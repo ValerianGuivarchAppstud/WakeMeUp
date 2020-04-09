@@ -1,0 +1,106 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+
+    <style name="AppTheme.page">
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="Button">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="enforceMaterialTheme">true</item>
+        <item name="enforceTextAppearance">true</item>
+        <item name="android:textAppearance">?attr/textAppearanceButton</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetTop">6dp</item>
+        <item name="android:insetBottom">6dp</item>
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+    </style>
+
+    <style name="Button.Edit">
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginTop">36dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
+        <item name="android:layout_height">30dp</item>
+    </style>
+
+
+    <style name="Button.Valider">
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="cornerRadius">@null</item>
+        <item name="elevation">2dp</item>
+        <item name="iconPadding">8dp</item>
+        <item name="backgroundTint">@color/colorPrimaryDark</item>
+        <item name="shapeAppearance">?attr/shapeAppearanceSmallComponent</item>
+    </style>
+
+    <style name="Button.Connect">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:layout_marginBottom">30dp</item>
+    </style>
+
+
+    <style name="AppTheme.BoutonReveil">
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/lighttext</item>
+    </style>
+
+    <style name="AppTheme.HeureReveil">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">60sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/lighttext</item>
+    </style>
+
+    <style name="snooze">
+        <item name="android:background">@drawable/snooze</item>
+        <item name="android:backgroundTint">@color/green</item>
+    </style>
+
+    <style name="stop">
+        <item name="android:background">@drawable/alarm_note_off</item>
+        <item name="android:backgroundTint">@color/red</item>
+    </style>
+
+    <style name="AppTheme.ItemReveil">
+        <item name="android:background">@color/background</item>
+    </style>
+
+    <style name="AppTheme.BoutonItem">
+        <item name="android:background">@color/background</item>
+        <item name="android:tint">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.HeureJours">
+        <item name="android:textStyle">italic</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/lighttext</item>
+    </style>
+
+    <style name="ToolBarStyle" parent="AppTheme">
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/darktext</item>
+        <item name="colorControlNormal">@color/darktext</item>
+    </style>
+
+
+</resources>

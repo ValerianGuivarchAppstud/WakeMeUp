@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "330824332061",
+    "firebase_url": "https://wakemeup-d8f76.firebaseio.com",
+    "project_id": "wakemeup-d8f76",
+    "storage_bucket": "wakemeup-d8f76.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330824332061:android:f404615928fa1d5a6827f4",
+        "android_client_info": {
+          "package_name": "com.wakemeup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "330824332061-qpna2b1usfsrd0ka1fq1c4tnd1vja01u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wakemeup",
+            "certificate_hash": "db95857c356bacd2c63fc70ae6e6c66c20e0f5cc"
+          }
+        },
+        {
+          "client_id": "330824332061-mggkj7b9cfn3qqneesl2fvkbhtlngjql.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0ig29oIGlPdzRFFf2J30Q6ERwHrMKypw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "330824332061-mggkj7b9cfn3qqneesl2fvkbhtlngjql.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/id_menu_bar_message"
+        android:title="@string/musiques_en_attente"
+        app:actionLayout="@layout/action_bar_notification_icon_reveils"
+        app:showAsAction="always" />
+
+
+</menu>
