@@ -13,23 +13,12 @@ import java.util.*
 
 class AlarmViewModel : ViewModel() {
 
-
     private val liveDataReveils = MutableLiveData<SortedMap<Int, Reveil>>()
     private val listeReveils = sortedMapOf<Int, Reveil>()
 
     init {
         chargement()
     }
-
-
-    /*  private fun listToJSON() : String{
-          var json = "{"
-          for(reveil in listeReveils){
-              json+=reveil.toJson()
-          }
-          json+="}"
-          return json
-      }*/
 
     fun getReveils(): LiveData<SortedMap<Int, Reveil>> {
         return liveDataReveils

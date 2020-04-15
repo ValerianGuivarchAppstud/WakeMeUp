@@ -48,26 +48,17 @@
         <item name="shapeAppearance">?attr/shapeAppearanceSmallComponent</item>
     </style>
 
-    <style name="Button.Connect">
-        <item name="android:layout_centerHorizontal">true</item>
-        <item name="android:layout_marginLeft">30dp</item>
-        <item name="android:layout_marginRight">30dp</item>
-        <item name="android:layout_marginBottom">30dp</item>
-    </style>
-
 
     <style name="AppTheme.BoutonReveil">
         <item name="android:textStyle">bold|italic</item>
         <item name="android:textSize">28sp</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textColor">@color/lighttext</item>
     </style>
 
     <style name="AppTheme.HeureReveil">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">60sp</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textColor">@color/lighttext</item>
     </style>
 
     <style name="snooze">
@@ -81,11 +72,9 @@
     </style>
 
     <style name="AppTheme.ItemReveil">
-        <item name="android:background">@color/background</item>
     </style>
 
     <style name="AppTheme.BoutonItem">
-        <item name="android:background">@color/background</item>
         <item name="android:tint">@color/colorPrimary</item>
     </style>
 
@@ -93,13 +82,10 @@
         <item name="android:textStyle">italic</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textColor">@color/lighttext</item>
     </style>
 
     <style name="ToolBarStyle" parent="AppTheme">
         <item name="android:backgroundTint">@color/colorPrimary</item>
-        <item name="android:textColorPrimary">@color/darktext</item>
-        <item name="colorControlNormal">@color/darktext</item>
     </style>
 
 

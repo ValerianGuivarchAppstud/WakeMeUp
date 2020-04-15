@@ -23,9 +23,9 @@ class AmiAdapter(
 
     class AmiViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val item_ami_nom: TextView = itemView.findViewById<View>(R.id.nom_ami) as TextView
+        val itemAmiNom: TextView = itemView.findViewById<View>(R.id.nom_ami) as TextView
         val cardView: CardView = itemView.findViewById<Switch>(R.id.card_view_item_ami) as CardView
-        val list_ami_valider: ImageView =
+        val listAmiValider: ImageView =
             itemView.findViewById<Switch>(R.id.list_ami_valider) as ImageView
 
         fun bind(ami: UserModel, listener: RecyclerItemClickListener) {
@@ -45,7 +45,7 @@ class AmiAdapter(
 
         val ami = listeAmis[position]
         if (listeSelection.contains(position)) {
-            holder.list_ami_valider.setBackgroundResource(R.drawable.selection_oui)
+            holder.listAmiValider.setBackgroundResource(R.drawable.selection_oui)
             holder.cardView.setBackgroundColor(
                 ContextCompat.getColor(
                     context,
@@ -54,9 +54,9 @@ class AmiAdapter(
             )
         } else {
             holder.cardView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent))
-            holder.list_ami_valider.setBackgroundResource(R.drawable.selection_non)
+            holder.listAmiValider.setBackgroundResource(R.drawable.selection_non)
         }
-        holder.item_ami_nom.text = ami.username
+        holder.itemAmiNom.text = ami.username
         holder.cardView.tag = position
         holder.cardView.setOnClickListener(listener)
     }

@@ -17,13 +17,13 @@ class ReveilEdit : AppCompatActivity() {
     private lateinit var reveil: Reveil
 
     private val listDaysInWeek = listOf(
-        Reveil.DaysWeek.dimanche,
-        Reveil.DaysWeek.lundi,
-        Reveil.DaysWeek.mardi,
-        Reveil.DaysWeek.mercredi,
-        Reveil.DaysWeek.jeudi,
-        Reveil.DaysWeek.vendredi,
-        Reveil.DaysWeek.samedi
+        Reveil.DaysWeek.Dimanche,
+        Reveil.DaysWeek.Lundi,
+        Reveil.DaysWeek.Mardi,
+        Reveil.DaysWeek.Mercredi,
+        Reveil.DaysWeek.Jeudi,
+        Reveil.DaysWeek.Vendredi,
+        Reveil.DaysWeek.Samedi
     )
 
     private fun dayButtonClicked(day: Reveil.DaysWeek, edit_liste_jour_button: ToggleButton) {
@@ -96,34 +96,34 @@ class ReveilEdit : AppCompatActivity() {
 
         edit_time_picker.hour = reveil.nextAlarm.get(Calendar.HOUR_OF_DAY)
         edit_time_picker.minute = reveil.nextAlarm.get(Calendar.MINUTE)
-        dayButtonUpdate(Reveil.DaysWeek.lundi, edit_liste_jour_lundi)
-        dayButtonUpdate(Reveil.DaysWeek.mardi, edit_liste_jour_mardi)
-        dayButtonUpdate(Reveil.DaysWeek.mercredi, edit_liste_jour_mercredi)
-        dayButtonUpdate(Reveil.DaysWeek.jeudi, edit_liste_jour_jeudi)
-        dayButtonUpdate(Reveil.DaysWeek.vendredi, edit_liste_jour_vendredi)
-        dayButtonUpdate(Reveil.DaysWeek.samedi, edit_liste_jour_samedi)
-        dayButtonUpdate(Reveil.DaysWeek.dimanche, edit_liste_jour_dimanche)
+        dayButtonUpdate(Reveil.DaysWeek.Lundi, edit_liste_jour_lundi)
+        dayButtonUpdate(Reveil.DaysWeek.Mardi, edit_liste_jour_mardi)
+        dayButtonUpdate(Reveil.DaysWeek.Mercredi, edit_liste_jour_mercredi)
+        dayButtonUpdate(Reveil.DaysWeek.Jeudi, edit_liste_jour_jeudi)
+        dayButtonUpdate(Reveil.DaysWeek.Vendredi, edit_liste_jour_vendredi)
+        dayButtonUpdate(Reveil.DaysWeek.Samedi, edit_liste_jour_samedi)
+        dayButtonUpdate(Reveil.DaysWeek.Dimanche, edit_liste_jour_dimanche)
 
         edit_liste_jour_lundi.setOnClickListener {
-            dayButtonClicked(Reveil.DaysWeek.lundi, edit_liste_jour_lundi)
+            dayButtonClicked(Reveil.DaysWeek.Lundi, edit_liste_jour_lundi)
         }
         edit_liste_jour_mardi.setOnClickListener {
-            dayButtonClicked(Reveil.DaysWeek.mardi, edit_liste_jour_mardi)
+            dayButtonClicked(Reveil.DaysWeek.Mardi, edit_liste_jour_mardi)
         }
         edit_liste_jour_mercredi.setOnClickListener {
-            dayButtonClicked(Reveil.DaysWeek.mercredi, edit_liste_jour_mercredi)
+            dayButtonClicked(Reveil.DaysWeek.Mercredi, edit_liste_jour_mercredi)
         }
         edit_liste_jour_jeudi.setOnClickListener {
-            dayButtonClicked(Reveil.DaysWeek.jeudi, edit_liste_jour_jeudi)
+            dayButtonClicked(Reveil.DaysWeek.Jeudi, edit_liste_jour_jeudi)
         }
         edit_liste_jour_vendredi.setOnClickListener {
-            dayButtonClicked(Reveil.DaysWeek.vendredi, edit_liste_jour_vendredi)
+            dayButtonClicked(Reveil.DaysWeek.Vendredi, edit_liste_jour_vendredi)
         }
         edit_liste_jour_samedi.setOnClickListener {
-            dayButtonClicked(Reveil.DaysWeek.samedi, edit_liste_jour_samedi)
+            dayButtonClicked(Reveil.DaysWeek.Samedi, edit_liste_jour_samedi)
         }
         edit_liste_jour_dimanche.setOnClickListener {
-            dayButtonClicked(Reveil.DaysWeek.dimanche, edit_liste_jour_dimanche)
+            dayButtonClicked(Reveil.DaysWeek.Dimanche, edit_liste_jour_dimanche)
         }
 
 

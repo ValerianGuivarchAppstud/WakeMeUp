@@ -21,7 +21,7 @@ class SonnerieAttenteAdapter(
 
     class SonnerieAttenteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val item_ami_nom: TextView =
+        val itemAmiNom: TextView =
             itemView.findViewById<View>(R.id.nom_ami_sonnerie_attente) as TextView
         val cardView: CardView =
             itemView.findViewById<Switch>(R.id.card_view_item_sonnerie_attente) as CardView
@@ -42,7 +42,7 @@ class SonnerieAttenteAdapter(
     override fun onBindViewHolder(holder: SonnerieAttenteViewHolder, position: Int) {
 
         val sonnerie = listeSonneriesEnAttente[position]
-        holder.item_ami_nom.text = sonnerie.sender
+        holder.itemAmiNom.text = sonnerie.sender
         holder.cardView.tag = position
         holder.cardView.setOnClickListener(listener)
     }

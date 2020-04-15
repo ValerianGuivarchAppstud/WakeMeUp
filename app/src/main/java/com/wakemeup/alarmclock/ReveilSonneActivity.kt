@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.os.PowerManager
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -15,7 +14,6 @@ import com.wakemeup.song.Song
 
 
 class ReveilSonneActivity : AppCompatActivity() {
-    private val TAG: String = "ReveilSonneActivity"
 
     private var youTubePlayer: YouTubePlayer? = null
     private lateinit var youTubePlayerView: YouTubePlayerView
@@ -48,13 +46,10 @@ class ReveilSonneActivity : AppCompatActivity() {
             override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {
                 super.onError(youTubePlayer, error)
                 //TODO musique par défaut -> marche pas, error se lance pas si pas internet
-                Log.e(TAG, "erreur")
-                Log.e(TAG, error.name)
-                Log.e(TAG, error.toString())
+
             }
 
             override fun onReady(youTubePlayer: YouTubePlayer) {
-                Log.e(TAG, "ready")
                 this@ReveilSonneActivity.youTubePlayer = youTubePlayer
                 if (currentSong != null) {
                     prepareSong(currentSong)

@@ -197,14 +197,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     private fun updateHotCount() {
-        val new_hot_number = AppWakeUp.listSonneriesEnAttente.size
+        val newHotNumber = AppWakeUp.listSonneriesEnAttente.size
         var newNotif = false
         for (musicReceived in AppWakeUp.listSonneriesEnAttente.values) {
             if (musicReceived.notificationRecu) {
                 newNotif = true
             }
         }
-        if (new_hot_number == 0) {
+        if (newHotNumber == 0) {
             viewNbMusiquesEnAttente.visibility = View.INVISIBLE
             viewIconeMusiquesEnAttente.setImageResource(R.drawable.icon_music_no)
         } else {
@@ -214,7 +214,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             viewIconeMusiquesEnAttente.setImageResource(R.drawable.icon_music_yes)
             viewNbMusiquesEnAttente.visibility = View.VISIBLE
-            viewNbMusiquesEnAttente.text = new_hot_number.toString()
+            viewNbMusiquesEnAttente.text = newHotNumber.toString()
 
         }
     }
@@ -250,13 +250,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Show fragment after user clicked on a menu item
         when (id) {
             R.id.activity_main_drawer_reveil -> this.showFragment(
-                FRAGMENT_ID.FRAGMENT_REVEIL
+                FragmentId.FRAGMENT_REVEIL
             )
             R.id.activity_main_drawer_musiques -> this.showFragment(
-                FRAGMENT_ID.FRAGMENT_MUSIQUES
+                FragmentId.FRAGMENT_MUSIQUES
             )
             R.id.activity_main_drawer_amis -> this.showFragment(
-                FRAGMENT_ID.FRAGMENT_AMIS
+                FragmentId.FRAGMENT_AMIS
             )
             R.id.activity_main_drawer_deconnecter -> {
                 AppWakeUp.auth.signOut()
@@ -364,7 +364,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             supportFragmentManager.findFragmentById(R.id.activity_main_frame_layout)
         if (visibleFragment == null) {
             // Show News Fragment
-            this.showFragment(FRAGMENT_ID.FRAGMENT_REVEIL)
+            this.showFragment(FragmentId.FRAGMENT_REVEIL)
             // Mark as selected the menu item corresponding to VideoFragment
             this.navigationView!!.menu.getItem(0).isChecked = true
         }
@@ -372,13 +372,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     // Show fragment according an Identifier
 
-    private fun showFragment(fragmentIdentifier: FRAGMENT_ID) {
+    private fun showFragment(fragmentIdentifier: FragmentId) {
         when (fragmentIdentifier) {
-            FRAGMENT_ID.FRAGMENT_SECONNECTER -> this.showSeConnecterFragment()
-            FRAGMENT_ID.FRAGMENT_SEDECONNECTER -> this.showSeDeconnecterFragment()
-            FRAGMENT_ID.FRAGMENT_MUSIQUES -> this.showMusiquesFragment()
-            FRAGMENT_ID.FRAGMENT_AMIS -> this.showAmisFragment()
-            FRAGMENT_ID.FRAGMENT_REVEIL -> this.showReveilFragment()
+            FragmentId.FRAGMENT_SECONNECTER -> this.showSeConnecterFragment()
+            FragmentId.FRAGMENT_SEDECONNECTER -> this.showSeDeconnecterFragment()
+            FragmentId.FRAGMENT_MUSIQUES -> this.showMusiquesFragment()
+            FragmentId.FRAGMENT_AMIS -> this.showAmisFragment()
+            FragmentId.FRAGMENT_REVEIL -> this.showReveilFragment()
             else -> {
             }
         }
@@ -436,7 +436,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     companion object {
 
-        enum class FRAGMENT_ID {
+        enum class FragmentId {
             FRAGMENT_REVEIL,
             FRAGMENT_MUSIQUES,
             FRAGMENT_AMIS,

@@ -29,8 +29,6 @@ import kotlinx.android.synthetic.main.fragment_video.view.*
 
 class VideoFragment : Fragment() {
 
-    private val TAG: String = "ListVideoActivity"
-
     private var isPlaying: Boolean = false
     private val songList = mutableListOf<Song>()
 
