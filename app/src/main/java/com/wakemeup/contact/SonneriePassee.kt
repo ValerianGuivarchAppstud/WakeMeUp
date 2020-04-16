@@ -1,7 +1,6 @@
-package com.wakemeup.amis
+package com.wakemeup.contact
 
 import java.io.Serializable
-
 
 class SonneriePassee(val sender: String, val receiver: String, val song: String) : Serializable {
 

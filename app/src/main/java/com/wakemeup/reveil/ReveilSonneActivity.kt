@@ -1,4 +1,4 @@
-package com.wakemeup.alarmclock
+package com.wakemeup.reveil
 
 import android.annotation.SuppressLint
 import android.content.Context

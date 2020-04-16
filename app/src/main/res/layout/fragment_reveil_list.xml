@@ -3,23 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background"
-    tools:context="com.valapp.wakemeupwithvideo.alarmclock.ListeReveilActivity">
+    android:layout_height="match_parent">
 
-    <ScrollView
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_reveil"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/list_reveil"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFFFFF"
-            android:orientation="vertical"
-            tools:listitem="@layout/item_reveil_programme" />
-
-    </ScrollView>
+        android:layout_height="match_parent"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_list_reveil"></androidx.recyclerview.widget.RecyclerView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/bouton_add_reveil"

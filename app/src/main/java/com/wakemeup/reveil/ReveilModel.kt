@@ -1,4 +1,4 @@
-package com.wakemeup.alarmclock
+package com.wakemeup.reveil
 
 import android.app.Activity
 import android.app.AlarmManager
@@ -8,12 +8,13 @@ import android.content.Intent
 import android.os.Parcelable
 import android.util.Log
 import android.widget.Toast
+import com.wakemeup.AppWakeUp
 import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 import java.util.*
 
 @Parcelize
-class Reveil(
+class ReveilModel(
     var listActifDays: MutableList<DaysWeek> = mutableListOf(
         DaysWeek.Lundi,
         DaysWeek.Mardi,
@@ -60,20 +61,22 @@ class Reveil(
             Log.e("GetUnicId", "new -> " + idCount)
             idCount = idCount + 1
             Log.e("GetUnicId", "new -> " + idCount)
-            return idCount
+            return idCount - 1
         }
 
-        fun chargement(listeReveils: MutableMap<Int, Reveil>) {
+        fun chargement(listeReveils: MutableMap<Int, ReveilModel>) {
             idCount = listeReveils.keys.max() ?: 0
+            idCount++
         }
     }
 
-    fun startAlarm(activity: Activity) {
-        toastNextClock(activity)
-        val alarmManager = activity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(activity, AlertReceiver::class.java)
+    fun startAlarm() {
+
+        val alarmManager =
+            AppWakeUp.appContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(AppWakeUp.appContext, AlertReceiver::class.java)
         val sender = PendingIntent.getBroadcast(
-            activity,
+            AppWakeUp.appContext,
             this.idReveil,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
@@ -81,20 +84,22 @@ class Reveil(
         //TODO exact inutile
         alarmManager.setExact(
             AlarmManager.RTC_WAKEUP,
-            this.nextAlarm.timeInMillis,
-            sender
-        )//System.currentTimeMillis()+5000, sender)
+            System.currentTimeMillis() + 5000, sender
+        )
+        //this.nextAlarm.timeInMillis,sender)
     }
 
-    fun cancelAlarm(activity: Activity) {
-        val alarmManager = activity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(activity, AlertReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(activity, this.idReveil, intent, 0)
+    fun cancelAlarm() {
+        val alarmManager =
+            AppWakeUp.appContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(AppWakeUp.appContext, AlertReceiver::class.java)
+        val pendingIntent =
+            PendingIntent.getBroadcast(AppWakeUp.appContext, this.idReveil, intent, 0)
         //pendingIntent doit être le même qu'avant
         alarmManager.cancel(pendingIntent)
     }
 
-    private fun toastNextClock(activity: Activity) {
+    fun toastNextClock(activity: Activity) {
         var textClock = "Réveil prévu dans"
         var nextClockMinute =
             (this.nextAlarm.timeInMillis / 1000 / 60) - (Calendar.getInstance().timeInMillis / 1000 / 60)
@@ -122,6 +127,6 @@ class Reveil(
                 textClock += "s"
             }
         }
-        Toast.makeText(activity, textClock, Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, textClock, Toast.LENGTH_SHORT).show()
     }
 }

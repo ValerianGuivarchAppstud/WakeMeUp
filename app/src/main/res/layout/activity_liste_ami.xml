@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".amis.ListFriendToSendMusicActivity">
+    tools:context=".contact.ListFriendToSendMusicActivity">
 
     <include
         android:id="@+id/header_include_liste_ami"
@@ -18,7 +18,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="2dp"
         android:layout_weight="1"
-        tools:listitem="@layout/item_list_ami" />
+        tools:listitem="@layout/item_list_contact" />
 
     <LinearLayout
         android:layout_width="match_parent"

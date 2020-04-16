@@ -12,9 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.wakemeup.R
-import com.wakemeup.afterTextChanged
 import com.wakemeup.connect.ui.signup.SignupViewModel
 import com.wakemeup.connect.ui.signup.SignupViewModelFactory
+import com.wakemeup.util.afterTextChanged
 
 class SignupActivity : AppCompatActivity() {
 

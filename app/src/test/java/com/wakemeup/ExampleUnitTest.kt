@@ -1,6 +1,5 @@
 package com.wakemeup
 
-import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**
@@ -9,8 +8,14 @@ import org.junit.Test
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
+
+    fun getS(): String? {
+        return null
+    }
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun testPrint() {
+        val test: String? = null
+        var name = getS() ?: "non"
+        print(name)
     }
 }

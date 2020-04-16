@@ -7,6 +7,7 @@
 
     <androidx.cardview.widget.CardView
         style="@style/AppTheme.ItemReveil"
+        android:id="@+id/reveil_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?android:attr/selectableItemBackground">
@@ -64,14 +65,14 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:checked="true"
-                    app:layout_constraintBottom_toTopOf="@+id/delete_clock"
+                    app:layout_constraintBottom_toTopOf="@+id/item_reveil_delete"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
                 <ImageButton
-                    android:id="@+id/delete_clock"
+                    android:id="@+id/item_reveil_delete"
                     style="@style/AppTheme.BoutonItem"
                     android:layout_width="50dp"
                     android:layout_height="50dp"

@@ -7,10 +7,10 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.iid.FirebaseInstanceId
 import com.wakemeup.AppWakeUp
+import com.wakemeup.MainActivity
 import com.wakemeup.R
 import com.wakemeup.connect.ui.LoginActivity
 import com.wakemeup.connect.ui.SignupActivity
-import com.wakemeup.main.MainActivity
 import com.wakemeup.notification.MyFirebaseMessagingService
 import com.wakemeup.notification.Token
 import kotlinx.android.synthetic.main.activity_connect.*

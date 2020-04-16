@@ -19,10 +19,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.wakemeup.AppWakeUp
+import com.wakemeup.MainActivity
 import com.wakemeup.R
-import com.wakemeup.SettingsActivity
-import com.wakemeup.amis.ListFriendToSendMusicActivity
-import com.wakemeup.main.MainActivity
+import com.wakemeup.contact.ListFriendToSendMusicActivity
 import kotlinx.android.synthetic.main.fragment_video.*
 import kotlinx.android.synthetic.main.fragment_video.view.*
 
@@ -55,7 +54,10 @@ class VideoFragment : Fragment() {
     private fun getSongList(query: String) {
 
         if (query.isNotEmpty()) {
-            SearchYouTube(this).execute(query, SettingsActivity.settings.nbSongToShow.toString())
+            SearchYouTube(this).execute(
+                query,
+                "20"
+            )//TODO ajout de settings pour paramêtrer le nb max de chanson à afficher
         }
 
         if (pb_main_loader != null) {
@@ -121,10 +123,10 @@ class VideoFragment : Fragment() {
         val builder = AlertDialog.Builder(context)
 
         // Set the alert dialog title
-        builder.setTitle("App background color")
+        builder.setTitle("Vous n'êtes pas connecté")
 
         // Display a message on alert dialog
-        builder.setMessage("Are you want to set the app background color to RED?")
+        builder.setMessage("Pour partager une musique à un contact, veuillez vous connecter.")
 
         // Set a positive button and its click listener on alert dialog
         builder.setPositiveButton("Se connecter") { dialog, which ->
@@ -150,7 +152,7 @@ class VideoFragment : Fragment() {
 
 
         // iv_play.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.selector_play))
-        getSongList("night")
+        getSongList("musique")
 
         val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycler_list_video)
         recyclerView.layoutManager = LinearLayoutManager(activity)

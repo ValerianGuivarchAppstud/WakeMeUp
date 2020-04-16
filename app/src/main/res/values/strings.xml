@@ -55,5 +55,6 @@
     <string name="modifier_r_veil">Modifier réveil</string>
     <string name="logo_sonnerie_en_attente">Logo sonnerie en attente</string>
     <string name="delete_clock">Delete Clock</string>
+    <string name="prompt_phone">Numéro de téléphone</string>
 
 </resources>

@@ -14,9 +14,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.wakemeup.AppWakeUp
 import com.wakemeup.R
-import com.wakemeup.afterTextChanged
 import com.wakemeup.connect.ui.login.LoginViewModel
 import com.wakemeup.connect.ui.login.LoginViewModelFactory
+import com.wakemeup.util.afterTextChanged
 
 class LoginActivity : AppCompatActivity() {
 

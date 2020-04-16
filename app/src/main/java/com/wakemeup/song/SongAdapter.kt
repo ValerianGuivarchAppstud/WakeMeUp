@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.wakemeup.R
-import com.wakemeup.Utility
+import com.wakemeup.util.Utility
 
 
 class SongAdapter(

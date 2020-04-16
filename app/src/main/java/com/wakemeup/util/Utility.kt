@@ -1,4 +1,4 @@
-package com.wakemeup
+package com.wakemeup.util
 
 import android.content.Intent
 import android.os.Parcelable
@@ -15,8 +15,6 @@ object Utility {
         val seconds = duration % 60
 
         return String.format("%d:%02d", minutes, seconds)
-
-
     }
 
 }

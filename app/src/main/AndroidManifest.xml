@@ -24,8 +24,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
@@ -33,14 +35,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".alarmclock.ReveilEdit" />
-        <activity android:name=".alarmclock.ReveilSonneActivity" />
-        <activity android:name=".amis.ListFriendToSendMusicActivity" />
+        <activity android:name=".reveil.ReveilEdit" />
+        <activity android:name=".reveil.ReveilSonneActivity" />
+        <activity android:name=".contact.ListFriendToSendMusicActivity" />
         <activity android:name=".connect.ConnectActivity" />
         <activity android:name=".connect.ui.LoginActivity" />
         <activity android:name=".connect.ui.SignupActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".amis.attente.ActivitySonneriesEnAttente" />
 
         <service
             android:name=".notification.MyFirebaseMessagingService"
@@ -51,7 +51,7 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".alarmclock.AlertReceiver" />
+        <receiver android:name=".reveil.AlertReceiver" />
     </application>
 
 </manifest>

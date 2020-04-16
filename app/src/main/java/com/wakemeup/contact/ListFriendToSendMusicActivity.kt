@@ -1,4 +1,4 @@
-package com.wakemeup.amis
+package com.wakemeup.contact
 
 import android.os.Bundle
 import android.util.Log
@@ -35,7 +35,6 @@ class ListFriendToSendMusicActivity : AppCompatActivity(), View.OnClickListener 
             }
             recycler_list_ami.adapter?.notifyDataSetChanged()
         }
-
     }
 
     private val listeSelection: MutableList<Int> = mutableListOf()
@@ -54,7 +53,6 @@ class ListFriendToSendMusicActivity : AppCompatActivity(), View.OnClickListener 
 
 
         recycler_list_ami.layoutManager = LinearLayoutManager(this)
-        recycler_list_ami.adapter = AmiAdapter(this, AppWakeUp.listeAmis, listeSelection, this)
 
         list_partage_ami_annuler.setOnClickListener {
             finish()
@@ -80,19 +78,14 @@ class ListFriendToSendMusicActivity : AppCompatActivity(), View.OnClickListener 
                         .child("receivedMusic").push().setValue(pushReveil.key)
                 }
 
-                Log.e("TESSSS", "A")
+
                 FirebaseInstanceId.getInstance().instanceId
                     .addOnSuccessListener { instanceIdResult ->
-                        Log.e("TESSSS", "B")
                         val deviceToken = instanceIdResult.token
-                        Log.e("TESSSS", "C")
                         updateToken(deviceToken, AppWakeUp.listeAmis[index].id)
-                        Log.e("TESSSS", "D")
                     }
                     .addOnFailureListener { instanceIdResult ->
-                        Log.e("J", "FAIL")
                     }
-                Log.e("TESSSS", "E")
                 AppWakeUp.database.getReference("Users").child(AppWakeUp.listeAmis[index].id)
                     .addValueEventListener(
                         object : ValueEventListener {
@@ -103,15 +96,12 @@ class ListFriendToSendMusicActivity : AppCompatActivity(), View.OnClickListener 
                                     AppWakeUp.auth.currentUser!!.uid,
                                     currentSong.id
                                 )
-                                Log.e("TESSSS", "G")
                             }
 
                             override fun onCancelled(databaseError: DatabaseError) {
-                                Log.e("TESSSS", "H")
                             }
                         }
                     )
-                Log.e("TESSSS", "I")
                 Toast.makeText(this, "Reveil envoyé !", Toast.LENGTH_SHORT).show()
                 finish()
 
@@ -133,21 +123,20 @@ class ListFriendToSendMusicActivity : AppCompatActivity(), View.OnClickListener 
                                 "$username : vous a envoyé une nouvelle chanson pour vous réveiller!",
                                 "Nouveau réveil",
                                 AppWakeUp.auth.currentUser!!.uid
+                                //TODO ajouter la nouvelle musique
                             )
                             val sender = Sender(data, token.token)
 
-                            Log.e("ListFriendToSend", "SEND")
                             apiService.sendNotifications(sender)!!.enqueue(object : Callback,
                                 retrofit2.Callback<MyResponse?> {
                                 override fun onFailure(call: Call<MyResponse?>, t: Throwable) {
-                                    Log.e("ListFriendToSend", "FAIL")
+
                                 }
 
                                 override fun onResponse(
                                     call: Call<MyResponse?>,
                                     response: Response<MyResponse?>
                                 ) {
-                                    Log.e("ListFriendToSend", "GOOD")
                                 }
 
                             })

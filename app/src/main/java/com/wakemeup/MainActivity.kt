@@ -1,4 +1,4 @@
-package com.wakemeup.main
+package com.wakemeup
 
 import android.Manifest
 import android.content.Intent
@@ -12,13 +12,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -30,12 +27,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
-import com.wakemeup.AppWakeUp
-import com.wakemeup.R
-import com.wakemeup.alarmclock.ReveilFragment
-import com.wakemeup.amis.SonnerieEnAttente
 import com.wakemeup.connect.ConnectActivity
 import com.wakemeup.connect.UserModel
+import com.wakemeup.contact.ContactsListeFragment
+import com.wakemeup.contact.SonnerieEnAttente
+import com.wakemeup.reveil.ReveilsListeFragment
 import com.wakemeup.song.VideoFragment
 
 
@@ -47,9 +43,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var navigationView: NavigationView? = null
 
     //FOR FRAGMENTS
-    private var fragmentReveil: ReveilFragment? = null
+    private var fragmentReveil: ReveilsListeFragment? = null
     private var fragmentMusique: VideoFragment? = null
-    private var fragmentAmis: AmisFragment? = null
+    private var fragmentContact: ContactsListeFragment? = null
 
     private var currentUser: UserModel? = null
 
@@ -81,8 +77,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                                     if (snapshot2.key != null) {
                                                         when (snapshot2.key) {
                                                             "receiver" -> receiver =
-                                                                snapshot2.value as String
-                                                            "song" -> song =
                                                                 snapshot2.value as String
                                                             "song" -> song =
                                                                 snapshot2.value as String
@@ -150,8 +144,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                     // Log and toast
                     val msg =
-                        "Testouille token notif : $token"//getString("Testouille token notif", token)
-                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                        "token notif : $token"//getString("Testouille token notif", token)
                     Log.e("MainActivity", msg)
                     Log.e("MainActivity", token!!)
                 }
@@ -177,17 +170,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         rootView.setOnClickListener {
-            //onOptionsItemSelected(alertMenuItem)
-            Log.e("TESTT", "rootview")
-            val titre = "testNotifTitre"
-            val builder = NotificationCompat.Builder(this, AppWakeUp.NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(titre)
-                .setAutoCancel(true)
-
-            NotificationManagerCompat.from(this)
-                .notify(AppWakeUp.NOTIFICATION_Test, builder.build())
-
 
         }
         return super.onCreateOptionsMenu(menu)
@@ -390,16 +372,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun showReveilFragment() {
         if (this.fragmentReveil == null) {
-            this.fragmentReveil = ReveilFragment.newInstance()
+            this.fragmentReveil = ReveilsListeFragment.newInstance()
         }
         this.startTransactionFragment(this.fragmentReveil!!)
     }
 
     private fun showAmisFragment() {
-        if (this.fragmentAmis == null) {
-            this.fragmentAmis = AmisFragment.newInstance()
+        if (this.fragmentContact == null) {
+            this.fragmentContact = ContactsListeFragment.newInstance()
         }
-        this.startTransactionFragment(this.fragmentAmis!!)
+        this.startTransactionFragment(this.fragmentContact!!)
     }
 
     private fun showMusiquesFragment() {

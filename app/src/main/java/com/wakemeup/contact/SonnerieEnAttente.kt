@@ -1,4 +1,4 @@
-package com.wakemeup.amis
+package com.wakemeup.contact
 
 import java.io.Serializable
 

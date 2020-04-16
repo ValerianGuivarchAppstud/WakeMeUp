@@ -1,4 +1,4 @@
-package com.wakemeup.alarmclock
+package com.wakemeup.reveil
 
 import android.content.BroadcastReceiver
 import android.content.Context
