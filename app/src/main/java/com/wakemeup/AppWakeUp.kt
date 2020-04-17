@@ -20,7 +20,7 @@ class AppWakeUp : Application() {
 
     val test = "TEST"
 
-        
+        var useless : String = "useless2"
 
         lateinit var auth: FirebaseAuth
         lateinit var database: FirebaseDatabase
