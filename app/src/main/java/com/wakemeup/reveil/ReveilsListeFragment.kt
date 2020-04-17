@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_reveil_list.view.*
 
 class ReveilsListeFragment : Fragment(), ReveilListeAdapter.ReveilListAdapterListener {
 
+    var useless : String = "useless"
     companion object {
         fun newInstance(): ReveilsListeFragment {
             return ReveilsListeFragment()
