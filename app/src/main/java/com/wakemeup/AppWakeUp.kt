@@ -20,7 +20,7 @@ class AppWakeUp : Application() {
 
 
 
-        var useless : String = "useless"
+        
 
         lateinit var auth: FirebaseAuth
         lateinit var database: FirebaseDatabase
