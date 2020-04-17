@@ -17,11 +17,6 @@ class AppWakeUp : Application() {
     companion object {
 
         lateinit var repository: Repository
-
-    val test = "TEST"
-
-        var useless : String = "useless2"
-
         lateinit var auth: FirebaseAuth
         lateinit var database: FirebaseDatabase
 

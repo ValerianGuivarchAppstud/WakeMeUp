@@ -12,6 +12,8 @@ import com.wakemeup.connect.ui.ConnectResult
 
 class SignupViewModel : ViewModel() {
 
+    private val inutile : String = "test"
+
     private val _signupForm = MutableLiveData<SignupFormState>()
     val signupFormState: LiveData<SignupFormState> = _signupForm
 
