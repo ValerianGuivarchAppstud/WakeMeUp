@@ -18,7 +18,7 @@ class AppWakeUp : Application() {
 
         lateinit var repository: Repository
 
-
+    val test = "TEST"
 
         
 
