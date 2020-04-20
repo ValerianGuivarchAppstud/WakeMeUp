@@ -32,6 +32,7 @@ import com.wakemeup.connect.UserModel
 import com.wakemeup.contact.ContactsListeFragment
 import com.wakemeup.contact.SonnerieEnAttente
 import com.wakemeup.reveil.ReveilsListeFragment
+import com.wakemeup.share.DemanderMusique
 import com.wakemeup.song.VideoFragment
 
 
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     //FOR FRAGMENTS
     private var fragmentReveil: ReveilsListeFragment? = null
     private var fragmentMusique: VideoFragment? = null
+    private var fragmentPartage : DemanderMusique? = null
     private var fragmentContact: ContactsListeFragment? = null
 
     private var currentUser: UserModel? = null
@@ -237,6 +239,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.activity_main_drawer_musiques -> this.showFragment(
                 FragmentId.FRAGMENT_MUSIQUES
             )
+            R.id.activity_main_drawer_partage -> this.showFragment(
+                FragmentId.FRAGMENT_PARTAGE
+            )
             R.id.activity_main_drawer_amis -> this.showFragment(
                 FragmentId.FRAGMENT_AMIS
             )
@@ -359,8 +364,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             FragmentId.FRAGMENT_SECONNECTER -> this.showSeConnecterFragment()
             FragmentId.FRAGMENT_SEDECONNECTER -> this.showSeDeconnecterFragment()
             FragmentId.FRAGMENT_MUSIQUES -> this.showMusiquesFragment()
+            FragmentId.FRAGMENT_PARTAGE -> this.showPartageFragment()
             FragmentId.FRAGMENT_AMIS -> this.showAmisFragment()
             FragmentId.FRAGMENT_REVEIL -> this.showReveilFragment()
+
             else -> {
             }
         }
@@ -389,6 +396,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             this.fragmentMusique = VideoFragment.newInstance(this)
         }
         this.startTransactionFragment(this.fragmentMusique!!)
+    }
+
+    private fun showPartageFragment() {
+        if (this.fragmentPartage == null) {
+            this.fragmentPartage = DemanderMusique.newInstance(this)
+        }
+        this.startTransactionFragment(this.fragmentPartage!!)
     }
 
     private fun showSeConnecterFragment() {
@@ -421,9 +435,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         enum class FragmentId {
             FRAGMENT_REVEIL,
             FRAGMENT_MUSIQUES,
+            FRAGMENT_PARTAGE,
             FRAGMENT_AMIS,
             FRAGMENT_SECONNECTER,
-            FRAGMENT_SEDECONNECTER
+            FRAGMENT_SEDECONNECTER,
+
         }
     }
 
