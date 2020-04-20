@@ -35,8 +35,7 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel = ViewModelProviders.of(
             this,
             LoginViewModelFactory()
-        )
-            .get(LoginViewModel::class.java)
+        ).get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
