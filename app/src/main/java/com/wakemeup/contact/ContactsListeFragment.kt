@@ -61,8 +61,13 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         return view
     }
 
-
     override fun onContactClicked(userModel: UserModel, itemView: View) {
         //todo action click user
+    }
+
+    // recuperer contact
+    fun recupererContactTelephone() : Map<String, UserModel>?{
+        // acceder au contact téléphone et les afficher en log
+        TODO()
     }
 }

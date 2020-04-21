@@ -8,5 +8,4 @@
         app:actionLayout="@layout/action_bar_notification_icon_reveils"
         app:showAsAction="always" />
 
-
 </menu>
