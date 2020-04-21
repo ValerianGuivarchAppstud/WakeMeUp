@@ -31,7 +31,6 @@ class VideoFragment : Fragment() {
     private var isPlaying: Boolean = false
     private val songList = mutableListOf<Song>()
 
-
     private lateinit var mAdapter: SongAdapter
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
@@ -187,7 +186,7 @@ class VideoFragment : Fragment() {
                 createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
             } else {
 
-                //TODO mettre la video en favori
+                //TODO mettre la video en favori / la rajouter dans firebase
             }
         }
 

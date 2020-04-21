@@ -37,8 +37,7 @@ class SignupActivity : AppCompatActivity() {
         signupViewModel = ViewModelProviders.of(
             this,
             SignupViewModelFactory()
-        )
-            .get(SignupViewModel::class.java)
+        ).get(SignupViewModel::class.java)
 
         signupViewModel.signupFormState.observe(this@SignupActivity, Observer {
             val signupState = it ?: return@Observer
@@ -128,6 +127,7 @@ class SignupActivity : AppCompatActivity() {
             )
         }
 
+        //quand on clic sur le bouton pour valider la creation de son compte
         signup.setOnClickListener {
             loading.visibility = View.VISIBLE
             signupViewModel.signup(
