@@ -50,7 +50,7 @@ class DemanderMusique : Fragment(){
         val applicationCible: MutableList<Parcelable> = ArrayList()
         val intentDebut = Intent()
         intentDebut.action = Intent.ACTION_SEND
-        intentDebut.putExtra(Intent.EXTRA_TEXT, "Partager sur wakemeup")
+        intentDebut.putExtra(Intent.EXTRA_TEXT, getString(R.string.message_partage_general))
         applicationCible.add(intentDebut)
         val shareIntent = Intent()
         shareIntent.action = Intent.ACTION_SEND
@@ -66,7 +66,7 @@ class DemanderMusique : Fragment(){
                     intent.component = ComponentName(packageName, resInfo.activityInfo.name)
                     intent.action = Intent.ACTION_SEND
                     intent.type = "text/plain"
-                    intent.putExtra(Intent.EXTRA_TEXT, "Text Gmail")
+                    intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.test_gmail))
                     intent.setPackage(packageName)
                     applicationCible.add(intent)
                 }
@@ -77,7 +77,7 @@ class DemanderMusique : Fragment(){
                         val intent = Intent()
                         intent.action = Intent.ACTION_SEND
                         intent.type = "text/plain"
-                        intent.putExtra(Intent.EXTRA_TEXT, "Text twitter")
+                        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.text_twitter))
                         intent.setPackage(packageName)
                         applicationCible.add(intent)
                     }
@@ -86,7 +86,7 @@ class DemanderMusique : Fragment(){
                     val intent = Intent()
                     intent.action = Intent.ACTION_SEND
                     intent.type = "text/plain"
-                    intent.putExtra(Intent.EXTRA_TEXT, "Text sms")
+                    intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.text_sms))
                     intent.setPackage(packageName)
                     applicationCible.add(intent)
                 }
@@ -95,7 +95,7 @@ class DemanderMusique : Fragment(){
                     intent.component = ComponentName(packageName, resInfo.activityInfo.name)
                     intent.action = Intent.ACTION_SEND
                     intent.type = "text/plain"
-                    intent.putExtra(Intent.EXTRA_TEXT, "Text instagram")
+                    intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.text_instagram))
                     intent.setPackage(packageName)
                     applicationCible.add(intent)
                 }
@@ -104,7 +104,7 @@ class DemanderMusique : Fragment(){
                     intent.component = ComponentName(packageName, resInfo.activityInfo.name)
                     intent.action = Intent.ACTION_SEND
                     intent.type = "text/plain"
-                    intent.putExtra(Intent.EXTRA_TEXT, "Text snapchat")
+                    intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.text_snapchat))
                     intent.setPackage(packageName)
                     applicationCible.add(intent)
                 }
@@ -122,7 +122,7 @@ class DemanderMusique : Fragment(){
                     intent.component = ComponentName(packageName, resInfo.activityInfo.name)
                     intent.action = Intent.ACTION_SEND
                     intent.type = "text/plain"
-                    intent.putExtra(Intent.EXTRA_TEXT, "Partage sur discord ")
+                    intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.text_discord))
                     intent.setPackage(packageName)
                     applicationCible.add(intent)
                 }
