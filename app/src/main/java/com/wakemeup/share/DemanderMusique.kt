@@ -7,12 +7,24 @@ import android.content.pm.ResolveInfo
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.neocampus.repo.ViewModelFactory
 import com.wakemeup.AppWakeUp
+import com.wakemeup.R
 import com.wakemeup.contact.ContactsListeFragment
 private lateinit var context: Context
 class DemanderMusique : Fragment(){
+
+    interface  ShareListener{
+        fun onClickShare()
+    }
+
+    var listener : ShareListener? = null
     companion object {
         fun newInstance(ctx : Context): DemanderMusique {
             context = ctx
@@ -20,9 +32,19 @@ class DemanderMusique : Fragment(){
         }
     }
 
+  /*  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        var view = inflater.inflate(R.layout.fragment_share, container, false)
+
+        return view
+
+    }*/
+
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        //val factory = ViewModelFactory(AppWakeUp.repository)
 
         var twitter = false
         val applicationCible: MutableList<Parcelable> = ArrayList()
@@ -95,6 +117,15 @@ class DemanderMusique : Fragment(){
                     intent.setPackage(packageName)
                     applicationCible.add(intent)
                 }
+                if (packageName.contains("discord")) {
+                    val intent = Intent()
+                    intent.component = ComponentName(packageName, resInfo.activityInfo.name)
+                    intent.action = Intent.ACTION_SEND
+                    intent.type = "text/plain"
+                    intent.putExtra(Intent.EXTRA_TEXT, "Partage sur discord ")
+                    intent.setPackage(packageName)
+                    applicationCible.add(intent)
+                }
             }
             //on vérifie la présence d'application
             if (!applicationCible.isEmpty()) {
@@ -110,20 +141,14 @@ class DemanderMusique : Fragment(){
                 for (j in 0..applicationCible.size-1) {
                     arrayIntent[j] = applicationCible.get(j) as Intent
                 }
-
-
                 chooserIntent.putExtra(
                     Intent.EXTRA_ALTERNATE_INTENTS, arrayIntent
                 )
-
                 startActivity(chooserIntent)
             } else {
-                println("Pas d'application")
-
+               Toast.makeText(context, "Pas d'application", Toast.LENGTH_SHORT).show()
             }
         }
-
-
 
     }
 

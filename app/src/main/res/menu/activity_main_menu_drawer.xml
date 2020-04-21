@@ -20,7 +20,7 @@
             android:title="@string/musiques" />
         <item
             android:id="@+id/activity_main_drawer_partage"
-            android:icon="@drawable/ic_launcher_foreground"
+            android:icon="@drawable/share"
             android:title="Demander une musique" />
         <item
             android:id="@+id/activity_main_drawer_amis"

@@ -402,6 +402,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (this.fragmentPartage == null) {
             this.fragmentPartage = DemanderMusique.newInstance(this)
         }
+        supportFragmentManager.beginTransaction().remove(this.fragmentPartage!!).commit()
         this.startTransactionFragment(this.fragmentPartage!!)
     }
 
@@ -517,4 +518,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         startActivity(intent)
     }
+
+
 }
