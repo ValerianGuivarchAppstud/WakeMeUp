@@ -11,6 +11,7 @@
         android:id="@+id/profil_picture"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginTop="70dp"
         android:contentDescription="@string/PhotoProfil"
         app:srcCompat="@drawable/ic_launcher_background" />
 
