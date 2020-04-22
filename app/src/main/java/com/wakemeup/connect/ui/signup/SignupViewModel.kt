@@ -46,7 +46,7 @@ class SignupViewModel : ViewModel() {
                 hashmap["phone"] = phone
                 hashmap["username"] = username
                 hashmap["mail"] = mail
-                
+                //TODO hashmap["video_favori"] = "vide"
                 reference.setValue(hashmap).addOnCompleteListener {
                     if (it.isSuccessful) {
                         _signupResult.value =

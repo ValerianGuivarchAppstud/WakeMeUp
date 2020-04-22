@@ -2,6 +2,7 @@ package com.wakemeup.song
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,7 @@ class VideoFragment : Fragment() {
     private lateinit var mAdapter: SongAdapter
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
+    private lateinit var partageView: View
 
     private var currentIndex: Int = 0
     private var currentSongLength: Int = 0
@@ -97,8 +99,15 @@ class VideoFragment : Fragment() {
         }
     }
 
+    private fun startActivityListFriendToSendMusicActivity(){
+        //ouvre l'activity de la liste d'amis
+        activity!!.intent = Intent(activity, ListFriendToSendMusicActivity::class.java)
+        activity!!.intent.putExtra("song", currentSong)
+        startActivity(activity!!.intent)
+    }
+
     //Recherche une musique depuis la barre de recherche (id : et_search)
-    private fun createDialog() {
+    private fun createDialogForSearch() {
         val builder = AlertDialog.Builder(activity!!)
         val view = activity!!.layoutInflater.inflate(R.layout.dialog_search, null)
         builder.setTitle(R.string.rechercher)
@@ -118,6 +127,59 @@ class VideoFragment : Fragment() {
                     ).show()
                 }
             }.create().show()
+    }
+
+    private fun createDialoguePartage(){
+        val builder = AlertDialog.Builder(activity!!)
+        val view_dialog_partage_ = activity!!.layoutInflater.inflate(R.layout.dialog_partage, null)
+        builder.setTitle("A quel moment voulez vous que la vidéo se lance?")
+            .setView(view_dialog_partage_)
+            .setPositiveButton("Au début"){ _,_ ->
+                currentSong?.lancement = 0
+                startActivityListFriendToSendMusicActivity()
+            }
+            .setNeutralButton("Choisir le temps"){ _, _ ->
+               createDialogueChoixDuTemps()
+            }
+            .create().show()
+    }
+
+    private fun createDialogueChoixDuTemps(){
+        val builder = AlertDialog.Builder(activity!!)
+        val view = activity!!.layoutInflater.inflate(R.layout.dialogue_choisir_le_temps, null)
+        builder.setTitle("A quel moment voulez vous que la vidéo se lance?")
+            .setView(view)
+            .setPositiveButton("Ok") { _, _ ->
+                val heure = view.findViewById<EditText>(R.id.et_choix_du_temps_heure).text.toString().trim()
+                val minute = view.findViewById<EditText>(R.id.et_choix_du_temps_minute).text.toString().trim()
+                val seconde = view.findViewById<EditText>(R.id.et_choix_du_temps_seconde).text.toString().trim()
+
+                if (heure.isNotEmpty() && minute.isNotEmpty() && seconde.isNotEmpty()) {
+
+                    if (minute.toInt() <= 60 && seconde.toInt() <= 60) {
+                        val temps_en_secondes: Int = 60 * 60 * heure.toInt() + 60 * minute.toInt() + seconde.toInt()
+                        val temps_format_url = "&t=${temps_en_secondes}s"
+                        currentSong?.lancement = temps_en_secondes
+                        currentSong!!.addTempsInUrl(temps_format_url)
+                        startActivityListFriendToSendMusicActivity()
+                    } else {
+                        Toast.makeText(
+                            activity!!.application,
+                            "Veuillez mettre un temps valide.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                else{
+                    Toast.makeText(
+                        activity!!.application,
+                        "Veuillez remplir les champs.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+            }
+            .create().show()
     }
 
 
@@ -152,6 +214,7 @@ class VideoFragment : Fragment() {
     ): View? {
         super.onCreate(savedInstanceState)
         currentView = inflater.inflate(R.layout.fragment_video, container, false)
+        partageView = inflater.inflate(R.layout.dialog_partage, container, true)
 
 
         // iv_play.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.selector_play))
@@ -161,10 +224,11 @@ class VideoFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
 
+
         //Gestion du click sur le bouton rechercher
         val bt = currentView.findViewById<FloatingActionButton>(R.id.fab_search)
         bt.setOnClickListener {
-            createDialog()
+            createDialogForSearch()
         }
 
         val btPartage = currentView.findViewById<Button>(R.id.list_video_partage)
@@ -173,9 +237,18 @@ class VideoFragment : Fragment() {
                 createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
             } else {
                 if (currentSong != null) {
-                    activity!!.intent = Intent(activity, ListFriendToSendMusicActivity::class.java)
-                    activity!!.intent.putExtra("song", currentSong)
-                    startActivity(activity!!.intent)
+                    createDialoguePartage() //lance la dialogue pour preciser le temps
+                    //TODO réussir a cliquer sur les bouton (bug aucune action apres un apuie)
+
+
+
+                }
+                else{
+                    Toast.makeText(
+                        activity!!.application,
+                        "Veuillez sélectionner une vidéo",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

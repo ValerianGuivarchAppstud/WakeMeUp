@@ -57,4 +57,8 @@
     <string name="delete_clock">Delete Clock</string>
     <string name="prompt_phone">Numéro de téléphone</string>
 
+    <string name="heure_choix_temps">Heure</string>
+    <string name="minute_choix_temps">Minute</string>
+    <string name="seconde_choix_temps">Seconde</string>
+
 </resources>

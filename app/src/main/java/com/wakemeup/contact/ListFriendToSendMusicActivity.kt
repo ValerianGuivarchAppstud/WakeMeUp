@@ -54,6 +54,8 @@ class ListFriendToSendMusicActivity : AppCompatActivity(), View.OnClickListener 
 
         recycler_list_ami.layoutManager = LinearLayoutManager(this)
 
+        texte_temps_lancement_video.setText("La video se lancera a : ${currentSong.lancement / (60*60)}h ${(currentSong.lancement / 60) % 60}m ${currentSong.lancement % 60}s")
+
         list_partage_ami_annuler.setOnClickListener {
             finish()
         }

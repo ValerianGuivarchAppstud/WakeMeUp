@@ -9,17 +9,22 @@ class Song(
     val id: String,
     val title: String,
     val artist: String,
-    val artworkUrl: String,
+    var artworkUrl: String,
     val duration: Int,
+    var lancement :Int,
+
     private val rank: Int = 0
 ) : Comparable<Song>, Parcelable {
+
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readInt(),
+        parcel.readInt(),
         parcel.readInt()
+
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -28,6 +33,7 @@ class Song(
         parcel.writeString(artist)
         parcel.writeString(artworkUrl)
         parcel.writeInt(duration)
+        parcel.writeInt(lancement)
         parcel.writeInt(rank)
     }
 
@@ -41,11 +47,16 @@ class Song(
         result.snippet.channelTitle,
         result.snippet.thumbnails.medium.url,
         300,
+        0,
         rank
     )
 
     override fun compareTo(other: Song): Int {
         return other.rank - this.rank
+    }
+
+    fun addTempsInUrl(temps : String){
+        artworkUrl+=temps
     }
 
     companion object CREATOR : Parcelable.Creator<Song> {
