@@ -3,15 +3,14 @@ package com.wakemeup
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -110,7 +109,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         if (AppWakeUp.auth.currentUser == null) {
             startConnectActivity()
@@ -237,9 +235,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.activity_main_drawer_musiques -> this.showFragment(
                 FragmentId.FRAGMENT_MUSIQUES
             )
-            R.id.activity_main_drawer_amis -> this.showFragment(
-                FragmentId.FRAGMENT_AMIS
-            )
+            R.id.activity_main_drawer_amis -> {
+                this.showFragment(
+                    FragmentId.FRAGMENT_AMIS
+                )
+                getPhoneContacts()
+            }
             R.id.activity_main_drawer_deconnecter -> {
                 AppWakeUp.auth.signOut()
                 startConnectActivity()
@@ -254,6 +255,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         this.drawerLayout!!.closeDrawer(GravityCompat.START)
 
         return true
+    }
+
+    // non ok
+    private fun afficherPhoneContact() {
+        var phoneContactInfo = null
+        if (phoneContactInfo != null) {
+            for(item in 1..4){
+
+            }
+        }else{
+            Log.i("ContactListEurre", "Il y a une eurre")
+        }
+
     }
 
     // ---------------------
@@ -501,4 +515,37 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         startActivity(intent)
     }
+
+    // my own function
+    fun getPhoneContacts(): ArrayList<UserModel> {
+
+        val arrContact : ArrayList<UserModel> = ArrayList<UserModel>()
+        var userModel : UserModel? = null
+        var cursor: Cursor? = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null)
+        var from = arrayOf(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone.NUMBER,
+            ContactsContract.CommonDataKinds.Phone._ID)
+        cursor!!.moveToFirst()
+        while (cursor.isAfterLast == false) {
+            val contactNumber =
+                cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+            val contactName =
+                cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+            val phoneContactID =
+                cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID))
+            userModel = UserModel(""+phoneContactID,"no image",contactNumber, contactName, "nomail@gamil.com")
+            if (userModel != null) {
+                Log.i("ContactList", "Nom : ${userModel.username}, Phone : ${userModel.phone}, ID : ${userModel.id}" )
+                arrContact.add(userModel)
+            }
+            userModel = null
+            cursor.moveToNext()
+
+        }
+         cursor.close()
+         cursor = null
+        Log.d("END", "Got all Contacts")
+        return arrContact
+    }
+
 }

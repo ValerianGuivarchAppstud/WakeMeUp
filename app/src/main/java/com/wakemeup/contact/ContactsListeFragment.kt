@@ -1,6 +1,9 @@
 package com.wakemeup.contact
 
+import android.database.Cursor
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.core.Tag
 import com.neocampus.repo.ViewModelFactory
 import com.wakemeup.AppWakeUp
 import com.wakemeup.R
@@ -65,9 +69,5 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         //todo action click user
     }
 
-    // recuperer contact
-    fun recupererContactTelephone() : Map<String, UserModel>?{
-        // acceder au contact téléphone et les afficher en log
-        TODO()
-    }
+
 }

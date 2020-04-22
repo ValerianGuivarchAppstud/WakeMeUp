@@ -22,6 +22,7 @@
             android:id="@+id/activity_main_drawer_amis"
             android:icon="@drawable/icon_main_menu_friends"
             android:title="@string/amis" />
+
     </group>
     <item
         android:id="@+id/activity_main_drawer_deconnecter"
