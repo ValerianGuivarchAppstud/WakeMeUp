@@ -56,7 +56,6 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
     ): View? {
         super.onCreate(savedInstanceState)
         val view = inflater.inflate(R.layout.fragment_contact_list, container, false)
-
         val recyclerView = view.findViewById<RecyclerView>(R.id.list_contact)
         adapter = ContactListeAdapter(contacts, this)
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -69,5 +68,38 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         //todo action click user
     }
 
+
+    // my own function
+    fun getPhoneContacts(): Map<String, UserModel> {
+        var contact = mutableMapOf<String, UserModel>()
+        val arrContact : ArrayList<UserModel> = ArrayList<UserModel>()
+        var userModel : UserModel? = null
+        var cursor: Cursor? = context!!.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null)
+        var from = arrayOf(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone.NUMBER,
+            ContactsContract.CommonDataKinds.Phone._ID)
+        cursor!!.moveToFirst()
+        while (cursor.isAfterLast == false) {
+            val contactNumber =
+                cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+            val contactName =
+                cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+            val phoneContactID =
+                cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID))
+            userModel = UserModel(""+phoneContactID,"no image",contactNumber, contactName, "nomail@gamil.com")
+            if (userModel != null) {
+                Log.i("ContactListFragmentAmis", "Nom : ${userModel.username}, Phone : ${userModel.phone}, ID : ${userModel.id}" )
+                arrContact.add(userModel)
+                contact.put("${userModel.id}", userModel)
+            }
+            userModel = null
+            cursor.moveToNext()
+
+        }
+        cursor.close()
+        cursor = null
+        Log.d("END", "Got all Contacts")
+        return contact
+    }
 
 }

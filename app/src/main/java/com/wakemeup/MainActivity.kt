@@ -239,7 +239,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 this.showFragment(
                     FragmentId.FRAGMENT_AMIS
                 )
-                getPhoneContacts()
+                //getPhoneContacts()
             }
             R.id.activity_main_drawer_deconnecter -> {
                 AppWakeUp.auth.signOut()
@@ -514,38 +514,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         }
         startActivity(intent)
-    }
-
-    // my own function
-    fun getPhoneContacts(): ArrayList<UserModel> {
-
-        val arrContact : ArrayList<UserModel> = ArrayList<UserModel>()
-        var userModel : UserModel? = null
-        var cursor: Cursor? = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null)
-        var from = arrayOf(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-            ContactsContract.CommonDataKinds.Phone.NUMBER,
-            ContactsContract.CommonDataKinds.Phone._ID)
-        cursor!!.moveToFirst()
-        while (cursor.isAfterLast == false) {
-            val contactNumber =
-                cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-            val contactName =
-                cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-            val phoneContactID =
-                cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID))
-            userModel = UserModel(""+phoneContactID,"no image",contactNumber, contactName, "nomail@gamil.com")
-            if (userModel != null) {
-                Log.i("ContactList", "Nom : ${userModel.username}, Phone : ${userModel.phone}, ID : ${userModel.id}" )
-                arrContact.add(userModel)
-            }
-            userModel = null
-            cursor.moveToNext()
-
-        }
-         cursor.close()
-         cursor = null
-        Log.d("END", "Got all Contacts")
-        return arrContact
     }
 
 }
