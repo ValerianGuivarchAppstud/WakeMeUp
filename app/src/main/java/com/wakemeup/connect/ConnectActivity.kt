@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.iid.FirebaseInstanceId
 import com.wakemeup.AppWakeUp
@@ -35,7 +36,7 @@ class ConnectActivity : AppCompatActivity() {
 
         connect_button_se_connecter.setOnClickListener {
             val intentSeConnecter = Intent(this, LoginActivity::class.java)
-            startActivityForResult(intentSeConnecter, CREATION_COMPTE)
+            startActivityForResult(intentSeConnecter, CONNECTION_COMPTE)
         }
 
 
@@ -62,7 +63,8 @@ class ConnectActivity : AppCompatActivity() {
         when (requestCode) {
             CREATION_COMPTE -> {
                 if (AppWakeUp.auth.currentUser != null) {
-                    startMainActivityBeingConnected()
+                    AppWakeUp.auth.signOut()
+                    //startMainActivityBeingConnected()
                 }
             }
             CONNECTION_COMPTE -> {

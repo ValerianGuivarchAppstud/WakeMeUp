@@ -1,6 +1,7 @@
 package com.wakemeup.connect.ui
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -11,6 +12,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.wakemeup.AppWakeUp
 import com.wakemeup.R
 import com.wakemeup.connect.ui.signup.SignupViewModel
 import com.wakemeup.connect.ui.signup.SignupViewModelFactory
@@ -70,7 +72,8 @@ class SignupActivity : AppCompatActivity() {
             if (signupResult.error != null) {
                 showSignupFailed(signupResult.error)
             } else {
-                updateUiWithUser()
+                sendEmailConfirm()
+                //updateUiWithUser()
             }
             setResult(Activity.RESULT_OK)
 
@@ -158,5 +161,20 @@ class SignupActivity : AppCompatActivity() {
     private fun showSignupFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
+
+    private fun sendEmailConfirm(){
+        val user = AppWakeUp.auth.currentUser!!
+        user.sendEmailVerification()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                        applicationContext,
+                        "Un email de confirmation vous a été envoyé ;)",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+    }
+
 }
 
