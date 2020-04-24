@@ -3,6 +3,8 @@ package com.wakemeup.song
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.api.services.youtube.model.SearchResult
+import com.google.api.services.youtube.model.VideoContentDetails
+import java.io.Serializable
 
 
 class Song(
@@ -14,7 +16,9 @@ class Song(
     var lancement :Int,
 
     private val rank: Int = 0
-) : Comparable<Song>, Parcelable {
+) : Comparable<Song>, Parcelable, Serializable {
+
+    //val videoDetails : VideoContentDetails = VideoContentDetails()
 
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
@@ -46,7 +50,7 @@ class Song(
         result.snippet.title,
         result.snippet.channelTitle,
         result.snippet.thumbnails.medium.url,
-        300,
+        0,
         0,
         rank
     )
@@ -55,11 +59,16 @@ class Song(
         return other.rank - this.rank
     }
 
-    fun addTempsInUrl(temps : String){
-        artworkUrl+=temps
+    /*
+    fun addTempsInUrl(temps : Int){
+        artworkUrl+="&t=${temps}s"
     }
+    */
+
 
     companion object CREATOR : Parcelable.Creator<Song> {
+        private val serialVersionUid : Long = 123456789
+
         override fun createFromParcel(parcel: Parcel): Song {
             return Song(parcel)
         }

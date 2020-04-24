@@ -1,10 +1,12 @@
 package com.wakemeup.util
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import android.widget.Toast
 
 
 object Utility {
@@ -37,5 +39,13 @@ fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
 
 fun Intent.putParcelableExtra(key: String, value: Parcelable) {
     putExtra(key, value)
+}
+
+fun creatToast(activity : Activity, text : String){
+    Toast.makeText(
+        activity!!.application,
+        text,
+        Toast.LENGTH_SHORT
+    ).show()
 }
 

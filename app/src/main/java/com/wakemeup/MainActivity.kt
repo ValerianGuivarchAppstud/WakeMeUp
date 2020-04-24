@@ -10,10 +10,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -35,7 +32,10 @@ import com.wakemeup.connect.UserModel
 import com.wakemeup.contact.ContactsListeFragment
 import com.wakemeup.contact.SonnerieEnAttente
 import com.wakemeup.reveil.ReveilsListeFragment
+import com.wakemeup.song.Song
 import com.wakemeup.song.VideoFragment
+import com.wakemeup.util.loadFavoris
+import com.wakemeup.util.persisteFavoris
 import java.util.*
 
 
@@ -113,6 +113,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -404,6 +405,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             this.fragmentMusique = VideoFragment.newInstance(this)
         }
         this.startTransactionFragment(this.fragmentMusique!!)
+
     }
 
     private fun showSeConnecterFragment() {
@@ -418,6 +420,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             this.fragmentMusique = VideoFragment.newInstance(this)
         }
         this.startTransactionFragment(this.fragmentMusique!!)
+
     }
 
     // ---
@@ -428,6 +431,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             supportFragmentManager.beginTransaction()
                 .replace(R.id.activity_main_frame_layout, fragment).commit()
         }
+    }
+
+    public fun persisteFavorisMain(currentSong: Song?) {
+        persisteFavoris(this,currentSong)
+    }
+
+    public fun loadFavorisMain() : Song {
+        return loadFavoris(this)
     }
 
 

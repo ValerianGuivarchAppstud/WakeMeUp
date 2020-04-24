@@ -2,8 +2,8 @@ package com.wakemeup.song
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +23,8 @@ import com.wakemeup.AppWakeUp
 import com.wakemeup.MainActivity
 import com.wakemeup.R
 import com.wakemeup.contact.ListFriendToSendMusicActivity
+import com.wakemeup.util.loadFavoris
+import com.wakemeup.util.persisteFavoris
 import kotlinx.android.synthetic.main.fragment_video.*
 import kotlinx.android.synthetic.main.fragment_video.view.*
 
@@ -43,6 +45,7 @@ class VideoFragment : Fragment() {
     private var currentSong: Song? = null
 
     private var youTubePlayer: YouTubePlayer? = null
+
 
 
     private fun changeSelectedSong(index: Int) {
@@ -80,29 +83,41 @@ class VideoFragment : Fragment() {
         mAdapter.selectedPosition = 0
     }
 
+
     //lance la video reliée au parametre "song"
     private fun prepareSong(song: Song?) {
         //todo vérifier bug ici, si on sélectionne la musique trop vite
+
+
+
         if (song != null) {
 
             currentSongLength = song.duration
             currentSong = song
 
+            //persisteFavoris(this,currentSong)
+
+
             if (youTubePlayer != null) {
-                youTubePlayer!!.loadVideo(song.id, 0F)
-                //////// todo youTubePlayer.setVolume(100)
+
+                youTubePlayer!!.loadVideo(song.id,song.lancement.toFloat())
+                youTubePlayer!!.setVolume(100)
+
                 youTubePlayerView.getPlayerUiController()
-                    .setVideoTitle(song.title)//.loadVideo(videoId, 0F)
+                    .setVideoTitle(song.title)
 
                 this.isPlaying = true
             }
         }
     }
 
+
+
+
     private fun startActivityListFriendToSendMusicActivity(){
         //ouvre l'activity de la liste d'amis
         activity!!.intent = Intent(activity, ListFriendToSendMusicActivity::class.java)
-        activity!!.intent.putExtra("song", currentSong)
+        activity!!.intent.putExtra("song", currentSong as Parcelable)
         startActivity(activity!!.intent)
     }
 
@@ -158,9 +173,7 @@ class VideoFragment : Fragment() {
 
                     if (minute.toInt() <= 60 && seconde.toInt() <= 60) {
                         val temps_en_secondes: Int = 60 * 60 * heure.toInt() + 60 * minute.toInt() + seconde.toInt()
-                        val temps_format_url = "&t=${temps_en_secondes}s"
                         currentSong?.lancement = temps_en_secondes
-                        currentSong!!.addTempsInUrl(temps_format_url)
                         startActivityListFriendToSendMusicActivity()
                     } else {
                         Toast.makeText(
@@ -226,8 +239,8 @@ class VideoFragment : Fragment() {
 
 
         //Gestion du click sur le bouton rechercher
-        val bt = currentView.findViewById<FloatingActionButton>(R.id.fab_search)
-        bt.setOnClickListener {
+        val bt_search = currentView.findViewById<FloatingActionButton>(R.id.fab_search)
+        bt_search.setOnClickListener {
             createDialogForSearch()
         }
 
@@ -238,10 +251,6 @@ class VideoFragment : Fragment() {
             } else {
                 if (currentSong != null) {
                     createDialoguePartage() //lance la dialogue pour preciser le temps
-                    //TODO réussir a cliquer sur les bouton (bug aucune action apres un apuie)
-
-
-
                 }
                 else{
                     Toast.makeText(

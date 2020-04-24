@@ -73,6 +73,8 @@ object InternalSearchYouTube {
      * @throws GeneralSecurityException, IOException, GoogleJsonResponseException
      */
     @Throws(GeneralSecurityException::class, IOException::class, GoogleJsonResponseException::class)
+
+
     fun search(searchWord: String, maxResult: Int): MutableList<SearchResult>? {
         val youtubeService = service
         // Define and execute the API request
@@ -82,7 +84,6 @@ object InternalSearchYouTube {
                 .setId("UC_x5XG1OV2P6uZZ5FSM9Ttw")
                 .execute();
      */
-
         val request = youtubeService.search()
             .list("snippet").setType("video")
 
