@@ -22,6 +22,8 @@ import com.wakemeup.AppWakeUp
 import com.wakemeup.MainActivity
 import com.wakemeup.R
 import com.wakemeup.contact.ListFriendToSendMusicActivity
+import com.wakemeup.util.loadFavoris
+import com.wakemeup.util.persisteFavoris
 import kotlinx.android.synthetic.main.fragment_video.*
 import kotlinx.android.synthetic.main.fragment_video.view.*
 
@@ -41,6 +43,31 @@ class VideosFavoris : Fragment() {
     private var currentSong: Song? = null
 
     private var youTubePlayer: YouTubePlayer? = null
+
+
+    private fun createAlertDialogNotConnected(context: Context, ma: MainActivity) {
+        // Initialize a new instance of
+        val builder = AlertDialog.Builder(context)
+
+        // Set the alert dialog title
+        builder.setTitle("Vous n'êtes pas connecté")
+
+        // Display a message on alert dialog
+        builder.setMessage("Pour partager une musique à un contact, veuillez vous connecter.")
+
+        // Set a positive button and its click listener on alert dialog
+        builder.setPositiveButton("Se connecter") { dialog, which ->
+            ma.startConnectActivity(false)
+        }
+        // Display a neutral button on alert dialog
+        builder.setNeutralButton("Annuler") { _, _ -> }
+
+        // Finally, make the alert dialog using builder
+        val dialog: AlertDialog = builder.create()
+
+        // Display the alert dialog on app interface
+        dialog.show()
+    }
 
 
     private fun changeSelectedSong(index: Int) {
@@ -68,6 +95,61 @@ class VideosFavoris : Fragment() {
 
                 this.isPlaying = true
             }
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        super.onCreate(savedInstanceState)
+        currentView = inflater.inflate(R.layout.fragment_favori, container, false)
+
+        val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycler_list_video)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.adapter = mAdapter
+
+
+        youTubePlayerView = currentView.findViewById(R.id.youtube_player_view)
+        lifecycle.addObserver(youTubePlayerView)
+
+        youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onReady(ytPlayer: YouTubePlayer) {
+                youTubePlayer = ytPlayer
+                if (currentSong != null) {
+                    prepareSong(currentSong)
+                }
+            }
+        })
+
+        val songs = mutableListOf<Song>()
+        val song = loadFavoris(this.requireContext())
+        songs.add(song)
+        currentIndex = 0
+        currentView.pb_main_loader.visibility = View.GONE
+        songList.clear()
+        songList.addAll(songs)
+        mAdapter.notifyDataSetChanged()
+        mAdapter.selectedPosition = 0
+
+        return currentView
+    }
+
+    companion object {
+
+        fun newInstance(ctx: Context): VideosFavoris {
+
+            val nf = VideosFavoris()
+            nf.mAdapter = SongAdapter(ctx, nf.songList,
+                object : SongAdapter.RecyclerItemClickListener {
+                    override fun onClickListener(song: Song, position: Int) {
+                        nf.firstLaunch = false
+                        nf.changeSelectedSong(position)
+                        nf.prepareSong(song)
+                    }
+                })
+            return nf
         }
     }
 

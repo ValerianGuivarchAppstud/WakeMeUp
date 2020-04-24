@@ -95,9 +95,6 @@ class VideoFragment : Fragment() {
             currentSongLength = song.duration
             currentSong = song
 
-            //persisteFavoris(this,currentSong)
-
-
             if (youTubePlayer != null) {
 
                 youTubePlayer!!.loadVideo(song.id,song.lancement.toFloat())
@@ -238,12 +235,13 @@ class VideoFragment : Fragment() {
         recyclerView.adapter = mAdapter
 
 
-        //Gestion du click sur le bouton rechercher
+        //Gestion du clic sur le bouton rechercher
         val bt_search = currentView.findViewById<FloatingActionButton>(R.id.fab_search)
         bt_search.setOnClickListener {
             createDialogForSearch()
         }
 
+        //Gestion du clic sur le bouton partage
         val btPartage = currentView.findViewById<Button>(R.id.list_video_partage)
         btPartage.setOnClickListener {
             if (AppWakeUp.auth.currentUser!!.isAnonymous) {
@@ -262,13 +260,19 @@ class VideoFragment : Fragment() {
             }
         }
 
+
+        //Gestion du clic sur le bouton favori
         val btFavori = currentView.findViewById<Button>(R.id.list_video_favori)
         btFavori.setOnClickListener {
             if (AppWakeUp.auth.currentUser!!.isAnonymous) {
                 createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
             } else {
-
-                //TODO mettre la video en favori / la rajouter dans firebase
+                persisteFavoris(this.requireContext(),currentSong)
+                Toast.makeText(
+                    activity!!.application,
+                    "La video a été ajouté",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 

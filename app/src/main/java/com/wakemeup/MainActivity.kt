@@ -39,6 +39,7 @@ import com.wakemeup.reveil.ReveilsListeFragment
 import com.wakemeup.song.Song
 import com.wakemeup.share.DemanderMusique
 import com.wakemeup.song.VideoFragment
+import com.wakemeup.song.VideosFavoris
 import com.wakemeup.util.loadFavoris
 import com.wakemeup.util.persisteFavoris
 import java.util.*
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var fragmentPartage : DemanderMusique? = null
     private var fragmentContact: ContactsListeFragment? = null
     private var fragmentParametre : SettingsUser? = null
-    private var fragmentFavoris: VideoFragment? = null
+    private var fragmentFavoris: VideosFavoris? = null
 
     private var currentUser: UserModel? = null
 
@@ -404,7 +405,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // Create each fragment page and show it
 
     private fun showFavorisFragment() {
-        //TODO Créer le fragment des favoris
+        if (this.fragmentFavoris == null) {
+            this.fragmentFavoris = VideosFavoris.newInstance(this)
+        }
+        this.startTransactionFragment(this.fragmentFavoris!!)
     }
 
     private fun showReveilFragment() {
