@@ -26,6 +26,8 @@ class SignupViewModel : ViewModel() {
     //todo ajotuer connexion Google ? Facebook ?
 
     //TODO refactoring, imbriquer firebase dans une classe, des fois que je change
+
+    //enregistre les données du nouveau compte utilisateur dans firebase
     fun signup(
         activitySignun: Activity,
         username: String,
@@ -33,7 +35,7 @@ class SignupViewModel : ViewModel() {
         mail: String,
         phone: String
     ) {
-        AppWakeUp.auth.createUserWithEmailAndPassword(mail, password).addOnCompleteListener { it ->
+        AppWakeUp.auth.createUserWithEmailAndPassword(mail, password).addOnCompleteListener() { it ->
             if (it.isSuccessful) {
                 val firebaseUser = AppWakeUp.auth.currentUser!!
                 val userId = firebaseUser.uid
@@ -44,6 +46,7 @@ class SignupViewModel : ViewModel() {
                 hashmap["phone"] = phone
                 hashmap["username"] = username
                 hashmap["mail"] = mail
+                
                 reference.setValue(hashmap).addOnCompleteListener {
                     if (it.isSuccessful) {
                         _signupResult.value =

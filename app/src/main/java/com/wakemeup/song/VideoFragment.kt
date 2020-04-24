@@ -31,7 +31,6 @@ class VideoFragment : Fragment() {
     private var isPlaying: Boolean = false
     private val songList = mutableListOf<Song>()
 
-
     private lateinit var mAdapter: SongAdapter
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
@@ -79,9 +78,11 @@ class VideoFragment : Fragment() {
         mAdapter.selectedPosition = 0
     }
 
+    //lance la video reliée au parametre "song"
     private fun prepareSong(song: Song?) {
         //todo vérifier bug ici, si on sélectionne la musique trop vite
         if (song != null) {
+
             currentSongLength = song.duration
             currentSong = song
 
@@ -96,7 +97,7 @@ class VideoFragment : Fragment() {
         }
     }
 
-
+    //Recherche une musique depuis la barre de recherche (id : et_search)
     private fun createDialog() {
         val builder = AlertDialog.Builder(activity!!)
         val view = activity!!.layoutInflater.inflate(R.layout.dialog_search, null)
@@ -106,8 +107,10 @@ class VideoFragment : Fragment() {
                 val search: String =
                     view.findViewById<EditText>(R.id.et_search).text.toString().trim()
                 if (search.isNotEmpty()) {
+                    //si la bar de recherche n'est pas vide
                     getSongList(search)
                 } else {
+                    //si la bar de recherche est vide
                     Toast.makeText(
                         activity!!.application,
                         "Veuillez remplir le champ",
@@ -179,7 +182,12 @@ class VideoFragment : Fragment() {
 
         val btFavori = currentView.findViewById<Button>(R.id.list_video_favori)
         btFavori.setOnClickListener {
+            if (AppWakeUp.auth.currentUser!!.isAnonymous) {
+                createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
+            } else {
 
+                //TODO mettre la video en favori / la rajouter dans firebase
+            }
         }
 
         youTubePlayerView = currentView.findViewById(R.id.youtube_player_view)

@@ -3,20 +3,22 @@ package com.wakemeup
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -32,6 +34,7 @@ import com.wakemeup.contact.ContactsListeFragment
 import com.wakemeup.contact.SonnerieEnAttente
 import com.wakemeup.reveil.ReveilsListeFragment
 import com.wakemeup.song.VideoFragment
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -45,6 +48,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var fragmentReveil: ReveilsListeFragment? = null
     private var fragmentMusique: VideoFragment? = null
     private var fragmentContact: ContactsListeFragment? = null
+    private var fragmentFavoris: VideoFragment? = null
 
     private var currentUser: UserModel? = null
 
@@ -109,6 +113,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         if (AppWakeUp.auth.currentUser == null) {
             startConnectActivity()
@@ -235,12 +240,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.activity_main_drawer_musiques -> this.showFragment(
                 FragmentId.FRAGMENT_MUSIQUES
             )
-            R.id.activity_main_drawer_amis -> {
-                this.showFragment(
-                    FragmentId.FRAGMENT_AMIS
-                )
-                //getPhoneContacts()
-            }
+            R.id.activity_main_drawer_amis -> this.showFragment(
+                FragmentId.FRAGMENT_AMIS
+            )
+            R.id.activity_main_drawer_favoris -> this.showFragment(
+                FragmentId.FRAGMENT_FAVORIS
+            )
             R.id.activity_main_drawer_deconnecter -> {
                 AppWakeUp.auth.signOut()
                 startConnectActivity()
@@ -255,19 +260,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         this.drawerLayout!!.closeDrawer(GravityCompat.START)
 
         return true
-    }
-
-    // non ok
-    private fun afficherPhoneContact() {
-        var phoneContactInfo = null
-        if (phoneContactInfo != null) {
-            for(item in 1..4){
-
-            }
-        }else{
-            Log.i("ContactListEurre", "Il y a une eurre")
-        }
-
     }
 
     // ---------------------
@@ -323,9 +315,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
             )
+            navigationView!!.menu.findItem(R.id.activity_main_drawer_favoris).isVisible = true
             navigationView!!.menu.findItem(R.id.activity_main_drawer_connecter).isVisible = false
             navigationView!!.menu.findItem(R.id.activity_main_drawer_deconnecter).isVisible = true
         } else {
+            navigationView!!.menu.findItem(R.id.activity_main_drawer_favoris).isVisible = false
             navigationView!!.menu.findItem(R.id.activity_main_drawer_connecter).isVisible = true
             navigationView!!.menu.findItem(R.id.activity_main_drawer_deconnecter).isVisible = false
         }
@@ -375,6 +369,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             FragmentId.FRAGMENT_MUSIQUES -> this.showMusiquesFragment()
             FragmentId.FRAGMENT_AMIS -> this.showAmisFragment()
             FragmentId.FRAGMENT_REVEIL -> this.showReveilFragment()
+            FragmentId.FRAGMENT_FAVORIS -> this.showFavorisFragment()
+
             else -> {
             }
         }
@@ -383,6 +379,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // ---
 
     // Create each fragment page and show it
+
+    private fun showFavorisFragment() {
+        //TODO Créer le fragment des favoris
+    }
 
     private fun showReveilFragment() {
         if (this.fragmentReveil == null) {
@@ -437,7 +437,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             FRAGMENT_MUSIQUES,
             FRAGMENT_AMIS,
             FRAGMENT_SECONNECTER,
-            FRAGMENT_SEDECONNECTER
+            FRAGMENT_SEDECONNECTER,
+            FRAGMENT_FAVORIS
         }
     }
 
@@ -515,5 +516,4 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         startActivity(intent)
     }
-
 }
