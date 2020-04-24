@@ -30,6 +30,7 @@
 
     </LinearLayout>
 
+
     <!-- 2 | NavigationView -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/activity_main_nav_view"
@@ -39,5 +40,6 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/activity_main_nav_header"
         app:menu="@menu/activity_main_menu_drawer" />
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

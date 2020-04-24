@@ -2,6 +2,7 @@ package com.wakemeup
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.neocampus.repo.Repository
@@ -79,4 +80,5 @@ class AppWakeUp : Application() {
         appContext = applicationContext
         repository = Repository()
     }
+
 }

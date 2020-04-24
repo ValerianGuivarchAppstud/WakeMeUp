@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="Modification du compte"
+        app:theme="@style/ToolBarStyle" />
+
+    <TextView
+        android:id="@+id/indication_identifiant"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Changer votre identifiant :"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/valeur_identifiant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/indication_identifiant"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/indication_identifiant"
+        tools:text="identifiant" />
+
+    <ImageButton
+        android:id="@+id/button_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/share"
+        app:layout_constraintLeft_toRightOf="@id/valeur_identifiant"
+        app:layout_constraintTop_toTopOf="@id/valeur_identifiant"
+        app:layout_constraintBottom_toBottomOf="@id/valeur_identifiant"
+        android:layout_marginLeft="20dp"/>
+
+    <TextView
+        android:id="@+id/indication_mdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Changer votre Mot de Passe :"
+        app:layout_constraintTop_toBottomOf="@+id/valeur_identifiant"
+        app:layout_constraintLeft_toLeftOf="@id/indication_identifiant"
+        android:layout_marginTop="90dp"
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:id="@+id/valeur_mdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/valeur_identifiant"
+        app:layout_constraintTop_toBottomOf="@id/indication_mdp"
+        android:layout_marginTop="30dp"
+        tools:text="Mot de passe"
+        android:textSize="20sp"/>
+
+    <ImageButton
+        android:id="@+id/button_mdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/valeur_mdp"
+        app:layout_constraintTop_toTopOf="@id/valeur_mdp"
+        app:layout_constraintBottom_toBottomOf="@id/valeur_mdp"
+        android:src="@drawable/share"
+        android:layout_marginLeft="20dp"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

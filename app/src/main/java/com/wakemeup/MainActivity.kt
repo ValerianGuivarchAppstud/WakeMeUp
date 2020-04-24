@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -28,12 +29,15 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.wakemeup.connect.ConnectActivity
+
 import com.wakemeup.connect.UserModel
+import com.wakemeup.connect.ui.EditUser.EditUser
 import com.wakemeup.contact.ContactsListeFragment
 import com.wakemeup.contact.SonnerieEnAttente
 import com.wakemeup.reveil.ReveilsListeFragment
 import com.wakemeup.share.DemanderMusique
 import com.wakemeup.song.VideoFragment
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -48,7 +52,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var fragmentMusique: VideoFragment? = null
     private var fragmentPartage : DemanderMusique? = null
     private var fragmentContact: ContactsListeFragment? = null
-
+    private var fragmentParametre : SettingsUser? = null
     private var currentUser: UserModel? = null
 
 
@@ -245,6 +249,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.activity_main_drawer_amis -> this.showFragment(
                 FragmentId.FRAGMENT_AMIS
             )
+            R.id.activity_main_drawer_parametre -> this.showFragment(
+                FragmentId.FRAGMENT_PARAMETRE
+            )
             R.id.activity_main_drawer_deconnecter -> {
                 AppWakeUp.auth.signOut()
                 startConnectActivity()
@@ -252,6 +259,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.activity_main_drawer_connecter -> {
                 startConnectActivity(false)
             }
+
             else -> {
             }
         }
@@ -367,11 +375,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             FragmentId.FRAGMENT_PARTAGE -> this.showPartageFragment()
             FragmentId.FRAGMENT_AMIS -> this.showAmisFragment()
             FragmentId.FRAGMENT_REVEIL -> this.showReveilFragment()
-
+            FragmentId.FRAGMENT_PARAMETRE -> this.showParametreFragment()
             else -> {
             }
         }
     }
+
+
 
     // ---
 
@@ -404,6 +414,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         supportFragmentManager.beginTransaction().remove(this.fragmentPartage!!).commit()
         this.startTransactionFragment(this.fragmentPartage!!)
+    }
+
+    private fun showParametreFragment() {
+        if (this.fragmentParametre == null) {
+            this.fragmentParametre= SettingsUser.newInstance(this)
+        }
+        this.startTransactionFragment(this.fragmentParametre!!)
     }
 
     private fun showSeConnecterFragment() {
@@ -440,6 +457,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             FRAGMENT_AMIS,
             FRAGMENT_SECONNECTER,
             FRAGMENT_SEDECONNECTER,
+            FRAGMENT_PARAMETRE
 
         }
     }
