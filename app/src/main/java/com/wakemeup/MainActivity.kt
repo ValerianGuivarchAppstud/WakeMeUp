@@ -473,14 +473,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    public fun persisteFavorisMain(currentSong: Song?) {
-        persisteFavoris(this,currentSong)
-    }
-
-    public fun loadFavorisMain() : Song {
-        return loadFavoris(this)
-    }
-
 
     companion object {
 

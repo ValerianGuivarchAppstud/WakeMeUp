@@ -10,17 +10,17 @@ import java.io.ObjectOutputStream
 private val TAG = "storage"
 private  const val FILENAME_FAVORI= "fav_utilisateur.txt"
 
-fun persisteFavoris(context: Context, songs: Song?){
+fun persisteFavoris(context: Context, songs: MutableList<Song?>){
     val fileOutPut = context!!.openFileOutput(FILENAME_FAVORI, Context.MODE_PRIVATE)
     val outPutStream = ObjectOutputStream(fileOutPut)
     outPutStream.writeObject(songs)
     outPutStream.close()
 }
 
-fun loadFavoris(context : Context) : Song{
+fun loadFavoris(context : Context) : MutableList<Song?>{
     val fileInput = context!!.openFileInput(FILENAME_FAVORI)
     val inputStream = ObjectInputStream(fileInput)
-    val songs = inputStream.readObject() as Song
+    val songs = inputStream.readObject() as MutableList<Song?>
     inputStream.close()
     return songs
 }

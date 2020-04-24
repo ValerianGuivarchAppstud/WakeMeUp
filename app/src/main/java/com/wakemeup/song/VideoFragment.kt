@@ -33,7 +33,7 @@ class VideoFragment : Fragment() {
 
     private var isPlaying: Boolean = false
     private val songList = mutableListOf<Song>()
-
+    private var favorisListe : MutableList<Song?> = mutableListOf<Song?>()
     private lateinit var mAdapter: SongAdapter
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
@@ -150,6 +150,9 @@ class VideoFragment : Fragment() {
                 currentSong?.lancement = 0
                 startActivityListFriendToSendMusicActivity()
             }
+            .setNegativeButton("Annuler"){_, _ ->
+
+            }
             .setNeutralButton("Choisir le temps"){ _, _ ->
                createDialogueChoixDuTemps()
             }
@@ -225,7 +228,7 @@ class VideoFragment : Fragment() {
         super.onCreate(savedInstanceState)
         currentView = inflater.inflate(R.layout.fragment_video, container, false)
         partageView = inflater.inflate(R.layout.dialog_partage, container, true)
-
+        favorisListe = loadFavoris(this.requireContext())
 
         // iv_play.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.selector_play))
         getSongList("musique")
@@ -267,7 +270,11 @@ class VideoFragment : Fragment() {
             if (AppWakeUp.auth.currentUser!!.isAnonymous) {
                 createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
             } else {
-                persisteFavoris(this.requireContext(),currentSong)
+                if (currentSong!=null) {
+                    favorisListe.add(currentSong!!)
+                    persisteFavoris(this.requireContext(),favorisListe)
+                }
+
                 Toast.makeText(
                     activity!!.application,
                     "La video a été ajouté",

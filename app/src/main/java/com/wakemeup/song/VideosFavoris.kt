@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.fragment_video.view.*
 class VideosFavoris : Fragment() {
 
     private var isPlaying: Boolean = false
-    private val songList = mutableListOf<Song>()
+    private val songList : MutableList<Song> = mutableListOf<Song>()
 
     private lateinit var mAdapter: SongAdapter
     private lateinit var youTubePlayerView: YouTubePlayerView
@@ -123,13 +123,16 @@ class VideosFavoris : Fragment() {
             }
         })
 
-        val songs = mutableListOf<Song>()
-        val song = loadFavoris(this.requireContext())
-        songs.add(song)
+
         currentIndex = 0
         currentView.pb_main_loader.visibility = View.GONE
         songList.clear()
-        songList.addAll(songs)
+        val favoris = loadFavoris(this.requireContext())
+        for (song in favoris){
+            if (song != null) {
+                songList.add(song)
+            }
+        }
         mAdapter.notifyDataSetChanged()
         mAdapter.selectedPosition = 0
 
