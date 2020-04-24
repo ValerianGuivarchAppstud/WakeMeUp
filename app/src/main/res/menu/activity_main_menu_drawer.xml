@@ -23,6 +23,10 @@
             android:icon="@drawable/icon_main_menu_favoris"
             android:title="@string/favori" />
         <item
+            android:id="@+id/activity_main_drawer_partage"
+            android:icon="@drawable/share"
+            android:title="Demander une musique" />
+        <item
             android:id="@+id/activity_main_drawer_amis"
             android:icon="@drawable/icon_main_menu_friends"
             android:title="@string/amis" />

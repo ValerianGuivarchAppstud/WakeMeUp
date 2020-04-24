@@ -56,5 +56,12 @@
     <string name="logo_sonnerie_en_attente">Logo sonnerie en attente</string>
     <string name="delete_clock">Delete Clock</string>
     <string name="prompt_phone">Numéro de téléphone</string>
+    <string name="message_partage_general">Partager sur wakemeup :</string>
+    <string name="test_gmail">Text Gmail</string>
+    <string name="text_twitter">Text twitter</string>
+    <string name="text_sms">Text sms</string>
+    <string name="text_instagram">Text instagram</string>
+    <string name="text_snapchat">Text snapchat</string>
+    <string name="text_discord">\"Partage sur discord \"</string>
 
 </resources>
