@@ -55,6 +55,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
+
         val view = inflater.inflate(R.layout.fragment_contact_list, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.list_contact)
         adapter = ContactListeAdapter(contacts, this)
@@ -72,9 +73,9 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
     // my own function
     fun getPhoneContacts(): Map<String, UserModel> {
         var contact = mutableMapOf<String, UserModel>()
-        val arrContact : ArrayList<UserModel> = ArrayList<UserModel>()
         var userModel : UserModel? = null
-        var cursor: Cursor? = context!!.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null)
+        var cursor: Cursor? = context!!.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null, null, null, null)
         var from = arrayOf(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
             ContactsContract.CommonDataKinds.Phone.NUMBER,
             ContactsContract.CommonDataKinds.Phone._ID)
@@ -89,12 +90,10 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
             userModel = UserModel(""+phoneContactID,"no image",contactNumber, contactName, "nomail@gamil.com")
             if (userModel != null) {
                 Log.i("ContactListFragmentAmis", "Nom : ${userModel.username}, Phone : ${userModel.phone}, ID : ${userModel.id}" )
-                arrContact.add(userModel)
                 contact.put("${userModel.id}", userModel)
             }
             userModel = null
             cursor.moveToNext()
-
         }
         cursor.close()
         cursor = null
