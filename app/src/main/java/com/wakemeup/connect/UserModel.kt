@@ -5,10 +5,11 @@ class UserModel(
     val imageUrl: String,
     val phone: String,
     val username: String,
-    val mail: String
+    var mail: String
 ) {
 
 
     constructor() : this("", "", "", "", "")
+
 
 }

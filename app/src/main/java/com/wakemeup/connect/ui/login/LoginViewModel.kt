@@ -19,11 +19,12 @@ class LoginViewModel : ViewModel() {
 
         AppWakeUp.auth.signInWithEmailAndPassword(mail, password)
             .addOnCompleteListener {
-                if (it.isSuccessful) {
+                if (it.isSuccessful && AppWakeUp.auth.currentUser!!.isEmailVerified) {
                     _loginResult.value =
                         ConnectResult(AppWakeUp.auth.currentUser)
 
                 } else {
+                    AppWakeUp.auth.signOut()
                     _loginResult.value =
                         ConnectResult(error = R.string.login_failed)
                 }

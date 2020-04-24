@@ -1,7 +1,6 @@
 package com.wakemeup
 
 import android.Manifest
-import android.content.ClipData
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -11,13 +10,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -33,6 +34,7 @@ import com.wakemeup.contact.ContactsListeFragment
 import com.wakemeup.contact.SonnerieEnAttente
 import com.wakemeup.reveil.ReveilsListeFragment
 import com.wakemeup.song.Song
+import com.wakemeup.share.DemanderMusique
 import com.wakemeup.song.VideoFragment
 import com.wakemeup.util.loadFavoris
 import com.wakemeup.util.persisteFavoris
@@ -49,6 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     //FOR FRAGMENTS
     private var fragmentReveil: ReveilsListeFragment? = null
     private var fragmentMusique: VideoFragment? = null
+    private var fragmentPartage : DemanderMusique? = null
     private var fragmentContact: ContactsListeFragment? = null
     private var fragmentFavoris: VideoFragment? = null
 
@@ -116,6 +119,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         if (AppWakeUp.auth.currentUser == null) {
             startConnectActivity()
@@ -241,6 +245,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             )
             R.id.activity_main_drawer_musiques -> this.showFragment(
                 FragmentId.FRAGMENT_MUSIQUES
+            )
+            R.id.activity_main_drawer_partage -> this.showFragment(
+                FragmentId.FRAGMENT_PARTAGE
             )
             R.id.activity_main_drawer_amis -> this.showFragment(
                 FragmentId.FRAGMENT_AMIS
@@ -369,8 +376,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             FragmentId.FRAGMENT_SECONNECTER -> this.showSeConnecterFragment()
             FragmentId.FRAGMENT_SEDECONNECTER -> this.showSeDeconnecterFragment()
             FragmentId.FRAGMENT_MUSIQUES -> this.showMusiquesFragment()
+            FragmentId.FRAGMENT_PARTAGE -> this.showPartageFragment()
             FragmentId.FRAGMENT_AMIS -> this.showAmisFragment()
             FragmentId.FRAGMENT_REVEIL -> this.showReveilFragment()
+
             FragmentId.FRAGMENT_FAVORIS -> this.showFavorisFragment()
 
             else -> {
@@ -406,6 +415,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         this.startTransactionFragment(this.fragmentMusique!!)
 
+    }
+
+    private fun showPartageFragment() {
+        if (this.fragmentPartage == null) {
+            this.fragmentPartage = DemanderMusique.newInstance(this)
+        }
+        supportFragmentManager.beginTransaction().remove(this.fragmentPartage!!).commit()
+        this.startTransactionFragment(this.fragmentPartage!!)
     }
 
     private fun showSeConnecterFragment() {
@@ -447,10 +464,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         enum class FragmentId {
             FRAGMENT_REVEIL,
             FRAGMENT_MUSIQUES,
+            FRAGMENT_PARTAGE,
             FRAGMENT_AMIS,
             FRAGMENT_SECONNECTER,
             FRAGMENT_SEDECONNECTER,
             FRAGMENT_FAVORIS
+            FRAGMENT_SEDECONNECTER
+
         }
     }
 
@@ -528,4 +548,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         startActivity(intent)
     }
+
+
 }
