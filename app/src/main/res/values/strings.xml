@@ -63,6 +63,7 @@
     <string name="text_instagram">Text instagram</string>
     <string name="text_snapchat">Text snapchat</string>
     <string name="text_discord">\"Partage sur discord \"</string>
+    <string name="nouvel_id_dialog">Nouvel identifiant</string>
 
     <string name="heure_choix_temps">Heure</string>
     <string name="minute_choix_temps">Minute</string>
