@@ -34,6 +34,14 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         val factory = ViewModelFactory(AppWakeUp.repository)
 
         viewModel = ViewModelProvider(this, factory).get(ContactListeViewModel::class.java)
+
+         //put all contact
+         for (user in getPhoneContacts().values){
+             println("BOUCLE: ${user.username}")
+             viewModel.addContact(user)
+             println("FIN Bouvle")
+         }
+
         viewModel.getContactsListeLiveData().observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer { nouvelleListeContacts ->
@@ -55,7 +63,6 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
-
         val view = inflater.inflate(R.layout.fragment_contact_list, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.list_contact)
         adapter = ContactListeAdapter(contacts, this)
