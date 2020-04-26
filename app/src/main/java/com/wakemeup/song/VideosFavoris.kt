@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -31,6 +32,7 @@ import kotlinx.android.synthetic.main.fragment_video.view.*
 
 class VideosFavoris : Fragment() {
 
+    private lateinit var dialogue : DialogueYoutube
     private var isPlaying: Boolean = false
     private val songList : MutableList<Song> = mutableListOf<Song>()
 
@@ -44,31 +46,7 @@ class VideosFavoris : Fragment() {
     private var currentSong: Song? = null
 
     private var youTubePlayer: YouTubePlayer? = null
-
-
-    private fun createAlertDialogNotConnected(context: Context, ma: MainActivity) {
-        // Initialize a new instance of
-        val builder = AlertDialog.Builder(context)
-
-        // Set the alert dialog title
-        builder.setTitle("Vous n'êtes pas connecté")
-
-        // Display a message on alert dialog
-        builder.setMessage("Pour partager une musique à un contact, veuillez vous connecter.")
-
-        // Set a positive button and its click listener on alert dialog
-        builder.setPositiveButton("Se connecter") { dialog, which ->
-            ma.startConnectActivity(false)
-        }
-        // Display a neutral button on alert dialog
-        builder.setNeutralButton("Annuler") { _, _ -> }
-
-        // Finally, make the alert dialog using builder
-        val dialog: AlertDialog = builder.create()
-
-        // Display the alert dialog on app interface
-        dialog.show()
-    }
+    private lateinit var textePasDeFavori : TextView
 
 
     private fun changeSelectedSong(index: Int) {
@@ -77,8 +55,6 @@ class VideosFavoris : Fragment() {
         mAdapter.selectedPosition = currentIndex
         mAdapter.notifyItemChanged(currentIndex)
     }
-
-
 
     //lance la video reliée au parametre "song"
     private fun prepareSong(song: Song?) {
@@ -101,6 +77,7 @@ class VideosFavoris : Fragment() {
 
     //TODO créer classe abstraite ou créer classe BouttonPartage
 
+
     //Gestion du clic sur le bouton suprimer
     private fun gestionBoutonSupprimer(){
         val btSupprimer = currentView.findViewById<Button>(R.id.bouton_supprimer_favori)
@@ -108,8 +85,17 @@ class VideosFavoris : Fragment() {
 
             if (currentSong != null) {
                 songList.remove(currentSong!!)
+                if (songList.isNullOrEmpty()){
+                    currentSong = null
+                    textePasDeFavori.visibility=View.VISIBLE
+                }
+
+                //Mettre a jour-----------------
+
                 mAdapter.notifyDataSetChanged()
                 mAdapter.selectedPosition = 0
+                //------------------------------
+
                 resetFavoris(this.requireContext())
                 persisteFavoris(this.requireContext(),songList)
 
@@ -128,6 +114,27 @@ class VideosFavoris : Fragment() {
                 ).show()
             }
 
+        }
+    }
+
+    //Gestion du clic sur le bouton partage
+    private fun gestionBoutonParatage(){
+        val btPartage = currentView.findViewById<Button>(R.id.button_partage_favori)
+        btPartage.setOnClickListener {
+            if (AppWakeUp.auth.currentUser!!.isAnonymous) {
+                dialogue.createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
+            } else {
+                if (currentSong != null) {
+                    dialogue.createDialoguePartage(currentSong) //lance la dialogue pour preciser le temps
+                }
+                else{
+                    Toast.makeText(
+                        activity!!.application,
+                        "Veuillez sélectionner une vidéo",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
     }
 
@@ -162,17 +169,32 @@ class VideosFavoris : Fragment() {
         songList.clear()
 
         gestionBoutonSupprimer()
+        gestionBoutonParatage()
+
+        textePasDeFavori = currentView.findViewById(R.id.texte_pas_de_favori)
 
         //Charge les favoris-----------------------------------------------------
         val favoris : MutableList<Song>? = loadFavoris(this.requireContext())
         if (favoris != null) {
             songList.addAll(favoris)
+            if (favoris.isEmpty()) {
+                textePasDeFavori.visibility = View.VISIBLE
+            }
+            else{
+                textePasDeFavori.visibility=View.INVISIBLE
+            }
+        }
+        else{
+            textePasDeFavori = currentView.findViewById<Button>(R.id.texte_pas_de_favori)
+            textePasDeFavori.visibility=View.VISIBLE
         }
         //------------------------------------------------------------------------
 
 
         mAdapter.notifyDataSetChanged()
         mAdapter.selectedPosition = 0
+
+        dialogue = DialogueYoutube(activity!!)
 
         return currentView
     }

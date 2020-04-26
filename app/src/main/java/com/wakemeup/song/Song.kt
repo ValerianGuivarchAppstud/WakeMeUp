@@ -14,7 +14,6 @@ class Song(
     var artworkUrl: String,
     val duration: Int,
     var lancement :Int,
-
     private val rank: Int = 0
 ) : Comparable<Song>, Parcelable, Serializable {
 
@@ -65,13 +64,6 @@ class Song(
             return (other.id == this.id)
         }
         return false
-    }
-    */
-     
-
-    /*
-    fun addTempsInUrl(temps : Int){
-        artworkUrl+="&t=${temps}s"
     }
     */
 

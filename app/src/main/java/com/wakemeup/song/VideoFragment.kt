@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.fragment_video.view.*
 
 class VideoFragment : Fragment() {
 
+    private lateinit var dialogue : DialogueYoutube
     private var isPlaying: Boolean = false
     private val songList = mutableListOf<Song>()
     private var favorisListe : MutableList<Song> = mutableListOf<Song>()
@@ -132,94 +133,16 @@ class VideoFragment : Fragment() {
             }.create().show()
     }
 
-    private fun createDialoguePartage(){
-        val builder = AlertDialog.Builder(activity!!)
-        val view_dialog_partage_ = activity!!.layoutInflater.inflate(R.layout.dialog_partage, null)
-        builder.setTitle("A quel moment voulez vous que la vidéo se lance?")
-            .setView(view_dialog_partage_)
-            .setPositiveButton("Au début"){ _,_ ->
-                currentSong?.lancement = 0
-                startActivityListFriendToSendMusicActivity()
-            }
-            .setNegativeButton("Annuler"){_, _ ->
-
-            }
-            .setNeutralButton("Choisir le temps"){ _, _ ->
-               createDialogueChoixDuTemps()
-            }
-            .create().show()
-    }
-
-    private fun createDialogueChoixDuTemps(){
-        val builder = AlertDialog.Builder(activity!!)
-        val view = activity!!.layoutInflater.inflate(R.layout.dialogue_choisir_le_temps, null)
-        builder.setTitle("A quel moment voulez vous que la vidéo se lance?")
-            .setView(view)
-            .setPositiveButton("Ok") { _, _ ->
-                val heure = view.findViewById<EditText>(R.id.et_choix_du_temps_heure).text.toString().trim()
-                val minute = view.findViewById<EditText>(R.id.et_choix_du_temps_minute).text.toString().trim()
-                val seconde = view.findViewById<EditText>(R.id.et_choix_du_temps_seconde).text.toString().trim()
-
-                if (heure.isNotEmpty() && minute.isNotEmpty() && seconde.isNotEmpty()) {
-
-                    if (minute.toInt() <= 60 && seconde.toInt() <= 60) {
-                        val temps_en_secondes: Int = 60 * 60 * heure.toInt() + 60 * minute.toInt() + seconde.toInt()
-                        currentSong?.lancement = temps_en_secondes
-                        startActivityListFriendToSendMusicActivity()
-                    } else {
-                        Toast.makeText(
-                            activity!!.application,
-                            "Veuillez mettre un temps valide.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                else{
-                    Toast.makeText(
-                        activity!!.application,
-                        "Veuillez remplir les champs.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-            }
-            .create().show()
-    }
-
-
-    private fun createAlertDialogNotConnected(context: Context, ma: MainActivity) {
-        // Initialize a new instance of
-        val builder = AlertDialog.Builder(context)
-
-        // Set the alert dialog title
-        builder.setTitle("Vous n'êtes pas connecté")
-
-        // Display a message on alert dialog
-        builder.setMessage("Pour partager une musique à un contact, veuillez vous connecter.")
-
-        // Set a positive button and its click listener on alert dialog
-        builder.setPositiveButton("Se connecter") { dialog, which ->
-            ma.startConnectActivity(false)
-        }
-        // Display a neutral button on alert dialog
-        builder.setNeutralButton("Annuler") { _, _ -> }
-
-        // Finally, make the alert dialog using builder
-        val dialog: AlertDialog = builder.create()
-
-        // Display the alert dialog on app interface
-        dialog.show()
-    }
 
     //Gestion du clic sur le bouton partage
     private fun gestionBoutonParatage(){
         val btPartage = currentView.findViewById<Button>(R.id.list_video_partage)
         btPartage.setOnClickListener {
             if (AppWakeUp.auth.currentUser!!.isAnonymous) {
-                createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
+                dialogue.createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
             } else {
                 if (currentSong != null) {
-                    createDialoguePartage() //lance la dialogue pour preciser le temps
+                    dialogue.createDialoguePartage(currentSong) //lance la dialogue pour preciser le temps
                 }
                 else{
                     Toast.makeText(
@@ -237,7 +160,7 @@ class VideoFragment : Fragment() {
         val btFavori = currentView.findViewById<Button>(R.id.list_video_favori)
         btFavori.setOnClickListener {
             if (AppWakeUp.auth.currentUser!!.isAnonymous) {
-                createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
+                dialogue.createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
             } else {
                 if (currentSong!=null) {
                     if (loadFavoris(this.requireContext()) != null) {
@@ -273,31 +196,41 @@ class VideoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         super.onCreate(savedInstanceState)
+
         currentView = inflater.inflate(R.layout.fragment_video, container, false)
         partageView = inflater.inflate(R.layout.dialog_partage, container, true)
 
-
+        //Initialisation de la liste des favoris-------------------------------------------------
         val chargement_des_favoris : MutableList<Song>? = loadFavoris(this.requireContext())
         if (chargement_des_favoris != null) {
             favorisListe.addAll(chargement_des_favoris)
         }
+        //---------------------------------------------------------------------------------------
 
 
         // iv_play.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.selector_play))
         getSongList("musique")
 
+
+        //Initialisation du recyclerView---------------------------------------------------
         val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycler_list_video)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
+        //---------------------------------------------------------------------------------
 
+
+        //Gestion des differents boutons--
         gestionBoutonFavori()
         gestionBoutonParatage()
         gestionBoutonSearch()
+        //--------------------------------
 
+
+        //Initialisation du YoutubePlayer----------------------------------------------------------
         youTubePlayerView = currentView.findViewById(R.id.youtube_player_view)
         lifecycle.addObserver(youTubePlayerView)
-
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(ytPlayer: YouTubePlayer) {
                 youTubePlayer = ytPlayer
@@ -306,7 +239,9 @@ class VideoFragment : Fragment() {
                 }
             }
         })
+        //-----------------------------------------------------------------------------------------
 
+        dialogue = DialogueYoutube(activity!!)
 
         return currentView
     }
