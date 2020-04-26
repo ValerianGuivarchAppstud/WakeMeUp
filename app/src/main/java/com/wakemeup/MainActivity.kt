@@ -40,8 +40,6 @@ import com.wakemeup.song.Song
 import com.wakemeup.share.DemanderMusique
 import com.wakemeup.song.VideoFragment
 import com.wakemeup.song.VideosFavoris
-import com.wakemeup.util.loadFavoris
-import com.wakemeup.util.persisteFavoris
 import java.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 

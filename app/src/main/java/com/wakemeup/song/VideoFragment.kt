@@ -25,6 +25,7 @@ import com.wakemeup.R
 import com.wakemeup.contact.ListFriendToSendMusicActivity
 import com.wakemeup.util.loadFavoris
 import com.wakemeup.util.persisteFavoris
+import com.wakemeup.util.resetFavoris
 import kotlinx.android.synthetic.main.fragment_video.*
 import kotlinx.android.synthetic.main.fragment_video.view.*
 
@@ -33,7 +34,7 @@ class VideoFragment : Fragment() {
 
     private var isPlaying: Boolean = false
     private val songList = mutableListOf<Song>()
-    private var favorisListe : MutableList<Song?> = mutableListOf<Song?>()
+    private var favorisListe : MutableList<Song> = mutableListOf<Song>()
     private lateinit var mAdapter: SongAdapter
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
@@ -70,7 +71,6 @@ class VideoFragment : Fragment() {
     }
 
     fun updateAff(responses: MutableList<SearchResult>) {
-
         val songs = mutableListOf<Song>()
         for ((i, track) in responses.withIndex()) {
             songs.add(songs.size, Song(track, i))
@@ -87,28 +87,19 @@ class VideoFragment : Fragment() {
     //lance la video reliée au parametre "song"
     private fun prepareSong(song: Song?) {
         //todo vérifier bug ici, si on sélectionne la musique trop vite
-
-
-
         if (song != null) {
-
             currentSongLength = song.duration
             currentSong = song
 
             if (youTubePlayer != null) {
-
                 youTubePlayer!!.loadVideo(song.id,song.lancement.toFloat())
                 youTubePlayer!!.setVolume(100)
-
                 youTubePlayerView.getPlayerUiController()
                     .setVideoTitle(song.title)
-
                 this.isPlaying = true
             }
         }
     }
-
-
 
 
     private fun startActivityListFriendToSendMusicActivity(){
@@ -220,31 +211,8 @@ class VideoFragment : Fragment() {
         dialog.show()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreate(savedInstanceState)
-        currentView = inflater.inflate(R.layout.fragment_video, container, false)
-        partageView = inflater.inflate(R.layout.dialog_partage, container, true)
-        favorisListe = loadFavoris(this.requireContext())
-
-        // iv_play.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.selector_play))
-        getSongList("musique")
-
-        val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycler_list_video)
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = mAdapter
-
-
-        //Gestion du clic sur le bouton rechercher
-        val bt_search = currentView.findViewById<FloatingActionButton>(R.id.fab_search)
-        bt_search.setOnClickListener {
-            createDialogForSearch()
-        }
-
-        //Gestion du clic sur le bouton partage
+    //Gestion du clic sur le bouton partage
+    private fun gestionBoutonParatage(){
         val btPartage = currentView.findViewById<Button>(R.id.list_video_partage)
         btPartage.setOnClickListener {
             if (AppWakeUp.auth.currentUser!!.isAnonymous) {
@@ -262,19 +230,27 @@ class VideoFragment : Fragment() {
                 }
             }
         }
+    }
 
-
-        //Gestion du clic sur le bouton favori
+    //Gestion du clic sur le bouton favori
+    private fun gestionBoutonFavori(){
         val btFavori = currentView.findViewById<Button>(R.id.list_video_favori)
         btFavori.setOnClickListener {
             if (AppWakeUp.auth.currentUser!!.isAnonymous) {
                 createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
             } else {
                 if (currentSong!=null) {
+                    if (loadFavoris(this.requireContext()) != null) {
+                        favorisListe = loadFavoris(this.requireContext())!!
+                    }
+                    else{
+                        favorisListe = mutableListOf<Song>()
+                    }
                     favorisListe.add(currentSong!!)
+                    resetFavoris(this.requireContext())
                     persisteFavoris(this.requireContext(),favorisListe)
-                }
 
+                }
                 Toast.makeText(
                     activity!!.application,
                     "La video a été ajouté",
@@ -282,6 +258,42 @@ class VideoFragment : Fragment() {
                 ).show()
             }
         }
+    }
+
+    //Gestion du clic sur le bouton rechercher
+    private fun gestionBoutonSearch(){
+        val bt_search = currentView.findViewById<FloatingActionButton>(R.id.fab_search)
+        bt_search.setOnClickListener {
+            createDialogForSearch()
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        super.onCreate(savedInstanceState)
+        currentView = inflater.inflate(R.layout.fragment_video, container, false)
+        partageView = inflater.inflate(R.layout.dialog_partage, container, true)
+
+
+        val chargement_des_favoris : MutableList<Song>? = loadFavoris(this.requireContext())
+        if (chargement_des_favoris != null) {
+            favorisListe.addAll(chargement_des_favoris)
+        }
+
+
+        // iv_play.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.selector_play))
+        getSongList("musique")
+
+        val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycler_list_video)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.adapter = mAdapter
+
+        gestionBoutonFavori()
+        gestionBoutonParatage()
+        gestionBoutonSearch()
 
         youTubePlayerView = currentView.findViewById(R.id.youtube_player_view)
         lifecycle.addObserver(youTubePlayerView)
@@ -294,6 +306,7 @@ class VideoFragment : Fragment() {
                 }
             }
         })
+
 
         return currentView
     }

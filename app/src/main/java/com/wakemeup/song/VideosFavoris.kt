@@ -24,6 +24,7 @@ import com.wakemeup.R
 import com.wakemeup.contact.ListFriendToSendMusicActivity
 import com.wakemeup.util.loadFavoris
 import com.wakemeup.util.persisteFavoris
+import com.wakemeup.util.resetFavoris
 import kotlinx.android.synthetic.main.fragment_video.*
 import kotlinx.android.synthetic.main.fragment_video.view.*
 
@@ -98,6 +99,39 @@ class VideosFavoris : Fragment() {
         }
     }
 
+    //TODO créer classe abstraite ou créer classe BouttonPartage
+
+    //Gestion du clic sur le bouton suprimer
+    private fun gestionBoutonSupprimer(){
+        val btSupprimer = currentView.findViewById<Button>(R.id.bouton_supprimer_favori)
+        btSupprimer.setOnClickListener {
+
+            if (currentSong != null) {
+                songList.remove(currentSong!!)
+                mAdapter.notifyDataSetChanged()
+                mAdapter.selectedPosition = 0
+                resetFavoris(this.requireContext())
+                persisteFavoris(this.requireContext(),songList)
+
+                Toast.makeText(
+                    activity!!.application,
+                    "Vidéo Suprimmée",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            }
+            else{
+                Toast.makeText(
+                    activity!!.application,
+                    "Veuillez sélectionner une vidéo",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+        }
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -106,12 +140,12 @@ class VideosFavoris : Fragment() {
         super.onCreate(savedInstanceState)
         currentView = inflater.inflate(R.layout.fragment_favori, container, false)
 
-        val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycler_list_video)
+        val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycler_list_video_favoris)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
 
 
-        youTubePlayerView = currentView.findViewById(R.id.youtube_player_view)
+        youTubePlayerView = currentView.findViewById(R.id.youtube_player_view_favoris)
         lifecycle.addObserver(youTubePlayerView)
 
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
@@ -123,16 +157,20 @@ class VideosFavoris : Fragment() {
             }
         })
 
-
         currentIndex = 0
         currentView.pb_main_loader.visibility = View.GONE
         songList.clear()
-        val favoris = loadFavoris(this.requireContext())
-        for (song in favoris){
-            if (song != null) {
-                songList.add(song)
-            }
+
+        gestionBoutonSupprimer()
+
+        //Charge les favoris-----------------------------------------------------
+        val favoris : MutableList<Song>? = loadFavoris(this.requireContext())
+        if (favoris != null) {
+            songList.addAll(favoris)
         }
+        //------------------------------------------------------------------------
+
+
         mAdapter.notifyDataSetChanged()
         mAdapter.selectedPosition = 0
 

@@ -59,6 +59,16 @@ class Song(
         return other.rank - this.rank
     }
 
+    /*override fun equals(other: Any?): Boolean {
+
+        if (other is Song && other!=null){
+            return (other.id == this.id)
+        }
+        return false
+    }
+    */
+     
+
     /*
     fun addTempsInUrl(temps : Int){
         artworkUrl+="&t=${temps}s"

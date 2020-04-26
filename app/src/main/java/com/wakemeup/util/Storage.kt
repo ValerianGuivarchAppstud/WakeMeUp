@@ -1,26 +1,60 @@
 package com.wakemeup.util
 
 import android.content.Context
-import com.wakemeup.MainActivity
 import com.wakemeup.song.Song
-import com.wakemeup.song.VideoFragment
+import java.io.FileInputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
 private val TAG = "storage"
-private  const val FILENAME_FAVORI= "fav_utilisateur.txt"
+private  const val FILENAME_FAVORI= "fav_util.fav"
 
-fun persisteFavoris(context: Context, songs: MutableList<Song?>){
-    val fileOutPut = context!!.openFileOutput(FILENAME_FAVORI, Context.MODE_PRIVATE)
+
+//Sauvegarde les favoris utilisateur dans un fichier "fav_utilisateur.txt"
+fun persisteFavoris(context: Context, songs: MutableList<Song>){
+    val fileOutPut = context.openFileOutput(FILENAME_FAVORI, Context.MODE_PRIVATE)
     val outPutStream = ObjectOutputStream(fileOutPut)
     outPutStream.writeObject(songs)
     outPutStream.close()
 }
 
-fun loadFavoris(context : Context) : MutableList<Song?>{
-    val fileInput = context!!.openFileInput(FILENAME_FAVORI)
-    val inputStream = ObjectInputStream(fileInput)
-    val songs = inputStream.readObject() as MutableList<Song?>
+//Charge les favoris utilisateurs du fichier "fav_utilisateur.txt"
+fun loadFavoris(context : Context) : MutableList<Song>?{
+
+    //TODO FAIRE UN PUTAIN DE TRY CATCH
+
+
+
+    val fileInput : FileInputStream?
+    var songs : MutableList<Song>?
+    val inputStream : ObjectInputStream
+    try {
+        fileInput = context.openFileInput(FILENAME_FAVORI)
+        inputStream = ObjectInputStream(fileInput)
+    }
+    catch(e1 : java.lang.reflect.InvocationTargetException){
+        return  null
+    }
+    catch(e2 : java.io.EOFException){
+        return  null
+    }
+    catch(e3 : android.system.ErrnoException){
+        return  null
+    }
+    catch(e4 : java.io.FileNotFoundException){
+        return null
+    }
+
+
+    songs = inputStream.readObject() as MutableList<Song>?
     inputStream.close()
+
     return songs
+
+
+}
+
+//reset le fichier des favoris
+fun resetFavoris(context: Context){
+    context.deleteFile(FILENAME_FAVORI)
 }
