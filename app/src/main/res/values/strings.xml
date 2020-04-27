@@ -68,5 +68,6 @@
     <string name="heure_choix_temps">Heure</string>
     <string name="minute_choix_temps">Minute</string>
     <string name="seconde_choix_temps">Seconde</string>
+    <string name="nouveau_email">Nouvel email</string>
 
 </resources>
