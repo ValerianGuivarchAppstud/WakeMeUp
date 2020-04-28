@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
@@ -136,7 +137,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 updateMusiqueEnAttente()
             }
 
-
             // Configure all views
             this.configureToolBar()
             this.configureDrawerLayout()
@@ -169,28 +169,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var viewNbMusiquesEnAttente: TextView
     private lateinit var viewIconeMusiquesEnAttente: ImageView
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.toolbar_reveils, menu)
 
-        val alertMenuItem = menu.findItem(R.id.id_menu_bar_message)
-        val rootView = alertMenuItem.actionView as RelativeLayout
-        viewNbMusiquesEnAttente = rootView.findViewById(R.id.text_message_notification)
-        viewIconeMusiquesEnAttente = rootView.findViewById(R.id.icone_musique_attente)
-        if ((AppWakeUp.auth.currentUser!!.isAnonymous)) {
+            menuInflater.inflate(R.menu.toolbar_reveils, menu)
 
-            viewNbMusiquesEnAttente.visibility = View.INVISIBLE
-            viewIconeMusiquesEnAttente.visibility = View.INVISIBLE
-        } else {
-            updateHotCount()
-        }
+            val alertMenuItem = menu.findItem(R.id.id_menu_bar_message)
+            val rootView = alertMenuItem.actionView as RelativeLayout
+            viewNbMusiquesEnAttente = rootView.findViewById(R.id.text_message_notification)
+            viewIconeMusiquesEnAttente = rootView.findViewById(R.id.icone_musique_attente)
+            if ((AppWakeUp.auth.currentUser!!.isAnonymous)) {
 
-        rootView.setOnClickListener {
+                viewNbMusiquesEnAttente.visibility = View.INVISIBLE
+                viewIconeMusiquesEnAttente.visibility = View.INVISIBLE
+            } else {
+                updateHotCount()
+            }
 
-        }
-        return super.onCreateOptionsMenu(menu)
+            rootView.setOnClickListener {
 
+            }
+            return super.onCreateOptionsMenu(menu)
 
     }
-
 
     private fun updateHotCount() {
         val newHotNumber = AppWakeUp.listSonneriesEnAttente.size
@@ -254,9 +253,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.activity_main_drawer_partage -> this.showFragment(
                 FragmentId.FRAGMENT_PARTAGE
             )
-            R.id.activity_main_drawer_amis -> this.showFragment(
-                FragmentId.FRAGMENT_AMIS
-            )
+            R.id.activity_main_drawer_amis -> {
+                this.showFragment(
+                    FragmentId.FRAGMENT_AMIS
+                )
+            }
             R.id.activity_main_drawer_favoris -> this.showFragment(
                 FragmentId.FRAGMENT_FAVORIS
             )
@@ -491,6 +492,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             FRAGMENT_PARAMETRE
 
         }
+
     }
 
 
@@ -567,6 +569,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         startActivity(intent)
     }
-
 
 }

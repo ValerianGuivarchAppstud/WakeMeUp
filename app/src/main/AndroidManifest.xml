@@ -45,7 +45,6 @@
             android:parentActivityName=".MainActivity"/>
 
 
-
         <service
             android:name=".notification.MyFirebaseMessagingService"
             android:stopWithTask="false">
