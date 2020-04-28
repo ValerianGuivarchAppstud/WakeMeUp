@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.contains
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,11 +24,10 @@ import com.wakemeup.AppWakeUp
 import com.wakemeup.MainActivity
 import com.wakemeup.R
 import com.wakemeup.contact.ListFriendToSendMusicActivity
-import com.wakemeup.util.loadFavoris
-import com.wakemeup.util.persisteFavoris
-import com.wakemeup.util.resetFavoris
+import com.wakemeup.util.*
 import kotlinx.android.synthetic.main.fragment_video.*
 import kotlinx.android.synthetic.main.fragment_video.view.*
+import kotlinx.android.synthetic.main.item_list_history.*
 
 
 class VideoFragment : Fragment() {
@@ -36,10 +36,13 @@ class VideoFragment : Fragment() {
     private var isPlaying: Boolean = false
     private val songList = mutableListOf<Song>()
     private var favorisListe : MutableList<Song> = mutableListOf<Song>()
+    private var historiqueListe : MutableList<String> = mutableListOf<String>()
     private lateinit var mAdapter: SongAdapter
+    private lateinit var rAdapter: RechercheAdaptateur
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
     private lateinit var partageView: View
+    private lateinit var rechercheView: View
 
     private var currentIndex: Int = 0
     private var currentSongLength: Int = 0
@@ -102,13 +105,33 @@ class VideoFragment : Fragment() {
         }
     }
 
+    private fun gestionHistorique(search : String){
+        //Gestion de la persistance de l'historique (sauvgarde l'historique dans un fichier)
+        if (loadHistorique(this.requireContext()) != null) {
+            historiqueListe = loadHistorique(this.requireContext())!!
+        }
+        else{
+            historiqueListe = mutableListOf<String>()
+        }
+        historiqueListe.add(search)
+        resetHistorique(this.requireContext())
+        persisteHistorique(this.requireContext(),historiqueListe)
 
-    private fun startActivityListFriendToSendMusicActivity(){
-        //ouvre l'activity de la liste d'amis
-        activity!!.intent = Intent(activity, ListFriendToSendMusicActivity::class.java)
-        activity!!.intent.putExtra("song", currentSong as Parcelable)
-        startActivity(activity!!.intent)
     }
+
+    private fun gestionFavoris(){
+        //Gestion de la persistance des favoris (sauvgarde les favoris dans un fichier)
+        if (loadFavoris(this.requireContext()) != null) {
+            favorisListe = loadFavoris(this.requireContext())!!
+        }
+        else{
+            favorisListe = mutableListOf<Song>()
+        }
+        favorisListe.add(currentSong!!)
+        resetFavoris(this.requireContext())
+        persisteFavoris(this.requireContext(),favorisListe)
+    }
+
 
     //Recherche une musique depuis la barre de recherche (id : et_search)
     private fun createDialogForSearch() {
@@ -122,6 +145,11 @@ class VideoFragment : Fragment() {
                 if (search.isNotEmpty()) {
                     //si la bar de recherche n'est pas vide
                     getSongList(search)
+
+                    //Gestion de la persistance de l'historique------------------
+                    gestionHistorique(search)
+                    //-----------------------------------------------------------
+
                 } else {
                     //si la bar de recherche est vide
                     Toast.makeText(
@@ -130,7 +158,56 @@ class VideoFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            }.create().show()
+            }
+            .setNegativeButton("Annuler"){ _, _ ->
+            }
+            .create().show()
+    }
+
+    //Gestion du dialogue de l'historique
+    private fun createDialogForHistory(){
+        val builder = AlertDialog.Builder(activity!!)
+        val view = activity!!.layoutInflater.inflate(R.layout.dialogue_history, null)
+        view.setOnClickListener {  }
+        val recherches = loadHistorique(this.requireContext())
+        val recyclerViewRecherche = view.findViewById<RecyclerView>(R.id.recycler_list_recherche)
+        var parametre : MutableList<String>?
+
+        //Initialisation du recyclerView de l'historique---------------------------
+        recyclerViewRecherche.layoutManager = LinearLayoutManager(activity!!)
+        if (recherches != null) {
+            parametre = recherches
+        }
+        else{
+            parametre = mutableListOf<String>()
+
+        }
+        //--------------------------------------------------------------------------
+
+        //Initialisation du dialogue pour l'historique----
+        val dialogueHistory =
+            builder.setTitle(R.string.historique)
+            .setView(view)
+            .setNegativeButton("Annuler") { _, _ ->
+            }
+            .create()
+        //------------------------------------------------
+
+        //Initialisiton de l'adaptateur de recycler view-----------------------------
+        rAdapter = RechercheAdaptateur(parametre,
+            object : RechercheAdaptateur.RecyclerItemClickListener{
+                override fun onClickListener(recherche : String, position: Int){
+                    getSongList(recherche)
+                    dialogueHistory.hide()
+                }
+            }
+        )
+        recyclerViewRecherche.adapter = rAdapter
+        //---------------------------------------------------------------------------
+
+        dialogueHistory.show()
+
+
     }
 
 
@@ -163,16 +240,7 @@ class VideoFragment : Fragment() {
                 dialogue.createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
             } else {
                 if (currentSong!=null) {
-                    if (loadFavoris(this.requireContext()) != null) {
-                        favorisListe = loadFavoris(this.requireContext())!!
-                    }
-                    else{
-                        favorisListe = mutableListOf<Song>()
-                    }
-                    favorisListe.add(currentSong!!)
-                    resetFavoris(this.requireContext())
-                    persisteFavoris(this.requireContext(),favorisListe)
-
+                    gestionFavoris()
                 }
                 Toast.makeText(
                     activity!!.application,
@@ -191,6 +259,14 @@ class VideoFragment : Fragment() {
         }
     }
 
+    //Gestion du clic sur le bouton Historique
+    private fun gestionBoutonHistorique(){
+        val bt_Historique = currentView.findViewById<FloatingActionButton>(R.id.fab_history)
+        bt_Historique.setOnClickListener {
+            createDialogForHistory()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -198,9 +274,11 @@ class VideoFragment : Fragment() {
     ): View? {
 
         super.onCreate(savedInstanceState)
-
+        //Initialisation des vues-------------------------------------------------------------
         currentView = inflater.inflate(R.layout.fragment_video, container, false)
-        partageView = inflater.inflate(R.layout.dialog_partage, container, true)
+        partageView = inflater.inflate(R.layout.dialog_partage, container, false)
+        rechercheView = inflater.inflate(R.layout.dialogue_history, container, false)
+        //------------------------------------------------------------------------------------
 
         //Initialisation de la liste des favoris-------------------------------------------------
         val chargement_des_favoris : MutableList<Song>? = loadFavoris(this.requireContext())
@@ -209,15 +287,23 @@ class VideoFragment : Fragment() {
         }
         //---------------------------------------------------------------------------------------
 
+        //Initialisation de la liste contenant l'historique-------------------------------------
+        val chargement_historique : MutableList<String>? = loadHistorique(this.requireContext())
+        if (chargement_historique != null) {
+            historiqueListe.addAll(chargement_historique)
+        }
+        //---------------------------------------------------------------------------------------
+
 
         // iv_play.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.selector_play))
         getSongList("musique")
 
 
-        //Initialisation du recyclerView---------------------------------------------------
+        //Initialisation du recyclerView (Le principal, pour les vidéos youtube------------
         val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycler_list_video)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
+
         //---------------------------------------------------------------------------------
 
 
@@ -225,6 +311,7 @@ class VideoFragment : Fragment() {
         gestionBoutonFavori()
         gestionBoutonParatage()
         gestionBoutonSearch()
+        gestionBoutonHistorique()
         //--------------------------------
 
 
@@ -241,7 +328,11 @@ class VideoFragment : Fragment() {
         })
         //-----------------------------------------------------------------------------------------
 
+
+        //Initialisation de la variable dialogue de type DialogueYoutube------------------------
+        // (comporte presque tout les dialogues géneré pour la partie Youtube de l'application)
         dialogue = DialogueYoutube(activity!!)
+        //--------------------------------------------------------------------------------------
 
         return currentView
     }

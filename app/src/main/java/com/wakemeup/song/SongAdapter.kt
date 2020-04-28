@@ -21,8 +21,7 @@ class SongAdapter(
     var selectedPosition: Int = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_list_video, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list_video, parent, false)
         return SongViewHolder(view)
     }
 

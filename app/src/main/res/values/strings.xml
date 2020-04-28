@@ -38,6 +38,7 @@
     <string name="favori">Favori</string>
     <string name="image_ami">Image ami</string>
     <string name="valider">Valider</string>
+    <string name="historique">Historique</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
