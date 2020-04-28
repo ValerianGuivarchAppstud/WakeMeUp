@@ -71,8 +71,6 @@ class LoginActivity : AppCompatActivity() {
             loading.visibility = View.GONE
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)
-            } else {
-                updateUiWithUser()
             }
             setResult(Activity.RESULT_OK)
 
@@ -121,17 +119,17 @@ class LoginActivity : AppCompatActivity() {
         buttonFacebookLogin.setReadPermissions("email", "public_profile")
         buttonFacebookLogin.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
-                //todo Log.d(AppCompatActivity.TAG, "facebook:onSuccess:$loginResult")
+                Log.d(TAG, "facebook:onSuccess:$loginResult")
                 handleFacebookAccessToken(loginResult.accessToken)
             }
 
             override fun onCancel() {
-                //todo Log.d(AppCompatActivity.TAG, "facebook:onCancel")
+                Log.d(TAG, "facebook:onCancel")
                 // ...
             }
 
             override fun onError(error: FacebookException) {
-                //todo Log.d(AppCompatActivity.TAG, "facebook:onError", error)
+                Log.d(TAG, "facebook:onError", error)
                 // ...
             }
         })
@@ -167,17 +165,6 @@ class LoginActivity : AppCompatActivity() {
 
                 // ...
             }
-    }
-
-    private fun updateUiWithUser() {
-
-        val welcome = getString(R.string.welcome)
-        val displayName = AppWakeUp.auth.currentUser!!.displayName
-        Toast.makeText(
-            applicationContext,
-            "$welcome $displayName",
-            Toast.LENGTH_LONG
-        ).show()
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {

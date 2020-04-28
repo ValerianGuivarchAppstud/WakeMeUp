@@ -9,8 +9,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -32,7 +30,6 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.wakemeup.connect.ConnectActivity
 
 import com.wakemeup.connect.UserModel
-import com.wakemeup.connect.ui.EditUser.EditUser
 import com.wakemeup.contact.ContactsListeFragment
 import com.wakemeup.contact.SonnerieEnAttente
 import com.wakemeup.reveil.ReveilsListeFragment
@@ -135,7 +132,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 updateListeAmis()
                 updateMusiqueEnAttente()
             }
-
 
             // Configure all views
             this.configureToolBar()
