@@ -12,10 +12,10 @@ class LanceurFragment() : AppCompatActivity() {
 
         val extras : Bundle = intent.extras!!
         val categorie = extras.getString("categorie")
-
+        val name = extras.getString("name")
         when (categorie){
             "email" -> {
-                var fragment = EditEmailFragment.newInstance(this)
+                var fragment = EditEmailFragment.newInstance(this, name!!)
                 supportFragmentManager.beginTransaction().replace(R.id.layout_fragment, fragment)
                     .commit()
             }

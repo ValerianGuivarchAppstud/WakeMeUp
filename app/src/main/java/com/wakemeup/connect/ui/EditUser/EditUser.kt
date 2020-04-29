@@ -22,6 +22,7 @@ import com.google.firebase.firestore.auth.User
 import com.wakemeup.AppWakeUp
 import com.wakemeup.MainActivity
 import com.wakemeup.R
+import com.wakemeup.connect.ConnectActivity
 import com.wakemeup.connect.UserModel
 import kotlinx.android.synthetic.main.activity_edit_user.*
 import kotlinx.android.synthetic.main.activity_login.*
@@ -39,6 +40,7 @@ class EditUser : AppCompatActivity() {
         val toolbar = toolbar
         setSupportActionBar(toolbar)
 
+        Log.i("EditUser", AppWakeUp.auth.currentUser!!.email)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         val dataSnapshot: DataSnapshot
         val reference =
@@ -53,7 +55,9 @@ class EditUser : AppCompatActivity() {
 
                     valeur_identifiant.text = currentUserModel.username
                     valeur_mdp.text = "*********"
-                    valeur_email.text = currentUserModel.mail
+
+
+                    Log.i("EditUser", AppWakeUp.auth.currentUser!!.email)
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
@@ -61,6 +65,26 @@ class EditUser : AppCompatActivity() {
                 }
             }
         )
+
+
+
+        if (intent.extras != null) {
+
+            val extras = intent.extras
+
+            val categorie = extras!!.getString("email")
+            valeur_email.text = categorie
+            val intent = Intent(this, ConnectActivity::class.java)
+            startActivity(
+                intent
+            )
+
+        } else {
+            Log.i("EditUser", "pas d'extra")
+            valeur_email.text = AppWakeUp.auth.currentUser!!.email
+        }
+
+
 
         button_id.setOnClickListener {
             val intent = Intent(this, LanceurFragment::class.java)
@@ -80,94 +104,8 @@ class EditUser : AppCompatActivity() {
         button_email.setOnClickListener(){
             val intent = Intent(this, LanceurFragment::class.java)
             intent.putExtra("categorie","email")
+            intent.putExtra("name",currentUserModel.username)
             startActivity(intent)
         }
     }
 }
-/*
-
-    private fun showUpdateIdDialog() {
-        val updateId = EditIDDialogFragment()
-        updateId.listener = object : EditIDDialogFragment.EditIDListener{
-            override fun onDialogPositiveClick(newUsername: String) {
-                  //updateUsername(newUsername)
-                updatePassword(newUsername)
-            }
-            override fun onNegativeClick() {}
-        }
-        updateId.show(supportFragmentManager,"UpdateIdFragment")
-    }
-
-    private fun showUpdateEmailDialog() {
-        val updateEmailDialog = EditEmailDialogFragment()
-        updateEmailDialog.listener = object : EditEmailDialogFragment.EditEmailListener {
-            override fun onDialogPositiveClick(newEmail: String) {
-                updateEmail(newEmail)
-            }
-
-            override fun onNegativeClick() {}
-
-
-        }
-        updateEmailDialog.show(supportFragmentManager, "UpdateEmailFragment")
-    }
-
-
-    fun updateUsername(newName : String ){
-
-        val firebaseUser = AppWakeUp.auth.currentUser!!
-        val userId = firebaseUser.uid
-        val reference = AppWakeUp.database.getReference("Users").child(userId)
-        val newUser = UserModel(userId, "", firebaseUser.phoneNumber ?: "", newName,firebaseUser.email ?: "")
-        reference.setValue(newUser)
-        Toast.makeText(this, "Nom d'utilisateur modifié", Toast.LENGTH_SHORT).show()
-    }
-
-    fun updateEmail(newEmail : String){
-
-        val firebaseUser = AppWakeUp.auth.currentUser!!
-        val userId = firebaseUser.uid
-        val reference = AppWakeUp.database.getReference("Users").child(userId)
-        var credential = EmailAuthProvider
-            .getCredential(firebaseUser.email!!,"julienn")
-        firebaseUser?.reauthenticate(credential)
-        firebaseUser?.updateEmail(newEmail)
-            ?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d("EditUser", "User email address updated.")
-                    valeur_email.text = newEmail
-                }else{
-                    Log.d("EditUser", "Update email fail")
-                }
-            }
-
-        /*val newUser = UserModel(userId, "", firebaseUser.phoneNumber ?: "",currentUserModel.username ?: "", newEmail)
-        reference.setValue(newUser)
-        Toast.makeText(this, "Email modifié", Toast.LENGTH_SHORT).show() */
-
-    }
-
-    fun updatePassword(newPassword : String){
-
-        val firebaseUser = AppWakeUp.auth.currentUser!!
-        val userId = firebaseUser.uid
-        val reference = AppWakeUp.database.getReference("Users").child(userId)
-        var credential = EmailAuthProvider
-            .getCredential(firebaseUser.email!!,"mdpmdp")
-        firebaseUser?.reauthenticate(credential)
-
-            firebaseUser?.let{ user ->
-            user.updatePassword(newPassword).addOnCompleteListener{ task ->
-                if (task.isSuccessful) {
-                    Log.d("EditUser", "User password updated.")
-                    Toast.makeText(this, "Mot de passe modifié", Toast.LENGTH_SHORT).show()
-                }else{
-                    Log.d("EditUser", "Password fail")
-                }
-            }
-        }
-
-    }
-}
-
-*/

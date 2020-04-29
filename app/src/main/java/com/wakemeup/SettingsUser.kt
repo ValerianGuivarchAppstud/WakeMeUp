@@ -19,15 +19,11 @@ import kotlinx.android.synthetic.main.fragment_settings.view.*
 
 class SettingsUser() : Fragment() {
 
-
     companion object {
         fun newInstance(ctx: Context): SettingsUser {
             return SettingsUser()
         }
     }
-
-
-
 
 
     override fun onCreateView(
@@ -39,15 +35,8 @@ class SettingsUser() : Fragment() {
         view.findViewById<Button>(R.id.button_edit_user).setOnClickListener{
             val intent = Intent(activity, EditUser::class.java)
             startActivity(intent)
-
-
         }
-
         return view
     }
-
-
-
-
 
 }
