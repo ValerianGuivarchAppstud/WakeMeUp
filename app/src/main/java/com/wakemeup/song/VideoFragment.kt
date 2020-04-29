@@ -75,6 +75,7 @@ class VideoFragment : Fragment() {
     }
 
     fun updateAff(responses: MutableList<SearchResult>) {
+
         val songs = mutableListOf<Song>()
         for ((i, track) in responses.withIndex()) {
             songs.add(songs.size, Song(track, i))
@@ -85,6 +86,12 @@ class VideoFragment : Fragment() {
         songList.addAll(songs)
         mAdapter.notifyDataSetChanged()
         mAdapter.selectedPosition = 0
+
+        //Lancer la 1ere video youtube de la liste
+        currentSong = songList[0]
+        changeSelectedSong(0)
+        prepareSong(currentSong)
+        //----------------------------------------
     }
 
 
@@ -137,13 +144,14 @@ class VideoFragment : Fragment() {
     private fun createDialogForSearch() {
         val builder = AlertDialog.Builder(activity!!)
         val view = activity!!.layoutInflater.inflate(R.layout.dialog_search, null)
-        builder.setTitle(R.string.rechercher)
+        builder
             .setView(view)
             .setPositiveButton(R.string.ok) { _, _ ->
                 val search: String =
                     view.findViewById<EditText>(R.id.et_search).text.toString().trim()
                 if (search.isNotEmpty()) {
                     //si la bar de recherche n'est pas vide
+
                     getSongList(search)
 
                     //Gestion de la persistance de l'historique------------------
@@ -326,6 +334,7 @@ class VideoFragment : Fragment() {
                 }
             }
         })
+
         //-----------------------------------------------------------------------------------------
 
 

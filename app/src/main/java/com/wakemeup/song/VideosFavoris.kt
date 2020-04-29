@@ -90,7 +90,7 @@ class VideosFavoris : Fragment() {
                     textePasDeFavori.visibility=View.VISIBLE
                 }
 
-                //Mettre a jour-----------------
+                //Mise à jour-----------------
 
                 mAdapter.notifyDataSetChanged()
                 mAdapter.selectedPosition = 0
@@ -183,12 +183,25 @@ class VideosFavoris : Fragment() {
             else{
                 textePasDeFavori.visibility=View.INVISIBLE
             }
+
+            //Lancer la 1ere video youtube de la liste
+            if (songList.isNotEmpty()) {
+                currentSong = songList[0]
+                changeSelectedSong(0)
+                prepareSong(currentSong)
+            }
+            //----------------------------------------
+
         }
         else{
+            currentSong = null
             textePasDeFavori = currentView.findViewById<Button>(R.id.texte_pas_de_favori)
             textePasDeFavori.visibility=View.VISIBLE
         }
         //------------------------------------------------------------------------
+
+
+
 
 
         mAdapter.notifyDataSetChanged()

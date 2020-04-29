@@ -37,7 +37,7 @@ class ReveilSonneActivity : AppCompatActivity() {
         }
 
         //musique test
-        currentSong = Song("fHI8X4OXluQ", "Blinding the light", "The weekdn", "test",0, 100)
+        //currentSong = Song("fHI8X4OXluQ", "Blinding the light", "The weekdn", "test",0, 100)
 
         youTubePlayerView = findViewById(R.id.youtubePlayReveil)
         lifecycle.addObserver(youTubePlayerView)

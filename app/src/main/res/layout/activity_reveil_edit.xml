@@ -126,7 +126,7 @@
         app:layout_constraintEnd_toStartOf="@+id/bouton_supprimer_reveil"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_liste_jour"
-        app:layout_constraintVertical_bias="0.553" />
+        app:layout_constraintVertical_bias="0.541" />
 
     <Button
         android:id="@+id/bouton_supprimer_reveil"
@@ -138,8 +138,6 @@
         app:layout_constraintStart_toEndOf="@+id/bouton_editer_reveil"
         app:layout_constraintTop_toBottomOf="@+id/edit_liste_jour"
         app:layout_constraintVertical_bias="0.2" />
-
-
 
     />
 
