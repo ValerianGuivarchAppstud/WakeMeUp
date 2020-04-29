@@ -71,4 +71,6 @@
     <string name="minute_choix_temps">Minute</string>
     <string name="seconde_choix_temps">Seconde</string>
 
+    <string name="titre_favoris">Vos Favoris</string>
+
 </resources>
