@@ -37,8 +37,10 @@ class VideoFragment : Fragment() {
     private val songList = mutableListOf<Song>()
     private var favorisListe : MutableList<Song> = mutableListOf<Song>()
     private var historiqueListe : MutableList<String> = mutableListOf<String>()
+    private var historiqueVideoListe : MutableList<Song> = mutableListOf<Song>()
     private lateinit var mAdapter: SongAdapter
     private lateinit var rAdapter: RechercheAdaptateur
+    private lateinit var hvAdapter : HistVideoAdaptater
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
     private lateinit var partageView: View
@@ -94,6 +96,20 @@ class VideoFragment : Fragment() {
         //----------------------------------------
     }
 
+    fun saveSongInHistVideo(song : Song){
+        var load = loadHistoriqueVideo(this.requireContext())
+
+        if (load.isNullOrEmpty()){
+            load = mutableListOf<Song>()
+        }
+
+        load.add(song)
+        persisteHistoriqueVideo(this.requireContext(), load)
+        historiqueVideoListe.clear()
+        historiqueVideoListe.addAll(load)
+
+    }
+
 
     //lance la video reliée au parametre "song"
     private fun prepareSong(song: Song?) {
@@ -140,25 +156,29 @@ class VideoFragment : Fragment() {
     }
 
 
+
     //Recherche une musique depuis la barre de recherche (id : et_search)
     private fun createDialogForSearch() {
         val builder = AlertDialog.Builder(activity!!)
         val view = activity!!.layoutInflater.inflate(R.layout.dialog_search, null)
-        builder
+        val recherches = loadHistorique(this.requireContext())
+        val recyclerViewRecherche = view.findViewById<RecyclerView>(R.id.recycler_list_recherche)
+        var parametre : MutableList<String>?
+
+
+        //Créer le dialogue de recherche de vidéo-------------------------------------------------
+        val dialogueSearch =
+            builder
             .setView(view)
             .setPositiveButton(R.string.ok) { _, _ ->
-                val search: String =
-                    view.findViewById<EditText>(R.id.et_search).text.toString().trim()
+                val search: String = view.findViewById<EditText>(R.id.et_search).text.toString().trim()
                 if (search.isNotEmpty()) {
-                    //si la bar de recherche n'est pas vide
-
                     getSongList(search)
-
                     //Gestion de la persistance de l'historique------------------
                     gestionHistorique(search)
                     //-----------------------------------------------------------
-
-                } else {
+                }
+                else {
                     //si la bar de recherche est vide
                     Toast.makeText(
                         activity!!.application,
@@ -169,17 +189,8 @@ class VideoFragment : Fragment() {
             }
             .setNegativeButton("Annuler"){ _, _ ->
             }
-            .create().show()
-    }
-
-    //Gestion du dialogue de l'historique
-    private fun createDialogForHistory(){
-        val builder = AlertDialog.Builder(activity!!)
-        val view = activity!!.layoutInflater.inflate(R.layout.dialogue_history, null)
-        view.setOnClickListener {  }
-        val recherches = loadHistorique(this.requireContext())
-        val recyclerViewRecherche = view.findViewById<RecyclerView>(R.id.recycler_list_recherche)
-        var parametre : MutableList<String>?
+            .create()
+        //-----------------------------------------------------------------------------------------
 
         //Initialisation du recyclerView de l'historique---------------------------
         recyclerViewRecherche.layoutManager = LinearLayoutManager(activity!!)
@@ -188,9 +199,34 @@ class VideoFragment : Fragment() {
         }
         else{
             parametre = mutableListOf<String>()
-
         }
         //--------------------------------------------------------------------------
+
+        //Initialisiton de l'adaptateur de recycler view-----------------------------
+        rAdapter = RechercheAdaptateur(parametre,
+            object : RechercheAdaptateur.RecyclerItemClickListener{
+                override fun onClickListener(recherche : String, position: Int){
+                    getSongList(recherche)
+                    dialogueSearch.hide()
+                }
+            }
+        )
+        recyclerViewRecherche.adapter = rAdapter
+        //---------------------------------------------------------------------------
+
+        dialogueSearch.show()
+
+
+    }
+
+    //Gestion du dialogue de l'historique
+    private fun createDialogForHistory(){
+        val builder = AlertDialog.Builder(activity!!)
+        val view = activity!!.layoutInflater.inflate(R.layout.dialogue_history, null)
+
+        val recherches = loadHistoriqueVideo(this.requireContext())
+        val recyclerViewRecherche = view.findViewById<RecyclerView>(R.id.recycler_list_historique_video)
+        var parametre : MutableList<Song>?
 
         //Initialisation du dialogue pour l'historique----
         val dialogueHistory =
@@ -201,16 +237,26 @@ class VideoFragment : Fragment() {
             .create()
         //------------------------------------------------
 
+        //Initialisation du recyclerView de l'historique---------------------------
+        recyclerViewRecherche.layoutManager = LinearLayoutManager(activity!!)
+        if (recherches != null) {
+            parametre = recherches
+        }
+        else{
+            parametre = mutableListOf<Song>()
+        }
+        //--------------------------------------------------------------------------
+
         //Initialisiton de l'adaptateur de recycler view-----------------------------
-        rAdapter = RechercheAdaptateur(parametre,
-            object : RechercheAdaptateur.RecyclerItemClickListener{
-                override fun onClickListener(recherche : String, position: Int){
-                    getSongList(recherche)
+        hvAdapter = HistVideoAdaptater(this.requireContext(),parametre,
+            object : HistVideoAdaptater.RecyclerItemClickListener{
+                override fun onClickListener(song : Song, position: Int){
+                    prepareSong(song)
                     dialogueHistory.hide()
                 }
             }
         )
-        recyclerViewRecherche.adapter = rAdapter
+        recyclerViewRecherche.adapter = hvAdapter
         //---------------------------------------------------------------------------
 
         dialogueHistory.show()
@@ -302,6 +348,13 @@ class VideoFragment : Fragment() {
         }
         //---------------------------------------------------------------------------------------
 
+        //Initialisation de la liste contenant l'historique-------------------------------------
+        val chargement_historiqueVideo : MutableList<Song>? = loadHistoriqueVideo(this.requireContext())
+        if (chargement_historiqueVideo != null) {
+            historiqueVideoListe.addAll(chargement_historiqueVideo)
+        }
+        //---------------------------------------------------------------------------------------
+
 
         // iv_play.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.selector_play))
         getSongList("musique")
@@ -357,6 +410,7 @@ class VideoFragment : Fragment() {
                         nf.firstLaunch = false
                         nf.changeSelectedSong(position)
                         nf.prepareSong(song)
+                        nf.saveSongInHistVideo(song)
                     }
                 })
             return nf

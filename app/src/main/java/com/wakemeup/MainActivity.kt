@@ -323,7 +323,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val user: UserModel = dataSnapshot.getValue(UserModel::class.java)!!
-                        currentUser = user
+                            currentUser = user
                         updateProfilView(user)
                     }
 
@@ -538,6 +538,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     for (snap in dataSnapshot.children) {
+                        Log.i("MainActivity", snap.toString())
                         val user: UserModel = snap.getValue(UserModel::class.java)!!
                         if (contactsPhone.containsKey(user.phone) && user.id != AppWakeUp.auth.uid) {
                             contactsApp.add(user)

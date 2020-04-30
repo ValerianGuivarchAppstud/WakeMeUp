@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp">
-</RelativeLayout>
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:gravity="center">
+
+    <Button
+        android:id="@+id/bouton_debut"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        style="@style/AppTheme.BoutonReveil"
+        android:text="Debut"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/bouton_choix"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        style="@style/AppTheme.BoutonReveil"
+        android:text="Choix"
+        android:textSize="20sp" />
+
+
+</LinearLayout>

@@ -8,6 +8,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -31,23 +32,32 @@ class DialogueYoutube(val activity: FragmentActivity) {
     }
 
 
-
     public fun createDialoguePartage(currentSong : Song?){
         val builder = AlertDialog.Builder(activity!!)
-        val view_dialog_partage_ = activity!!.layoutInflater.inflate(R.layout.dialog_partage, null)
-        builder.setTitle("A quel moment voulez vous que la vidéo se lance?")
-            .setView(view_dialog_partage_)
-            .setPositiveButton("Au début"){ _, _ ->
-                currentSong?.lancement = 0
-                startActivityListFriendToSendMusicActivity(currentSong)
-            }
-            .setNegativeButton("Annuler"){ _, _ ->
+        val viewDialogPartage = activity!!.layoutInflater.inflate(R.layout.dialog_partage, null)
 
-            }
-            .setNeutralButton("Choisir le temps"){ _, _ ->
-                createDialogueChoixDuTemps(currentSong)
-            }
-            .create().show()
+        val btChoix = viewDialogPartage.findViewById<Button>(R.id.bouton_choix)
+        val btDebut = viewDialogPartage.findViewById<Button>(R.id.bouton_debut)
+
+        val dialoguePartage =
+            builder
+                .setTitle("A quel moment voulez vous que la vidéo se lance?")
+                .setView(viewDialogPartage)
+                .setNegativeButton("Annuler"){ _, _ ->
+            }.create()
+
+        btChoix.setOnClickListener {
+            createDialogueChoixDuTemps(currentSong)
+            dialoguePartage.hide()
+        }
+        btDebut.setOnClickListener {
+            currentSong?.lancement = 0
+            startActivityListFriendToSendMusicActivity(currentSong)
+            dialoguePartage.hide()
+        }
+
+        dialoguePartage.show()
+
     }
 
     private fun createDialogueChoixDuTemps(currentSong : Song?){

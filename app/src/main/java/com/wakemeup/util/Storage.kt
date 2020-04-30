@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream
 private val TAG = "storage"
 private  const val FILENAME_FAVORI= "fav_util.fav"
 private  const val FILENAME_HISTORIQUE= "hist_util.hist"
+private  const val FILENAME_HISTORIQUEVIDEO= "hist_video_util.hist"
 
 //charge n'importe quel type d'objet du fichier filename
 fun <T> load(context: Context, filename : String) : T?{
@@ -52,12 +53,12 @@ fun <T> persiste(context: Context, obj : T, filename: String){
 
 //Charge les favoris utilisateurs du fichier "fav_util.fav"
 fun loadFavoris(context : Context) : MutableList<Song>?{
-    return load<MutableList<Song>?>(context, FILENAME_FAVORI)
+    return load(context, FILENAME_FAVORI)
 }
 
 //Sauvegarde les favoris utilisateur dans un fichier "fav_util.fav"
 fun persisteFavoris(context: Context, songs: MutableList<Song>){
-    persiste<MutableList<Song>>(context, songs, FILENAME_FAVORI)
+    persiste(context, songs, FILENAME_FAVORI)
 }
 
 
@@ -70,17 +71,35 @@ fun resetFavoris(context: Context){
 
 //Charge les recherches utilisateurs du fichier "hist_util.hist"
 fun loadHistorique(context : Context) : MutableList<String>?{
-    return load<MutableList<String>?>(context, FILENAME_HISTORIQUE)
+    return load(context, FILENAME_HISTORIQUE)
 }
 
 //Sauvegarde les recheche utilisateur dans un fichier "hist_util.hist"
 fun persisteHistorique(context: Context, historique: MutableList<String>){
-    persiste<MutableList<String>>(context, historique, FILENAME_HISTORIQUE)
+    persiste(context, historique, FILENAME_HISTORIQUE)
 }
 
 //reset le fichier des historiques
 fun resetHistorique(context: Context){
     context.deleteFile(FILENAME_HISTORIQUE)
+}
+
+//--------------------------------------------------------------------------------------
+
+
+//Charge les recherches utilisateurs du fichier "hist_video_util.hist"
+fun loadHistoriqueVideo(context : Context) : MutableList<Song>?{
+    return load(context, FILENAME_HISTORIQUEVIDEO)
+}
+
+//Sauvegarde les recheche utilisateur dans un fichier "hist_video_util.hist"
+fun persisteHistoriqueVideo(context: Context, historiqueVideo: MutableList<Song>){
+    persiste(context, historiqueVideo, FILENAME_HISTORIQUEVIDEO)
+}
+
+//reset le fichier des historiques des videos
+fun resetHistoriqueVideo(context: Context){
+    context.deleteFile(FILENAME_HISTORIQUEVIDEO)
 }
 
 //--------------------------------------------------------------------------------------
