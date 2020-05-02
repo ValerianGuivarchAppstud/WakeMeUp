@@ -2,6 +2,7 @@ package com.wakemeup.util
 
 import android.content.Context
 import com.wakemeup.song.Song
+import com.wakemeup.song.SongHistorique
 import java.io.FileInputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -52,15 +53,14 @@ fun <T> persiste(context: Context, obj : T, filename: String){
 
 
 //Charge les favoris utilisateurs du fichier "fav_util.fav"
-fun loadFavoris(context : Context) : MutableList<Song>?{
+fun loadFavoris(context : Context) : MutableList<SongHistorique>?{
     return load(context, FILENAME_FAVORI)
 }
 
 //Sauvegarde les favoris utilisateur dans un fichier "fav_util.fav"
-fun persisteFavoris(context: Context, songs: MutableList<Song>){
+fun persisteFavoris(context: Context, songs: MutableList<SongHistorique>){
     persiste(context, songs, FILENAME_FAVORI)
 }
-
 
 //reset le fichier des favoris
 fun resetFavoris(context: Context){
@@ -88,12 +88,12 @@ fun resetHistorique(context: Context){
 
 
 //Charge les recherches utilisateurs du fichier "hist_video_util.hist"
-fun loadHistoriqueVideo(context : Context) : MutableList<Song>?{
+fun loadHistoriqueVideo(context : Context) : MutableList<SongHistorique>?{
     return load(context, FILENAME_HISTORIQUEVIDEO)
 }
 
 //Sauvegarde les recheche utilisateur dans un fichier "hist_video_util.hist"
-fun persisteHistoriqueVideo(context: Context, historiqueVideo: MutableList<Song>){
+fun persisteHistoriqueVideo(context: Context, historiqueVideo: MutableList<SongHistorique>){
     persiste(context, historiqueVideo, FILENAME_HISTORIQUEVIDEO)
 }
 

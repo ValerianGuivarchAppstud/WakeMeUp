@@ -1,32 +1,21 @@
 package com.wakemeup.song
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.api.services.youtube.model.SearchResult
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.wakemeup.AppWakeUp
 import com.wakemeup.MainActivity
 import com.wakemeup.R
-import com.wakemeup.contact.ListFriendToSendMusicActivity
-import com.wakemeup.util.loadFavoris
-import com.wakemeup.util.persisteFavoris
-import com.wakemeup.util.resetFavoris
-import kotlinx.android.synthetic.main.fragment_video.*
+import com.wakemeup.util.*
 import kotlinx.android.synthetic.main.fragment_video.view.*
 
 
@@ -34,16 +23,16 @@ class VideosFavoris : Fragment() {
 
     private lateinit var dialogue : DialogueYoutube
     private var isPlaying: Boolean = false
-    private val songList : MutableList<Song> = mutableListOf<Song>()
+    private val favorisList : MutableList<SongHistorique> = mutableListOf()
 
-    private lateinit var mAdapter: SongAdapter
+    private lateinit var mAdapter: SongHistoriqueAdaptater
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
 
     private var currentIndex: Int = 0
     private var currentSongLength: Int = 0
     private var firstLaunch = true
-    private var currentSong: Song? = null
+    private var currentSong: SongHistorique? = null
 
     private var youTubePlayer: YouTubePlayer? = null
     private lateinit var textePasDeFavori : TextView
@@ -57,12 +46,13 @@ class VideosFavoris : Fragment() {
     }
 
     //lance la video reliée au parametre "song"
-    private fun prepareSong(song: Song?) {
+    private fun prepareSong(songH: SongHistorique?) {
         //todo vérifier bug ici, si on sélectionne la musique trop vite
-        if (song != null) {
 
+        if (songH != null) {
+            val song = songH.song
             currentSongLength = song.duration
-            currentSong = song
+            currentSong = songH
 
             if (youTubePlayer != null) {
                 youTubePlayer!!.loadVideo(song.id, 0F)
@@ -84,8 +74,8 @@ class VideosFavoris : Fragment() {
         btSupprimer.setOnClickListener {
 
             if (currentSong != null) {
-                songList.remove(currentSong!!)
-                if (songList.isNullOrEmpty()){
+                favorisList.remove(currentSong!!)
+                if (favorisList.isNullOrEmpty()){
                     currentSong = null
                     textePasDeFavori.visibility=View.VISIBLE
                 }
@@ -97,7 +87,7 @@ class VideosFavoris : Fragment() {
                 //------------------------------
 
                 resetFavoris(this.requireContext())
-                persisteFavoris(this.requireContext(),songList)
+                persisteFavoris(this.requireContext(),favorisList)
 
                 Toast.makeText(
                     activity!!.application,
@@ -125,7 +115,7 @@ class VideosFavoris : Fragment() {
                 dialogue.createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
             } else {
                 if (currentSong != null) {
-                    dialogue.createDialoguePartage(currentSong) //lance la dialogue pour preciser le temps
+                    dialogue.createDialoguePartage(currentSong!!.song) //lance la dialogue pour preciser le temps
                 }
                 else{
                     Toast.makeText(
@@ -166,7 +156,7 @@ class VideosFavoris : Fragment() {
 
         currentIndex = 0
         currentView.pb_main_loader.visibility = View.GONE
-        songList.clear()
+        favorisList.clear()
 
         gestionBoutonSupprimer()
         gestionBoutonParatage()
@@ -174,9 +164,9 @@ class VideosFavoris : Fragment() {
         textePasDeFavori = currentView.findViewById(R.id.texte_pas_de_favori)
 
         //Charge les favoris-----------------------------------------------------
-        val favoris : MutableList<Song>? = loadFavoris(this.requireContext())
+        val favoris : MutableList<SongHistorique>? = loadFavoris(this.requireContext())
         if (favoris != null) {
-            songList.addAll(favoris)
+            favorisList.addAll(favoris)
             if (favoris.isEmpty()) {
                 textePasDeFavori.visibility = View.VISIBLE
             }
@@ -185,8 +175,8 @@ class VideosFavoris : Fragment() {
             }
 
             //Lancer la 1ere video youtube de la liste
-            if (songList.isNotEmpty()) {
-                currentSong = songList[0]
+            if (favorisList.isNotEmpty()) {
+                currentSong = favorisList[0]
                 changeSelectedSong(0)
                 prepareSong(currentSong)
             }
@@ -199,15 +189,41 @@ class VideosFavoris : Fragment() {
             textePasDeFavori.visibility=View.VISIBLE
         }
         //------------------------------------------------------------------------
-
-
-
-
-
         mAdapter.notifyDataSetChanged()
         mAdapter.selectedPosition = 0
 
         dialogue = DialogueYoutube(activity!!)
+
+        //Initialisation du spinner----------------------------------------------------------------------------
+        val spinner = currentView.findViewById<Spinner>(R.id.spinner_trie)
+        val trie = arrayOf("Date d'ajout","Alphabétique")
+
+        spinner.adapter = ArrayAdapter<String>(this.requireContext(),android.R.layout.simple_list_item_1,trie)
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when (trie[position]){
+                    "Alphabétique"  -> {
+                        trieAlphabetique(favorisList, activity!!)
+                        mAdapter.notifyDataSetChanged()
+                        mAdapter.selectedPosition = 0
+                    }
+                    "Date d'ajout" -> {
+                        trieDateAjout(favorisList,activity!!)
+                        mAdapter.notifyDataSetChanged()
+                        mAdapter.selectedPosition = 0
+                    }
+                }
+            }
+        }
+        //------------------------------------------------------------------------------------------------------
 
         return currentView
     }
@@ -217,12 +233,15 @@ class VideosFavoris : Fragment() {
         fun newInstance(ctx: Context): VideosFavoris {
 
             val nf = VideosFavoris()
-            nf.mAdapter = SongAdapter(ctx, nf.songList,
-                object : SongAdapter.RecyclerItemClickListener {
-                    override fun onClickListener(song: Song, position: Int) {
+            nf.mAdapter = SongHistoriqueAdaptater(
+                ctx,
+                "FAVORIS",
+                nf.favorisList,
+                object : SongHistoriqueAdaptater.RecyclerItemClickListener {
+                    override fun onClickListener(songH: SongHistorique, position: Int) {
                         nf.firstLaunch = false
                         nf.changeSelectedSong(position)
-                        nf.prepareSong(song)
+                        nf.prepareSong(songH)
                     }
                 })
             return nf

@@ -2,14 +2,14 @@ package com.wakemeup.song
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.contains
 import androidx.fragment.app.Fragment
@@ -35,12 +35,12 @@ class VideoFragment : Fragment() {
     private lateinit var dialogue : DialogueYoutube
     private var isPlaying: Boolean = false
     private val songList = mutableListOf<Song>()
-    private var favorisListe : MutableList<Song> = mutableListOf<Song>()
-    private var historiqueListe : MutableList<String> = mutableListOf<String>()
-    private var historiqueVideoListe : MutableList<Song> = mutableListOf<Song>()
+    private var favorisListe : MutableList<SongHistorique> = mutableListOf()
+    private var historiqueListe : MutableList<String> = mutableListOf()
+    private var historiqueVideoListe : MutableList<SongHistorique> = mutableListOf()
     private lateinit var mAdapter: SongAdapter
     private lateinit var rAdapter: RechercheAdaptateur
-    private lateinit var hvAdapter : HistVideoAdaptater
+    private lateinit var hvAdapter : SongHistoriqueAdaptater
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
     private lateinit var partageView: View
@@ -98,15 +98,21 @@ class VideoFragment : Fragment() {
 
     fun saveSongInHistVideo(song : Song){
         var load = loadHistoriqueVideo(this.requireContext())
+        var index : Int
 
         if (load.isNullOrEmpty()){
-            load = mutableListOf<Song>()
+            load = mutableListOf()
+            index = 0
+        }
+        else{
+            index = load.last().index
         }
 
-        load.add(song)
+        load.add(SongHistorique(index+1,song))
         persisteHistoriqueVideo(this.requireContext(), load)
         historiqueVideoListe.clear()
         historiqueVideoListe.addAll(load)
+
 
     }
 
@@ -144,13 +150,17 @@ class VideoFragment : Fragment() {
 
     private fun gestionFavoris(){
         //Gestion de la persistance des favoris (sauvgarde les favoris dans un fichier)
-        if (loadFavoris(this.requireContext()) != null) {
-            favorisListe = loadFavoris(this.requireContext())!!
+        var index : Int
+        val listeTemp = loadFavoris(this.requireContext())
+        if (listeTemp != null) {
+            favorisListe = listeTemp
+            index = listeTemp.last().index +1
         }
         else{
-            favorisListe = mutableListOf<Song>()
+            favorisListe = mutableListOf<SongHistorique>()
+            index = 0
         }
-        favorisListe.add(currentSong!!)
+        favorisListe.add(SongHistorique(index,currentSong!!))
         resetFavoris(this.requireContext())
         persisteFavoris(this.requireContext(),favorisListe)
     }
@@ -216,42 +226,47 @@ class VideoFragment : Fragment() {
 
         dialogueSearch.show()
 
-
     }
+
+
 
     //Gestion du dialogue de l'historique
     private fun createDialogForHistory(){
         val builder = AlertDialog.Builder(activity!!)
         val view = activity!!.layoutInflater.inflate(R.layout.dialogue_history, null)
-
-        val recherches = loadHistoriqueVideo(this.requireContext())
         val recyclerViewRecherche = view.findViewById<RecyclerView>(R.id.recycler_list_historique_video)
-        var parametre : MutableList<Song>?
+
+
+        //Rest l'hsitorique des videos----------------------------------
+        historiqueVideoListe.clear()
+        val histVideoTemp = loadHistoriqueVideo(this.requireContext())
+        if (histVideoTemp == null)
+            historiqueVideoListe = mutableListOf()
+        else
+            historiqueVideoListe = histVideoTemp
+        //---------------------------------------------------------------
 
         //Initialisation du dialogue pour l'historique----
         val dialogueHistory =
-            builder.setTitle(R.string.historique)
-            .setView(view)
-            .setNegativeButton("Annuler") { _, _ ->
-            }
-            .create()
+            builder
+                .setView(view)
+                .setNegativeButton("Annuler") { _, _ ->
+                }
+                .create()
         //------------------------------------------------
 
         //Initialisation du recyclerView de l'historique---------------------------
-        recyclerViewRecherche.layoutManager = LinearLayoutManager(activity!!)
-        if (recherches != null) {
-            parametre = recherches
-        }
-        else{
-            parametre = mutableListOf<Song>()
-        }
+        recyclerViewRecherche.layoutManager = LinearLayoutManager(view.context!!)
         //--------------------------------------------------------------------------
 
         //Initialisiton de l'adaptateur de recycler view-----------------------------
-        hvAdapter = HistVideoAdaptater(this.requireContext(),parametre,
-            object : HistVideoAdaptater.RecyclerItemClickListener{
-                override fun onClickListener(song : Song, position: Int){
-                    prepareSong(song)
+        hvAdapter = SongHistoriqueAdaptater(
+            this.requireContext(),
+            "HISTORIQUE",
+            historiqueVideoListe,
+            object : SongHistoriqueAdaptater.RecyclerItemClickListener{
+                override fun onClickListener(song : SongHistorique, position: Int){
+                    prepareSong(song.song)
                     dialogueHistory.hide()
                 }
             }
@@ -259,9 +274,40 @@ class VideoFragment : Fragment() {
         recyclerViewRecherche.adapter = hvAdapter
         //---------------------------------------------------------------------------
 
+        //Initialisation du spinner----------------------------------------------------------------------------
+        val spinner = view.findViewById<Spinner>(R.id.spinner_trie)
+        val trie = arrayOf("Date d'ajout","Alphabétique")
+
+        spinner.adapter = ArrayAdapter<String>(this.requireContext(),android.R.layout.simple_list_item_1,trie)
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when (trie[position]){
+                    "Alphabétique"  -> {
+                        trieAlphabetique(historiqueVideoListe, activity!!)
+                        //view?.pb_main_loader?.visibility = View.GONE
+                        hvAdapter.notifyDataSetChanged()
+                        hvAdapter.selectedPosition = 0
+                    }
+                    "Date d'ajout" -> {
+                        trieDateAjout(historiqueVideoListe,activity!!)
+                        //view?.pb_main_loader?.visibility = View.GONE
+                        hvAdapter.notifyDataSetChanged()
+                        hvAdapter.selectedPosition = 0
+                        //view?.pb_main_loader?.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
+        //------------------------------------------------------------------------------------------------------
         dialogueHistory.show()
-
-
     }
 
 
@@ -335,7 +381,7 @@ class VideoFragment : Fragment() {
         //------------------------------------------------------------------------------------
 
         //Initialisation de la liste des favoris-------------------------------------------------
-        val chargement_des_favoris : MutableList<Song>? = loadFavoris(this.requireContext())
+        val chargement_des_favoris : MutableList<SongHistorique>? = loadFavoris(this.requireContext())
         if (chargement_des_favoris != null) {
             favorisListe.addAll(chargement_des_favoris)
         }
@@ -349,7 +395,7 @@ class VideoFragment : Fragment() {
         //---------------------------------------------------------------------------------------
 
         //Initialisation de la liste contenant l'historique-------------------------------------
-        val chargement_historiqueVideo : MutableList<Song>? = loadHistoriqueVideo(this.requireContext())
+        val chargement_historiqueVideo : MutableList<SongHistorique>? = loadHistoriqueVideo(this.requireContext())
         if (chargement_historiqueVideo != null) {
             historiqueVideoListe.addAll(chargement_historiqueVideo)
         }

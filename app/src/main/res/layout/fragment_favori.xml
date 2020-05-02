@@ -8,13 +8,13 @@
 
     <TextView
         android:id="@+id/title_favoris"
+        style="@style/AppTheme.BoutonReveil"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/titre_favoris"
-        android:textSize="30sp"
-        android:gravity="center"
         android:background="@color/colorPrimaryDark"
-        style="@style/AppTheme.BoutonReveil"/>
+        android:gravity="center"
+        android:text="@string/titre_favoris"
+        android:textSize="20sp" />
 
     <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
         android:id="@+id/youtube_player_view_favoris"
@@ -44,8 +44,18 @@
             android:layout_weight="1"
             android:text="@string/supprimer" />
 
-    </LinearLayout>
 
+    </LinearLayout>
+    <Spinner
+        android:id="@+id/spinner_trie"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:pointerIcon="text"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right"
+        android:gravity="right"
+        />
 
         <RelativeLayout
             android:layout_width="match_parent"

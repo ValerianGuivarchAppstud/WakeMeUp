@@ -55,7 +55,7 @@ class Song(
     )
 
     override fun compareTo(other: Song): Int {
-        return other.rank - this.rank
+        return other.title.hashCode() - this.title.hashCode()
     }
 
     /*override fun equals(other: Any?): Boolean {

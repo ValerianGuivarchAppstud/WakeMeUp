@@ -29,19 +29,19 @@ class SongAdapter(
 
         val song = songList[position]
         if (selectedPosition == position) {
-            holder.itemView.setBackgroundColor(
-                ContextCompat.getColor(
-                    context,
-                    R.color.colorPrimary
+                holder.itemView.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.colorPrimary
+                    )
                 )
-            )
-        } else {
-            holder.itemView.setBackgroundColor(
-                ContextCompat.getColor(
-                    context,
-                    android.R.color.transparent
+            } else {
+                holder.itemView.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        android.R.color.transparent
+                    )
                 )
-            )
         }
 
         holder.tvTitle.text = song.title
