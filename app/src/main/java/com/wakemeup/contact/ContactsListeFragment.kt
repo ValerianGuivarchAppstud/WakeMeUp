@@ -4,9 +4,7 @@ import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +14,10 @@ import com.neocampus.repo.ViewModelFactory
 import com.wakemeup.AppWakeUp
 import com.wakemeup.R
 import com.wakemeup.connect.UserModel
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import androidx.appcompat.widget.SearchView
 
 class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapterListener {
 
@@ -34,6 +36,12 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         val factory = ViewModelFactory(AppWakeUp.repository)
 
         viewModel = ViewModelProvider(this, factory).get(ContactListeViewModel::class.java)
+
+         //put all Phonecontacts in viewModel
+         for (user in getPhoneContacts().values){
+             viewModel.addContact(user)
+         }
+
         viewModel.getContactsListeLiveData().observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer { nouvelleListeContacts ->
@@ -55,7 +63,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
-
+        setHasOptionsMenu(true)
         val view = inflater.inflate(R.layout.fragment_contact_list, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.list_contact)
         adapter = ContactListeAdapter(contacts, this)
@@ -65,10 +73,28 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         return view
     }
 
+    //menu recherche
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_search_contacts, menu)
+        val item = menu.findItem(R.id.rechercher_contacts)
+        val searchview : androidx.appcompat.widget.SearchView = item.actionView as androidx.appcompat.widget.SearchView
+        searchview.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText)
+                return false
+            }
+        })
+        super.onCreateOptionsMenu(menu, inflater)
+       // setHasOptionsMenu(true)
+    }
+
     override fun onContactClicked(userModel: UserModel, itemView: View) {
         //todo action click user
     }
-
 
     // my own function
     fun getPhoneContacts(): Map<String, UserModel> {

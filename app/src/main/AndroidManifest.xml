@@ -43,7 +43,7 @@
         <activity android:name=".connect.ui.SignupActivity" />
         <activity android:name=".connect.ui.EditUser.EditUser"
             android:parentActivityName=".MainActivity"/>
-
+        <activity android:name=".connect.ui.EditUser.LanceurFragment"/>
 
 
         <service

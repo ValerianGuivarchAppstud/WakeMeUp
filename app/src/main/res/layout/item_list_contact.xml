@@ -38,7 +38,6 @@
                 android:layout_height="50dp"
                 android:contentDescription="@string/selection" />
 
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

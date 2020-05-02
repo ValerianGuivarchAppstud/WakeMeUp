@@ -162,7 +162,7 @@ class SignupActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 
-    private fun sendEmailConfirm(){
+    public fun sendEmailConfirm(){
         val user = AppWakeUp.auth.currentUser!!
         user.sendEmailVerification()
             .addOnCompleteListener { task ->

@@ -15,16 +15,18 @@ import com.google.firebase.firestore.auth.User
 import com.wakemeup.connect.ui.EditUser.EditUser
 import com.wakemeup.util.resetFavoris
 import com.wakemeup.util.resetHistorique
+import com.wakemeup.connect.ui.EditUser.EditEmailFragment
+import com.wakemeup.connect.ui.EditUser.LanceurFragment
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 
 class SettingsUser() : Fragment() {
-
 
     companion object {
         fun newInstance(ctx: Context): SettingsUser {
             return SettingsUser()
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,9 +65,5 @@ class SettingsUser() : Fragment() {
 
         return view
     }
-
-
-
-
 
 }

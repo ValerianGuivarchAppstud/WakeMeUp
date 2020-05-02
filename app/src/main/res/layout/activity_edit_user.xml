@@ -31,9 +31,11 @@
         android:id="@+id/valeur_identifiant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="44dp"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.128"
         app:layout_constraintLeft_toLeftOf="@id/indication_identifiant"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/indication_identifiant"
@@ -41,9 +43,9 @@
 
     <ImageButton
         android:id="@+id/button_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/share"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:src="@drawable/icon_edit_black_24dp"
         app:layout_constraintLeft_toRightOf="@id/valeur_identifiant"
         app:layout_constraintTop_toTopOf="@id/valeur_identifiant"
         app:layout_constraintBottom_toBottomOf="@id/valeur_identifiant"
@@ -53,7 +55,7 @@
         android:id="@+id/indication_mdp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Changer votre Mot de Passe :"
+        android:text="Changer votre mot de passe :"
         app:layout_constraintTop_toBottomOf="@+id/valeur_identifiant"
         app:layout_constraintLeft_toLeftOf="@id/indication_identifiant"
         android:layout_marginTop="90dp"
@@ -64,6 +66,7 @@
         android:id="@+id/valeur_mdp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="@id/valeur_identifiant"
         app:layout_constraintTop_toBottomOf="@id/indication_mdp"
         android:layout_marginTop="30dp"
@@ -72,15 +75,47 @@
 
     <ImageButton
         android:id="@+id/button_mdp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         app:layout_constraintLeft_toRightOf="@id/valeur_mdp"
         app:layout_constraintTop_toTopOf="@id/valeur_mdp"
         app:layout_constraintBottom_toBottomOf="@id/valeur_mdp"
-        android:src="@drawable/share"
+        android:src="@drawable/icon_edit_black_24dp"
         android:layout_marginLeft="20dp"/>
 
 
+    <TextView
+        android:id="@+id/indication_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Changer votre email :"
+
+        app:layout_constraintTop_toBottomOf="@+id/valeur_mdp"
+        app:layout_constraintLeft_toLeftOf="@id/indication_mdp"
+        android:layout_marginTop="90dp"
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:id="@+id/valeur_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/valeur_mdp"
+        app:layout_constraintTop_toBottomOf="@id/indication_email"
+        android:layout_marginTop="30dp"
+        tools:text="email"
+        android:textSize="20sp"/>
+
+    <ImageButton
+        android:id="@+id/button_email"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        app:layout_constraintLeft_toRightOf="@id/valeur_email"
+        app:layout_constraintTop_toTopOf="@id/valeur_email"
+        app:layout_constraintBottom_toBottomOf="@id/valeur_email"
+        android:src="@drawable/icon_edit_black_24dp"
+        android:layout_marginLeft="20dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

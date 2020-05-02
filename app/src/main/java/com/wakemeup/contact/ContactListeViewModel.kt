@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.neocampus.repo.Repository
 import com.wakemeup.connect.UserModel
 
-class ContactListeViewModel(val repo: Repository) : ViewModel() {
+class ContactListeViewModel(val repo: Repository) : ViewModel(){
 
     private val contactListeState = MediatorLiveData<Map<String, UserModel>>()
 
