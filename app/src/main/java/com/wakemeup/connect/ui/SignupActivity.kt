@@ -1,7 +1,6 @@
 package com.wakemeup.connect.ui
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -145,18 +144,6 @@ class SignupActivity : AppCompatActivity() {
 
     }
 
-
-    private fun updateUiWithUser() {
-        val welcome = getString(R.string.welcome)
-        val displayName = "todo"
-        //AppWakeUp.auth.currentUser.
-        //AppWakeUp.auth.currentUser!!
-        Toast.makeText(
-            applicationContext,
-            "$welcome $displayName",
-            Toast.LENGTH_LONG
-        ).show()
-    }
 
     private fun showSignupFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()

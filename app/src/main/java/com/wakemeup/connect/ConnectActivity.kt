@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.wakemeup.AppWakeUp
 import com.wakemeup.MainActivity
@@ -69,6 +72,7 @@ class ConnectActivity : AppCompatActivity() {
             }
             CONNECTION_COMPTE -> {
                 if (AppWakeUp.auth.currentUser != null) {
+                    sayWelcome()
                     startMainActivityBeingConnected()
                 }
             }
@@ -101,4 +105,29 @@ class ConnectActivity : AppCompatActivity() {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
     }
+
+    private fun sayWelcome(){
+
+        val reference =
+            AppWakeUp.database.getReference("Users").child(AppWakeUp.auth.currentUser!!.uid)
+
+        reference.addValueEventListener(
+            object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val user: UserModel = dataSnapshot.getValue(UserModel::class.java)!!
+                    val welcome = getString(R.string.welcome)
+                        Toast.makeText(
+                            applicationContext,
+                            "$welcome ${user.username}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.e("MainActivity", "loadPost:onCancelled ${databaseError.message}")
+                }
+            }
+        )
+    }
+
 }

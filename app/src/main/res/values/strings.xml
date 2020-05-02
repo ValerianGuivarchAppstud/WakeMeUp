@@ -74,4 +74,8 @@
 
     <string name="titre_favoris">Vos Favoris</string>
 
+    <string name="facebook_app_id">241537453728565</string>
+    <string name="fb_login_protocol_scheme">fb241537453728565</string>
+
+
 </resources>
