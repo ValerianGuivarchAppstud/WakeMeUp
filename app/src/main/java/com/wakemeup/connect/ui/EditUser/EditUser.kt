@@ -1,36 +1,48 @@
 package com.wakemeup.connect.ui.EditUser
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
+import android.util.Patterns
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
+import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.auth.*
+import com.google.firebase.database.*
 import com.google.firebase.firestore.auth.User
 import com.wakemeup.AppWakeUp
+import com.wakemeup.MainActivity
 import com.wakemeup.R
+import com.wakemeup.connect.ConnectActivity
 import com.wakemeup.connect.UserModel
 import kotlinx.android.synthetic.main.activity_edit_user.*
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.fragment_update_email.*
 
 class EditUser : AppCompatActivity() {
 
-    lateinit var currentUser : UserModel
+
+    lateinit var currentUserModel: UserModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_user)
 
         val toolbar = toolbar
         setSupportActionBar(toolbar)
+
+        Log.i("EditUser", AppWakeUp.auth.currentUser!!.email)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        val dataSnapshot : DataSnapshot
+        val dataSnapshot: DataSnapshot
         val reference =
             AppWakeUp.database.getReference("Users").child(AppWakeUp.auth.currentUser!!.uid)
 
@@ -38,9 +50,14 @@ class EditUser : AppCompatActivity() {
             object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val user: UserModel = dataSnapshot.getValue(UserModel::class.java)!!
-                    currentUser = user
-                    valeur_identifiant.text = currentUser.username
+                    currentUserModel = user
+
+
+                    valeur_identifiant.text = currentUserModel.username
                     valeur_mdp.text = "*********"
+
+
+                    Log.i("EditUser", AppWakeUp.auth.currentUser!!.email)
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
@@ -51,54 +68,44 @@ class EditUser : AppCompatActivity() {
 
 
 
+        if (intent.extras != null) {
 
+            val extras = intent.extras
 
+            val categorie = extras!!.getString("email")
+            valeur_email.text = categorie
+            val intent = Intent(this, ConnectActivity::class.java)
+            startActivity(
+                intent
+            )
 
-        /*Log.i("EditUser",AppWakeUp.auth.currentUser!!.email.toString())
-        AppWakeUp.auth.currentUser!!.updateEmail("user@example.com")
-            ?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d("EditUser", "User email address updated.")
-                }else{
-                    Log.d("EditUser","Fail update email")
-                }
-            }*/
-
-
-        button_id.setOnClickListener{
-            showUpdateIdDialog()
+        } else {
+            Log.i("EditUser", "pas d'extra")
+            valeur_email.text = AppWakeUp.auth.currentUser!!.email
         }
-    }
 
-    private fun showUpdateIdDialog() {
-        val updateId = EditIDDialogFragment()
-        updateId.listener = object : EditIDDialogFragment.EditIDListener{
-            override fun onDialogPositiveClick(newId: String) {
-               //TODO update id dans la database
-               /* val newPassword = newId
 
-                AppWakeUp.auth.currentUser!!.updatePassword(newPassword).addOnCompleteListener{
-                    task ->
-                    if(task.isSuccessful){
-                        Toast.makeText(this@EditUser, "Succes $newPassword", Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(this@EditUser, "Echec", Toast.LENGTH_SHORT).show()
-                    }
-                }*/
 
-            }
-
-            override fun onNegativeClick() {
-
-            }
+        button_id.setOnClickListener {
+            val intent = Intent(this, LanceurFragment::class.java)
+            intent.putExtra("categorie", "username")
+            startActivity(intent)
         }
-        updateId.show(supportFragmentManager,"UpdateIdFragment")
-    }
 
 
-    fun masqueMDP(lenght : Int){
 
+
+        button_mdp.setOnClickListener{
+            val intent = Intent(this, LanceurFragment::class.java)
+            intent.putExtra("categorie","password")
+            startActivity(intent)
+        }
+
+        button_email.setOnClickListener(){
+            val intent = Intent(this, LanceurFragment::class.java)
+            intent.putExtra("categorie","email")
+            intent.putExtra("name",currentUserModel.username)
+            startActivity(intent)
+        }
     }
 }
-
-

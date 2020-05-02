@@ -3,19 +3,28 @@ package com.wakemeup.contact
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.wakemeup.R
 import com.wakemeup.connect.UserModel
 
 class ContactListeAdapter(
-    private val contacts: Map<String, UserModel>,
+    private var contacts: Map<String, UserModel>,
     private val listener: ContactListAdapterListener?
 ) : RecyclerView.Adapter<ContactListeAdapter.ViewHolder>(),
-    View.OnClickListener {
+    View.OnClickListener, Filterable{
+
+    // variable filtrée avec la recherche dans contacts
+    var allUsersRecherche = mutableListOf<UserModel>()
+    var contactsInitiaux = mutableMapOf<String, UserModel>()
+
+    init {
+        allUsersRecherche.addAll(
+            contacts.values
+        )
+        contactsInitiaux.putAll(contacts)
+    }
 
     interface ContactListAdapterListener {
         fun onContactClicked(userModel: UserModel, itemView: View)
@@ -30,7 +39,7 @@ class ContactListeAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val viewItem = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_list_reveil, parent, false)
+            .inflate(R.layout.item_list_contact, parent, false)
         return ViewHolder(viewItem)
     }
 
@@ -49,5 +58,38 @@ class ContactListeAdapter(
 
     override fun onClick(v: View) {
         listener?.onContactClicked(v.tag as UserModel, v)
+    }
+
+    override fun getFilter(): Filter {
+       return userFilter
+    }
+
+    private var userFilter : Filter = object : Filter() {
+        override fun performFiltering(charSequence: CharSequence?): FilterResults {
+            var filteredList: ArrayList<UserModel> = mutableListOf<UserModel>() as ArrayList<UserModel>
+            if(charSequence.toString().isEmpty()){
+                filteredList.addAll(allUsersRecherche)
+            }else{
+                for(userModel in allUsersRecherche){
+                    if(userModel.username.toLowerCase().contains(charSequence.toString().toLowerCase().trim())){
+                        filteredList.add(userModel)
+                    }
+                }
+            }
+
+            var filterResults : FilterResults = FilterResults()
+            filterResults.values = filteredList
+            return  filterResults
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            contactsInitiaux.clear()
+            for(user in results?.values as ArrayList<UserModel>){
+                contactsInitiaux.put(user.id, user)
+            }
+            contacts = contactsInitiaux
+            notifyDataSetChanged()
+        }
+
     }
 }

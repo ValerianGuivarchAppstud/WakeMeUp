@@ -6,7 +6,6 @@
     android:orientation="vertical"
     tools:context=".contact.ListFriendToSendMusicActivity">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_contact"
         android:layout_width="match_parent"
