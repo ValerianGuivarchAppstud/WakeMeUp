@@ -12,20 +12,26 @@
 
     <EditText
         android:id="@+id/activity_login_mail"
-        style="@style/Button.Edit"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="24dp"
         android:hint="@string/prompt_identifiant_mail"
         android:importantForAutofill="no"
         android:inputType="text"
-        android:selectAllOnFocus="false"
+        android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/activity_login_password"
-        style="@style/Button.Edit"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="24dp"
         android:hint="@string/prompt_password"
         android:imeActionLabel="@string/action_login"
         android:imeOptions="actionDone"
@@ -38,10 +44,10 @@
 
     <Button
         android:id="@+id/activity_login_button"
-        style="@style/Button.Valider"
         android:enabled="false"
         android:text="@string/action_login"
-        android:layout_width="250dp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/rounded_button"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -49,7 +55,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_login_password"
         app:layout_constraintVertical_bias="0.2"
-
         />
 
 
@@ -62,7 +67,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activity_login_button"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintVertical_bias="0.1" />
 
     <ProgressBar
         android:id="@+id/activity_login_loading"

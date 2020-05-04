@@ -22,6 +22,10 @@
             android:id="@+id/activity_main_drawer_favoris"
             android:icon="@drawable/icon_main_menu_favoris"
             android:title="@string/favori" />
+        <item
+            android:id="@+id/activity_main_drawer_musiques_en_attente"
+            android:icon="@drawable/icon_main_menu_musiques"
+            android:title="@string/musiques_recues" />
         <item android:title="Social">
             <menu>
                 <item

@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
@@ -24,7 +23,6 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -33,14 +31,12 @@ import com.wakemeup.connect.ConnectActivity
 
 import com.wakemeup.connect.UserModel
 import com.wakemeup.contact.ContactsListeFragment
-import com.wakemeup.contact.SonnerieEnAttente
+import com.wakemeup.contact.SonnerieRecue
 import com.wakemeup.reveil.ReveilsListeFragment
-import com.wakemeup.song.Song
 import com.wakemeup.share.DemanderMusique
+import com.wakemeup.song.MusiquesRecuesFragment
 import com.wakemeup.song.VideoFragment
 import com.wakemeup.song.VideosFavoris
-import java.util.*
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -57,6 +53,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var fragmentContact: ContactsListeFragment? = null
     private var fragmentParametre : SettingsUser? = null
     private var fragmentFavoris: VideosFavoris? = null
+    private var fragmentMusiquesRecues: MusiquesRecuesFragment? = null
 
     private var currentUser: UserModel? = null
 
@@ -95,7 +92,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                                     }
                                                 }
                                                 val music =
-                                                    SonnerieEnAttente(receiver, sender, song)
+                                                    SonnerieRecue(receiver, sender, song)
                                                 AppWakeUp.addSonnerieEnAttente(
                                                     idMusicSend,
                                                     music,
@@ -250,11 +247,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.activity_main_drawer_partage -> this.showFragment(
                 FragmentId.FRAGMENT_PARTAGE
             )
-            R.id.activity_main_drawer_amis -> {
-                this.showFragment(
-                    FragmentId.FRAGMENT_AMIS
-                )
-            }
+            R.id.activity_main_drawer_amis -> this.showFragment(
+                FragmentId.FRAGMENT_AMIS
+            )
+            R.id.activity_main_drawer_musiques_en_attente -> this.showFragment(
+                FragmentId.FRAGMENT_MUSIQUES_RECUES
+            )
             R.id.activity_main_drawer_favoris -> this.showFragment(
                 FragmentId.FRAGMENT_FAVORIS
             )
@@ -266,6 +264,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startConnectActivity()
             }
             R.id.activity_main_drawer_connecter -> {
+                AppWakeUp.auth.signOut()
                 startConnectActivity(false)
             }
 
@@ -332,10 +331,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             )
             navigationView!!.menu.findItem(R.id.activity_main_drawer_favoris).isVisible = true
+            navigationView!!.menu.findItem(R.id.activity_main_drawer_musiques_en_attente).isVisible = true
             navigationView!!.menu.findItem(R.id.activity_main_drawer_connecter).isVisible = false
             navigationView!!.menu.findItem(R.id.activity_main_drawer_deconnecter).isVisible = true
         } else {
             navigationView!!.menu.findItem(R.id.activity_main_drawer_favoris).isVisible = false
+            navigationView!!.menu.findItem(R.id.activity_main_drawer_musiques_en_attente).isVisible = false
             navigationView!!.menu.findItem(R.id.activity_main_drawer_connecter).isVisible = true
             navigationView!!.menu.findItem(R.id.activity_main_drawer_deconnecter).isVisible = false
         }
@@ -386,7 +387,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             FragmentId.FRAGMENT_PARTAGE -> this.showPartageFragment()
             FragmentId.FRAGMENT_AMIS -> this.showAmisFragment()
             FragmentId.FRAGMENT_REVEIL -> this.showReveilFragment()
-
+            FragmentId.FRAGMENT_MUSIQUES_RECUES -> this.showMusiquesRecuesFragment()
             FragmentId.FRAGMENT_FAVORIS -> this.showFavorisFragment()
 
             FragmentId.FRAGMENT_PARAMETRE -> this.showParametreFragment()
@@ -427,6 +428,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             this.fragmentMusique = VideoFragment.newInstance(this)
         }
         this.startTransactionFragment(this.fragmentMusique!!)
+
+    }
+
+    private fun showMusiquesRecuesFragment() {
+        if (this.fragmentMusiquesRecues == null) {
+            this.fragmentMusiquesRecues = MusiquesRecuesFragment.newInstance(this)
+        }
+        this.startTransactionFragment(this.fragmentMusiquesRecues!!)
 
     }
 
@@ -481,8 +490,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             FRAGMENT_SECONNECTER,
             FRAGMENT_SEDECONNECTER,
             FRAGMENT_FAVORIS,
-            FRAGMENT_PARAMETRE
-
+            FRAGMENT_PARAMETRE,
+            FRAGMENT_MUSIQUES_RECUES
         }
 
     }

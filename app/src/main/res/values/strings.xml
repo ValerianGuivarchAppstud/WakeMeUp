@@ -42,14 +42,16 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="reveils">Reveils</string>
+    <string name="reveils">Réveils</string>
     <string name="musiques">Musiques</string>
     <string name="amis">Amis</string>
     <string name="SeDeconnecter">Se déconnecter</string>
     <string name="PhotoProfil">Photo de profil</string>
     <string name="ajouter_r_veil">Ajouter Réveil</string>
     <string name="supprimer_r_veil">Supprimer réveil</string>
-    <string name="musiques_en_attente">Musiques en attente</string>
+    <string name="musiques_recues">Musiques reçues</string>
+    <string name="musiques_en_attente">En attente</string>
+    <string name="musiques_passees">Passées</string>
     <string name="selection">selection</string>
     <string name="icone_notifications_musiques">Icone notifications musiques</string>
     <string name="text_erreur_contact_sans_connect">Vous ne pouve pas accéder à votre liste de contact tant que vous n\'êtes pas connecté</string>

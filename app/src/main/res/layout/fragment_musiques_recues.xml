@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title_musiques_recues"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/musiques_recues"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:background="@color/colorPrimaryDark"
+        style="@style/AppTheme.BoutonReveil"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+
+
+        <Button
+            android:id="@+id/bouton_musiques_passees"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="25dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/musiques_passees"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/bouton_musiques_en_attente"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@color/grey"
+            android:text="@string/musiques_en_attente"
+            android:textColor="@color/colorPrimary" />
+
+    </LinearLayout>
+
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:id="@+id/youtube_player_view_musiques_recues"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:showFullScreenButton="false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/bouton_ajouter_favori"
+            style="@style/AppTheme.BoutonReveil"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/favori" />
+
+        <Button
+            android:id="@+id/bouton_supprimer_musiques_en_attente"
+            style="@style/AppTheme.BoutonReveil"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/supprimer" />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+
+        <ProgressBar
+            android:id="@+id/pb_main_loader"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:visibility="visible" />
+        <TextView
+            android:id="@+id/texte_pas_de_musiques_en_attente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vous n'avez aucune musique en attente"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="30sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_list_video_musiques_en_attente"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            tools:listitem="@layout/item_list_video" />
+
+
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>
+
