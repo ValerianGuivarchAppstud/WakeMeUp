@@ -52,6 +52,8 @@
     <string name="musiques_recues">Musiques reçues</string>
     <string name="musiques_en_attente">En attente</string>
     <string name="musiques_passees">Passées</string>
+    <string name="textNoneMusicPassees">Vous n\'avez aucune musique déjà passées</string>
+    <string name="textNoneMusicEnAttente">Vous n\'avez aucune musique en attente</string>
     <string name="selection">selection</string>
     <string name="icone_notifications_musiques">Icone notifications musiques</string>
     <string name="text_erreur_contact_sans_connect">Vous ne pouve pas accéder à votre liste de contact tant que vous n\'êtes pas connecté</string>
