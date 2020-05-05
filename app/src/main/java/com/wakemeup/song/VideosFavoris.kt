@@ -23,8 +23,7 @@ class VideosFavoris : Fragment() {
 
     private lateinit var dialogue : DialogueYoutube
     private var isPlaying: Boolean = false
-    private val favorisList : MutableList<SongHistorique> = mutableListOf()
-
+    private var favorisList : MutableList<SongHistorique> = mutableListOf()
     private lateinit var mAdapter: SongHistoriqueAdaptater
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
@@ -69,7 +68,7 @@ class VideosFavoris : Fragment() {
 
 
     //Gestion du clic sur le bouton suprimer
-    private fun gestionBoutonSupprimer(){
+    private fun gestionBoutonSupprimer(index : Int){
         val btSupprimer = currentView.findViewById<Button>(R.id.bouton_supprimer_favori)
         btSupprimer.setOnClickListener {
 
@@ -87,10 +86,10 @@ class VideosFavoris : Fragment() {
                 //------------------------------
 
                 resetFavoris(this.requireContext())
-                persisteFavoris(this.requireContext(),favorisList)
+                persisteFavoris(this.requireContext(),SongIndex(favorisList, index))
 
                 Toast.makeText(
-                    activity!!.application,
+                    requireActivity().application,
                     "Vidéo Suprimmée",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -98,7 +97,7 @@ class VideosFavoris : Fragment() {
             }
             else{
                 Toast.makeText(
-                    activity!!.application,
+                    requireActivity().application,
                     "Veuillez sélectionner une vidéo",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -112,14 +111,14 @@ class VideosFavoris : Fragment() {
         val btPartage = currentView.findViewById<Button>(R.id.button_partage_favori)
         btPartage.setOnClickListener {
             if (AppWakeUp.auth.currentUser!!.isAnonymous) {
-                dialogue.createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
+                dialogue.createAlertDialogNotConnected(requireContext(), this.requireActivity() as MainActivity)
             } else {
                 if (currentSong != null) {
                     dialogue.createDialoguePartage(currentSong!!.song) //lance la dialogue pour preciser le temps
                 }
                 else{
                     Toast.makeText(
-                        activity!!.application,
+                        requireActivity().application,
                         "Veuillez sélectionner une vidéo",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -137,9 +136,21 @@ class VideosFavoris : Fragment() {
         super.onCreate(savedInstanceState)
         currentView = inflater.inflate(R.layout.fragment_favori, container, false)
 
+        //Initialisation du recyclerView (Le principal, pour les vidéos youtube)----------------------------
+        mAdapter = SongHistoriqueAdaptater(
+            this.requireContext(),
+            "FAVORIS",
+            favorisList,
+            object : SongHistoriqueAdaptater.RecyclerItemClickListener {
+                override fun onClickListener(songH: SongHistorique, position: Int) {
+                    changeSelectedSong(position)
+                    prepareSong(songH)
+                }
+            })
         val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycler_list_video_favoris)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
+        //---------------------------------------------------------------------------------------------------
 
 
         youTubePlayerView = currentView.findViewById(R.id.youtube_player_view_favoris)
@@ -158,16 +169,17 @@ class VideosFavoris : Fragment() {
         currentView.pb_main_loader.visibility = View.GONE
         favorisList.clear()
 
-        gestionBoutonSupprimer()
-        gestionBoutonParatage()
 
         textePasDeFavori = currentView.findViewById(R.id.texte_pas_de_favori)
 
-        //Charge les favoris-----------------------------------------------------
-        val favoris : MutableList<SongHistorique>? = loadFavoris(this.requireContext())
+        //Charge les favoris--------------------------------------------------------------
+        val favoris = loadFavoris(this.requireContext())
+        var index : Int
         if (favoris != null) {
-            favorisList.addAll(favoris)
-            if (favoris.isEmpty()) {
+            favorisList.addAll(favoris.list)
+            index = favoris.index
+
+            if (favorisList.isEmpty()) {
                 textePasDeFavori.visibility = View.VISIBLE
             }
             else{
@@ -184,15 +196,18 @@ class VideosFavoris : Fragment() {
 
         }
         else{
+            index = 0
             currentSong = null
             textePasDeFavori = currentView.findViewById<Button>(R.id.texte_pas_de_favori)
             textePasDeFavori.visibility=View.VISIBLE
         }
-        //------------------------------------------------------------------------
-        mAdapter.notifyDataSetChanged()
-        mAdapter.selectedPosition = 0
+        //---------------------------------------------------------------------------------
 
-        dialogue = DialogueYoutube(activity!!)
+
+        //Gestion des boutons--------------
+        gestionBoutonSupprimer(index)
+        gestionBoutonParatage()
+        //--------------------------------
 
         //Initialisation du spinner----------------------------------------------------------------------------
         val spinner = currentView.findViewById<Spinner>(R.id.spinner_trie)
@@ -210,6 +225,8 @@ class VideosFavoris : Fragment() {
                 id: Long
             ) {
                 when (trie[position]){
+                    //TODO adapter la liste des favoris à Song index
+
                     "Alphabétique"  -> {
                         trieAlphabetique(favorisList, activity!!)
                         mAdapter.notifyDataSetChanged()
@@ -225,25 +242,17 @@ class VideosFavoris : Fragment() {
         }
         //------------------------------------------------------------------------------------------------------
 
+        mAdapter.notifyDataSetChanged()
+        mAdapter.selectedPosition = 0
+
+        dialogue = DialogueYoutube(requireActivity())
+
         return currentView
     }
 
     companion object {
-
         fun newInstance(ctx: Context): VideosFavoris {
-
             val nf = VideosFavoris()
-            nf.mAdapter = SongHistoriqueAdaptater(
-                ctx,
-                "FAVORIS",
-                nf.favorisList,
-                object : SongHistoriqueAdaptater.RecyclerItemClickListener {
-                    override fun onClickListener(songH: SongHistorique, position: Int) {
-                        nf.firstLaunch = false
-                        nf.changeSelectedSong(position)
-                        nf.prepareSong(songH)
-                    }
-                })
             return nf
         }
     }

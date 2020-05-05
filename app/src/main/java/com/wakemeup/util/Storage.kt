@@ -3,6 +3,7 @@ package com.wakemeup.util
 import android.content.Context
 import com.wakemeup.song.Song
 import com.wakemeup.song.SongHistorique
+import com.wakemeup.song.SongIndex
 import java.io.FileInputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -10,7 +11,7 @@ import java.io.ObjectOutputStream
 private val TAG = "storage"
 private  const val FILENAME_FAVORI= "fav_util.fav"
 private  const val FILENAME_HISTORIQUE= "hist_util.hist"
-private  const val FILENAME_HISTORIQUEVIDEO= "hist_video_util.hist"
+private  const val FILENAME_HISTORIQUEVIDEO= "hist_video_util.histVideo"
 
 //charge n'importe quel type d'objet du fichier filename
 fun <T> load(context: Context, filename : String) : T?{
@@ -53,12 +54,13 @@ fun <T> persiste(context: Context, obj : T, filename: String){
 
 
 //Charge les favoris utilisateurs du fichier "fav_util.fav"
-fun loadFavoris(context : Context) : MutableList<SongHistorique>?{
+fun loadFavoris(context : Context) : SongIndex?{
     return load(context, FILENAME_FAVORI)
 }
 
+
 //Sauvegarde les favoris utilisateur dans un fichier "fav_util.fav"
-fun persisteFavoris(context: Context, songs: MutableList<SongHistorique>){
+fun persisteFavoris(context: Context, songs: SongIndex){
     persiste(context, songs, FILENAME_FAVORI)
 }
 
@@ -88,12 +90,12 @@ fun resetHistorique(context: Context){
 
 
 //Charge les recherches utilisateurs du fichier "hist_video_util.hist"
-fun loadHistoriqueVideo(context : Context) : MutableList<SongHistorique>?{
+fun loadHistoriqueVideo(context : Context) : SongIndex?{
     return load(context, FILENAME_HISTORIQUEVIDEO)
 }
 
 //Sauvegarde les recheche utilisateur dans un fichier "hist_video_util.hist"
-fun persisteHistoriqueVideo(context: Context, historiqueVideo: MutableList<SongHistorique>){
+fun persisteHistoriqueVideo(context: Context, historiqueVideo: SongIndex){
     persiste(context, historiqueVideo, FILENAME_HISTORIQUEVIDEO)
 }
 

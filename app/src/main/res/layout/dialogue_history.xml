@@ -9,7 +9,7 @@
         android:id="@+id/text_dialogue"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:layout_marginLeft="20dp"
         android:text="Historique"
         style="@style/AppTheme.BoutonReveil"
@@ -23,9 +23,7 @@
         android:layout_height="wrap_content"
         android:pointerIcon="text"
         android:layout_alignParentRight="true"
-
         />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_list_historique_video"

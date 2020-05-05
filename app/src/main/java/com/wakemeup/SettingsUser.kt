@@ -15,6 +15,7 @@ import com.google.firebase.firestore.auth.User
 import com.wakemeup.connect.ui.EditUser.EditUser
 import com.wakemeup.util.resetFavoris
 import com.wakemeup.util.resetHistorique
+import com.wakemeup.util.resetHistoriqueVideo
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 
 class SettingsUser() : Fragment() {
@@ -36,11 +37,12 @@ class SettingsUser() : Fragment() {
         //Bouton pour gérer l'historique
         view.findViewById<Button>(R.id.button_gestion_historique).setOnClickListener{
             Toast.makeText(
-                activity!!.application,
+                requireActivity().application,
                 "L'historique a été supprimé.",
                 Toast.LENGTH_SHORT
             ).show()
             resetHistorique(this.requireContext())
+            resetHistoriqueVideo(this.requireContext())
         }
 
         //Bouton pour editer le compte utilisateur
@@ -52,7 +54,7 @@ class SettingsUser() : Fragment() {
         //Bouton pour gérer les favoris
         view.findViewById<Button>(R.id.button_gestionFavori).setOnClickListener{
             Toast.makeText(
-                activity!!.application,
+                requireActivity().application,
                 "Les vidéos favoris ont été surpimées.",
                 Toast.LENGTH_SHORT
             ).show()

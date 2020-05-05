@@ -3,7 +3,6 @@ package com.wakemeup.song
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.api.services.youtube.model.SearchResult
-import com.google.api.services.youtube.model.VideoContentDetails
 import java.io.Serializable
 
 
@@ -17,7 +16,6 @@ class Song(
     private val rank: Int = 0
 ) : Comparable<Song>, Parcelable, Serializable {
 
-    //val videoDetails : VideoContentDetails = VideoContentDetails()
 
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
