@@ -159,6 +159,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         return contact
     }
 
+    //récupérer les contacts de l'appli
     fun getContactAmiInphone() : List<String>{
         AppWakeUp.database.getReference("Users").addValueEventListener(
             object : ValueEventListener {
