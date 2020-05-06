@@ -5,14 +5,14 @@ import java.io.Serializable
 
 class SonneriePassee(val senderId: String, val senderName : String, val receiverId : String
                      , val song: Song, val listen : Boolean) : Serializable {
-
+/*
     constructor(sentMusic: SonnerieEnAttente) : this(
         sentMusic.senderId,
         sentMusic.senderName,
         sentMusic.receiverId,
         sentMusic.song,
         sentMusic.listen
-    )
+    )*/
 
 }
 

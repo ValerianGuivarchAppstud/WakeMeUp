@@ -67,7 +67,7 @@ class MusiquesAttenteFragment : Fragment() {
     }
 
     //TODO créer classe abstraite ou créer classe BouttonPartage
-
+/*
     private fun gestionFavoris(){
         //Gestion de la persistance des favoris (sauvgarde les favoris dans un fichier)
         if (loadFavoris(this.requireContext()) != null) {
@@ -79,7 +79,7 @@ class MusiquesAttenteFragment : Fragment() {
         favorisListe.add(currentSong!!)
         resetFavoris(this.requireContext())
         persisteFavoris(this.requireContext(),favorisListe)
-    }
+    }*/
 
 
 

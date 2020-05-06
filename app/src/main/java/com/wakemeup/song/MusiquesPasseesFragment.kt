@@ -28,8 +28,8 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
 
     private lateinit var dialogue : DialogueYoutube
     private var isPlaying: Boolean = false
-    private val songList = mutableListOf<Song>()
-    private var favorisListe : MutableList<Song> = mutableListOf<Song>()
+    private val songList = SongIndex()//= mutableListOf<Song>()
+    private var favorisListe = SongIndex()//: MutableList<Song> = mutableListOf<Song>()
 
     private lateinit var mAdapter: SongAdapter
     private lateinit var youTubePlayerView: YouTubePlayerView
@@ -103,10 +103,9 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
     private fun gestionBoutonSupprimer(){
         val btSupprimer = currentView.bouton_supprimer_musiques_passees
         btSupprimer.setOnClickListener {
-
             if (currentSong != null) {
                 songList.remove(currentSong!!)
-                if (songList.isNullOrEmpty()){
+                if (songList.list.isNullOrEmpty()){
                     currentSong = null
                     currentView.texte_pas_de_musiques_passees.visibility = View.VISIBLE
                 }
@@ -121,7 +120,7 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
                 persisteFavoris(this.requireContext(),songList)
 
                 Toast.makeText(
-                    activity!!.application,
+                    requireActivity().application,
                     "Vidéo Suprimmée",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -129,7 +128,7 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
             }
             else{
                 Toast.makeText(
-                    activity!!.application,
+                    requireActivity().application,
                     "Veuillez sélectionner une vidéo",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -143,13 +142,13 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
         val btFavori = currentView.bouton_ajouter_favori
         btFavori.setOnClickListener {
             if (AppWakeUp.auth.currentUser!!.isAnonymous) {
-                dialogue.createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
+                dialogue.createAlertDialogNotConnected(requireContext(), this.requireActivity() as MainActivity)
             } else {
                 if (currentSong!=null) {
                     gestionFavoris()
 
                     Toast.makeText(
-                        activity!!.application,
+                        requireActivity().application,
                         "La video a été ajouté",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -157,7 +156,7 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
 
                 else{
                     Toast.makeText(
-                        activity!!.application,
+                        requireActivity().application,
                         "Veuillez sélectionner une vidéo",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -171,10 +170,8 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
         if (loadFavoris(this.requireContext()) != null) {
             favorisListe = loadFavoris(this.requireContext())!!
         }
-        else{
-            favorisListe = mutableListOf<Song>()
-        }
-        favorisListe.add(currentSong!!)
+        favorisListe.list.add(SongHistorique(favorisListe.index,currentSong!!))
+        favorisListe.index++
         resetFavoris(this.requireContext())
         persisteFavoris(this.requireContext(),favorisListe)
     }
@@ -207,7 +204,8 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
 
         currentIndex = 0
         currentView.pb_main_loader.visibility = View.GONE
-        songList.clear()
+        songList.list.clear()
+        songList.index=0
 
         gestionBoutonSupprimer()
         gestionBoutonFavori()
@@ -217,7 +215,10 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
         //Charge les musiques en attente -----------------------------------------------------
         val musiques : MutableList<Song>? = null //todo AppWakeUp.listSonneriesEnAttente
         if (musiques != null) {
-            songList.addAll(musiques)
+            for(m in musiques){
+                songList.list.add(SongHistorique(favorisListe.index,currentSong!!))
+                songList.index++
+            }
             if (musiques.isEmpty()) {
                 currentView.texte_pas_de_musiques_passees.visibility = View.VISIBLE
             }
@@ -226,8 +227,8 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
             }
 
             //Lancer la 1ere video youtube de la liste
-            if (songList.isNotEmpty()) {
-                currentSong = songList[0]
+            if (songList.list.isNotEmpty()) {
+                currentSong = songList.list[0].song
                 changeSelectedSong(0)
                 prepareSong(currentSong)
             }
@@ -257,7 +258,13 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
         fun newInstance(ctx: Context): MusiquesPasseesFragment {
 
             val nf = MusiquesPasseesFragment()
-            nf.mAdapter = SongAdapter(ctx, nf.songList,
+            //TODO corriger ça
+            val songList: MutableList<Song> = mutableListOf()
+            for(hs in nf.songList.list){
+                songList.add(hs.song)
+            }
+
+            nf.mAdapter = SongAdapter(ctx, songList,
                 object : SongAdapter.RecyclerItemClickListener {
                     override fun onClickListener(song: Song, position: Int) {
                         nf.firstLaunch = false

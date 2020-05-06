@@ -13,6 +13,8 @@ data class SonnerieRecue(
     //var notificationRecu: Boolean = false
 ) : Serializable {
 
+    constructor(sentMusic: SonnerieRecue) : this(sentMusic.senderId, sentMusic.senderName, sentMusic.receiverId, sentMusic.song, sentMusic.listen)
+
    // constructor(sentMusic: SonnerieRecue) : this(sentMusic.sender,  sentMusic.senderName, sentMusic.receiverId,
         //sentMusic.son, sentMusic.listen)
 
