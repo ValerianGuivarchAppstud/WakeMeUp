@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
@@ -24,7 +23,6 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -33,14 +31,16 @@ import com.wakemeup.connect.ConnectActivity
 
 import com.wakemeup.connect.UserModel
 import com.wakemeup.contact.ContactsListeFragment
-import com.wakemeup.contact.SonnerieEnAttente
+import com.wakemeup.contact.SonnerieRecue
 import com.wakemeup.reveil.ReveilsListeFragment
-import com.wakemeup.song.Song
 import com.wakemeup.share.DemanderMusique
+import com.wakemeup.song.MusiquesRecuesFragment
+import com.wakemeup.song.Song
 import com.wakemeup.song.VideoFragment
 import com.wakemeup.song.VideosFavoris
 import java.util.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.collections.HashMap
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -57,55 +57,135 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var fragmentContact: ContactsListeFragment? = null
     private var fragmentParametre : SettingsUser? = null
     private var fragmentFavoris: VideosFavoris? = null
+    private var fragmentMusiquesRecues: MusiquesRecuesFragment? = null
 
     private var currentUser: UserModel? = null
 
 
     private fun updateMusiqueEnAttente() {
-        AppWakeUp.database.getReference("Users").child(AppWakeUp.auth.uid!!).child("receivedMusic")
+        //SONNERIE
+        var idMusicSend = ""
+        var senderId = ""
+        var senderName = ""
+        var receiverId = ""
+        var listen = false
+
+        //SONG
+        var id = ""
+        var artworkUrl = ""
+        var artiste = ""
+        var durationL: Long = 0
+        var duration = 0
+        var lancementL: Long = 0
+        var lancement = 0
+        var title = ""
+        AppWakeUp.database.getReference("Sonnerie")
             .addValueEventListener(
                 object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {
 
                     }
-
                     override fun onDataChange(p0: DataSnapshot) {
+                        //boucle sur les id des sonneries
                         for (snapshot in p0.children) {
                             if (snapshot.key != null) {
-                                val idMusicSend = snapshot.key!!
                                 if (!AppWakeUp.listSonneriesEnAttente.containsKey(idMusicSend)) {
-                                    val reveilRef = AppWakeUp.database.getReference("Reveils")
-                                        .child((snapshot.getValue(String::class.java) as String))
-                                    reveilRef.addValueEventListener(
+                                    val refSonnerie = AppWakeUp.database.getReference("Sonnerie")
+                                        .child(snapshot.key as String)
+                                    refSonnerie.addValueEventListener(
                                         object : ValueEventListener {
                                             override fun onCancelled(p0: DatabaseError) {}
 
                                             override fun onDataChange(p0: DataSnapshot) {
-                                                val sender = ""
-                                                var receiver = ""
-                                                var song = ""
                                                 for (snapshot2 in p0.children) {
+                                                    //boucle sur les champs d'une sonnerie
+                                                    idMusicSend = snapshot.key!!
                                                     if (snapshot2.key != null) {
                                                         when (snapshot2.key) {
-                                                            "receiver" -> receiver =
+                                                            "listen" -> listen =
+                                                                snapshot2.value as Boolean
+                                                            "senderId" -> senderId =
                                                                 snapshot2.value as String
-                                                            "song" -> song =
+                                                            "receiverId" -> receiverId =
                                                                 snapshot2.value as String
+                                                            "senderName" -> senderName =
+                                                                snapshot2.value as String
+                                                            "song" -> {
+                                                                val refSong =
+                                                                    AppWakeUp.database.getReference(
+                                                                        "Sonnerie"
+                                                                    )
+                                                                        .child(idMusicSend)
+                                                                        .child("song")
+
+                                                                refSong.addValueEventListener(
+                                                                    object : ValueEventListener {
+                                                                        override fun onCancelled(p0: DatabaseError) {
+
+                                                                        }
+
+                                                                        override fun onDataChange(p0: DataSnapshot) {
+                                                                            //boucle sur les champs d'un song
+                                                                            for (snapshot3 in p0.children) {
+                                                                                if (snapshot3.key != null) {
+                                                                                    when (snapshot3.key) {
+                                                                                        "id" -> id =
+                                                                                            snapshot3.value as String
+                                                                                        "artworkUrl" -> artworkUrl =
+                                                                                            snapshot3.value as String
+                                                                                        "duration" -> {
+                                                                                            durationL =
+                                                                                                snapshot3.value as Long
+                                                                                            var duration =
+                                                                                                durationL.toInt()
+                                                                                        }
+                                                                                        "title" -> title =
+                                                                                            snapshot3.value as String
+                                                                                        "lancement" -> {
+                                                                                            lancementL =
+                                                                                                snapshot3.value as Long
+                                                                                            lancement =
+                                                                                                lancementL.toInt()
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                )
+                                                            }
                                                         }
                                                     }
                                                 }
-                                                val music =
-                                                    SonnerieEnAttente(receiver, sender, song)
-                                                AppWakeUp.addSonnerieEnAttente(
-                                                    idMusicSend,
-                                                    music,
-                                                    this@MainActivity
-                                                )
-                                                Log.e(
-                                                    "REVEIL MUSIC",
-                                                    AppWakeUp.listSonneriesEnAttente.size.toString()
-                                                )
-                                                updateHotCount()
+                                                //On garde que les sonneries qui nous sont destinées
+                                                if (receiverId == AppWakeUp.auth.currentUser!!.uid && listen==false) {
+                                                    var song = Song(
+                                                        id,
+                                                        title,
+                                                        artiste,
+                                                        artworkUrl,
+                                                        duration,
+                                                        lancement
+                                                    )
+                                                    val music =
+                                                        SonnerieRecue(
+                                                            senderId,
+                                                            senderName,
+                                                            receiverId,
+                                                            song,
+                                                            listen
+                                                        )
+                                                    AppWakeUp.addSonnerieEnAttente(
+                                                        idMusicSend,
+                                                        music,
+                                                        this@MainActivity
+                                                    )
+                                                    Log.e(
+                                                        "REVEIL MUSIC",
+                                                        AppWakeUp.listSonneriesEnAttente.size.toString()
+                                                    )
+                                                    updateHotCount()
+                                                }
                                             }
                                         }
                                     )
@@ -117,12 +197,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             )
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         if (AppWakeUp.auth.currentUser == null) {
             startConnectActivity()
@@ -160,41 +238,65 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     Log.e("MainActivity", token!!)
                 }
                 )
+
+            /*
+            //TEST
+            val song1 : Song = Song("idsong1", "titlesong1","artistsong1","urlsong1", 3,0,1)
+            val song2 : Song = Song("idsong2", "titlesong2","artistsong2","urlsong2", 3,0,2)
+            val song3 : Song = Song("idsong3", "titlesong3","artistsong3","urlsong3", 3,0,3)
+            val sonnerie1 : SonnerieEnAttente = SonnerieEnAttente("idpaul","null","F0fgLaCFxJdV0EoV7p8xLXkaO8B3",song1, false)
+            val sonnerie2 : SonnerieEnAttente = SonnerieEnAttente("idpierre","null","F0fgLaCFxJdV0EoV7p8xLXkaO8B3", song2,true)
+            val sonnerie3 : SonnerieEnAttente = SonnerieEnAttente("idjean","null","idEnzo", song2, false)
+
+
+                val reference =  AppWakeUp.database.getReference("Sonnerie")
+                reference.child("IdSonnerie1").setValue(sonnerie1).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Log.i("MainActivity","Musique ajoutée")
+
+                    } else {
+                        Log.i("MainActivity","erreur musique ajoutée")
+                    }
+                }
+            */
         }
     }
+
+
 
     private lateinit var viewNbMusiquesEnAttente: TextView
     private lateinit var viewIconeMusiquesEnAttente: ImageView
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.toolbar_reveils, menu)
 
-            menuInflater.inflate(R.menu.toolbar_reveils, menu)
+        val alertMenuItem = menu.findItem(R.id.id_menu_bar_message)
+        val rootView = alertMenuItem.actionView as RelativeLayout
+        viewNbMusiquesEnAttente = rootView.findViewById<TextView>(R.id.text_message_notification)
+        viewIconeMusiquesEnAttente = rootView.findViewById<ImageView>(R.id.icone_musique_attente)
+        if ((AppWakeUp.auth.currentUser!!.isAnonymous)) {
 
-            val alertMenuItem = menu.findItem(R.id.id_menu_bar_message)
-            val rootView = alertMenuItem.actionView as RelativeLayout
-            viewNbMusiquesEnAttente = rootView.findViewById(R.id.text_message_notification)
-            viewIconeMusiquesEnAttente = rootView.findViewById(R.id.icone_musique_attente)
-            if ((AppWakeUp.auth.currentUser!!.isAnonymous)) {
+            viewNbMusiquesEnAttente.visibility = View.INVISIBLE
+            viewIconeMusiquesEnAttente.setImageResource(R.drawable.icon_music_no)
+            //viewIconeMusiquesEnAttente.visibility = View.INVISIBLE
+        } else {
+            updateMusiqueEnAttente()
+            updateHotCount()
+        }
+        rootView.setOnClickListener {
 
-                viewNbMusiquesEnAttente.visibility = View.INVISIBLE
-                viewIconeMusiquesEnAttente.visibility = View.INVISIBLE
-            } else {
-                updateHotCount()
-            }
-
-            rootView.setOnClickListener {
-
-            }
-            return super.onCreateOptionsMenu(menu)
+        }
+        return super.onCreateOptionsMenu(menu)
 
     }
 
     private fun updateHotCount() {
+
         val newHotNumber = AppWakeUp.listSonneriesEnAttente.size
         var newNotif = false
         for (musicReceived in AppWakeUp.listSonneriesEnAttente.values) {
-            if (musicReceived.notificationRecu) {
+            //if (musicReceived.notificationRecu) {
                 newNotif = true
-            }
+            //}
         }
         if (newHotNumber == 0) {
             viewNbMusiquesEnAttente.visibility = View.INVISIBLE
@@ -202,7 +304,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             if (!newNotif) {
                 viewNbMusiquesEnAttente.background =
-                    ContextCompat.getDrawable(this, R.drawable.rounded_square_no)
+                    ContextCompat.getDrawable(this, R.drawable.rounded_square_blue)
+            }else{
+                viewNbMusiquesEnAttente.background =
+                    ContextCompat.getDrawable(this, R.drawable.rounded_square)
             }
             viewIconeMusiquesEnAttente.setImageResource(R.drawable.icon_music_yes)
             viewNbMusiquesEnAttente.visibility = View.VISIBLE
@@ -250,11 +355,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.activity_main_drawer_partage -> this.showFragment(
                 FragmentId.FRAGMENT_PARTAGE
             )
-            R.id.activity_main_drawer_amis -> {
-                this.showFragment(
-                    FragmentId.FRAGMENT_AMIS
-                )
-            }
+            R.id.activity_main_drawer_amis -> this.showFragment(
+                FragmentId.FRAGMENT_AMIS
+            )
+            R.id.activity_main_drawer_musiques_en_attente -> this.showFragment(
+                FragmentId.FRAGMENT_MUSIQUES_RECUES
+            )
             R.id.activity_main_drawer_favoris -> this.showFragment(
                 FragmentId.FRAGMENT_FAVORIS
             )
@@ -266,6 +372,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startConnectActivity()
             }
             R.id.activity_main_drawer_connecter -> {
+                AppWakeUp.auth.signOut()
                 startConnectActivity(false)
             }
 
@@ -332,10 +439,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             )
             navigationView!!.menu.findItem(R.id.activity_main_drawer_favoris).isVisible = true
+            navigationView!!.menu.findItem(R.id.activity_main_drawer_musiques_en_attente).isVisible = true
             navigationView!!.menu.findItem(R.id.activity_main_drawer_connecter).isVisible = false
             navigationView!!.menu.findItem(R.id.activity_main_drawer_deconnecter).isVisible = true
         } else {
             navigationView!!.menu.findItem(R.id.activity_main_drawer_favoris).isVisible = false
+            navigationView!!.menu.findItem(R.id.activity_main_drawer_musiques_en_attente).isVisible = false
             navigationView!!.menu.findItem(R.id.activity_main_drawer_connecter).isVisible = true
             navigationView!!.menu.findItem(R.id.activity_main_drawer_deconnecter).isVisible = false
         }
@@ -386,7 +495,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             FragmentId.FRAGMENT_PARTAGE -> this.showPartageFragment()
             FragmentId.FRAGMENT_AMIS -> this.showAmisFragment()
             FragmentId.FRAGMENT_REVEIL -> this.showReveilFragment()
-
+            FragmentId.FRAGMENT_MUSIQUES_RECUES -> this.showMusiquesRecuesFragment()
             FragmentId.FRAGMENT_FAVORIS -> this.showFavorisFragment()
 
             FragmentId.FRAGMENT_PARAMETRE -> this.showParametreFragment()
@@ -427,6 +536,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             this.fragmentMusique = VideoFragment.newInstance(this)
         }
         this.startTransactionFragment(this.fragmentMusique!!)
+
+    }
+
+    private fun showMusiquesRecuesFragment() {
+        if (this.fragmentMusiquesRecues == null) {
+            this.fragmentMusiquesRecues = MusiquesRecuesFragment.newInstance(this)
+        }
+        this.startTransactionFragment(this.fragmentMusiquesRecues!!)
 
     }
 
@@ -481,8 +598,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             FRAGMENT_SECONNECTER,
             FRAGMENT_SEDECONNECTER,
             FRAGMENT_FAVORIS,
-            FRAGMENT_PARAMETRE
-
+            FRAGMENT_PARAMETRE,
+            FRAGMENT_MUSIQUES_RECUES
         }
 
     }

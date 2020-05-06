@@ -1,14 +1,18 @@
 package com.wakemeup.contact
 
+import com.wakemeup.song.Song
 import java.io.Serializable
 
-class SonneriePassee(val sender: String, val receiver: String, val song: String) : Serializable {
-
+class SonneriePassee(val senderId: String, val senderName : String, val receiverId : String
+                     , val song: Song, val listen : Boolean) : Serializable {
+/*
     constructor(sentMusic: SonnerieEnAttente) : this(
-        sentMusic.sender,
-        sentMusic.receiver,
-        sentMusic.song
-    )
+        sentMusic.senderId,
+        sentMusic.senderName,
+        sentMusic.receiverId,
+        sentMusic.song,
+        sentMusic.listen
+    )*/
 
 }
 

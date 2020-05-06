@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/text_dialogue"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="20dp"
+        android:text="Historique"
+        style="@style/AppTheme.BoutonReveil"
+        android:textSize="20sp"
+        android:layout_alignParentLeft="true"/>
+
+    <Spinner
+        android:id="@+id/spinner_trie"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:pointerIcon="text"
+        android:layout_alignParentRight="true"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_list_historique_video"
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -15,5 +35,5 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         tools:listitem="@layout/item_list_video" />
 
-</LinearLayout>
+</RelativeLayout>
 

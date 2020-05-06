@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.wakemeup.AppWakeUp
 import com.wakemeup.connect.UserModel
+import com.wakemeup.contact.SonnerieRecue
 import com.wakemeup.reveil.ReveilModel
 import java.io.FileNotFoundException
 import java.io.ObjectInputStream
@@ -85,6 +86,61 @@ class Repository() {
     fun addContact(userModel: UserModel) {
         contacts.put(userModel.username, userModel)
         contactsLiveData.value = contacts
+    }
+
+
+    /**************************************************/
+    /**************** SONNERIES RECUES ****************/
+    /**************************************************/
+
+    private val listSonneriesEnAttente = mutableMapOf<String, SonnerieRecue>()
+    private val listSonneriesPassee = mutableMapOf<String, SonnerieRecue>()
+    private val listSonneriesPasseeLiveData = MutableLiveData<Map<String, SonnerieRecue>>()
+    private val listSonneriesEnAttenteLiveData = MutableLiveData<Map<String, SonnerieRecue>>()
+
+    private val NAME_FILE_SONNERIES_EN_ATTENTE = "sonneries_en-attente.file"
+    private val NAME_FILE_SONNERIES_PASSEES = "sonneries_passees.file"
+
+    fun getSonneriesAttente(): LiveData<Map<String, SonnerieRecue>> = listSonneriesEnAttenteLiveData
+    fun getSonneriesPassees(): LiveData<Map<String, SonnerieRecue>> = listSonneriesPasseeLiveData
+
+    fun addSonnerieEnAttente(
+        idSonnerie: String,
+        sonnerie: SonnerieRecue,
+        context: Context
+    ) {
+        listSonneriesEnAttente.put(idSonnerie, sonnerie)
+        enregistrementSonnerieEnAttente(context)
+        listSonneriesEnAttenteLiveData.value = listSonneriesEnAttente
+    }
+
+    fun removeSonnerieEnAttente(idSonnerie: String, musicId: String, context: Context) {
+        if (listSonneriesEnAttente.containsKey(idSonnerie)) {
+            listSonneriesPassee.put(
+                idSonnerie,
+                SonnerieRecue(listSonneriesEnAttente[idSonnerie]!!)
+            )
+            listSonneriesEnAttente.remove(idSonnerie)
+            enregistrementSonneriePassees(context)
+            enregistrementSonnerieEnAttente(context)
+            listSonneriesEnAttenteLiveData.value = listSonneriesEnAttente
+            listSonneriesPasseeLiveData.value = listSonneriesPassee
+        }
+    }
+
+    private fun enregistrementSonnerieEnAttente(context: Context) {
+        val fileOutput =
+            context.openFileOutput(NAME_FILE_SONNERIES_EN_ATTENTE, Context.MODE_PRIVATE)
+        val outputStream = ObjectOutputStream(fileOutput)
+        outputStream.writeObject(listSonneriesEnAttente)
+    }
+
+
+    private fun enregistrementSonneriePassees(context: Context) {
+        val fileOutput =
+            context.openFileOutput(NAME_FILE_SONNERIES_PASSEES, Context.MODE_PRIVATE)
+        val outputStream = ObjectOutputStream(fileOutput)
+        outputStream.writeObject(listSonneriesPassee)
     }
 
 }

@@ -26,15 +26,15 @@ class DialogueYoutube(val activity: FragmentActivity) {
 
     private fun startActivityListFriendToSendMusicActivity(currentSong : Song?){
         //ouvre l'activity de la liste d'amis
-        activity!!.intent = Intent(activity, ListFriendToSendMusicActivity::class.java)
-        activity!!.intent.putExtra("song", currentSong as Parcelable)
-        activity!!.startActivity(activity!!.intent)
+        activity.intent = Intent(activity, ListFriendToSendMusicActivity::class.java)
+        activity.intent.putExtra("song", currentSong as Parcelable)
+        activity.startActivity(activity.intent)
     }
 
 
     public fun createDialoguePartage(currentSong : Song?){
-        val builder = AlertDialog.Builder(activity!!)
-        val viewDialogPartage = activity!!.layoutInflater.inflate(R.layout.dialog_partage, null)
+        val builder = AlertDialog.Builder(activity)
+        val viewDialogPartage = activity.layoutInflater.inflate(R.layout.dialog_partage, null)
 
         val btChoix = viewDialogPartage.findViewById<Button>(R.id.bouton_choix)
         val btDebut = viewDialogPartage.findViewById<Button>(R.id.bouton_debut)
@@ -61,8 +61,8 @@ class DialogueYoutube(val activity: FragmentActivity) {
     }
 
     private fun createDialogueChoixDuTemps(currentSong : Song?){
-        val builder = AlertDialog.Builder(activity!!)
-        val view = activity!!.layoutInflater.inflate(R.layout.dialogue_choisir_le_temps, null)
+        val builder = AlertDialog.Builder(activity)
+        val view = activity.layoutInflater.inflate(R.layout.dialogue_choisir_le_temps, null)
         builder.setTitle("A quel moment voulez vous que la vidéo se lance?")
             .setView(view)
             .setPositiveButton("Ok") { _, _ ->
@@ -78,7 +78,7 @@ class DialogueYoutube(val activity: FragmentActivity) {
                         startActivityListFriendToSendMusicActivity(currentSong)
                     } else {
                         Toast.makeText(
-                            activity!!.application,
+                            activity.application,
                             "Veuillez mettre un temps valide.",
                             Toast.LENGTH_SHORT
                         ).show()
@@ -86,7 +86,7 @@ class DialogueYoutube(val activity: FragmentActivity) {
                 }
                 else{
                     Toast.makeText(
-                        activity!!.application,
+                        activity.application,
                         "Veuillez remplir les champs.",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -108,7 +108,7 @@ class DialogueYoutube(val activity: FragmentActivity) {
         builder.setMessage("Pour partager une musique à un contact, veuillez vous connecter.")
 
         // Set a positive button and its click listener on alert dialog
-        builder.setPositiveButton("Se connecter") { dialog, which ->
+        builder.setPositiveButton("Se connecter") { _, _ ->
             ma.startConnectActivity(false)
         }
         // Display a neutral button on alert dialog

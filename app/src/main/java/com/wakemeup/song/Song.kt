@@ -3,7 +3,6 @@ package com.wakemeup.song
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.api.services.youtube.model.SearchResult
-import com.google.api.services.youtube.model.VideoContentDetails
 import java.io.Serializable
 
 
@@ -17,7 +16,6 @@ class Song(
     private val rank: Int = 0
 ) : Comparable<Song>, Parcelable, Serializable {
 
-    //val videoDetails : VideoContentDetails = VideoContentDetails()
 
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
@@ -36,8 +34,8 @@ class Song(
         parcel.writeString(artist)
         parcel.writeString(artworkUrl)
         parcel.writeInt(duration)
-        parcel.writeInt(lancement)
-        parcel.writeInt(rank)
+        //parcel.writeInt(lancement)
+        //parcel.writeInt(rank)
     }
 
     override fun describeContents(): Int {
@@ -55,7 +53,7 @@ class Song(
     )
 
     override fun compareTo(other: Song): Int {
-        return other.rank - this.rank
+        return other.title.hashCode() - this.title.hashCode()
     }
 
     /*override fun equals(other: Any?): Boolean {

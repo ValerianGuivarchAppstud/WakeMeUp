@@ -2,13 +2,11 @@ package com.wakemeup
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.neocampus.repo.Repository
 import com.wakemeup.connect.UserModel
-import com.wakemeup.contact.SonnerieEnAttente
-import com.wakemeup.contact.SonneriePassee
+import com.wakemeup.contact.SonnerieRecue
 import java.io.ObjectOutputStream
 
 
@@ -26,14 +24,14 @@ class AppWakeUp : Application() {
         private const val NAME_FILE_SONNERIES_PASSEES = "sonneries_passees.file"
         lateinit var listeAmis: MutableList<UserModel>
 
-        val listSonneriesEnAttente = mutableMapOf<String, SonnerieEnAttente>()
+        val listSonneriesEnAttente = mutableMapOf<String, SonnerieRecue>()
 
-        val listSonneriesPassee = mutableMapOf<String, SonneriePassee>()
+        val listSonneriesPassee = mutableMapOf<String, SonnerieRecue>()
 
 
         fun addSonnerieEnAttente(
             idSonnerie: String,
-            sonnerie: SonnerieEnAttente,
+            sonnerie: SonnerieRecue,
             context: Context
         ) {
             listSonneriesEnAttente.put(idSonnerie, sonnerie)
@@ -44,7 +42,7 @@ class AppWakeUp : Application() {
             if (listSonneriesEnAttente.containsKey(idSonnerie)) {
                 listSonneriesPassee.put(
                     idSonnerie,
-                    SonneriePassee(listSonneriesEnAttente[idSonnerie]!!)
+                    SonnerieRecue(listSonneriesEnAttente[idSonnerie]!!)
                 )
                 listSonneriesEnAttente.remove(idSonnerie)
                 enregistrementSonneriePassees(context)
