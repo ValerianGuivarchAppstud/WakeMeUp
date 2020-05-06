@@ -6,58 +6,51 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/title_favoris"
-        style="@style/AppTheme.BoutonReveil"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:gravity="center"
-        android:text="@string/titre_favoris"
-        android:textSize="20sp" />
 
-    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-        android:id="@+id/youtube_player_view_favoris"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:showFullScreenButton="false" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+
+        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+            android:id="@+id/youtube_player_view_favoris"
+            android:layout_width="280dp"
+            android:layout_height="130dp"
+            app:showFullScreenButton="false"
+            android:layout_centerHorizontal="true">
+        </com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView>
 
 
         <Button
             android:id="@+id/button_partage_favori"
             style="@style/AppTheme.BoutonReveil"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/partager" />
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_toStartOf="@+id/youtube_player_view_favoris"
+            android:text="@string/partager"
+            android:textSize="35sp" />
 
         <Button
             android:id="@+id/bouton_supprimer_favori"
             style="@style/AppTheme.BoutonReveil"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/supprimer" />
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_toEndOf="@+id/youtube_player_view_favoris"
+            android:text="@string/supprimer"
+            android:textSize="35sp" />
 
 
-    </LinearLayout>
+    </RelativeLayout>
+
     <Spinner
         android:id="@+id/spinner_trie"
-        android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:pointerIcon="text"
-        android:layout_alignParentRight="true"
         android:layout_gravity="right"
-        android:gravity="right"
-        />
+        android:pointerIcon="text" />
 
-        <RelativeLayout
+    <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center">

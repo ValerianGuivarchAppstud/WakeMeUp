@@ -3,8 +3,7 @@ package com.wakemeup.contact
 import com.wakemeup.song.Song
 import java.io.Serializable
 
-
-class SonnerieEnAttente(
+data class SonnerieRecue(
     val senderId: String,
     val senderName : String,
     val receiverId: String,
@@ -14,7 +13,7 @@ class SonnerieEnAttente(
     //var notificationRecu: Boolean = false
 ) : Serializable {
 
-   // constructor(sentMusic: SentMusic) : this(sentMusic.sender,  sentMusic.senderName, sentMusic.receiverId,
+   // constructor(sentMusic: SonnerieRecue) : this(sentMusic.sender,  sentMusic.senderName, sentMusic.receiverId,
         //sentMusic.son, sentMusic.listen)
 
 }
