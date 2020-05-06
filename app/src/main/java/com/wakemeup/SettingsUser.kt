@@ -61,8 +61,6 @@ class SettingsUser() : Fragment() {
             resetFavoris(this.requireContext())
         }
 
-
-
         return view
     }
 

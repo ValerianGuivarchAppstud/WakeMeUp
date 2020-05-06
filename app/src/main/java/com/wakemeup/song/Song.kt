@@ -36,8 +36,8 @@ class Song(
         parcel.writeString(artist)
         parcel.writeString(artworkUrl)
         parcel.writeInt(duration)
-        parcel.writeInt(lancement)
-        parcel.writeInt(rank)
+        //parcel.writeInt(lancement)
+        //parcel.writeInt(rank)
     }
 
     override fun describeContents(): Int {
