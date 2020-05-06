@@ -85,11 +85,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     override fun onCancelled(p0: DatabaseError) {
 
                     }
-
                     override fun onDataChange(p0: DataSnapshot) {
                         //boucle sur les id des sonneries
                         for (snapshot in p0.children) {
-                            Log.i("snapshot", snapshot.key as String)
                             if (snapshot.key != null) {
                                 if (!AppWakeUp.listSonneriesEnAttente.containsKey(idMusicSend)) {
                                     val refSonnerie = AppWakeUp.database.getReference("Sonnerie")
@@ -101,7 +99,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                             override fun onDataChange(p0: DataSnapshot) {
                                                 for (snapshot2 in p0.children) {
                                                     //boucle sur les champs d'une sonnerie
-                                                    Log.i("snapshot2", snapshot2.key as String)
                                                     idMusicSend = snapshot.key!!
                                                     if (snapshot2.key != null) {
                                                         when (snapshot2.key) {
@@ -162,7 +159,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                                 }
                                                 //On garde que les sonneries qui nous sont destinées
                                                 if (receiverId == AppWakeUp.auth.currentUser!!.uid && listen==false) {
-                                                    Log.i("receiverID", receiverId.toString())
                                                     var song = Song(
                                                         id,
                                                         title,
@@ -296,14 +292,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun updateHotCount() {
 
         val newHotNumber = AppWakeUp.listSonneriesEnAttente.size
-        Log.i("MainActivityListe",AppWakeUp.listSonneriesEnAttente.toString())
         var newNotif = false
         for (musicReceived in AppWakeUp.listSonneriesEnAttente.values) {
             //if (musicReceived.notificationRecu) {
                 newNotif = true
             //}
         }
-
         if (newHotNumber == 0) {
             viewNbMusiquesEnAttente.visibility = View.INVISIBLE
             viewIconeMusiquesEnAttente.setImageResource(R.drawable.icon_music_no)
