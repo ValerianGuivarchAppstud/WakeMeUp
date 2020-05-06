@@ -17,7 +17,15 @@ import com.wakemeup.connect.UserModel
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.FragmentActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapterListener {
 
@@ -30,6 +38,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
     private lateinit var viewModel: ContactListeViewModel
     private lateinit var adapter: ContactListeAdapter
     private val contacts = mutableMapOf<String, UserModel>()
+    private var listeContactInApp = mutableListOf<String>()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -39,7 +48,8 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
 
          //put all Phonecontacts in viewModel
          for (user in getPhoneContacts().values){
-             viewModel.addContact(user)
+                     viewModel.addContact(user)
+
          }
 
         viewModel.getContactsListeLiveData().observe(
@@ -93,14 +103,36 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
     }
 
     override fun onContactClicked(userModel: UserModel, itemView: View) {
-        //todo action click user
+        var mBuilder = android.app.AlertDialog.Builder(context)
+        val myView = layoutInflater.inflate(R.layout.detail_contact_ami, null)
+        val userName = myView.findViewById<TextView>(R.id.userName) as TextView
+        val phone = myView.findViewById<TextView>(R.id.userContact) as TextView
+        val mail = myView.findViewById<TextView>(R.id.userMail) as TextView
+        val buttonDemanderMusique = myView.findViewById<Button>(R.id.ask_musique) as Button
+        val buttonPartagerMusique = myView.findViewById<Button>(R.id.share_musique) as Button
+        userName.text = userModel.username
+        phone.text = userModel.phone
+        mail.text = userModel.mail
+
+        buttonDemanderMusique.setOnClickListener(){
+            Toast.makeText(context, "${userModel.username}, une musique stp?", Toast.LENGTH_SHORT).show()
+        }
+
+        buttonPartagerMusique.setOnClickListener(){
+            Toast.makeText(context, "${userModel.username}, prend cette musique", Toast.LENGTH_SHORT).show()
+        }
+
+        mBuilder.setView(myView)
+        val info = mBuilder.create()
+        info.show()
     }
+
 
     // my own function
     fun getPhoneContacts(): Map<String, UserModel> {
         var contact = mutableMapOf<String, UserModel>()
         var userModel : UserModel? = null
-        var cursor: Cursor? = context!!.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+        var cursor: Cursor? = requireContext().contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
             null, null, null, null)
         var from = arrayOf(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
             ContactsContract.CommonDataKinds.Phone.NUMBER,
@@ -127,4 +159,34 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         return contact
     }
 
+    fun getContactAmiInphone() : List<String>{
+        AppWakeUp.database.getReference("Users").addValueEventListener(
+            object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) { }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    for (snaphot : DataSnapshot in p0.children){
+                        val ret2:ValueEventListener = AppWakeUp.database.getReference("Users").child(snaphot.key as String)
+                            .addValueEventListener(
+                                object : ValueEventListener {
+                                    override fun onCancelled(p0: DatabaseError) { }
+
+                                    override fun onDataChange(p0: DataSnapshot) {
+                                        for(snaphot: DataSnapshot in p0.children){
+                                            if(snaphot.key == "phone"){
+                                                Log.i("Snap", snaphot.getValue() as String)
+                                                listeContactInApp.add(snaphot.getValue() as String)
+                                            }
+                                        }
+                                    }
+
+                                }
+                            )
+                    }
+                }
+
+            }
+        )
+        return listeContactInApp
+    }
 }
