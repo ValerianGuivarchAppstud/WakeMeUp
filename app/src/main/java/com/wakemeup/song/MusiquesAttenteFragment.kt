@@ -68,74 +68,6 @@ class MusiquesAttenteFragment : Fragment() {
 
     //TODO créer classe abstraite ou créer classe BouttonPartage
 
-
-    //Gestion du clic sur le bouton suprimer
-    private fun gestionBoutonSupprimer(){
-        val btSupprimer = currentView.bouton_supprimer_musiques_en_attente
-        btSupprimer.setOnClickListener {
-
-            if (currentSong != null) {
-                songList.remove(currentSong!!)
-                if (songList.isNullOrEmpty()){
-                    currentSong = null
-                    currentView.texte_pas_de_musiques_en_attente.visibility = View.VISIBLE
-                }
-
-                //Mise à jour-----------------
-
-                mAdapter.notifyDataSetChanged()
-                mAdapter.selectedPosition = 0
-                //------------------------------
-
-                resetFavoris(this.requireContext())
-                persisteFavoris(this.requireContext(),songList)
-
-                Toast.makeText(
-                    activity!!.application,
-                    "Vidéo Suprimmée",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-            }
-            else{
-                Toast.makeText(
-                    activity!!.application,
-                    "Veuillez sélectionner une vidéo",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-        }
-    }
-
-    //Gestion du clic sur le bouton favori
-    private fun gestionBoutonFavori(){
-        val btFavori = currentView.bouton_ajouter_favori
-        btFavori.setOnClickListener {
-            if (AppWakeUp.auth.currentUser!!.isAnonymous) {
-                dialogue.createAlertDialogNotConnected(context!!, this.activity!! as MainActivity)
-            } else {
-                if (currentSong!=null) {
-                    gestionFavoris()
-
-                    Toast.makeText(
-                        activity!!.application,
-                        "La video a été ajouté",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                else{
-                    Toast.makeText(
-                        activity!!.application,
-                        "Veuillez sélectionner une vidéo",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
-    }
-
     private fun gestionFavoris(){
         //Gestion de la persistance des favoris (sauvgarde les favoris dans un fichier)
         if (loadFavoris(this.requireContext()) != null) {
@@ -180,8 +112,6 @@ class MusiquesAttenteFragment : Fragment() {
         currentView.pb_main_loader.visibility = View.GONE
         songList.clear()
 
-        gestionBoutonSupprimer()
-        gestionBoutonFavori()
 
 //        textePasDeFavori = currentView.findViewById(R.id.texte_pas_de_favori)
 

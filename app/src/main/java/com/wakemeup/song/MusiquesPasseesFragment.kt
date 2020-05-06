@@ -8,18 +8,23 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.wakemeup.R
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.neocampus.repo.ViewModelFactory
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.wakemeup.AppWakeUp
 import com.wakemeup.MainActivity
+import com.wakemeup.contact.SonnerieRecue
 import com.wakemeup.util.loadFavoris
 import com.wakemeup.util.persisteFavoris
 import com.wakemeup.util.resetFavoris
+import kotlinx.android.synthetic.main.activity_liste_ami.*
 import kotlinx.android.synthetic.main.fragment_musiques_passees.view.*
 
-class MusiquesPasseesFragment : Fragment() {
+class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListener {
 
     private lateinit var dialogue : DialogueYoutube
     private var isPlaying: Boolean = false
@@ -38,7 +43,32 @@ class MusiquesPasseesFragment : Fragment() {
     private var youTubePlayer: YouTubePlayer? = null
 
 
+    private lateinit var viewModel: MusiquesListesViewModel
+    private val listMusicPass = mutableMapOf<String, SonnerieRecue>()
 
+    override fun onClickListener(song: Song, position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        // Todo view model
+        //val factory = ViewModelFactory(AppWakeUp.repository)
+        //viewModel = ViewModelProvider(this, factory).get(MusiquesListesViewModel::class.java)
+        /*viewModel.getListePasseesLiveData().observe(
+            viewLifecycleOwner,
+            Observer { nouvelleListe ->
+                //todo songAdapter et viewModel
+                // updateMusiqueListe(nouvelleListe)
+            })*/
+    }
+
+    private fun updateMusiqueListe(nouvelleListe : Map<String, SonnerieRecue>){
+        listMusicPass.clear()
+        listMusicPass.putAll(nouvelleListe)
+        mAdapter.notifyDataSetChanged()
+    }
 
     private fun changeSelectedSong(index: Int) {
         mAdapter.notifyItemChanged(mAdapter.selectedPosition)
@@ -148,7 +178,6 @@ class MusiquesPasseesFragment : Fragment() {
         resetFavoris(this.requireContext())
         persisteFavoris(this.requireContext(),favorisListe)
     }
-
 
 
     override fun onCreateView(
