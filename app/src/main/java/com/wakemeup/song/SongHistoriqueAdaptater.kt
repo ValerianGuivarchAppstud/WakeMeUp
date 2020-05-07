@@ -41,25 +41,26 @@ class SongHistoriqueAdaptater(
     }
 
     override fun onBindViewHolder(
-        holder: SongHistoriqueAdaptater.SongHistoriqueViewHolder,
+        holder: SongHistoriqueViewHolder,
         position: Int
     ) {
         val song = historiqueVideo[position].song
 
         //Si l'adaptateur est celui des favoris, on met un fond bleu quand on clic sur une musique
-        if (laClass == Companion.FAVORIS){
+        if (laClass == HISTORIQUE){
             if (selectedPosition == position) {
                 holder.itemView.setBackgroundColor(
                     ContextCompat.getColor(
                         context,
-                        R.color.colorPrimary
+                        android.R.color.transparent
                     )
                 )
+
             } else {
                 holder.itemView.setBackgroundColor(
                     ContextCompat.getColor(
                         context,
-                        android.R.color.transparent
+                        R.color.colorPrimary
                     )
                 )
             }
@@ -97,6 +98,5 @@ class SongHistoriqueAdaptater(
 
     companion object {
         private const val HISTORIQUE = "HISTORIQUE"
-        private const val FAVORIS = "FAVORIS"
     }
 }
