@@ -2,31 +2,38 @@ package com.wakemeup.song
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.neocampus.repo.ViewModelFactory
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.wakemeup.AppWakeUp
 import com.wakemeup.MainActivity
 import com.wakemeup.R
+import com.wakemeup.contact.SonnerieRecue
 import com.wakemeup.util.loadFavoris
 import com.wakemeup.util.persisteFavoris
 import com.wakemeup.util.resetFavoris
+import kotlinx.android.synthetic.main.activity_reveil_edit.*
 import kotlinx.android.synthetic.main.fragment_musiques_attente.view.*
+import java.util.*
 
-class MusiquesAttenteFragment : Fragment() {
+class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickListener {
 
     private lateinit var dialogue : DialogueYoutube
     private var isPlaying: Boolean = false
-    private val songList = mutableListOf<Song>()
-    private var favorisListe : MutableList<Song> = mutableListOf<Song>()
+    private val sonnerieAttenteMap = mutableMapOf<String, SonnerieRecue>()
 
-    private lateinit var mAdapter: SongAdapter
+    private lateinit var mAdapter: SonnerieAdapter
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
 
@@ -37,7 +44,25 @@ class MusiquesAttenteFragment : Fragment() {
 
     private var youTubePlayer: YouTubePlayer? = null
 
+    private lateinit var viewModel: MusiquesListesViewModel
 
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        val factory = ViewModelFactory(AppWakeUp.repository)
+        viewModel = ViewModelProvider(this, factory).get(MusiquesListesViewModel::class.java)
+        viewModel.getListeAttenteLiveData().observe(viewLifecycleOwner, Observer { list ->
+            updateAttenteListe(list)
+        })
+    }
+
+    private fun updateAttenteListe(nouvelleListeSonneries: Map<String, SonnerieRecue>) {
+        Log.e("Error", "updateAttenteListe")
+        sonnerieAttenteMap.clear()
+        sonnerieAttenteMap.putAll(nouvelleListeSonneries)
+        mAdapter.notifyDataSetChanged()
+    }
 
 
     private fun changeSelectedSong(index: Int) {
@@ -66,22 +91,6 @@ class MusiquesAttenteFragment : Fragment() {
         }
     }
 
-    //TODO créer classe abstraite ou créer classe BouttonPartage
-/*
-    private fun gestionFavoris(){
-        //Gestion de la persistance des favoris (sauvgarde les favoris dans un fichier)
-        if (loadFavoris(this.requireContext()) != null) {
-            favorisListe = loadFavoris(this.requireContext())!!
-        }
-        else{
-            favorisListe = mutableListOf<Song>()
-        }
-        favorisListe.add(currentSong!!)
-        resetFavoris(this.requireContext())
-        persisteFavoris(this.requireContext(),favorisListe)
-    }*/
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,6 +100,7 @@ class MusiquesAttenteFragment : Fragment() {
         super.onCreate(savedInstanceState)
         currentView = inflater.inflate(R.layout.fragment_musiques_attente, container, false)
 
+        mAdapter =  SonnerieAdapter(this.requireContext(), sonnerieAttenteMap,this)
         val recyclerView = currentView.recycler_list_video_musiques_en_attente
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
@@ -110,34 +120,14 @@ class MusiquesAttenteFragment : Fragment() {
 
         currentIndex = 0
         currentView.pb_main_loader.visibility = View.GONE
-        songList.clear()
+        sonnerieAttenteMap.clear()
 
 
-//        textePasDeFavori = currentView.findViewById(R.id.texte_pas_de_favori)
-
-        //Charge les musiques en attente -----------------------------------------------------
-        val musiques : MutableList<Song>? = null //todo AppWakeUp.listSonneriesEnAttente
-        if (musiques != null) {
-            songList.addAll(musiques)
-            if (musiques.isEmpty()) {
-                currentView.texte_pas_de_musiques_en_attente.visibility = View.VISIBLE
-            }
-            else{
-                currentView.texte_pas_de_musiques_en_attente.visibility=View.INVISIBLE
-            }
-
-            //Lancer la 1ere video youtube de la liste
-            if (songList.isNotEmpty()) {
-                currentSong = songList[0]
-                changeSelectedSong(0)
-                prepareSong(currentSong)
-            }
-            //----------------------------------------
-
+        if (sonnerieAttenteMap.isEmpty()) {
+            currentView.texte_pas_de_musiques_en_attente.visibility = View.VISIBLE
         }
         else{
-            currentSong = null
-            currentView.texte_pas_de_musiques_en_attente.visibility = View.VISIBLE
+            currentView.texte_pas_de_musiques_en_attente.visibility=View.INVISIBLE
         }
         //------------------------------------------------------------------------
 
@@ -148,25 +138,22 @@ class MusiquesAttenteFragment : Fragment() {
         mAdapter.notifyDataSetChanged()
         mAdapter.selectedPosition = 0
 
-        dialogue = DialogueYoutube(activity!!)
+        dialogue = DialogueYoutube(requireActivity())
 
         return currentView
     }
 
     companion object {
 
-        fun newInstance(ctx: Context): MusiquesAttenteFragment {
+        fun newInstance(): MusiquesAttenteFragment {
 
             val nf = MusiquesAttenteFragment()
-            nf.mAdapter = SongAdapter(ctx, nf.songList,
-                object : SongAdapter.RecyclerItemClickListener {
-                    override fun onClickListener(song: Song, position: Int) {
-                        nf.firstLaunch = false
-                        nf.changeSelectedSong(position)
-                        nf.prepareSong(song)
-                    }
-                })
             return nf
         }
+    }
+
+    override fun onClickSonnerieListener(sonnerie: SonnerieRecue, position: Int) {
+        changeSelectedSong(position)
+        prepareSong(sonnerie.song)
     }
 }

@@ -101,7 +101,7 @@ class MusiquesRecuesFragment : Fragment() {
 
     private fun showAttenteFragment() {
         if (this.fragmentMusiquesAttente == null) {
-            this.fragmentMusiquesAttente = MusiquesAttenteFragment.newInstance(this.requireContext())
+            this.fragmentMusiquesAttente = MusiquesAttenteFragment.newInstance()
         }
         childFragmentManager.beginTransaction().remove(this.fragmentMusiquesAttente!!).commit()
         this.startTransactionFragment(this.fragmentMusiquesAttente!!)
@@ -109,7 +109,7 @@ class MusiquesRecuesFragment : Fragment() {
 
     private fun showPasseesFragment() {
         if (this.fragmentMusiquesPassees == null) {
-            this.fragmentMusiquesPassees = MusiquesPasseesFragment.newInstance(this.requireContext())
+            this.fragmentMusiquesPassees = MusiquesPasseesFragment.newInstance()
         }
         childFragmentManager.beginTransaction().remove(this.fragmentMusiquesPassees!!).commit()
         this.startTransactionFragment(this.fragmentMusiquesPassees!!)

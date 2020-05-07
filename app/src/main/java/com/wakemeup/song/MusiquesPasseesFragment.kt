@@ -24,14 +24,14 @@ import com.wakemeup.util.resetFavoris
 import kotlinx.android.synthetic.main.activity_liste_ami.*
 import kotlinx.android.synthetic.main.fragment_musiques_passees.view.*
 
-class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListener {
+class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickListener {
 
     private lateinit var dialogue : DialogueYoutube
     private var isPlaying: Boolean = false
     private val songList = SongIndex()//= mutableListOf<Song>()
     private var favorisListe = SongIndex()//: MutableList<Song> = mutableListOf<Song>()
 
-    private lateinit var mAdapter: SongAdapter
+    private lateinit var mAdapter: SonnerieAdapter
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
 
@@ -46,24 +46,20 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
     private lateinit var viewModel: MusiquesListesViewModel
     private val listMusicPass = mutableMapOf<String, SonnerieRecue>()
 
-    override fun onClickListener(song: Song, position: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+/*    override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         // Todo view model
-        //val factory = ViewModelFactory(AppWakeUp.repository)
-        //viewModel = ViewModelProvider(this, factory).get(MusiquesListesViewModel::class.java)
-        /*viewModel.getListePasseesLiveData().observe(
+        val factory = ViewModelFactory(AppWakeUp.repository)
+        viewModel = ViewModelProvider(this, factory).get(MusiquesListesViewModel::class.java)
+        viewModel.getListePasseesLiveData().observe(
             viewLifecycleOwner,
             Observer { nouvelleListe ->
                 //todo songAdapter et viewModel
                 // updateMusiqueListe(nouvelleListe)
-            })*/
+            })
     }
-
+*/
     private fun updateMusiqueListe(nouvelleListe : Map<String, SonnerieRecue>){
         listMusicPass.clear()
         listMusicPass.putAll(nouvelleListe)
@@ -185,6 +181,8 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
         super.onCreate(savedInstanceState)
         currentView = inflater.inflate(R.layout.fragment_musiques_passees, container, false)
 
+        mAdapter = SonnerieAdapter(this.requireContext(), listMusicPass, this)
+
         val recyclerView = currentView.recycler_list_video_musiques_passees
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
@@ -248,14 +246,14 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
         mAdapter.notifyDataSetChanged()
         mAdapter.selectedPosition = 0
 
-        dialogue = DialogueYoutube(activity!!)
+        dialogue = DialogueYoutube(requireActivity())
 
         return currentView
     }
 
     companion object {
 
-        fun newInstance(ctx: Context): MusiquesPasseesFragment {
+        fun newInstance(): MusiquesPasseesFragment {
 
             val nf = MusiquesPasseesFragment()
             //TODO corriger ça
@@ -264,15 +262,14 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
                 songList.add(hs.song)
             }
 
-            nf.mAdapter = SongAdapter(ctx, songList,
-                object : SongAdapter.RecyclerItemClickListener {
-                    override fun onClickListener(song: Song, position: Int) {
-                        nf.firstLaunch = false
-                        nf.changeSelectedSong(position)
-                        nf.prepareSong(song)
-                    }
-                })
+
             return nf
         }
     }
+
+    override fun onClickSonnerieListener(sonnerie: SonnerieRecue, position: Int) {
+        changeSelectedSong(position)
+        prepareSong(sonnerie.song)
+    }
+
 }
