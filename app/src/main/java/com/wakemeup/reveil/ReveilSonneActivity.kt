@@ -11,6 +11,8 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.wakemeup.R
 import com.wakemeup.song.Song
+import kotlinx.android.synthetic.main.activity_reveil_sonne.*
+import java.util.*
 
 
 class ReveilSonneActivity : AppCompatActivity() {
@@ -23,6 +25,27 @@ class ReveilSonneActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reveil_sonne)
+
+        val calendar : Calendar = Calendar.getInstance()
+
+        val jour = calendar.get(Calendar.DAY_OF_MONTH)
+        val mois = calendar.get(Calendar.MONTH) +1
+        val anne = calendar.get(Calendar.YEAR)
+
+        val heure = calendar.get(Calendar.HOUR)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        date_sonnerie.text = "${jour} / ${mois} / ${anne}"
+        heure_sonnerie.text = "$heure : $minute"
+
+
+        bouton_reveil_stop.setOnClickListener{
+            this.finish()
+        }
+
+        bouton_reveil_snooze.setOnClickListener {
+            //TODO
+        }
 
         val powermanager =
             this.getSystemService(Context.POWER_SERVICE) as PowerManager
@@ -37,7 +60,7 @@ class ReveilSonneActivity : AppCompatActivity() {
         }
 
         //musique test
-        //currentSong = Song("fHI8X4OXluQ", "Blinding the light", "The weekdn", "test",0, 100)
+        currentSong = Song("fHI8X4OXluQ", "Blinding the light", "The weekdn", "test",0, 100)
 
         youTubePlayerView = findViewById(R.id.youtubePlayReveil)
         lifecycle.addObserver(youTubePlayerView)
