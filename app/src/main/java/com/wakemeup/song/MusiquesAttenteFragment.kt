@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -91,9 +92,21 @@ class MusiquesAttenteFragment : Fragment() {
         super.onCreate(savedInstanceState)
         currentView = inflater.inflate(R.layout.fragment_musiques_attente, container, false)
 
+
+        //Initialisation du recyclerView (Le principal, pour les vidéos youtube)----------------------------
+        mAdapter =  SongAdapter(
+            this.requireContext(),
+            songList,
+            object : SongAdapter.RecyclerItemClickListener {
+                override fun onClickListener(song: Song, position: Int) {
+                    changeSelectedSong(position)
+                    prepareSong(song)
+                }
+            })
         val recyclerView = currentView.recycler_list_video_musiques_en_attente
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
+        //---------------------------------------------------------------------------------------------------
 
 
         youTubePlayerView = currentView.youtube_player_view_musiques_attente
@@ -141,14 +154,10 @@ class MusiquesAttenteFragment : Fragment() {
         }
         //------------------------------------------------------------------------
 
-
-
-
-
         mAdapter.notifyDataSetChanged()
         mAdapter.selectedPosition = 0
 
-        dialogue = DialogueYoutube(activity!!)
+        dialogue = DialogueYoutube(requireActivity())
 
         return currentView
     }
@@ -158,14 +167,6 @@ class MusiquesAttenteFragment : Fragment() {
         fun newInstance(ctx: Context): MusiquesAttenteFragment {
 
             val nf = MusiquesAttenteFragment()
-            nf.mAdapter = SongAdapter(ctx, nf.songList,
-                object : SongAdapter.RecyclerItemClickListener {
-                    override fun onClickListener(song: Song, position: Int) {
-                        nf.firstLaunch = false
-                        nf.changeSelectedSong(position)
-                        nf.prepareSong(song)
-                    }
-                })
             return nf
         }
     }
