@@ -12,6 +12,9 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+
     <permission
         android:name="com.wakemeup.permission.C2D_MESSAGE"
         android:protectionLevel="signature"
@@ -38,6 +41,9 @@
         </activity>
         <activity android:name=".reveil.ReveilEdit" />
         <activity android:name=".reveil.ReveilSonneActivity" />
+        <service android:name=".reveil.ReveilSonneService"
+            android:enabled="true"
+            />
         <activity android:name=".contact.ListFriendToSendMusicActivity" />
         <activity android:name=".connect.ConnectActivity" />
         <activity android:name=".connect.ui.LoginActivity" />
