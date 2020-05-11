@@ -17,9 +17,7 @@ class ViewModelFactory(private val repository: Repository) :
             modelClass.isAssignableFrom(ContactListeViewModel::class.java) -> ContactListeViewModel(
                 repository
             )
-            modelClass.isAssignableFrom(MusiquesListesViewModel::class.java) -> MusiquesListesViewModel(
-                repository
-            )
+            modelClass.isAssignableFrom(MusiquesListesViewModel::class.java) -> MusiquesListesViewModel()
             else -> throw IllegalArgumentException("Unexpected model class $modelClass")
         } as T
     }

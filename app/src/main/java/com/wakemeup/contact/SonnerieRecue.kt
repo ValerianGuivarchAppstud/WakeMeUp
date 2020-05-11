@@ -4,6 +4,7 @@ import com.wakemeup.song.Song
 import java.io.Serializable
 
 data class SonnerieRecue(
+    val sonnerieId: String,
     val senderId: String,
     val senderName : String,
     val receiverId: String,
@@ -13,7 +14,13 @@ data class SonnerieRecue(
     //var notificationRecu: Boolean = false
 ) : Serializable {
 
-    constructor(sentMusic: SonnerieRecue) : this(sentMusic.senderId, sentMusic.senderName, sentMusic.receiverId, sentMusic.song, sentMusic.listen)
+    constructor(sentMusic: SonnerieRecue) : this(
+        sentMusic.sonnerieId,
+        sentMusic.senderId,
+        sentMusic.senderName,
+        sentMusic.receiverId,
+        sentMusic.song,
+        sentMusic.listen)
 
    // constructor(sentMusic: SonnerieRecue) : this(sentMusic.sender,  sentMusic.senderName, sentMusic.receiverId,
         //sentMusic.son, sentMusic.listen)

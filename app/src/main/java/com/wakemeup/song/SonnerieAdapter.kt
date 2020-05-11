@@ -49,7 +49,7 @@ private val listener: RecyclerItemClickListener
         }
 
         if (sonnerie != null) {
-            holder.sender.text = "From : ${sonnerie.senderId}"
+            holder.sender.text = "From : ${sonnerie.senderName}"
             val duration = Utility.convertDuration(sonnerie.song.duration)
 
             holder.tvDuration.text = duration

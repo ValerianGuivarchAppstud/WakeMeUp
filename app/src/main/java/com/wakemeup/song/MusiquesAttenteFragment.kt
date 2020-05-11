@@ -1,13 +1,10 @@
 package com.wakemeup.song
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,11 +14,8 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.wakemeup.AppWakeUp
-import com.wakemeup.MainActivity
 import com.wakemeup.R
 import com.wakemeup.contact.SonnerieRecue
-import com.wakemeup.util.loadFavoris
-import com.wakemeup.util.persisteFavoris
 import com.wakemeup.util.resetFavoris
 import kotlinx.android.synthetic.main.activity_reveil_edit.*
 import kotlinx.android.synthetic.main.fragment_musiques_attente.view.*
@@ -120,15 +114,6 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
 
         currentIndex = 0
         currentView.pb_main_loader.visibility = View.GONE
-        sonnerieAttenteMap.clear()
-
-
-        if (sonnerieAttenteMap.isEmpty()) {
-            currentView.texte_pas_de_musiques_en_attente.visibility = View.VISIBLE
-        }
-        else{
-            currentView.texte_pas_de_musiques_en_attente.visibility=View.INVISIBLE
-        }
         //------------------------------------------------------------------------
 
 
@@ -146,14 +131,16 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
     companion object {
 
         fun newInstance(): MusiquesAttenteFragment {
-
-            val nf = MusiquesAttenteFragment()
-            return nf
+            return MusiquesAttenteFragment()
         }
     }
 
     override fun onClickSonnerieListener(sonnerie: SonnerieRecue, position: Int) {
         changeSelectedSong(position)
         prepareSong(sonnerie.song)
+
+        viewModel.removeSonnerieEnAttente(sonnerie.sonnerieId, sonnerie.song.id, requireContext())
+        //  mettre la sonnerie dans PASSEES
+        // todo informer firebase
     }
 }

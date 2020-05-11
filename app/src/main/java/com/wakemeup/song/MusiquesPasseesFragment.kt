@@ -28,7 +28,6 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
 
     private lateinit var dialogue : DialogueYoutube
     private var isPlaying: Boolean = false
-    private val songList = SongIndex()//= mutableListOf<Song>()
     private var favorisListe = SongIndex()//: MutableList<Song> = mutableListOf<Song>()
 
     private lateinit var mAdapter: SonnerieAdapter
@@ -46,20 +45,18 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
     private lateinit var viewModel: MusiquesListesViewModel
     private val listMusicPass = mutableMapOf<String, SonnerieRecue>()
 
-/*    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        // Todo view model
         val factory = ViewModelFactory(AppWakeUp.repository)
         viewModel = ViewModelProvider(this, factory).get(MusiquesListesViewModel::class.java)
         viewModel.getListePasseesLiveData().observe(
             viewLifecycleOwner,
             Observer { nouvelleListe ->
-                //todo songAdapter et viewModel
-                // updateMusiqueListe(nouvelleListe)
+                updateMusiqueListe(nouvelleListe)
             })
     }
-*/
+
     private fun updateMusiqueListe(nouvelleListe : Map<String, SonnerieRecue>){
         listMusicPass.clear()
         listMusicPass.putAll(nouvelleListe)
@@ -100,8 +97,9 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
         val btSupprimer = currentView.bouton_supprimer_musiques_passees
         btSupprimer.setOnClickListener {
             if (currentSong != null) {
-                songList.remove(currentSong!!)
-                if (songList.list.isNullOrEmpty()){
+                // todo viewModel.removePassee() ???
+                //listMusicPass.remove(currentSong!!)
+                if (listMusicPass.isNullOrEmpty()){
                     currentSong = null
                     currentView.texte_pas_de_musiques_passees.visibility = View.VISIBLE
                 }
@@ -112,8 +110,6 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
                 mAdapter.selectedPosition = 0
                 //------------------------------
 
-                resetFavoris(this.requireContext())
-                persisteFavoris(this.requireContext(),songList)
 
                 Toast.makeText(
                     requireActivity().application,
@@ -202,42 +198,9 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
 
         currentIndex = 0
         currentView.pb_main_loader.visibility = View.GONE
-        songList.list.clear()
-        songList.index=0
 
         gestionBoutonSupprimer()
         gestionBoutonFavori()
-
-//        textePasDeFavori = currentView.findViewById(R.id.texte_pas_de_favori)
-
-        //Charge les musiques en attente -----------------------------------------------------
-        val musiques : MutableList<Song>? = null //todo AppWakeUp.listSonneriesEnAttente
-        if (musiques != null) {
-            for(m in musiques){
-                songList.list.add(SongHistorique(favorisListe.index,currentSong!!))
-                songList.index++
-            }
-            if (musiques.isEmpty()) {
-                currentView.texte_pas_de_musiques_passees.visibility = View.VISIBLE
-            }
-            else{
-                currentView.texte_pas_de_musiques_passees.visibility=View.INVISIBLE
-            }
-
-            //Lancer la 1ere video youtube de la liste
-            if (songList.list.isNotEmpty()) {
-                currentSong = songList.list[0].song
-                changeSelectedSong(0)
-                prepareSong(currentSong)
-            }
-            //----------------------------------------
-
-        }
-        else{
-            currentSong = null
-            currentView.texte_pas_de_musiques_passees.visibility = View.VISIBLE
-        }
-        //------------------------------------------------------------------------
 
 
 
@@ -256,12 +219,13 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
         fun newInstance(): MusiquesPasseesFragment {
 
             val nf = MusiquesPasseesFragment()
-            //TODO corriger ça
+            //TODO corriger ça ?
+            /*
             val songList: MutableList<Song> = mutableListOf()
             for(hs in nf.songList.list){
                 songList.add(hs.song)
             }
-
+             */
 
             return nf
         }
