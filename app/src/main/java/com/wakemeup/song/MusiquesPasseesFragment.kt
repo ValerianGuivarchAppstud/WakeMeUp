@@ -32,7 +32,7 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
     private var favorisListe = SongIndex()//: MutableList<Song> = mutableListOf<Song>()
 
     private lateinit var mAdapter: SonnerieAdapter
-    private lateinit var mAdapter: SongHistoriqueAdaptater
+//    private lateinit var mAdapter: SongHistoriqueAdaptater
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
 
@@ -180,7 +180,7 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
 
         mAdapter = SonnerieAdapter(this.requireContext(), listMusicPass, this)
 
-        val recyclerView = currentView.recycler_list_video_musiques_passees
+    /*    val recyclerView = currentView.recycler_list_video_musiques_passees
 
 
         //Initialisation du recyclerView (Le principal, pour les vidéos youtube)----------------------------
@@ -194,7 +194,7 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
                     changeSelectedSong(position)
                     prepareSong(songH.song)
                 }
-            })
+            })*/
         val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycler_list_video_musiques_passees)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
@@ -242,7 +242,7 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
             val songList: MutableList<Song> = mutableListOf()
             for(hs in nf.songList.list){
                 songList.add(hs.song)
-            }
+            }*/
             return nf
         }
     }

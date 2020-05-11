@@ -1,5 +1,6 @@
 package com.wakemeup.song
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -97,7 +98,7 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
 
 
         //Initialisation du recyclerView (Le principal, pour les vidéos youtube)----------------------------
-        mAdapter =  SongAdapter(
+      /*  mAdapter =  SongAdapter(
             this.requireContext(),
             songList,
             object : SongAdapter.RecyclerItemClickListener {
@@ -105,7 +106,7 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
                     changeSelectedSong(position)
                     prepareSong(song)
                 }
-            })
+            })*/
         mAdapter =  SonnerieAdapter(this.requireContext(), sonnerieAttenteMap,this)
         val recyclerView = currentView.recycler_list_video_musiques_en_attente
         recyclerView.layoutManager = LinearLayoutManager(activity)
