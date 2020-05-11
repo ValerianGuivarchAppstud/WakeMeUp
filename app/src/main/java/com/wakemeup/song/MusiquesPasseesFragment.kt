@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.neocampus.repo.ViewModelFactory
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -31,12 +32,12 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
     private var favorisListe = SongIndex()//: MutableList<Song> = mutableListOf<Song>()
 
     private lateinit var mAdapter: SonnerieAdapter
+    private lateinit var mAdapter: SongHistoriqueAdaptater
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
 
     private var currentIndex: Int = 0
     private var currentSongLength: Int = 0
-    private var firstLaunch = true
     private var currentSong: Song? = null
 
     private var youTubePlayer: YouTubePlayer? = null
@@ -180,8 +181,25 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
         mAdapter = SonnerieAdapter(this.requireContext(), listMusicPass, this)
 
         val recyclerView = currentView.recycler_list_video_musiques_passees
+
+
+        //Initialisation du recyclerView (Le principal, pour les vidéos youtube)----------------------------
+        mAdapter = SongHistoriqueAdaptater(
+            this.requireContext(),
+            "MUSIQUESPASSES",
+            songList.list,
+            object : SongHistoriqueAdaptater.RecyclerItemClickListener {
+                override fun onClickListener(songH: SongHistorique, position: Int) {
+                    //nfirstLaunch = false
+                    changeSelectedSong(position)
+                    prepareSong(songH.song)
+                }
+            })
+        val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycler_list_video_musiques_passees)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
+        //---------------------------------------------------------------------------------------------------
+
 
 
         youTubePlayerView = currentView.youtube_player_view_musiques_passees
@@ -225,8 +243,6 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
             for(hs in nf.songList.list){
                 songList.add(hs.song)
             }
-             */
-
             return nf
         }
     }

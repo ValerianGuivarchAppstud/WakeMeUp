@@ -96,6 +96,8 @@ class VideoFragment : Fragment() {
         //----------------------------------------
     }
 
+
+    //Sauvgarde une vidéo dans l'hisotrique des vidéos quand on clique dessus
     fun saveSongInHistVideo(song : Song){
         var load = loadHistoriqueVideo(this.requireContext())
         if (load != null){
@@ -113,6 +115,7 @@ class VideoFragment : Fragment() {
             historiqueVideoListe.index = 1
         }
 
+        trieDateAjout(historiqueVideoListe.list, this.requireContext())
         persisteHistoriqueVideo(this.requireContext(), historiqueVideoListe)
     }
 

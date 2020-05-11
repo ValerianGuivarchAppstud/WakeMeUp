@@ -1,91 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-
-
-    <RelativeLayout
+    <TextView
+        android:id="@+id/title_favoris"
+        style="@style/AppTheme.BoutonReveil"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center"
+        android:text="@string/titre_favoris"
+        android:textSize="20sp" />
 
-        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-            android:id="@+id/youtube_player_view_favoris"
-            android:layout_width="280dp"
-            android:layout_height="130dp"
-            app:showFullScreenButton="false"
-            android:layout_centerHorizontal="true">
-        </com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView>
-
-
-        <Button
-            android:id="@+id/button_partage_favori"
-            style="@style/AppTheme.BoutonReveil"
-            android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:layout_toStartOf="@+id/youtube_player_view_favoris"
-            android:text="@string/partager"
-            android:textSize="35sp" />
-
-        <Button
-            android:id="@+id/bouton_supprimer_favori"
-            style="@style/AppTheme.BoutonReveil"
-            android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:layout_toEndOf="@+id/youtube_player_view_favoris"
-            android:text="@string/supprimer"
-            android:textSize="35sp" />
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:id="@+id/youtube_player_view_favoris"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
+        app:showFullScreenButton="false"
+        android:layout_below="@+id/title_favoris">
+    </com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView>
 
 
-    </RelativeLayout>
+    <Button
+        android:id="@+id/button_partage_favori"
+        style="@style/AppTheme.BoutonReveil"
+        android:layout_width="175dp"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/youtube_player_view_favoris"
+        android:text="@string/partager"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/bouton_supprimer_favori"
+        style="@style/AppTheme.BoutonReveil"
+        android:layout_width="175dp"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/youtube_player_view_favoris"
+        android:layout_toRightOf="@+id/button_partage_favori"
+        android:text="@string/supprimer"
+        android:textSize="30sp" />
 
     <Spinner
         android:id="@+id/spinner_trie"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/title_favoris"
         android:layout_gravity="right"
+        android:layout_toRightOf="@id/youtube_player_view_favoris"
         android:pointerIcon="text" />
 
-    <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center">
+    <ProgressBar
+        android:id="@+id/pb_main_loader"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="visible"
+        android:layout_toEndOf="@id/recycler_list_video_favoris"
+        android:layout_marginLeft="-220dp"
+        android:layout_marginTop="180dp" />
+    <TextView
+        android:id="@+id/texte_pas_de_favori"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vous n'avez aucun favoris"
+        android:layout_centerVertical="true"
+        android:textSize="20sp"
+        android:layout_toRightOf="@+id/youtube_player_view_favoris"
+        android:layout_margin="70dp"
+        android:textAlignment="center"
+        />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_list_video_favoris"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        tools:listitem="@layout/item_list_video"
+        android:layout_toRightOf="@+id/youtube_player_view_favoris"
+        android:layout_below="@+id/spinner_trie"
+        android:layout_centerHorizontal="true"
+        />
 
-            <ProgressBar
-                android:id="@+id/pb_main_loader"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:visibility="visible" />
-            <TextView
-                android:id="@+id/texte_pas_de_favori"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vous n'avez aucun favoris"
-                android:gravity="center"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:textSize="30sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_list_video_favoris"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                tools:listitem="@layout/item_list_video" />
-
-
-        </RelativeLayout>
-
-
-
-
-</LinearLayout>
+</RelativeLayout>
 

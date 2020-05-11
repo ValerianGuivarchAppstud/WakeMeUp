@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.neocampus.repo.ViewModelFactory
+import androidx.recyclerview.widget.RecyclerView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -94,10 +95,22 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
         super.onCreate(savedInstanceState)
         currentView = inflater.inflate(R.layout.fragment_musiques_attente, container, false)
 
+
+        //Initialisation du recyclerView (Le principal, pour les vidéos youtube)----------------------------
+        mAdapter =  SongAdapter(
+            this.requireContext(),
+            songList,
+            object : SongAdapter.RecyclerItemClickListener {
+                override fun onClickListener(song: Song, position: Int) {
+                    changeSelectedSong(position)
+                    prepareSong(song)
+                }
+            })
         mAdapter =  SonnerieAdapter(this.requireContext(), sonnerieAttenteMap,this)
         val recyclerView = currentView.recycler_list_video_musiques_en_attente
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
+        //---------------------------------------------------------------------------------------------------
 
 
         youTubePlayerView = currentView.youtube_player_view_musiques_attente
@@ -116,10 +129,6 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
         currentView.pb_main_loader.visibility = View.GONE
         //------------------------------------------------------------------------
 
-
-
-
-
         mAdapter.notifyDataSetChanged()
         mAdapter.selectedPosition = 0
 
@@ -130,6 +139,11 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
 
     companion object {
 
+        fun newInstance(ctx: Context): MusiquesAttenteFragment {
+
+            val nf = MusiquesAttenteFragment()
+            return nf
+        }
         fun newInstance(): MusiquesAttenteFragment {
             return MusiquesAttenteFragment()
         }
