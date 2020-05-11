@@ -39,6 +39,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
     private lateinit var adapter: ContactListeAdapter
     private val contacts = mutableMapOf<String, UserModel>()
     private var listeContactInApp = mutableListOf<String>()
+    private var listeDansAppli= mutableListOf<String>()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -49,7 +50,6 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
          //put all Phonecontacts in viewModel
          for (user in getPhoneContacts().values){
                      viewModel.addContact(user)
-
          }
 
         viewModel.getContactsListeLiveData().observe(
@@ -138,6 +138,9 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
             ContactsContract.CommonDataKinds.Phone.NUMBER,
             ContactsContract.CommonDataKinds.Phone._ID)
         cursor!!.moveToFirst()
+
+        listeDansAppli.addAll(getContactAmiInAppli()) //recuperer les amis de l'appli
+
         while (cursor.isAfterLast == false) {
             val contactNumber =
                 cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
@@ -148,6 +151,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
             userModel = UserModel(""+phoneContactID,"no image",contactNumber, contactName, "nomail@gamil.com")
             if (userModel != null) {
                 Log.i("ContactListFragmentAmis", "Nom : ${userModel.username}, Phone : ${userModel.phone}, ID : ${userModel.id}" )
+                if(listeDansAppli.contains("${contactNumber}"))
                 contact.put("${userModel.id}", userModel)
             }
             userModel = null
@@ -160,7 +164,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
     }
 
     //récupérer les contacts de l'appli
-    fun getContactAmiInphone() : List<String>{
+    fun getContactAmiInAppli() : List<String>{
         AppWakeUp.database.getReference("Users").addValueEventListener(
             object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) { }
