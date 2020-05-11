@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.wakemeup.contact.ContactListeViewModel
 import com.wakemeup.reveil.ReveilListeViewModel
+import com.wakemeup.song.MusiquesListesViewModel
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory(private val repository: Repository) :
@@ -16,6 +17,7 @@ class ViewModelFactory(private val repository: Repository) :
             modelClass.isAssignableFrom(ContactListeViewModel::class.java) -> ContactListeViewModel(
                 repository
             )
+            modelClass.isAssignableFrom(MusiquesListesViewModel::class.java) -> MusiquesListesViewModel()
             else -> throw IllegalArgumentException("Unexpected model class $modelClass")
         } as T
     }

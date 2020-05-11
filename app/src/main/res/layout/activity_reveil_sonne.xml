@@ -4,14 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    tools:context=".reveil.ReveilSonneActivity">
+    tools:context=".reveil.ReveilSonneActivity"
+    android:orientation="vertical">
 
     <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
         android:id="@+id/youtubePlayReveil"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:showFullScreenButton="false" />
+
+    <Button
+        android:id="@+id/button_favoris_reveil_sonne"
+        style="@style/AppTheme.BoutonReveil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/youtubePlayReveil"
+        android:layout_marginTop="0dp"
+        android:layout_weight="1"
+        android:text="@string/favori" />
+
+    <TextView
+        android:id="@+id/date_sonnerie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/button_favoris_reveil_sonne"
+        android:layout_marginTop="30dp"
+        android:text="DATE"
+        android:textSize="15sp"
+        style="@style/AppTheme.BoutonReveil"/>
+
+    <TextView
+        android:id="@+id/heure_sonnerie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/date_sonnerie"
+        style="@style/AppTheme.BoutonReveil"
+        android:textSize="80sp"
+
+        android:text="HEURE"/>
 
 
     <RelativeLayout
@@ -63,7 +95,9 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/stop" />
+            android:contentDescription="@string/stop"
+            android:hapticFeedbackEnabled="true"/>
+
 
         <TextView
             style="@style/AppTheme.BoutonReveil"

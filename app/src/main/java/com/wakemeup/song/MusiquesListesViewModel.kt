@@ -5,18 +5,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.neocampus.repo.Repository
+import com.wakemeup.AppWakeUp
 import com.wakemeup.contact.SonnerieRecue
 
-class MusiquesListesViewModel(val repo: Repository) : ViewModel() {
+class MusiquesListesViewModel() : ViewModel() {
 
     private val sonneriesPasseesListeState = MediatorLiveData<Map<String, SonnerieRecue>>()
     private val sonneriesAttenteListeState = MediatorLiveData<Map<String, SonnerieRecue>>()
 
     init {
-        sonneriesPasseesListeState.addSource(repo.getSonneriesPassees()) { newListe ->
+        sonneriesPasseesListeState.addSource(AppWakeUp.getSonneriesPassees()) { newListe ->
             sonneriesPasseesListeState.value = newListe
         }
-        sonneriesAttenteListeState.addSource(repo.getSonneriesAttente()) { newListe ->
+        sonneriesAttenteListeState.addSource(AppWakeUp.getSonneriesAttente()) { newListe ->
             sonneriesAttenteListeState.value = newListe
         }
     }
@@ -25,11 +26,11 @@ class MusiquesListesViewModel(val repo: Repository) : ViewModel() {
     fun getListeAttenteLiveData(): LiveData<Map<String, SonnerieRecue>> = sonneriesAttenteListeState
 
     fun addSonnerieAttente(idSonnerie: String, sonnerie: SonnerieRecue, context: Context) {
-        repo.addSonnerieEnAttente(idSonnerie, sonnerie, context)
+        AppWakeUp.addSonnerieEnAttente(idSonnerie, sonnerie, context)
     }
 
     fun removeSonnerieEnAttente(idSonnerie: String, musicId: String, context: Context) {
-        repo.removeSonnerieEnAttente(idSonnerie, musicId, context)
+        AppWakeUp.removeSonnerieEnAttente(idSonnerie, musicId, context)
     }
 
 }

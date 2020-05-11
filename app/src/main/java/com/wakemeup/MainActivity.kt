@@ -169,6 +169,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                                     )
                                                     val music =
                                                         SonnerieRecue(
+                                                            idMusicSend,
                                                             senderId,
                                                             senderName,
                                                             receiverId,

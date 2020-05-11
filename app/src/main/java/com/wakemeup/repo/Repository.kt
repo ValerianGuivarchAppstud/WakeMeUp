@@ -92,7 +92,7 @@ class Repository() {
     /**************************************************/
     /**************** SONNERIES RECUES ****************/
     /**************************************************/
-
+/*
     private val listSonneriesEnAttente = mutableMapOf<String, SonnerieRecue>()
     private val listSonneriesPassee = mutableMapOf<String, SonnerieRecue>()
     private val listSonneriesPasseeLiveData = MutableLiveData<Map<String, SonnerieRecue>>()
@@ -142,5 +142,6 @@ class Repository() {
         val outputStream = ObjectOutputStream(fileOutput)
         outputStream.writeObject(listSonneriesPassee)
     }
+    */
 
 }

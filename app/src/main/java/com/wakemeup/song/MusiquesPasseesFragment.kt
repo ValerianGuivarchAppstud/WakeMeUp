@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.neocampus.repo.ViewModelFactory
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -24,20 +25,19 @@ import com.wakemeup.util.resetFavoris
 import kotlinx.android.synthetic.main.activity_liste_ami.*
 import kotlinx.android.synthetic.main.fragment_musiques_passees.view.*
 
-class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListener {
+class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickListener {
 
     private lateinit var dialogue : DialogueYoutube
     private var isPlaying: Boolean = false
-    private val songList = SongIndex()//= mutableListOf<Song>()
     private var favorisListe = SongIndex()//: MutableList<Song> = mutableListOf<Song>()
 
-    private lateinit var mAdapter: SongAdapter
+    private lateinit var mAdapter: SonnerieAdapter
+//    private lateinit var mAdapter: SongHistoriqueAdaptater
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
 
     private var currentIndex: Int = 0
     private var currentSongLength: Int = 0
-    private var firstLaunch = true
     private var currentSong: Song? = null
 
     private var youTubePlayer: YouTubePlayer? = null
@@ -46,22 +46,16 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
     private lateinit var viewModel: MusiquesListesViewModel
     private val listMusicPass = mutableMapOf<String, SonnerieRecue>()
 
-    override fun onClickListener(song: Song, position: Int) {
-        TODO("Not yet implemented")
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        // Todo view model
-        //val factory = ViewModelFactory(AppWakeUp.repository)
-        //viewModel = ViewModelProvider(this, factory).get(MusiquesListesViewModel::class.java)
-        /*viewModel.getListePasseesLiveData().observe(
+        val factory = ViewModelFactory(AppWakeUp.repository)
+        viewModel = ViewModelProvider(this, factory).get(MusiquesListesViewModel::class.java)
+        viewModel.getListePasseesLiveData().observe(
             viewLifecycleOwner,
             Observer { nouvelleListe ->
-                //todo songAdapter et viewModel
-                // updateMusiqueListe(nouvelleListe)
-            })*/
+                updateMusiqueListe(nouvelleListe)
+            })
     }
 
     private fun updateMusiqueListe(nouvelleListe : Map<String, SonnerieRecue>){
@@ -104,8 +98,9 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
         val btSupprimer = currentView.bouton_supprimer_musiques_passees
         btSupprimer.setOnClickListener {
             if (currentSong != null) {
-                songList.remove(currentSong!!)
-                if (songList.list.isNullOrEmpty()){
+                // todo viewModel.removePassee() ???
+                //listMusicPass.remove(currentSong!!)
+                if (listMusicPass.isNullOrEmpty()){
                     currentSong = null
                     currentView.texte_pas_de_musiques_passees.visibility = View.VISIBLE
                 }
@@ -116,8 +111,6 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
                 mAdapter.selectedPosition = 0
                 //------------------------------
 
-                resetFavoris(this.requireContext())
-                persisteFavoris(this.requireContext(),songList)
 
                 Toast.makeText(
                     requireActivity().application,
@@ -185,9 +178,28 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
         super.onCreate(savedInstanceState)
         currentView = inflater.inflate(R.layout.fragment_musiques_passees, container, false)
 
-        val recyclerView = currentView.recycler_list_video_musiques_passees
+        mAdapter = SonnerieAdapter(this.requireContext(), listMusicPass, this)
+
+    /*    val recyclerView = currentView.recycler_list_video_musiques_passees
+
+
+        //Initialisation du recyclerView (Le principal, pour les vidéos youtube)----------------------------
+        mAdapter = SongHistoriqueAdaptater(
+            this.requireContext(),
+            "MUSIQUESPASSES",
+            songList.list,
+            object : SongHistoriqueAdaptater.RecyclerItemClickListener {
+                override fun onClickListener(songH: SongHistorique, position: Int) {
+                    //nfirstLaunch = false
+                    changeSelectedSong(position)
+                    prepareSong(songH.song)
+                }
+            })*/
+        val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycler_list_video_musiques_passees)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
+        //---------------------------------------------------------------------------------------------------
+
 
 
         youTubePlayerView = currentView.youtube_player_view_musiques_passees
@@ -204,42 +216,9 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
 
         currentIndex = 0
         currentView.pb_main_loader.visibility = View.GONE
-        songList.list.clear()
-        songList.index=0
 
         gestionBoutonSupprimer()
         gestionBoutonFavori()
-
-//        textePasDeFavori = currentView.findViewById(R.id.texte_pas_de_favori)
-
-        //Charge les musiques en attente -----------------------------------------------------
-        val musiques : MutableList<Song>? = null //todo AppWakeUp.listSonneriesEnAttente
-        if (musiques != null) {
-            for(m in musiques){
-                songList.list.add(SongHistorique(favorisListe.index,currentSong!!))
-                songList.index++
-            }
-            if (musiques.isEmpty()) {
-                currentView.texte_pas_de_musiques_passees.visibility = View.VISIBLE
-            }
-            else{
-                currentView.texte_pas_de_musiques_passees.visibility=View.INVISIBLE
-            }
-
-            //Lancer la 1ere video youtube de la liste
-            if (songList.list.isNotEmpty()) {
-                currentSong = songList.list[0].song
-                changeSelectedSong(0)
-                prepareSong(currentSong)
-            }
-            //----------------------------------------
-
-        }
-        else{
-            currentSong = null
-            currentView.texte_pas_de_musiques_passees.visibility = View.VISIBLE
-        }
-        //------------------------------------------------------------------------
 
 
 
@@ -248,31 +227,29 @@ class MusiquesPasseesFragment : Fragment(), SongAdapter.RecyclerItemClickListene
         mAdapter.notifyDataSetChanged()
         mAdapter.selectedPosition = 0
 
-        dialogue = DialogueYoutube(activity!!)
+        dialogue = DialogueYoutube(requireActivity())
 
         return currentView
     }
 
     companion object {
 
-        fun newInstance(ctx: Context): MusiquesPasseesFragment {
+        fun newInstance(): MusiquesPasseesFragment {
 
             val nf = MusiquesPasseesFragment()
-            //TODO corriger ça
+            //TODO corriger ça ?
+            /*
             val songList: MutableList<Song> = mutableListOf()
             for(hs in nf.songList.list){
                 songList.add(hs.song)
-            }
-
-            nf.mAdapter = SongAdapter(ctx, songList,
-                object : SongAdapter.RecyclerItemClickListener {
-                    override fun onClickListener(song: Song, position: Int) {
-                        nf.firstLaunch = false
-                        nf.changeSelectedSong(position)
-                        nf.prepareSong(song)
-                    }
-                })
+            }*/
             return nf
         }
     }
+
+    override fun onClickSonnerieListener(sonnerie: SonnerieRecue, position: Int) {
+        changeSelectedSong(position)
+        prepareSong(sonnerie.song)
+    }
+
 }

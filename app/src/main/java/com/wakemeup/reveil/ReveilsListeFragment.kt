@@ -60,7 +60,7 @@ class ReveilsListeFragment : Fragment(), ReveilListeAdapter.ReveilListAdapterLis
 
         if (resultCode == Activity.RESULT_OK && data != null) {
             val newClock = data.extras!![ReveilModel.REVEIL] as ReveilModel
-            newClock.toastNextClock(activity!!)
+            newClock.toastNextClock(requireActivity())
             when (requestCode) {
                 ReveilModel.CREATE_REQUEST_CODE -> {
                     if (resultCode == Activity.RESULT_OK) {
@@ -128,7 +128,7 @@ class ReveilsListeFragment : Fragment(), ReveilListeAdapter.ReveilListAdapterLis
     }
 
     override fun onReveilDelete(reveilModel: ReveilModel) {
-        val builder = AlertDialog.Builder(activity!!)
+        val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle("Supprimer réveil")
         builder.setMessage("Voulez-vous supprimer ce réveil ?")
         builder.setPositiveButton("Supprimer") { dialog, which ->

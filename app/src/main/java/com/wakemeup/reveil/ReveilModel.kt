@@ -81,12 +81,16 @@ class ReveilModel(
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-        //TODO exact inutile
+
+        //Declanche l'alarm au bout de this.nextAlarm.timeInMillis seconde---
         alarmManager.setExact(
             AlarmManager.RTC_WAKEUP,
             System.currentTimeMillis() + 5000, sender
         )
-        //this.nextAlarm.timeInMillis,sender)
+        //this.nextAlarm.timeInMillis
+        //--------------------------------------------------------------------AlertReceiver
+
+
     }
 
     fun cancelAlarm() {

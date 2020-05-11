@@ -2,6 +2,8 @@ package com.wakemeup
 
 import android.app.Application
 import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.neocampus.repo.Repository
@@ -24,10 +26,17 @@ class AppWakeUp : Application() {
         private const val NAME_FILE_SONNERIES_PASSEES = "sonneries_passees.file"
         lateinit var listeAmis: MutableList<UserModel>
 
+        /**************************************************/
+        /**************** SONNERIES RECUES ****************/
+        /**************************************************/
+
         val listSonneriesEnAttente = mutableMapOf<String, SonnerieRecue>()
-
         val listSonneriesPassee = mutableMapOf<String, SonnerieRecue>()
+        private val listSonneriesPasseeLiveData = MutableLiveData<Map<String, SonnerieRecue>>()
+        private val listSonneriesEnAttenteLiveData = MutableLiveData<Map<String, SonnerieRecue>>()
 
+        fun getSonneriesAttente(): LiveData<Map<String, SonnerieRecue>> = listSonneriesEnAttenteLiveData
+        fun getSonneriesPassees(): LiveData<Map<String, SonnerieRecue>> = listSonneriesPasseeLiveData
 
         fun addSonnerieEnAttente(
             idSonnerie: String,
@@ -36,6 +45,7 @@ class AppWakeUp : Application() {
         ) {
             listSonneriesEnAttente.put(idSonnerie, sonnerie)
             enregistrementSonnerieEnAttente(context)
+            listSonneriesEnAttenteLiveData.value = listSonneriesEnAttente
         }
 
         fun removeSonnerieEnAttente(idSonnerie: String, musicId: String, context: Context) {
@@ -47,6 +57,8 @@ class AppWakeUp : Application() {
                 listSonneriesEnAttente.remove(idSonnerie)
                 enregistrementSonneriePassees(context)
                 enregistrementSonnerieEnAttente(context)
+                listSonneriesEnAttenteLiveData.value = listSonneriesEnAttente
+                listSonneriesPasseeLiveData.value = listSonneriesPassee
             }
         }
 
