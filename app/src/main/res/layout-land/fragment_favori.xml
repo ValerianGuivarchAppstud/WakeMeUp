@@ -30,7 +30,7 @@
         style="@style/AppTheme.BoutonReveil"
         android:layout_width="175dp"
         android:layout_height="match_parent"
-        android:layout_below="@+id/spinner_trie"
+        android:layout_below="@+id/youtube_player_view_favoris"
         android:text="@string/partager"
         android:textSize="30sp" />
 
@@ -39,17 +39,18 @@
         style="@style/AppTheme.BoutonReveil"
         android:layout_width="175dp"
         android:layout_height="match_parent"
-        android:layout_below="@+id/spinner_trie"
+        android:layout_below="@+id/youtube_player_view_favoris"
         android:layout_toRightOf="@+id/button_partage_favori"
         android:text="@string/supprimer"
         android:textSize="30sp" />
 
     <Spinner
         android:id="@+id/spinner_trie"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/youtube_player_view_favoris"
+        android:layout_below="@+id/title_favoris"
         android:layout_gravity="right"
+        android:layout_toRightOf="@id/youtube_player_view_favoris"
         android:pointerIcon="text" />
 
     <ProgressBar
@@ -81,7 +82,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         tools:listitem="@layout/item_list_video"
         android:layout_toRightOf="@+id/youtube_player_view_favoris"
-        android:layout_below="@+id/title_favoris"
+        android:layout_below="@+id/spinner_trie"
         android:layout_centerHorizontal="true"
         />
 
