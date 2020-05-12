@@ -40,8 +40,7 @@ class AppWakeUp : Application() {
 
         fun addSonnerieEnAttente(
             idSonnerie: String,
-            sonnerie: SonnerieRecue,
-            context: Context
+            sonnerie: SonnerieRecue
         ) {
             listSonneriesEnAttente.put(idSonnerie, sonnerie)
             listSonneriesEnAttenteLiveData.value = listSonneriesEnAttente

@@ -20,18 +20,10 @@ class MusiquesListesViewModel() : ViewModel() {
 
     init {
         sonneriesPasseesListeState.addSource(AppWakeUp.getSonneriesPassees()) { newListe ->
-            val oldState = sonneriesPasseesListeState.value!!
-            sonneriesPasseesListeState.value = oldState.copy(
-                hasMusiquesChanged = true,
-                musiques = newListe
-            )
+            sonneriesPasseesListeState.value = MusiquesListViewState(true, newListe)
         }
-        sonneriesAttenteListeState.addSource(AppWakeUp.getSonneriesPassees()) { newListe ->
-            val oldState = sonneriesAttenteListeState.value!!
-            sonneriesAttenteListeState.value = oldState.copy(
-                hasMusiquesChanged = true,
-                musiques = newListe
-            )
+        sonneriesAttenteListeState.addSource(AppWakeUp.getSonneriesAttente()) { newListe ->
+            sonneriesAttenteListeState.value =MusiquesListViewState(true, newListe)
         }
     }
 
@@ -39,7 +31,7 @@ class MusiquesListesViewModel() : ViewModel() {
     fun getListeAttenteLiveData(): LiveData<MusiquesListViewState> = sonneriesAttenteListeState
 
     fun addSonnerieAttente(idSonnerie: String, sonnerie: SonnerieRecue, context: Context) {
-        AppWakeUp.addSonnerieEnAttente(idSonnerie, sonnerie, context)
+        AppWakeUp.addSonnerieEnAttente(idSonnerie, sonnerie)
     }
 
     fun removeSonnerieEnAttente(idSonnerie: String, musicId: String, context: Context) {
