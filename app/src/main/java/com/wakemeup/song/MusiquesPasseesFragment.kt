@@ -1,6 +1,5 @@
 package com.wakemeup.song
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +21,6 @@ import com.wakemeup.contact.SonnerieRecue
 import com.wakemeup.util.loadFavoris
 import com.wakemeup.util.persisteFavoris
 import com.wakemeup.util.resetFavoris
-import kotlinx.android.synthetic.main.activity_liste_ami.*
 import kotlinx.android.synthetic.main.fragment_musiques_passees.view.*
 
 class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickListener {
@@ -58,10 +56,12 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
             })
     }
 
-    private fun updateMusiqueListe(nouvelleListe : Map<String, SonnerieRecue>){
-        listMusicPass.clear()
-        listMusicPass.putAll(nouvelleListe)
-        mAdapter.notifyDataSetChanged()
+    private fun updateMusiqueListe(state: MusiquesListViewState){
+        if (state.hasMusiquesChanged){
+            listMusicPass.clear()
+            listMusicPass.putAll(state.musiques)
+            mAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun changeSelectedSong(index: Int) {
@@ -98,8 +98,7 @@ class MusiquesPasseesFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
         val btSupprimer = currentView.bouton_supprimer_musiques_passees
         btSupprimer.setOnClickListener {
             if (currentSong != null) {
-                // todo viewModel.removePassee() ???
-                //listMusicPass.remove(currentSong!!)
+                // todo viewModel.removeSonneriePassee()
                 if (listMusicPass.isNullOrEmpty()){
                     currentSong = null
                     currentView.texte_pas_de_musiques_passees.visibility = View.VISIBLE

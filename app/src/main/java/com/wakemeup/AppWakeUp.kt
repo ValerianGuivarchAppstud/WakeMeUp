@@ -44,7 +44,6 @@ class AppWakeUp : Application() {
             context: Context
         ) {
             listSonneriesEnAttente.put(idSonnerie, sonnerie)
-            enregistrementSonnerieEnAttente(context)
             listSonneriesEnAttenteLiveData.value = listSonneriesEnAttente
         }
 
@@ -55,26 +54,20 @@ class AppWakeUp : Application() {
                     SonnerieRecue(listSonneriesEnAttente[idSonnerie]!!)
                 )
                 listSonneriesEnAttente.remove(idSonnerie)
-                enregistrementSonneriePassees(context)
-                enregistrementSonnerieEnAttente(context)
                 listSonneriesEnAttenteLiveData.value = listSonneriesEnAttente
                 listSonneriesPasseeLiveData.value = listSonneriesPassee
+
+                // todo passer le param ecoutee à true dans la bdd
             }
         }
 
-        private fun enregistrementSonnerieEnAttente(context: Context) {
-            val fileOutput =
-                context.openFileOutput(NAME_FILE_SONNERIES_EN_ATTENTE, Context.MODE_PRIVATE)
-            val outputStream = ObjectOutputStream(fileOutput)
-            outputStream.writeObject(listSonneriesEnAttente)
-        }
+        fun removeSonneriePassee(idSonnerie: String, musicId: String, context: Context) {
+            if (listSonneriesPassee.containsKey(idSonnerie)) {
+                listSonneriesPassee.remove(idSonnerie)
+                listSonneriesPasseeLiveData.value = listSonneriesPassee
 
-
-        private fun enregistrementSonneriePassees(context: Context) {
-            val fileOutput =
-                context.openFileOutput(NAME_FILE_SONNERIES_PASSEES, Context.MODE_PRIVATE)
-            val outputStream = ObjectOutputStream(fileOutput)
-            outputStream.writeObject(listSonneriesPassee)
+                // todo enlever la sonnerie dans la bdd
+            }
         }
 
         lateinit var appContext: Context

@@ -82,10 +82,9 @@ private val listener: RecyclerItemClickListener
     }
 
     private fun convertMapToListSortDate() {
-
         sonnerieList?.addAll(sonnerieMap.values)
         //todo tri par date
-        //sonnerieAttenteList.sortBy { }
+        sonnerieList?.sortWith(compareBy { v -> v.sonnerieId })
     }
 
     interface RecyclerItemClickListener {
