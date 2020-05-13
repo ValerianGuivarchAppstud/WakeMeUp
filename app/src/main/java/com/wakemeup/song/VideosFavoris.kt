@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +40,8 @@ class VideosFavoris : Fragment() {
     private var currentSong: Song? = null
 
     private var youTubePlayer: YouTubePlayer? = null
+    private lateinit var btSupprimer : Button
+    private lateinit var btPartage : Button
     private lateinit var textePasDeFavori : TextView
     private val TAG = "VideosFavoris"
     private var ajout = true
@@ -74,7 +77,6 @@ class VideosFavoris : Fragment() {
     //Gestion du clic sur le bouton suprimer
     private fun gestionBoutonSupprimer(){
 
-        val btSupprimer = currentView.findViewById<Button>(R.id.bouton_supprimer_favori)
         btSupprimer.setOnClickListener {
         var listSong = mutableListOf<Any>()
             if (currentSong != null) {
@@ -103,8 +105,6 @@ class VideosFavoris : Fragment() {
                                                                 val idTrouvee = listSong[4] as String
 
                                                                 if (idTrouvee == currentSong!!.id){ // si l'id de la musique trouvé = a celle du currentSong
-
-                                                                    Log.i(TAG,"Video trouvée")
                                                                     var favASupprimer : Favoris? = null
                                                                     for(e in favorisList){
                                                                         if(e.idSong.id == idTrouvee){
@@ -153,7 +153,7 @@ class VideosFavoris : Fragment() {
 
     //Gestion du clic sur le bouton partage
     private fun gestionBoutonParatage(){
-        val btPartage = currentView.findViewById<Button>(R.id.button_partage_favori)
+
         btPartage.setOnClickListener {
             if (AppWakeUp.auth.currentUser!!.isAnonymous) {
                 dialogue.createAlertDialogNotConnected(requireContext(), this.requireActivity() as MainActivity)
@@ -275,6 +275,11 @@ class VideosFavoris : Fragment() {
             favorisList,
             object : FavorisAdaptater.RecyclerItemClickListener {
                 override fun onClickListener(songf: Favoris, position: Int) {
+                    if (youTubePlayerView.visibility == View.GONE) { // rendre le youtubeplayer et les bouton visible
+                        youTubePlayerView.visibility = View.VISIBLE
+                        btSupprimer.visibility = View.VISIBLE
+                        btPartage.visibility = View.VISIBLE
+                    }
                     changeSelectedSong(position)
                     prepareSong(songf.idSong)
                 }
@@ -286,6 +291,7 @@ class VideosFavoris : Fragment() {
 
         currentSong = null
 
+        //Init du youtube player--------------------------------------------------------------------
         youTubePlayerView = currentView.findViewById(R.id.youtube_player_view_favoris)
         lifecycle.addObserver(youTubePlayerView)
 
@@ -297,7 +303,9 @@ class VideosFavoris : Fragment() {
                 }
             }
         })
-        
+        //------------------------------------------------------------------------------------------
+
+
         currentIndex = 0
         favorisList.clear()
         textePasDeFavori = currentView.findViewById(R.id.texte_pas_de_favori)
@@ -307,10 +315,19 @@ class VideosFavoris : Fragment() {
         //---------------------------------------------------------------------------------
 
 
-        //Gestion des boutons--------------
+        //Gestion des boutons-----------------------------------------------------------
+        btSupprimer = currentView.findViewById<Button>(R.id.bouton_supprimer_favori)
+        btPartage = currentView.findViewById<Button>(R.id.button_partage_favori)
         gestionBoutonSupprimer()
         gestionBoutonParatage()
-        //--------------------------------
+        //------------------------------------------------------------------------------
+
+        //Enlever le youyube player et le bouton au debut---
+        youTubePlayerView.visibility = View.GONE
+        btSupprimer.visibility = View.GONE
+        btPartage.visibility = View.GONE
+        //--------------------------------------------------
+
 
         //Initialisation du spinner----------------------------------------------------------------------------
         val spinner = currentView.findViewById<Spinner>(R.id.spinner_trie)

@@ -50,6 +50,8 @@ class VideoFragment : Fragment() {
     private lateinit var currentView: View
     private lateinit var partageView: View
     private lateinit var rechercheView: View
+    private lateinit var btPartage : Button
+    private lateinit var btFavori : Button
 
     private var currentIndex: Int = 0
     private var currentSongLength: Int = 0
@@ -93,11 +95,6 @@ class VideoFragment : Fragment() {
         mAdapter.notifyDataSetChanged()
         mAdapter.selectedPosition = 0
 
-        //Lancer la 1ere video youtube de la liste
-        currentSong = songList[0]
-        changeSelectedSong(0)
-        prepareSong(currentSong)
-        //----------------------------------------
     }
 
 
@@ -339,7 +336,6 @@ class VideoFragment : Fragment() {
 
     //Gestion du clic sur le bouton partage
     private fun gestionBoutonParatage(){
-        val btPartage = currentView.findViewById<Button>(R.id.list_video_partage)
         btPartage.setOnClickListener {
             if (AppWakeUp.auth.currentUser!!.isAnonymous) {
                 dialogue.createAlertDialogNotConnected(requireContext(), this.requireActivity() as MainActivity)
@@ -361,7 +357,7 @@ class VideoFragment : Fragment() {
 
     //Gestion du clic sur le bouton favori
     private fun gestionBoutonFavori(){
-        val btFavori = currentView.findViewById<Button>(R.id.list_video_favori)
+
         btFavori.setOnClickListener {
             if (AppWakeUp.auth.currentUser!!.isAnonymous) {
                 dialogue.createAlertDialogNotConnected(requireContext(), this.requireActivity() as MainActivity)
@@ -435,7 +431,11 @@ class VideoFragment : Fragment() {
         mAdapter = SongAdapter(this.requireContext(),songList,
             object : SongAdapter.RecyclerItemClickListener {
                 override fun onClickListener(song: Song, position: Int) {
-                    //nfirstLaunch = false
+                    if (youTubePlayerView.visibility == View.GONE) { // rendre le youtubeplayer et les bouton visible
+                        youTubePlayerView.visibility = View.VISIBLE
+                        btFavori.visibility = View.VISIBLE
+                        btPartage.visibility = View.VISIBLE
+                    }
                     changeSelectedSong(position)
                     prepareSong(song)
                     saveSongInHistVideo(song)
@@ -447,15 +447,6 @@ class VideoFragment : Fragment() {
 
         //---------------------------------------------------------------------------------
 
-
-        //Gestion des differents boutons--
-        gestionBoutonFavori()
-        gestionBoutonParatage()
-        gestionBoutonSearch()
-        gestionBoutonHistorique()
-        //--------------------------------
-
-
         //Initialisation du YoutubePlayer----------------------------------------------------------
         youTubePlayerView = currentView.findViewById(R.id.youtube_player_view)
         lifecycle.addObserver(youTubePlayerView)
@@ -464,14 +455,27 @@ class VideoFragment : Fragment() {
                 youTubePlayer = ytPlayer
                 if (currentSong != null) {
                     prepareSong(currentSong)
-
-                    //InternalSearchYouTube.test(currentSong!!.id)
-
                 }
             }
         })
 
         //-----------------------------------------------------------------------------------------
+
+        //Gestion des differents boutons----------------------------------------
+        btFavori = currentView.findViewById<Button>(R.id.list_video_favori)
+        btPartage = currentView.findViewById<Button>(R.id.list_video_partage)
+
+        gestionBoutonFavori()
+        gestionBoutonParatage()
+        gestionBoutonSearch()
+        gestionBoutonHistorique()
+        //-----------------------------------------------------------------------
+
+        //Enlever le youyube player et le bouton au debut---
+        youTubePlayerView.visibility = View.GONE
+        btFavori.visibility = View.GONE
+        btPartage.visibility = View.GONE
+        //--------------------------------------------------
 
 
         //Initialisation de la variable dialogue de type DialogueYoutube------------------------
