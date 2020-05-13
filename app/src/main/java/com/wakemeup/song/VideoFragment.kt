@@ -17,17 +17,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.api.services.youtube.model.SearchResult
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.wakemeup.AppWakeUp
 import com.wakemeup.MainActivity
 import com.wakemeup.R
+import com.wakemeup.connect.UserModel
 import com.wakemeup.contact.ListFriendToSendMusicActivity
 import com.wakemeup.util.*
 import kotlinx.android.synthetic.main.fragment_video.*
 import kotlinx.android.synthetic.main.fragment_video.view.*
 import kotlinx.android.synthetic.main.item_list_history.*
+import java.sql.Timestamp
+import java.util.*
 
 
 class VideoFragment : Fragment() {
@@ -35,7 +41,6 @@ class VideoFragment : Fragment() {
     private lateinit var dialogue : DialogueYoutube
     private var isPlaying: Boolean = false
     private val songList = mutableListOf<Song>()
-    private var favorisListe : SongIndex = SongIndex()
     private var historiqueListe : MutableList<String> = mutableListOf()
     private  var historiqueVideoListe : SongIndex = SongIndex()
     private lateinit var mAdapter: SongAdapter
@@ -48,7 +53,6 @@ class VideoFragment : Fragment() {
 
     private var currentIndex: Int = 0
     private var currentSongLength: Int = 0
-    var firstLaunch = true
     private var currentSong: Song? = null
 
     private var youTubePlayer: YouTubePlayer? = null
@@ -152,21 +156,43 @@ class VideoFragment : Fragment() {
     }
 
     private fun gestionFavoris(){
-        //Gestion de la persistance des favoris (sauvgarde les favoris dans un fichier)
-        var index : Int
-        val listeTemp = loadFavoris(this.requireContext())
-        if (listeTemp!=null) {
-            if (listeTemp.index !=0) {
-                favorisListe = listeTemp
+        val referenceUsername =
+            AppWakeUp.database.getReference("Users").child(AppWakeUp.auth.currentUser!!.uid)
+
+        referenceUsername.addValueEventListener(
+            object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val reference =  AppWakeUp.database.getReference("Favoris")
+                    val currentuser = AppWakeUp.auth.currentUser!!
+                    //Initi de la date d'enregistrmeent des favoris-------------------
+                    val calendar : Calendar = Calendar.getInstance()
+
+                    val jour = calendar.get(Calendar.DAY_OF_MONTH)
+                    val mois = calendar.get(Calendar.MONTH) +1
+                    val anne = calendar.get(Calendar.YEAR)
+
+                    val heure = calendar.get(Calendar.HOUR_OF_DAY)
+                    val minute = calendar.get(Calendar.MINUTE)
+                    val seconde = calendar.get(Calendar.SECOND)
+                    //-----------------------------------------------------------------
+
+                    val favoriSave = Favoris("$jour/$mois/$anne/$heure/$minute/$seconde", currentSong!!, currentuser.uid )
+                    var refpush = reference.push()
+                    var key = refpush.key!!
+                    refpush.setValue(favoriSave).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            Log.i("VideoFragment","demande ajoutée")
+                            Log.i("VideoFragment", key)
+                        } else {
+                            Log.i("VideoFragment","erreur demande ajoutée")
+                        }
+                    }
+                }
             }
-        }
-
-        favorisListe.list.add(SongHistorique(favorisListe.index,currentSong!!))
-        favorisListe.index++
-        resetFavoris(this.requireContext())
-        persisteFavoris(this.requireContext(),favorisListe)
+        )
     }
-
 
 
     //Recherche une musique depuis la barre de recherche (id : et_search)
@@ -332,6 +358,7 @@ class VideoFragment : Fragment() {
         }
     }
 
+
     //Gestion du clic sur le bouton favori
     private fun gestionBoutonFavori(){
         val btFavori = currentView.findViewById<Button>(R.id.list_video_favori)
@@ -341,6 +368,10 @@ class VideoFragment : Fragment() {
             } else {
                 if (currentSong!=null) {
                     gestionFavoris()
+
+                    //TODO les mettre sur firebase
+
+
                 }
                 Toast.makeText(
                     requireActivity().application,
@@ -380,13 +411,6 @@ class VideoFragment : Fragment() {
         rechercheView = inflater.inflate(R.layout.dialogue_history, container, false)
         //------------------------------------------------------------------------------------
 
-
-        //Initialisation de la liste des favoris-------------------------------------------------
-        val chargement_des_favoris = loadFavoris(this.requireContext())
-        if (chargement_des_favoris != null) {
-            favorisListe = chargement_des_favoris
-        }
-        //---------------------------------------------------------------------------------------
 
         //Initialisation de la liste contenant l'historique-------------------------------------
         val chargement_historique : MutableList<String>? = loadHistorique(this.requireContext())
@@ -440,6 +464,9 @@ class VideoFragment : Fragment() {
                 youTubePlayer = ytPlayer
                 if (currentSong != null) {
                     prepareSong(currentSong)
+
+                    //InternalSearchYouTube.test(currentSong!!.id)
+
                 }
             }
         })

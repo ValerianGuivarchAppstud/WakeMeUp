@@ -35,7 +35,6 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
 
     private var currentIndex: Int = 0
     private var currentSongLength: Int = 0
-    private var firstLaunch = true
     private var currentSong: Song? = null
 
     private var youTubePlayer: YouTubePlayer? = null
@@ -128,7 +127,6 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
 
         currentIndex = 0
         currentView.pb_main_loader.visibility = View.GONE
-        //------------------------------------------------------------------------
 
         mAdapter.notifyDataSetChanged()
         mAdapter.selectedPosition = 0

@@ -12,10 +12,4 @@ data class DemandeMusique(
     val date : Timestamp
 ) : Serializable{
     constructor(demande: DemandeMusique) : this(demande.userID, demande.username, demande.date)
-
-
-
-
-
-
 }
