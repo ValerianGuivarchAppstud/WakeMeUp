@@ -47,10 +47,13 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         viewModel = ViewModelProvider(this, factory).get(ContactListeViewModel::class.java)
 
          //put all Phonecontacts in viewModel
+        /*
          for (user in getPhoneContacts().values){
                      viewModel.addContact(user)
 
          }
+         */
+
 
         viewModel.getContactsListeLiveData().observe(
             viewLifecycleOwner,

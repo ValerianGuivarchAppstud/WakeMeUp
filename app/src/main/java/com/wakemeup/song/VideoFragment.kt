@@ -1,17 +1,13 @@
 package com.wakemeup.song
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.drawable.Icon
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.contains
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,13 +22,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import com.wakemeup.AppWakeUp
 import com.wakemeup.MainActivity
 import com.wakemeup.R
-import com.wakemeup.connect.UserModel
-import com.wakemeup.contact.ListFriendToSendMusicActivity
 import com.wakemeup.util.*
 import kotlinx.android.synthetic.main.fragment_video.*
 import kotlinx.android.synthetic.main.fragment_video.view.*
-import kotlinx.android.synthetic.main.item_list_history.*
-import java.sql.Timestamp
 import java.util.*
 
 
@@ -52,6 +44,9 @@ class VideoFragment : Fragment() {
     private lateinit var rechercheView: View
     private lateinit var btPartage : Button
     private lateinit var btFavori : Button
+    private lateinit var recyclerView : RecyclerView
+    private var nbMusiquesChargees : String = "20"
+    private var texteCourant : String = "musique"
 
     private var currentIndex: Int = 0
     private var currentSongLength: Int = 0
@@ -68,12 +63,12 @@ class VideoFragment : Fragment() {
         mAdapter.notifyItemChanged(currentIndex)
     }
 
-    private fun getSongList(query: String) {
+    private fun getSongList(query: String, nbRecherche : String) {
 
         if (query.isNotEmpty()) {
             SearchYouTube(this).execute(
                 query,
-                "20"
+                nbRecherche
             )//TODO ajout de settings pour paramêtrer le nb max de chanson à afficher
         }
 
@@ -163,6 +158,7 @@ class VideoFragment : Fragment() {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val reference =  AppWakeUp.database.getReference("Favoris")
                     val currentuser = AppWakeUp.auth.currentUser!!
+
                     //Initi de la date d'enregistrmeent des favoris-------------------
                     val calendar : Calendar = Calendar.getInstance()
 
@@ -208,7 +204,9 @@ class VideoFragment : Fragment() {
             .setPositiveButton(R.string.ok) { _, _ ->
                 val search: String = view.findViewById<EditText>(R.id.et_search).text.toString().trim()
                 if (search.isNotEmpty()) {
-                    getSongList(search)
+                    nbMusiquesChargees = "20"
+                    texteCourant = search
+                    getSongList(texteCourant, nbMusiquesChargees)
                     //Gestion de la persistance de l'historique------------------
                     gestionHistorique(search)
                     //-----------------------------------------------------------
@@ -241,7 +239,10 @@ class VideoFragment : Fragment() {
         rAdapter = RechercheAdaptateur(parametre,
             object : RechercheAdaptateur.RecyclerItemClickListener{
                 override fun onClickListener(recherche : String, position: Int){
-                    getSongList(recherche)
+
+                    nbMusiquesChargees = "20"
+                    texteCourant = recherche
+                    getSongList(recherche,nbMusiquesChargees)
                     dialogueSearch.hide()
                 }
             }
@@ -292,6 +293,11 @@ class VideoFragment : Fragment() {
             historiqueVideoListe.list,
             object : SongHistoriqueAdaptater.RecyclerItemClickListener{
                 override fun onClickListener(song : SongHistorique, position: Int){
+                    if (youTubePlayerView.visibility == View.GONE) { // rendre le youtubeplayer et les bouton visible
+                        youTubePlayerView.visibility = View.VISIBLE
+                        btFavori.visibility = View.VISIBLE
+                        btPartage.visibility = View.VISIBLE
+                    }
                     prepareSong(song.song)
                     dialogueHistory.hide()
                 }
@@ -415,6 +421,7 @@ class VideoFragment : Fragment() {
         }
         //---------------------------------------------------------------------------------------
 
+
         //Initialisation de la liste contenant l'historique-------------------------------------
         val chargement_historiqueVideo = loadHistoriqueVideo(this.requireContext())
         if (chargement_historiqueVideo != null) {
@@ -424,10 +431,10 @@ class VideoFragment : Fragment() {
 
 
         // iv_play.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.selector_play))
-        getSongList("musique")
+        getSongList(texteCourant,"20")
 
 
-        //Initialisation du recyclerView (Le principal, pour les vidéos youtube)------------
+        //Initialisation du recyclerView (Le principal, pour les vidéos youtube)---------------------------------
         mAdapter = SongAdapter(this.requireContext(),songList,
             object : SongAdapter.RecyclerItemClickListener {
                 override fun onClickListener(song: Song, position: Int) {
@@ -441,11 +448,26 @@ class VideoFragment : Fragment() {
                     saveSongInHistVideo(song)
                 }
             })
-        val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycler_list_video)
+        recyclerView = currentView.findViewById(R.id.recycler_list_video)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
+        //--------------------------------------------------------------------------------------------------------
 
-        //---------------------------------------------------------------------------------
+
+
+        //Si on est a la fin du recycler view---------------------------------------------------
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    nbMusiquesChargees = (nbMusiquesChargees.toInt() + 20).toString()
+                    getSongList(texteCourant,nbMusiquesChargees)
+                }
+            }
+        })
+        //---------------------------------------------------------------------------------------
+
+
 
         //Initialisation du YoutubePlayer----------------------------------------------------------
         youTubePlayerView = currentView.findViewById(R.id.youtube_player_view)
