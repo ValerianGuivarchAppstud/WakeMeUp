@@ -5,23 +5,20 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.neocampus.repo.ViewModelFactory
-import androidx.recyclerview.widget.RecyclerView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.wakemeup.AppWakeUp
 import com.wakemeup.R
 import com.wakemeup.contact.SonnerieRecue
-import com.wakemeup.util.resetFavoris
-import kotlinx.android.synthetic.main.activity_reveil_edit.*
 import kotlinx.android.synthetic.main.fragment_musiques_attente.view.*
-import java.util.*
 
 class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickListener {
 
@@ -35,7 +32,6 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
 
     private var currentIndex: Int = 0
     private var currentSongLength: Int = 0
-    private var firstLaunch = true
     private var currentSong: Song? = null
 
     private var youTubePlayer: YouTubePlayer? = null
@@ -49,7 +45,7 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
         val factory = ViewModelFactory(AppWakeUp.repository)
         viewModel = ViewModelProvider(this, factory).get(MusiquesListesViewModel::class.java)
         viewModel.getListeAttenteLiveData().observe(viewLifecycleOwner, Observer { list ->
-            updateAttenteListe(list)
+            updateAttenteListe(list.musiques)
         })
     }
 
@@ -98,16 +94,16 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
 
 
         //Initialisation du recyclerView (Le principal, pour les vidéos youtube)----------------------------
-      /*  mAdapter =  SongAdapter(
-            this.requireContext(),
-            songList,
-            object : SongAdapter.RecyclerItemClickListener {
-                override fun onClickListener(song: Song, position: Int) {
-                    changeSelectedSong(position)
-                    prepareSong(song)
-                }
-            })*/
-        mAdapter =  SonnerieAdapter(this.requireContext(), sonnerieAttenteMap,this)
+        /*  mAdapter =  SongAdapter(
+              this.requireContext(),
+              songList,
+              object : SongAdapter.RecyclerItemClickListener {
+                  override fun onClickListener(song: Song, position: Int) {
+                      changeSelectedSong(position)
+                      prepareSong(song)
+                  }
+              })*/
+        mAdapter =  SonnerieAdapter(this.requireContext(), sonnerieAttenteMap.values.toList(),this)
         val recyclerView = currentView.recycler_list_video_musiques_en_attente
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
@@ -128,7 +124,6 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
 
         currentIndex = 0
         currentView.pb_main_loader.visibility = View.GONE
-        //------------------------------------------------------------------------
 
         mAdapter.notifyDataSetChanged()
         mAdapter.selectedPosition = 0

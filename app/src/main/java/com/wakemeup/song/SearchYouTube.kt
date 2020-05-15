@@ -92,6 +92,18 @@ object InternalSearchYouTube {
             .setQ(searchWord).setMaxResults(maxResult.toLong())
             .execute()
 
+
+
         return response.items
     }
+
+    /*fun test(id : String) {
+        val youtubeService = service
+        val request = youtubeService.search()
+            .list("snippet").setType("video")
+        Log.i("SearchYoutube1", "$id")
+        val response = request.setKey(DEVELOPER_KEY).setChannelId(id).execute()
+
+        Log.i("SearchYoutube", "${response.items[0].snippet.channelId}")
+    }*/
 }

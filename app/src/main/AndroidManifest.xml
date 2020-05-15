@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
+
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <permission
@@ -82,7 +83,16 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".reveil.AlertReceiver" />
+        <receiver
+            android:name=".reveil.AlertReceiver"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

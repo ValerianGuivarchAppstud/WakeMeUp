@@ -20,6 +20,7 @@
         android:id="@+id/youtube_player_view_favoris"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:showFullScreenButton="false" />
 
     <LinearLayout
@@ -34,6 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:visibility="gone"
             android:text="@string/partager" />
 
         <Button
@@ -42,13 +44,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:visibility="gone"
             android:text="@string/supprimer" />
 
 
     </LinearLayout>
     <Spinner
         android:id="@+id/spinner_trie"
-        android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:pointerIcon="text"
@@ -86,6 +88,7 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
+                android:scrollbars="vertical"
                 tools:listitem="@layout/item_list_video" />
 
 

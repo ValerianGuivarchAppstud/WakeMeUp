@@ -20,13 +20,13 @@
     <string name="logo">LOGO</string>
     <string name="login_failed">Echec de la connection</string>
 
-    <string name="lundi">lun.</string>
-    <string name="mardi">mar.</string>
-    <string name="mercredi">mer.</string>
-    <string name="jeudi">jeu.</string>
-    <string name="vendredi">ven.</string>
-    <string name="samedi">sam.</string>
-    <string name="dimanche">dim.</string>
+    <string name="lundi">lun</string>
+    <string name="mardi">mar</string>
+    <string name="mercredi">mer</string>
+    <string name="jeudi">jeu</string>
+    <string name="vendredi">ven</string>
+    <string name="samedi">sam</string>
+    <string name="dimanche">dim</string>
     <string name="snooze">Snooze</string>
     <string name="stop">Stop</string>
     <string name="logo_video">Logo vidéo</string>

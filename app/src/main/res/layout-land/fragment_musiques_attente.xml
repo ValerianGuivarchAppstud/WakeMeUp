@@ -35,7 +35,7 @@
         android:layout_centerVertical="true"
         android:textSize="20sp"
         android:layout_toRightOf="@+id/youtube_player_view_musiques_attente"
-        android:layout_margin="70dp"
+        android:layout_margin="30dp"
         android:textAlignment="center"
         />
 

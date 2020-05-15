@@ -21,6 +21,7 @@
         android:layout_width="350dp"
         android:layout_height="200dp"
         app:showFullScreenButton="false"
+        android:visibility="gone"
         android:layout_below="@+id/title_favoris">
     </com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView>
 
@@ -32,6 +33,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/youtube_player_view_favoris"
         android:text="@string/partager"
+        android:visibility="gone"
         android:textSize="30sp" />
 
     <Button
@@ -42,6 +44,7 @@
         android:layout_below="@+id/youtube_player_view_favoris"
         android:layout_toRightOf="@+id/button_partage_favori"
         android:text="@string/supprimer"
+        android:visibility="gone"
         android:textSize="30sp" />
 
     <Spinner
@@ -83,6 +86,7 @@
         tools:listitem="@layout/item_list_video"
         android:layout_toRightOf="@+id/youtube_player_view_favoris"
         android:layout_below="@+id/spinner_trie"
+        android:scrollbars="vertical"
         android:layout_centerHorizontal="true"
         />
 

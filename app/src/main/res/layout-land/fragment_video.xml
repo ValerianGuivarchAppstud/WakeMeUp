@@ -13,6 +13,7 @@
         android:layout_width="350dp"
         android:layout_height="200dp"
         app:showFullScreenButton="false"
+        android:visibility="gone"
         android:layout_below="@+id/title_favoris">
     </com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView>
 
@@ -24,6 +25,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/youtube_player_view"
         android:text="@string/partager"
+        android:visibility="gone"
         android:textSize="30sp" />
 
     <Button
@@ -34,6 +36,7 @@
         android:layout_below="@+id/youtube_player_view"
         android:layout_toRightOf="@+id/list_video_partage"
         android:text="@string/favori"
+        android:visibility="gone"
         android:textSize="30sp" />
 
     <ProgressBar
@@ -57,8 +60,7 @@
         android:layout_toRightOf="@+id/youtube_player_view"
         android:layout_below="@+id/title_favoris"
         android:layout_centerHorizontal="true"
-
-
+        android:scrollbars="vertical"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

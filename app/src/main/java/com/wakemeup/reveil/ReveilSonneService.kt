@@ -68,6 +68,7 @@ class ReveilSonneService : Service() {
         i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         this.startActivity(i)
 
+
         return START_NOT_STICKY
     }
 
