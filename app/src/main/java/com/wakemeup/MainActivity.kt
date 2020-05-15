@@ -176,8 +176,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                                         )
                                                     AppWakeUp.addSonnerieEnAttente(
                                                         idMusicSend,
-                                                        music,
-                                                        this@MainActivity
+                                                        music
                                                     )
                                                     Log.e(
                                                         "REVEIL MUSIC",
@@ -258,6 +257,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
             */
+
+
+            //TEST 2
+
+            /*val song1 = Song("idsong1", "titlesong1","artistsong1","urlsong1", 3,0,1)
+            val sonnerie1 = SonnerieRecue(
+                "idMusicSend",
+                "senderId",
+                "senderName",
+                "receiverId",
+                song1,
+                false
+            )
+            AppWakeUp.addSonnerieEnAttente("idMusicSend", sonnerie1)
+*/
+
         }
     }
 
