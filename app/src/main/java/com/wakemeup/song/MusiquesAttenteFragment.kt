@@ -27,7 +27,7 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
     private val sonnerieAttenteMap = mutableMapOf<String, SonnerieRecue>()
 
     private lateinit var mAdapter: SonnerieAdapter
-    private lateinit var youTubePlayerView: YouTubePlayerView
+    //private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
 
     private var currentIndex: Int = 0
@@ -65,7 +65,7 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
     }
 
     //lance la video reliée au parametre "song"
-    private fun prepareSong(song: Song?) {
+    /*private fun prepareSong(song: Song?) {
         //todo vérifier bug ici, si on sélectionne la musique trop vite
         if (song != null) {
 
@@ -81,7 +81,7 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
                 this.isPlaying = true
             }
         }
-    }
+    }*/
 
 
     override fun onCreateView(
@@ -110,7 +110,7 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
         //---------------------------------------------------------------------------------------------------
 
 
-        youTubePlayerView = currentView.youtube_player_view_musiques_attente
+        /*youTubePlayerView = currentView.youtube_player_view_musiques_attente
         lifecycle.addObserver(youTubePlayerView)
 
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
@@ -120,10 +120,10 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
                     prepareSong(currentSong)
                 }
             }
-        })
+        })*/
 
         currentIndex = 0
-        currentView.pb_main_loader.visibility = View.GONE
+        //currentView.pb_main_loader.visibility = View.GONE
 
         mAdapter.notifyDataSetChanged()
         mAdapter.selectedPosition = 0
@@ -147,7 +147,7 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
 
     override fun onClickSonnerieListener(sonnerie: SonnerieRecue, position: Int) {
         changeSelectedSong(position)
-        prepareSong(sonnerie.song)
+        //prepareSong(sonnerie.song)
 
         viewModel.removeSonnerieEnAttente(sonnerie.sonnerieId, sonnerie.song.id, requireContext())
         //  mettre la sonnerie dans PASSEES
