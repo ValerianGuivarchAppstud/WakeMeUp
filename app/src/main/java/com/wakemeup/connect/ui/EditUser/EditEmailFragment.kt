@@ -27,11 +27,12 @@ import kotlinx.android.synthetic.main.fragment_update_email.progressbar
 import kotlinx.android.synthetic.main.fragment_update_username.*
 
 private lateinit var context: Context
-class EditEmailFragment(val name : String) : Fragment() {
+
+class EditEmailFragment(val name: String) : Fragment() {
 
 
     companion object {
-        fun newInstance(ctx : Context, name : String): EditEmailFragment {
+        fun newInstance(ctx: Context, name: String): EditEmailFragment {
             context = ctx
             return EditEmailFragment(name)
         }
@@ -52,21 +53,21 @@ class EditEmailFragment(val name : String) : Fragment() {
         layoutUpdateEmail.visibility = View.GONE
 
 
-        button_authenticate.setOnClickListener{
-            val password =  edit_text_password.text.toString().trim()
+        button_authenticate.setOnClickListener {
+            val password = edit_text_password.text.toString().trim()
 
-            if(password.isEmpty()){
+            if (password.isEmpty()) {
                 edit_text_password.error = "Mot de passe nécessaire"
                 edit_text_password.requestFocus()
                 return@setOnClickListener
             }
 
             progressbar.visibility = View.VISIBLE
-            AppWakeUp.auth.currentUser?.let{ user ->
+            AppWakeUp.auth.currentUser?.let { user ->
                 val credential = EmailAuthProvider.getCredential(user.email!!, password)
-                user.reauthenticate(credential).addOnCompleteListener{ task ->
+                user.reauthenticate(credential).addOnCompleteListener { task ->
                     progressbar.visibility = View.GONE
-                    when{
+                    when {
                         task.isSuccessful -> {
                             layoutPassword.visibility = View.GONE
                             layoutUpdateEmail.visibility = View.VISIBLE
@@ -75,21 +76,25 @@ class EditEmailFragment(val name : String) : Fragment() {
                             edit_text_password.error = "Invalide Password"
                             edit_text_password.requestFocus()
                         }
-                        else -> Toast.makeText(context, "Une erreur est survenue", Toast.LENGTH_SHORT).show()
+                        else -> Toast.makeText(
+                            context,
+                            "Une erreur est survenue",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
         }
 
-        button_update.setOnClickListener{view ->
+        button_update.setOnClickListener { view ->
             val email = edit_text_email.text.toString().trim()
-            if (email.isEmpty()){
-                edit_text_email.error="Email requis"
+            if (email.isEmpty()) {
+                edit_text_email.error = "Email requis"
                 edit_text_email.requestFocus()
                 return@setOnClickListener
             }
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                edit_text_email.error="Email invalide"
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                edit_text_email.error = "Email invalide"
                 edit_text_email.requestFocus()
                 return@setOnClickListener
             }
@@ -97,8 +102,8 @@ class EditEmailFragment(val name : String) : Fragment() {
             AppWakeUp.auth.currentUser?.let { user ->
                 progressbar.visibility = View.GONE
                 AppWakeUp.auth.currentUser!!.verifyBeforeUpdateEmail(email)
-                    .addOnCompleteListener{task ->
-                        if(task.isSuccessful){
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
                             val firebaseUser = AppWakeUp.auth.currentUser!!
                             val userId = firebaseUser.uid
                             val reference = AppWakeUp.database.getReference("Users").child(userId)
@@ -110,13 +115,18 @@ class EditEmailFragment(val name : String) : Fragment() {
                                 email
                             )
                             reference.setValue(newUser)
-                            Toast.makeText(context, "un email de confirmation vous a été envoyé", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "un email de confirmation vous a été envoyé",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             //retour sur la page d'edit
                             val intent = Intent(activity, ConnectActivity::class.java)
-                            intent.putExtra("email",email)
+                            intent.putExtra("email", email)
                             startActivity(intent)
-                        }else{
-                            Toast.makeText(context, "Une erreur est survenue", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(context, "Une erreur est survenue", Toast.LENGTH_SHORT)
+                                .show()
                         }
 
                     }
@@ -124,23 +134,5 @@ class EditEmailFragment(val name : String) : Fragment() {
         }
 
 
-
-
     }
 }
-/* val firebaseUser = AppWakeUp.auth.currentUser!!
-                            val userId = firebaseUser.uid
-                            val reference = AppWakeUp.database.getReference("Users").child(userId)
-                            val newUser = UserModel(
-                                userId,
-                                "",
-                                firebaseUser.phoneNumber ?: "",
-                                "test",
-                                email
-                            )
-                            reference.setValue(newUser)
-                            val sign : SignupActivity = SignupActivity()
-                            sign.sendEmailConfirm()
-
-                            AppWakeUp.auth.currentUser
-                            */

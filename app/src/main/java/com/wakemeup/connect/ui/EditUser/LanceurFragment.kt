@@ -10,10 +10,10 @@ class LanceurFragment() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_user2)
 
-        val extras : Bundle = intent.extras!!
+        val extras: Bundle = intent.extras!!
         val categorie = extras.getString("categorie")
         val name = extras.getString("name")
-        when (categorie){
+        when (categorie) {
             "email" -> {
                 var fragment = EditEmailFragment.newInstance(this, name!!)
                 supportFragmentManager.beginTransaction().replace(R.id.layout_fragment, fragment)
@@ -21,23 +21,21 @@ class LanceurFragment() : AppCompatActivity() {
             }
             "password" -> {
                 var fragmentPassword = EditPasswordFragment.newInstance(this)
-                supportFragmentManager.beginTransaction().replace(R.id.layout_fragment, fragmentPassword)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.layout_fragment, fragmentPassword)
                     .commit()
             }
             "username" -> {
                 var fragmentUsername = EditUsernameFragment.newInstance(this)
-                supportFragmentManager.beginTransaction().replace(R.id.layout_fragment, fragmentUsername)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.layout_fragment, fragmentUsername)
                     .commit()
 
             }
         }
 
 
-
-
     }
-
-
 
 
 }

@@ -21,13 +21,6 @@ private lateinit var context: Context
 
 class EditPasswordFragment : Fragment() {
 
-
-    interface passwordInterface {
-        fun onClickShare()
-    }
-
-    var listener: passwordInterface? = null
-
     companion object {
         fun newInstance(ctx: Context): EditPasswordFragment {
             context = ctx
@@ -96,13 +89,11 @@ class EditPasswordFragment : Fragment() {
                 edit_password2.requestFocus()
                 return@setOnClickListener
             }
-            if (password1.length <6) {
+            if (password1.length < 6) {
                 edit_password.error = "Le mot de passe doit contenir au moins 6 caractères"
                 edit_password.requestFocus()
                 return@setOnClickListener
             }
-
-
             if (password1 != password2) {
                 edit_password.error = "Mots de passe différents"
                 edit_password.requestFocus()
