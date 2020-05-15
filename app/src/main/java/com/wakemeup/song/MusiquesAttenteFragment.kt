@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -18,12 +19,10 @@ import kotlinx.android.synthetic.main.fragment_musiques_attente.view.*
 
 class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickListener {
 
-    private val sonnerieAttenteMap = mutableMapOf<String, SonnerieRecue>()
+    private val sonnerieAttenteList = mutableListOf<SonnerieRecue>()
 
     private lateinit var mAdapter: SonnerieAdapter
     private lateinit var currentView: View
-
-    private var currentIndex: Int = 0
 
     private lateinit var viewModel: MusiquesListesViewModel
 
@@ -31,7 +30,7 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mAdapter =  SonnerieAdapter(this.requireContext(), sonnerieAttenteMap,this)
+        mAdapter =  SonnerieAdapter(this.requireContext(), sonnerieAttenteList,this)
         val recyclerView = currentView.recycler_list_video_musiques_en_attente
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
@@ -46,9 +45,12 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
     private fun updateAttenteListe(state: MusiquesListViewState) {
         Log.e("update", "updateAttenteListe = " + state.musiques)
         if (state.hasMusiquesChanged){
-            sonnerieAttenteMap.clear()
-            sonnerieAttenteMap.putAll(state.musiques)
+            sonnerieAttenteList.clear()
+            sonnerieAttenteList.addAll(state.musiques.values)
+            //todo tri par date
+            sonnerieAttenteList.sortWith(compareBy { v -> v.sonnerieId })
             mAdapter.notifyDataSetChanged()
+            currentView.texte_pas_de_musiques_en_attente.visibility = INVISIBLE
         }
     }
 
@@ -60,19 +62,6 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
     ): View? {
         super.onCreate(savedInstanceState)
         currentView = inflater.inflate(R.layout.fragment_musiques_attente, container, false)
-
-
-
-
-
-
-
-//        currentIndex = 0
-        //------------------------------------------------------------------------
-
-//        mAdapter.notifyDataSetChanged()
-//        mAdapter.selectedPosition = 0
-
         return currentView
     }
 

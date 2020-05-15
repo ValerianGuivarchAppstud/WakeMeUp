@@ -263,7 +263,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             //TEST 2
 
-            val song1 = Song("idsong1", "titlesong1","artistsong1","urlsong1", 3,0,1)
+            /*val song1 = Song("idsong1", "titlesong1","artistsong1","urlsong1", 3,0,1)
             val sonnerie1 = SonnerieRecue(
                 "idMusicSend",
                 "senderId",
@@ -273,7 +273,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 false
             )
             AppWakeUp.addSonnerieEnAttente("idMusicSend", sonnerie1)
-
+*/
 
         }
     }
