@@ -13,14 +13,9 @@ import com.wakemeup.R
 import com.wakemeup.connect.UserModel
 import kotlinx.android.synthetic.main.fragment_update_username.*
 
-private lateinit var context : Context
+private lateinit var context: Context
+
 class EditUsernameFragment : Fragment() {
-
-    interface usernameInterface {
-        fun onClickShare()
-    }
-
-    var listener: usernameInterface? = null
 
     companion object {
         fun newInstance(ctx: Context): EditUsernameFragment {
@@ -34,18 +29,16 @@ class EditUsernameFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_update_username, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         button_update.setOnClickListener {
             var newName = edit_text_username.text.toString()
 
-            if(newName ==""){
+            if (newName == "") {
                 edit_text_username.error = "Veuillez entrer un nom"
                 edit_text_username.requestFocus()
                 return@setOnClickListener

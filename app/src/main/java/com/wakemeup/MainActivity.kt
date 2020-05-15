@@ -27,17 +27,19 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
+import com.wakemeup.AppWakeUp.Companion.listSonneriesEnAttente
+import com.wakemeup.AppWakeUp.Companion.listSonneriesPassee
 import com.wakemeup.connect.ConnectActivity
 
 import com.wakemeup.connect.UserModel
 import com.wakemeup.contact.ContactsListeFragment
+import com.wakemeup.contact.SonnerieFirebase
+
+import com.wakemeup.contact.SonneriePassee
 import com.wakemeup.contact.SonnerieRecue
 import com.wakemeup.reveil.ReveilsListeFragment
 import com.wakemeup.share.DemanderMusique
-import com.wakemeup.song.MusiquesRecuesFragment
-import com.wakemeup.song.Song
-import com.wakemeup.song.VideoFragment
-import com.wakemeup.song.VideosFavoris
+import com.wakemeup.song.*
 import java.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.collections.HashMap
@@ -60,137 +62,74 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var fragmentMusiquesRecues: MusiquesRecuesFragment? = null
 
     private var currentUser: UserModel? = null
+    private var nbSonnerieEnAttente = 0
+    private var listeSonnerie = mutableListOf<SonnerieRecue>()
 
 
     private fun updateMusiqueEnAttente() {
-        //SONNERIE
-        var idMusicSend = ""
-        var senderId = ""
-        var senderName = ""
-        var receiverId = ""
-        var listen = false
 
-        //SONG
-        var id = ""
-        var artworkUrl = ""
-        var artiste = ""
-        var durationL: Long = 0
-        var duration = 0
-        var lancementL: Long = 0
-        var lancement = 0
-        var title = ""
+
         AppWakeUp.database.getReference("Sonnerie")
             .addValueEventListener(
                 object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {
-
                     }
+
                     override fun onDataChange(p0: DataSnapshot) {
-                        //boucle sur les id des sonneries
+                        //boucle sur les sonneries
                         for (snapshot in p0.children) {
-                            if (snapshot.key != null) {
-                                if (!AppWakeUp.listSonneriesEnAttente.containsKey(idMusicSend)) {
-                                    val refSonnerie = AppWakeUp.database.getReference("Sonnerie")
-                                        .child(snapshot.key as String)
-                                    refSonnerie.addValueEventListener(
+                            var sonnerie = snapshot.getValue(SonnerieFirebase::class.java)
+
+                            //On garde que les sonneries qui nous sont destinées
+                            if (sonnerie!!.idReceiver == AppWakeUp.auth.currentUser!!.uid) {
+                                var reference =
+                                    AppWakeUp.database.getReference("Song").addValueEventListener(
                                         object : ValueEventListener {
                                             override fun onCancelled(p0: DatabaseError) {}
 
                                             override fun onDataChange(p0: DataSnapshot) {
-                                                for (snapshot2 in p0.children) {
-                                                    //boucle sur les champs d'une sonnerie
-                                                    idMusicSend = snapshot.key!!
-                                                    if (snapshot2.key != null) {
-                                                        when (snapshot2.key) {
-                                                            "listen" -> listen =
-                                                                snapshot2.value as Boolean
-                                                            "senderId" -> senderId =
-                                                                snapshot2.value as String
-                                                            "receiverId" -> receiverId =
-                                                                snapshot2.value as String
-                                                            "senderName" -> senderName =
-                                                                snapshot2.value as String
-                                                            "song" -> {
-                                                                val refSong =
-                                                                    AppWakeUp.database.getReference(
-                                                                        "Sonnerie"
-                                                                    )
-                                                                        .child(idMusicSend)
-                                                                        .child("song")
+                                                //on boucle sur les sons
+                                                for (snapshot in p0.children) {
+                                                    var songFirebase =
+                                                        snapshot.getValue(Song::class.java)
+                                                    if (songFirebase!!.id == sonnerie.IdSong) {
+                                                        if (sonnerie.ecoutee == false) {
+                                                            nbSonnerieEnAttente++
+                                                            var sonnerieRecue = SonnerieRecue(
+                                                                sonnerie.IdSong,
+                                                                sonnerie.senderId,
+                                                                sonnerie.senderName,
+                                                                sonnerie.idReceiver,
+                                                                songFirebase,
+                                                                sonnerie.ecoutee
+                                                            )
+                                                            listSonneriesEnAttente.put(
+                                                                sonnerieRecue.sonnerieId,
+                                                                sonnerieRecue
+                                                            )
+                                                            updateHotCount()
+                                                        } else {
+                                                            var sonneriePassee = SonnerieRecue(
+                                                                sonnerie.IdSong,
+                                                                sonnerie.senderId,
+                                                                sonnerie.senderName,
+                                                                sonnerie.idReceiver,
+                                                                songFirebase,
+                                                                sonnerie.ecoutee
+                                                            )
+                                                            listSonneriesPassee.put(
+                                                                sonneriePassee.sonnerieId,
+                                                                sonneriePassee
+                                                            )
 
-                                                                refSong.addValueEventListener(
-                                                                    object : ValueEventListener {
-                                                                        override fun onCancelled(p0: DatabaseError) {
-
-                                                                        }
-
-                                                                        override fun onDataChange(p0: DataSnapshot) {
-                                                                            //boucle sur les champs d'un song
-                                                                            for (snapshot3 in p0.children) {
-                                                                                if (snapshot3.key != null) {
-                                                                                    when (snapshot3.key) {
-                                                                                        "id" -> id =
-                                                                                            snapshot3.value as String
-                                                                                        "artworkUrl" -> artworkUrl =
-                                                                                            snapshot3.value as String
-                                                                                        "duration" -> {
-                                                                                            durationL =
-                                                                                                snapshot3.value as Long
-                                                                                            var duration =
-                                                                                                durationL.toInt()
-                                                                                        }
-                                                                                        "title" -> title =
-                                                                                            snapshot3.value as String
-                                                                                        "lancement" -> {
-                                                                                            lancementL =
-                                                                                                snapshot3.value as Long
-                                                                                            lancement =
-                                                                                                lancementL.toInt()
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                )
-                                                            }
                                                         }
                                                     }
-                                                }
-                                                //On garde que les sonneries qui nous sont destinées
-                                                if (receiverId == AppWakeUp.auth.currentUser!!.uid && listen==false) {
-                                                    var song = Song(
-                                                        id,
-                                                        title,
-                                                        artiste,
-                                                        artworkUrl,
-                                                        duration,
-                                                        lancement
-                                                    )
-                                                    val music =
-                                                        SonnerieRecue(
-                                                            idMusicSend,
-                                                            senderId,
-                                                            senderName,
-                                                            receiverId,
-                                                            song,
-                                                            listen
-                                                        )
-                                                    AppWakeUp.addSonnerieEnAttente(
-                                                        idMusicSend,
-                                                        music,
-                                                        this@MainActivity
-                                                    )
-                                                    Log.e(
-                                                        "REVEIL MUSIC",
-                                                        AppWakeUp.listSonneriesEnAttente.size.toString()
-                                                    )
-                                                    updateHotCount()
                                                 }
                                             }
                                         }
                                     )
-                                }
+
+
                             }
                         }
                     }
@@ -198,7 +137,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             )
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+
+
+override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -240,18 +181,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
                 )
 
-            /*
             //TEST
+/*
             val song1 : Song = Song("idsong1", "titlesong1","artistsong1","urlsong1", 3,0,1)
+            //val sonnerie2 : SonnerieFirebase = SonnerieFirebase("idid3","sendg",false,"rdec","F0fgLaCFxJdV0EoV7p8xLXkaO8B3","ok")
+
+
+
             val song2 : Song = Song("idsong2", "titlesong2","artistsong2","urlsong2", 3,0,2)
             val song3 : Song = Song("idsong3", "titlesong3","artistsong3","urlsong3", 3,0,3)
-            val sonnerie1 : SonnerieEnAttente = SonnerieEnAttente("idpaul","null","F0fgLaCFxJdV0EoV7p8xLXkaO8B3",song1, false)
-            val sonnerie2 : SonnerieEnAttente = SonnerieEnAttente("idpierre","null","F0fgLaCFxJdV0EoV7p8xLXkaO8B3", song2,true)
-            val sonnerie3 : SonnerieEnAttente = SonnerieEnAttente("idjean","null","idEnzo", song2, false)
 
 
-                val reference =  AppWakeUp.database.getReference("Sonnerie")
-                reference.child("IdSonnerie1").setValue(sonnerie1).addOnCompleteListener {
+
+                val reference =  AppWakeUp.database.getReference("Song")
+                reference.child("jVm1NbrXaXc&t=62s").setValue(song1).addOnCompleteListener {
                     if (it.isSuccessful) {
                         Log.i("MainActivity","Musique ajoutée")
 
@@ -259,7 +202,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         Log.i("MainActivity","erreur musique ajoutée")
                     }
                 }
-            */
+*/
         }
     }
 
@@ -280,7 +223,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             viewIconeMusiquesEnAttente.setImageResource(R.drawable.icon_music_no)
             //viewIconeMusiquesEnAttente.visibility = View.INVISIBLE
         } else {
-            updateMusiqueEnAttente()
+            //updateMusiqueEnAttente()
             updateHotCount()
         }
         rootView.setOnClickListener {
@@ -292,7 +235,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun updateHotCount() {
 
-        val newHotNumber = AppWakeUp.listSonneriesEnAttente.size
+        val newHotNumber = nbSonnerieEnAttente//AppWakeUp.listSonneriesEnAttente.size
         var newNotif = false
         for (musicReceived in AppWakeUp.listSonneriesEnAttente.values) {
             //if (musicReceived.notificationRecu) {

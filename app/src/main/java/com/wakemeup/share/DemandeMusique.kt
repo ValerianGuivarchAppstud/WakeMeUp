@@ -13,9 +13,4 @@ data class DemandeMusique(
 ) : Serializable{
     constructor(demande: DemandeMusique) : this(demande.userID, demande.username, demande.date)
 
-
-
-
-
-
 }
