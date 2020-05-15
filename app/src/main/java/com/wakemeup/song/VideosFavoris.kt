@@ -44,7 +44,7 @@ class VideosFavoris : Fragment() {
     private lateinit var btPartage : Button
     private lateinit var textePasDeFavori : TextView
     private val TAG = "VideosFavoris"
-    private var ajout = true
+    private var ajout = true //permet de regler un bug, quand on apelle "removeValue()" , pour savoir si on charge ou si on supprime des favoris
 
 
     private fun changeSelectedSong(index: Int) {
@@ -139,6 +139,13 @@ class VideosFavoris : Fragment() {
                     "Vidéo Suprimmée",
                     Toast.LENGTH_SHORT
                 ).show()
+                if (youTubePlayerView.visibility == View.VISIBLE) { // rendre le youtubeplayer et les bouton visible
+                    this.isPlaying = false
+                    youTubePlayer?.pause()
+                    youTubePlayerView.visibility = View.GONE
+                    btSupprimer.visibility = View.GONE
+                    btPartage.visibility = View.GONE
+                }
             }
             else{
                 Toast.makeText(
@@ -219,11 +226,13 @@ class VideosFavoris : Fragment() {
                                                                 "index" -> index =
                                                                     snapshot2.value as String
                                                                 "idSong" -> {
+                                                                    //Charge l'entierment de "idSong" (le song sauvgarder dans la data classe favoris)---
                                                                     var mapSong =
                                                                         snapshot2.value as HashMap<*, *>
                                                                     for (elem in mapSong.values) {
                                                                         listSong.add(elem)
                                                                     }
+
                                                                     song = Song(
                                                                         listSong[4] as String,
                                                                         listSong[5] as String,
@@ -233,6 +242,7 @@ class VideosFavoris : Fragment() {
                                                                         (listSong[3] as Long).toInt()
                                                                     )
                                                                     listSong.clear()
+                                                                    //--------------------------------------------------------------------------------------
                                                                 }
                                                             }
                                                         }
@@ -345,8 +355,6 @@ class VideosFavoris : Fragment() {
                 id: Long
             ) {
                 when (trie[position]){
-                    //TODO adapter la liste des favoris à Song index
-
                     "Alphabétique"  -> {
                         trieAlphabetiqueFavoris(favorisList, activity!!)
                         fAdapter.notifyDataSetChanged()
