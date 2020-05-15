@@ -142,7 +142,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
             ContactsContract.CommonDataKinds.Phone._ID)
         cursor!!.moveToFirst()
 
-        listeDansAppli.addAll(getContactAmiInAppli()) //recuperer les amis de l'appli
+        listeDansAppli.addAll(getContactAmiInAppli()) //recuperer les amis de l'application
 
         while (cursor.isAfterLast == false) {
             val contactNumber =
@@ -154,7 +154,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
             userModel = UserModel(""+phoneContactID,"no image",contactNumber, contactName, "nomail@gamil.com")
             if (userModel != null) {
                 Log.i("ContactListFragmentAmis", "Nom : ${userModel.username}, Phone : ${userModel.phone}, ID : ${userModel.id}" )
-                if(listeDansAppli.contains("${contactNumber}"))
+                if(listeDansAppli.contains("${contactNumber}"))// condition pour selectionner
                 contact.put("${userModel.id}", userModel)
             }
             userModel = null
