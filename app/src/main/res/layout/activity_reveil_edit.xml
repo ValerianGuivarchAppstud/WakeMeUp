@@ -139,6 +139,18 @@
         app:layout_constraintTop_toBottomOf="@+id/edit_liste_jour"
         app:layout_constraintVertical_bias="0.2" />
 
+    <Button
+        android:id="@+id/bouton_repetition_reveil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Répétition réveil"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/bouton_editer_reveil"
+        app:layout_constraintTop_toBottomOf="@+id/edit_liste_jour"
+        app:layout_constraintVertical_bias="0.5" />
+
     />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

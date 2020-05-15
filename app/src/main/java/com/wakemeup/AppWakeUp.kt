@@ -2,12 +2,14 @@ package com.wakemeup
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.neocampus.repo.Repository
 import com.wakemeup.connect.UserModel
+import com.wakemeup.contact.SonneriePassee
 import com.wakemeup.contact.SonnerieRecue
 import java.io.ObjectOutputStream
 
@@ -81,6 +83,7 @@ class AppWakeUp : Application() {
         database = FirebaseDatabase.getInstance()
         appContext = applicationContext
         repository = Repository()
+
     }
 
 }

@@ -52,10 +52,8 @@ class EditUser : AppCompatActivity() {
                     val user: UserModel = dataSnapshot.getValue(UserModel::class.java)!!
                     currentUserModel = user
 
-
                     valeur_identifiant.text = currentUserModel.username
                     valeur_mdp.text = "*********"
-
 
                     Log.i("EditUser", AppWakeUp.auth.currentUser!!.email)
                 }
@@ -71,29 +69,21 @@ class EditUser : AppCompatActivity() {
         if (intent.extras != null) {
 
             val extras = intent.extras
-
             val categorie = extras!!.getString("email")
             valeur_email.text = categorie
             val intent = Intent(this, ConnectActivity::class.java)
-            startActivity(
-                intent
-            )
+            startActivity(intent)
 
         } else {
             Log.i("EditUser", "pas d'extra")
             valeur_email.text = AppWakeUp.auth.currentUser!!.email
         }
 
-
-
         button_id.setOnClickListener {
             val intent = Intent(this, LanceurFragment::class.java)
             intent.putExtra("categorie", "username")
             startActivity(intent)
         }
-
-
-
 
         button_mdp.setOnClickListener{
             val intent = Intent(this, LanceurFragment::class.java)

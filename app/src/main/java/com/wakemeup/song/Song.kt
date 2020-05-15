@@ -7,12 +7,12 @@ import java.io.Serializable
 
 
 class Song(
-    val id: String,
-    val title: String,
-    val artist: String,
-    var artworkUrl: String,
-    val duration: Int,
-    var lancement :Int,
+    val id: String= "",
+    val title: String ="",
+    val artist: String = "",
+    var artworkUrl: String = "",
+    val duration: Int = 0,
+    var lancement :Int = 0,
     private val rank: Int = 0
 ) : Comparable<Song>, Parcelable, Serializable {
 
@@ -27,6 +27,8 @@ class Song(
         parcel.readInt()
 
     )
+
+
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)

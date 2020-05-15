@@ -1,6 +1,7 @@
 package com.wakemeup.reveil
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -15,6 +16,7 @@ import kotlin.system.exitProcess
 class ReveilEdit : AppCompatActivity() {
 
     private lateinit var reveilModel: ReveilModel
+    private var boolEdit = true
 
     private val listDaysInWeek = listOf(
         ReveilModel.DaysWeek.Dimanche,
@@ -50,7 +52,10 @@ class ReveilEdit : AppCompatActivity() {
         setContentView(R.layout.activity_reveil_edit)
         edit_time_picker.setIs24HourView(true)
 
+        bouton_repetition_reveil.setOnClickListener {
+            createDialogReveilEdit()
 
+        }
 
         if (intent.extras == null || !(intent.extras!!.containsKey("requestCode")))
             return
@@ -129,6 +134,22 @@ class ReveilEdit : AppCompatActivity() {
 
     }
 
+    private fun createDialogReveilEdit() {
+        val builder = AlertDialog.Builder(this)
+
+        val viewDialogReveil =
+            this!!.layoutInflater.inflate(R.layout.activity_reveil_edit, null)
+        builder.setTitle(" Choissisez une répétition du reveil :")
+            .setView(viewDialogReveil)
+            .setPositiveButton("Quotidient") { _, _ ->
+                boolEdit = true
+
+            }
+            .setNegativeButton("Poncutel") { _, _ ->
+                boolEdit = false
+            }
+            .create()
+    }
 
     private fun calculeNextCalendar(reveilModel: ReveilModel): Calendar {
         val now = Calendar.getInstance()
