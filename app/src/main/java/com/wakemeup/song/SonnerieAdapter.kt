@@ -13,8 +13,8 @@ import com.wakemeup.R
 import com.wakemeup.contact.SonnerieRecue
 
 class SonnerieAdapter (private val context: Context,
-private val sonnerieList: List<SonnerieRecue>,
-private val listener: RecyclerItemClickListener
+                       private val sonnerieList: MutableList<SonnerieRecue>,
+                       private val listener: RecyclerItemClickListener
 ) : RecyclerView.Adapter<SonnerieAdapter.SonnerieViewHolder>() {
 
     var selectedPosition: Int = 0
