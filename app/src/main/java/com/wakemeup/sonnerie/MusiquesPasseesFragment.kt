@@ -1,4 +1,4 @@
-package com.wakemeup.song
+package com.wakemeup.sonnerie
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,7 +16,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.wakemeup.AppWakeUp
 import com.wakemeup.MainActivity
-import com.wakemeup.contact.SonnerieRecue
+import com.wakemeup.song.DialogueYoutube
+import com.wakemeup.song.SongHistorique
+import com.wakemeup.song.SongIndex
 import com.wakemeup.util.loadFavoris
 import com.wakemeup.util.persisteFavoris
 import com.wakemeup.util.resetFavoris

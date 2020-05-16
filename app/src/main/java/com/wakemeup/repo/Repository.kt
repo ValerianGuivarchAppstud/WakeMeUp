@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.wakemeup.AppWakeUp
 import com.wakemeup.connect.UserModel
-import com.wakemeup.contact.SonnerieRecue
 import com.wakemeup.reveil.ReveilModel
 import java.io.FileNotFoundException
 import java.io.ObjectInputStream

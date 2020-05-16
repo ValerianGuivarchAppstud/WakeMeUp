@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.wakemeup.contact.ContactListeViewModel
 import com.wakemeup.reveil.ReveilListeViewModel
-import com.wakemeup.song.MusiquesListesViewModel
+import com.wakemeup.sonnerie.MusiquesListesViewModel
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory(private val repository: Repository) :

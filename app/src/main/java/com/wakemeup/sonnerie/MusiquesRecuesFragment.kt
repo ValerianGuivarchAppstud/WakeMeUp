@@ -1,4 +1,4 @@
-package com.wakemeup.song
+package com.wakemeup.sonnerie
 
 import android.content.Context
 import android.os.Bundle
@@ -129,10 +129,7 @@ class MusiquesRecuesFragment : Fragment() {
     companion object {
 
         fun newInstance(ctx: Context): MusiquesRecuesFragment {
-
-            val nf = MusiquesRecuesFragment()
-            // todo nf ????
-            return nf
+            return MusiquesRecuesFragment()
         }
 
         enum class FragmentId {
