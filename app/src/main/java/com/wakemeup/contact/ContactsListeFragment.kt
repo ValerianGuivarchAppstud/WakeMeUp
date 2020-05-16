@@ -54,8 +54,6 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
                      viewModel.addContact(user)
          }
 
-
-
         viewModel.getContactsListeLiveData().observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer { nouvelleListeContacts ->
