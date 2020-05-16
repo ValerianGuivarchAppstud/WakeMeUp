@@ -1,6 +1,7 @@
 package com.wakemeup.connect.ui.signup
 
 import android.app.Activity
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -52,6 +53,7 @@ class SignupViewModel : ViewModel() {
                         _signupResult.value =
                             ConnectResult(AppWakeUp.auth.currentUser)
                     } else {
+                        Log.e("login", it.toString())
                         _signupResult.value =
                             ConnectResult(error = R.string.signup_failed)
                     }

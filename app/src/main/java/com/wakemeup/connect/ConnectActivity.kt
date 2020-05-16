@@ -67,6 +67,10 @@ class ConnectActivity : AppCompatActivity() {
             CREATION_COMPTE -> {
                 if (AppWakeUp.auth.currentUser != null) {
                     AppWakeUp.auth.signOut()
+                    val intentSeConnecter = Intent(this, LoginActivity::class.java)
+                    intentSeConnecter.extras!!.putString("activity_login_mail", data!!.getStringExtra("activity_login_mail"))
+                    intentSeConnecter.extras!!.putString("activity_login_password", data.getStringExtra("activity_login_password") )
+                    startActivityForResult(intentSeConnecter, CONNECTION_COMPTE)
                     //startMainActivityBeingConnected()
                 }
             }
