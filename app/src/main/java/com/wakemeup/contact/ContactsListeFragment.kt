@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener
 
 class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapterListener {
 
+    //TODO item musique cherché enlever durée
     companion object {
         fun newInstance(): ContactsListeFragment {
             return ContactsListeFragment()
@@ -150,6 +151,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
             val phoneContactID =
                 cursor.getInt(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID))
             userModel = UserModel(""+phoneContactID,"no image",contactNumber, contactName, "nomail@gamil.com")
+
             if (userModel != null) {
                 Log.i("ContactListFragmentAmis", "Nom : ${userModel.username}, Phone : ${userModel.phone}, ID : ${userModel.id}" )
                 if(listeDansAppli.contains("${contactNumber}"))// condition pour selectionner
