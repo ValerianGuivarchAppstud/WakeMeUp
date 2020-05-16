@@ -27,22 +27,17 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
-import com.wakemeup.AppWakeUp.Companion.listSonneriesEnAttente
-import com.wakemeup.AppWakeUp.Companion.listSonneriesPassee
 import com.wakemeup.connect.ConnectActivity
 
 import com.wakemeup.connect.UserModel
 import com.wakemeup.contact.ContactsListeFragment
-import com.wakemeup.contact.SonnerieFirebase
 
-import com.wakemeup.contact.SonneriePassee
-import com.wakemeup.contact.SonnerieRecue
 import com.wakemeup.reveil.ReveilsListeFragment
 import com.wakemeup.share.DemanderMusique
 import com.wakemeup.song.*
-import java.util.*
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlin.collections.HashMap
+import com.wakemeup.sonnerie.MusiquesRecuesFragment
+import com.wakemeup.sonnerie.SonnerieFirebase
+import com.wakemeup.sonnerie.SonnerieRecue
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -103,7 +98,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                                                 songFirebase,
                                                                 sonnerie.ecoutee
                                                             )
-                                                            listSonneriesEnAttente.put(
+                                                            AppWakeUp.addSonnerieEnAttente(
                                                                 sonnerieRecue.sonnerieId,
                                                                 sonnerieRecue
                                                             )
@@ -117,7 +112,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                                                 songFirebase,
                                                                 sonnerie.ecoutee
                                                             )
-                                                            listSonneriesPassee.put(
+                                                            AppWakeUp.addSonneriePassee(
                                                                 sonneriePassee.sonnerieId,
                                                                 sonneriePassee
                                                             )
@@ -203,6 +198,13 @@ override fun onCreate(savedInstanceState: Bundle?) {
                     }
                 }
 */
+            //TEST 2
+/*
+            val song1 = Song("idsong1", "titlesong1","artistsong1","https://www.youtube.com/watch?v=-sanFLupL-E", 3,0,1)
+            val sonnerie1 = SonnerieRecue("idMusicSend", "senderId", "senderName", "receiverId", song1, false)
+            AppWakeUp.addSonneriePassee("idMusicSend", sonnerie1)
+
+ */
         }
     }
 
@@ -386,11 +388,13 @@ override fun onCreate(savedInstanceState: Bundle?) {
             navigationView!!.menu.findItem(R.id.activity_main_drawer_musiques_en_attente).isVisible = true
             navigationView!!.menu.findItem(R.id.activity_main_drawer_connecter).isVisible = false
             navigationView!!.menu.findItem(R.id.activity_main_drawer_deconnecter).isVisible = true
+            navigationView!!.menu.findItem(R.id.activity_main_drawer_parametre).isVisible = true
         } else {
             navigationView!!.menu.findItem(R.id.activity_main_drawer_favoris).isVisible = false
             navigationView!!.menu.findItem(R.id.activity_main_drawer_musiques_en_attente).isVisible = false
             navigationView!!.menu.findItem(R.id.activity_main_drawer_connecter).isVisible = true
             navigationView!!.menu.findItem(R.id.activity_main_drawer_deconnecter).isVisible = false
+            navigationView!!.menu.findItem(R.id.activity_main_drawer_parametre).isVisible = false
         }
 
 
@@ -441,10 +445,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
             FragmentId.FRAGMENT_REVEIL -> this.showReveilFragment()
             FragmentId.FRAGMENT_MUSIQUES_RECUES -> this.showMusiquesRecuesFragment()
             FragmentId.FRAGMENT_FAVORIS -> this.showFavorisFragment()
-
             FragmentId.FRAGMENT_PARAMETRE -> this.showParametreFragment()
-            else -> {
-            }
         }
     }
 

@@ -2,16 +2,13 @@ package com.wakemeup
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.neocampus.repo.Repository
 import com.wakemeup.connect.UserModel
-import com.wakemeup.contact.SonneriePassee
-import com.wakemeup.contact.SonnerieRecue
-import java.io.ObjectOutputStream
+import com.wakemeup.sonnerie.SonnerieRecue
 
 
 class AppWakeUp : Application() {
@@ -46,6 +43,14 @@ class AppWakeUp : Application() {
         ) {
             listSonneriesEnAttente.put(idSonnerie, sonnerie)
             listSonneriesEnAttenteLiveData.value = listSonneriesEnAttente
+        }
+
+        fun addSonneriePassee(
+            idSonnerie: String,
+            sonnerie: SonnerieRecue
+        ) {
+            listSonneriesPassee.put(idSonnerie, sonnerie)
+            listSonneriesPasseeLiveData.value = listSonneriesPassee
         }
 
         fun removeSonnerieEnAttente(idSonnerie: String, musicId: String, context: Context) {

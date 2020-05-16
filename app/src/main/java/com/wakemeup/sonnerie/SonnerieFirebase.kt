@@ -1,4 +1,4 @@
-package com.wakemeup.contact
+package com.wakemeup.sonnerie
 
 import com.wakemeup.song.Song
 import java.io.Serializable

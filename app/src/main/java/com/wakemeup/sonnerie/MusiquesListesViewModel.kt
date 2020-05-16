@@ -1,12 +1,10 @@
-package com.wakemeup.song
+package com.wakemeup.sonnerie
 
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import com.neocampus.repo.Repository
 import com.wakemeup.AppWakeUp
-import com.wakemeup.contact.SonnerieRecue
 
 data class MusiquesListViewState(
     val hasMusiquesChanged : Boolean,

@@ -1,4 +1,4 @@
-package com.wakemeup.song
+package com.wakemeup.sonnerie
 
 import android.content.Context
 import android.os.Bundle
@@ -11,13 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.neocampus.repo.ViewModelFactory
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import com.wakemeup.AppWakeUp
 import com.wakemeup.R
-import com.wakemeup.contact.SonnerieRecue
 import kotlinx.android.synthetic.main.fragment_musiques_attente.view.*
 
 class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickListener {
@@ -38,7 +32,6 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
 
-        val factory = ViewModelFactory(AppWakeUp.repository)
         viewModel = ViewModelProvider(requireActivity()).get(MusiquesListesViewModel::class.java)
         viewModel.getListeAttenteLiveData().observe(viewLifecycleOwner, Observer { list ->
             updateAttenteListe(list)
@@ -71,9 +64,7 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAdapter.RecyclerItemClickLis
     companion object {
 
         fun newInstance(ctx: Context): MusiquesAttenteFragment {
-
-            val nf = MusiquesAttenteFragment()
-            return nf
+            return MusiquesAttenteFragment()
         }
         fun newInstance(): MusiquesAttenteFragment {
             return MusiquesAttenteFragment()
