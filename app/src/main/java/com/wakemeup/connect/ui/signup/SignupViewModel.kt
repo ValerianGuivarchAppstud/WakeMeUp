@@ -24,7 +24,7 @@ class SignupViewModel : ViewModel() {
 
     private lateinit var reference: DatabaseReference
 
-    //todo ajotuer connexion Google ? Facebook ?
+    //todo ajouter connexion Google ? Facebook ?
 
     //TODO refactoring, imbriquer firebase dans une classe, des fois que je change
 
@@ -53,12 +53,14 @@ class SignupViewModel : ViewModel() {
                         _signupResult.value =
                             ConnectResult(AppWakeUp.auth.currentUser)
                     } else {
-                        Log.e("login", it.toString())
+                        Log.e("fail connect", "2")
                         _signupResult.value =
                             ConnectResult(error = R.string.signup_failed)
                     }
                 }
             } else {
+                Log.e("fail connect", it.toString())
+                Log.e("fail connect", it.exception.toString())
                 _signupResult.value =
                     ConnectResult(error = R.string.signup_failed)
             }

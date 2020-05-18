@@ -2,6 +2,7 @@ package com.wakemeup.connect.ui
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -40,6 +41,12 @@ class SignupActivity : AppCompatActivity() {
             SignupViewModelFactory()
         ).get(SignupViewModel::class.java)
 
+        username.setText("Juanito")
+        password.setText("mmmmmm")
+        password2.setText("mmmmmm")
+        mail.setText("valerin64@gmail.com")
+
+
         signupViewModel.signupFormState.observe(this@SignupActivity, Observer {
             val signupState = it ?: return@Observer
 
@@ -68,6 +75,7 @@ class SignupActivity : AppCompatActivity() {
 
             loading.visibility = View.GONE
             if (signupResult.error != null) {
+                Log.e("fail", getString(signupResult.error))
                 showSignupFailed(signupResult.error)
             } else {
                 sendEmailConfirm()

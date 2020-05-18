@@ -41,9 +41,6 @@
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="cornerRadius">@null</item>
-        <item name="elevation">2dp</item>
-        <item name="iconPadding">8dp</item>
         <item name="backgroundTint">@color/colorPrimaryDark</item>
         <item name="shapeAppearance">?attr/shapeAppearanceSmallComponent</item>
     </style>
@@ -89,5 +86,19 @@
 
     </style>
 
+    <style name="my_time_picker_style">
+        <item name="android:textSize">34sp</item>
+    </style>
+
+
+    <style name="bouton_arrondi">
+        <item name="cornerRadius">@null</item>
+        <item name="elevation">2dp</item>
+        <item name="iconPadding">8dp</item>
+
+        <item name="android:background">@drawable/rounded_button</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+    </style>
 
 </resources>

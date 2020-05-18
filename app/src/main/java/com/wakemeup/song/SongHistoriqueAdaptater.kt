@@ -10,9 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.wakemeup.R
-import com.wakemeup.util.Utility
-
-
 
 
 //----------------------------------------------------------------//
@@ -69,9 +66,6 @@ class SongHistoriqueAdaptater(
 
         holder.tvTitle.text = song.title
         holder.tvArtist.text = song.artist
-        val duration = Utility.convertDuration(song.duration)
-
-        holder.tvDuration.text = duration
 
         Picasso.get().load(song.artworkUrl).placeholder(R.drawable.music_placeholder)
             .into(holder.ivArtwork)
@@ -87,7 +81,6 @@ class SongHistoriqueAdaptater(
 
         val tvTitle: TextView = itemView.findViewById<View>(R.id.tv_title) as TextView
         val tvArtist: TextView = itemView.findViewById<View>(R.id.tv_artist) as TextView
-        val tvDuration: TextView = itemView.findViewById<View>(R.id.tv_duration) as TextView
         val ivArtwork: ImageView = itemView.findViewById<View>(R.id.iv_artwork) as ImageView
         val ivPlayActive: ImageView = itemView.findViewById<View>(R.id.iv_play_active) as ImageView
 

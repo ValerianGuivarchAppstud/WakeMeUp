@@ -1,153 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TimePicker
-        android:id="@+id/edit_time_picker"
+
+    <TextView
+        android:id="@+id/textEditReveilHoraire"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/horaire"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TimePicker
+        android:id="@+id/edit_time_picker"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:theme="@style/my_time_picker_style"
         android:timePickerMode="spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textEditReveilHoraire" />
 
-        />
 
-    <LinearLayout
-        android:id="@+id/edit_liste_jour"
+    <View
+        android:id="@+id/divider2"
         android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_time_picker"
-        app:layout_constraintVertical_bias="0.2">
+        app:layout_constraintTop_toBottomOf="@+id/edit_time_picker" />
 
-        <ToggleButton
-            android:id="@+id/edit_liste_jour_lundi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOff="@string/lundi"
-            android:textOn="@string/lundi"
-            android:textSize="12sp" />
-
-        <ToggleButton
-            android:id="@+id/edit_liste_jour_mardi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOff="@string/mardi"
-            android:textOn="@string/mardi"
-            android:textSize="12sp" />
-
-        <ToggleButton
-            android:id="@+id/edit_liste_jour_mercredi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOff="@string/mercredi"
-            android:textOn="@string/mercredi"
-            android:textSize="12sp" />
-
-        <ToggleButton
-            android:id="@+id/edit_liste_jour_jeudi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOff="@string/jeudi"
-            android:textOn="@string/jeudi"
-            android:textSize="12sp" />
-
-        <ToggleButton
-            android:id="@+id/edit_liste_jour_vendredi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOff="@string/vendredi"
-            android:textOn="@string/vendredi"
-            android:textSize="12sp" />
-
-        <ToggleButton
-            android:id="@+id/edit_liste_jour_samedi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOff="@string/samedi"
-            android:textOn="@string/samedi"
-            android:textSize="12sp" />
-
-        <ToggleButton
-            android:id="@+id/edit_liste_jour_dimanche"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOff="@string/dimanche"
-            android:textOn="@string/dimanche"
-            android:textSize="12sp" />
-
-    </LinearLayout>
-
-
-    <Button
-        android:id="@+id/bouton_ajouter_reveil"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ajouter_r_veil"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bouton_annuler_ajout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_liste_jour"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintTop_toBottomOf="@+id/divider2">
+
+        <LinearLayout
+            android:id="@+id/bouton_editer_reveil_jours"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textEditReveilJours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/r_p_ter"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textEditReveilJoursChoisis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                tools:text="Lun, MAR, MER" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 
     <Button
-        android:id="@+id/bouton_annuler_ajout"
-        android:layout_width="wrap_content"
+        android:id="@+id/bouton_editer_reveil_annuler"
+        style="@style/bouton_arrondi"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/annuler"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/bouton_ajouter_reveil"
-        app:layout_constraintTop_toBottomOf="@+id/edit_liste_jour"
-        app:layout_constraintVertical_bias="0.2" />
-
-    <Button
-        android:id="@+id/bouton_editer_reveil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/modifier_r_veil"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bouton_supprimer_reveil"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/bouton_editer_reveil_valider"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_liste_jour"
-        app:layout_constraintVertical_bias="0.541" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
     <Button
-        android:id="@+id/bouton_supprimer_reveil"
-        android:layout_width="wrap_content"
+        android:id="@+id/bouton_editer_reveil_valider"
+        style="@style/bouton_arrondi"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/supprimer_r_veil"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/bouton_editer_reveil"
-        app:layout_constraintTop_toBottomOf="@+id/edit_liste_jour"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintStart_toEndOf="@+id/bouton_editer_reveil_annuler"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
-    <Button
-        android:id="@+id/bouton_repetition_reveil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Répétition réveil"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/bouton_editer_reveil"
-        app:layout_constraintTop_toBottomOf="@+id/edit_liste_jour"
-        app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

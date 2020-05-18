@@ -9,7 +9,7 @@
     <string name="prompt_mail">Adresse mail</string>
     <string name="action_sign_up">Créer son compte</string>
     <string name="action_login">Se connecter</string>
-    <string name="welcome">"Welcome !"</string>
+    <string name="welcome">Bienvenue </string>
     <string name="invalid_username">L\'identifiant doit comporter au moins 5 caractères, sans espace</string>
     <string name="invalid_password">Le mot de passe doit comporter au moins 6 caractères</string>
     <string name="invalid_password_again_signup">Les deux mots de passes doivent être identiques</string>
@@ -80,6 +80,8 @@
 
     <string name="facebook_app_id">241537453728565</string>
     <string name="fb_login_protocol_scheme">fb241537453728565</string>
+    <string name="horaire">Horaire :</string>
+    <string name="r_p_ter">Répéter :</string>
 
 
 </resources>

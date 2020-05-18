@@ -48,8 +48,6 @@ class SongAdapter(
         holder.tvArtist.text = song.artist
         val duration = Utility.convertDuration(song.duration)
 
-        holder.tvDuration.text = duration
-
         Picasso.get().load(song.artworkUrl).placeholder(R.drawable.music_placeholder)
             .into(holder.ivArtwork)
         holder.bind(song, listener)
@@ -63,7 +61,6 @@ class SongAdapter(
 
         val tvTitle: TextView = itemView.findViewById<View>(R.id.tv_title) as TextView
         val tvArtist: TextView = itemView.findViewById<View>(R.id.tv_artist) as TextView
-        val tvDuration: TextView = itemView.findViewById<View>(R.id.tv_duration) as TextView
         val ivArtwork: ImageView = itemView.findViewById<View>(R.id.iv_artwork) as ImageView
         val ivPlayActive: ImageView = itemView.findViewById<View>(R.id.iv_play_active) as ImageView
 

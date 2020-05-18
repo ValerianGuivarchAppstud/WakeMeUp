@@ -46,11 +46,6 @@ class LoginActivity : AppCompatActivity() {
         val loading = findViewById<ProgressBar>(R.id.activity_login_loading)
         val buttonFacebookLogin = findViewById<LoginButton>(R.id.buttonFacebookLogin)
 
-        if(intent.extras!!["activity_login_mail"]!=null){
-            identifiantMail.setText(intent.extras!!["activity_login_mail"] as String)
-            password.setText(intent.extras!!["activity_login_password"] as String)
-        }
-
         loginViewModel = ViewModelProviders.of(
             this,
             LoginViewModelFactory()
@@ -78,8 +73,6 @@ class LoginActivity : AppCompatActivity() {
                 showLoginFailed(loginResult.error)
             }
             setResult(Activity.RESULT_OK)
-            intent.extras!!.putString("activity_login_mail", identifiantMail.text.toString())
-            intent.extras!!.putString("activity_login_password", password.text.toString())
 
             //Complete and destroy connect activity once successful
             finish()

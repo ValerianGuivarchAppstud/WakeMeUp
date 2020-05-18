@@ -50,7 +50,6 @@ class Song(
         result.snippet.channelTitle,
         result.snippet.thumbnails.medium.url,
         0,
-        0,
         rank
     )
 

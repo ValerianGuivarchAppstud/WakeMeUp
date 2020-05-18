@@ -1,7 +1,6 @@
 package com.wakemeup.song
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.wakemeup.R
 import com.wakemeup.util.Utility
-
-
 
 
 //----------------------------------------------------------------//
@@ -68,7 +65,6 @@ class FavorisAdaptater(
         holder.tvArtist.text = song.artist
         val duration = Utility.convertDuration(song.duration)
 
-        holder.tvDuration.text = duration
         Picasso.get().load(song.artworkUrl).placeholder(R.drawable.music_placeholder).into(holder.ivArtwork)
         holder.bind(favorisVideo[position], listener)
     }
@@ -82,7 +78,6 @@ class FavorisAdaptater(
 
         val tvTitle: TextView = itemView.findViewById<View>(R.id.tv_title) as TextView
         val tvArtist: TextView = itemView.findViewById<View>(R.id.tv_artist) as TextView
-        val tvDuration: TextView = itemView.findViewById<View>(R.id.tv_duration) as TextView
         val ivArtwork: ImageView = itemView.findViewById<View>(R.id.iv_artwork) as ImageView
         val ivPlayActive: ImageView = itemView.findViewById<View>(R.id.iv_play_active) as ImageView
 

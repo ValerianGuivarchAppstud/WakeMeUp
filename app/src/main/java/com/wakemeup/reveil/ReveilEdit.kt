@@ -4,8 +4,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import com.wakemeup.R
 import com.wakemeup.util.putParcelableExtra
@@ -19,32 +17,14 @@ class ReveilEdit : AppCompatActivity() {
     private var boolEdit = true
 
     private val listDaysInWeek = listOf(
-        ReveilModel.DaysWeek.Dimanche,
         ReveilModel.DaysWeek.Lundi,
         ReveilModel.DaysWeek.Mardi,
         ReveilModel.DaysWeek.Mercredi,
         ReveilModel.DaysWeek.Jeudi,
         ReveilModel.DaysWeek.Vendredi,
-        ReveilModel.DaysWeek.Samedi
+        ReveilModel.DaysWeek.Samedi,
+        ReveilModel.DaysWeek.Dimanche
     )
-
-    private fun dayButtonClicked(day: ReveilModel.DaysWeek, edit_liste_jour_button: ToggleButton) {
-        if (reveilModel.listActifDays.contains(day)) {
-            reveilModel.listActifDays.remove(day)
-        } else {
-            reveilModel.listActifDays.add(day)
-        }
-        dayButtonUpdate(day, edit_liste_jour_button)
-    }
-
-    private fun dayButtonUpdate(day: ReveilModel.DaysWeek, edit_liste_jour_button: ToggleButton) {
-        if (reveilModel.listActifDays.contains(day)) {
-            edit_liste_jour_button.alpha = 1f
-        } else {
-            edit_liste_jour_button.alpha = 0.3f
-        }
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,47 +32,145 @@ class ReveilEdit : AppCompatActivity() {
         setContentView(R.layout.activity_reveil_edit)
         edit_time_picker.setIs24HourView(true)
 
-        bouton_repetition_reveil.setOnClickListener {
-            createDialogReveilEdit()
-
-        }
-
         if (intent.extras == null || !(intent.extras!!.containsKey("requestCode")))
             return
 
+
+        bouton_editer_reveil_jours.setOnClickListener {
+            // setup the alert builder
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Répétition du réveil")
+
+            // add a radio button list
+            //todo mettre en string.xml
+            val days = arrayOf<String>(
+                "Ne pas répéter",
+                "Du lundi au vendredi",
+                "Tous les jours",
+                "Personnaliser"
+            )
+
+            val checkedItem = reveilModel.repetition.ordinal
+            builder.setSingleChoiceItems(days, checkedItem) { dialog, which ->
+                if (which == 0) {
+                    reveilModel.repetition = ReveilModel.ReveilMode.PasDeRepetition
+                } else if (which == 1) {
+                    reveilModel.listActifDays = mutableListOf(
+                        ReveilModel.DaysWeek.Lundi,
+                        ReveilModel.DaysWeek.Mardi,
+                        ReveilModel.DaysWeek.Mercredi,
+                        ReveilModel.DaysWeek.Jeudi,
+                        ReveilModel.DaysWeek.Vendredi
+                    )
+                    reveilModel.repetition = ReveilModel.ReveilMode.Semaine
+                } else if (which == 2) {
+                    reveilModel.listActifDays = mutableListOf(
+                        ReveilModel.DaysWeek.Lundi,
+                        ReveilModel.DaysWeek.Mardi,
+                        ReveilModel.DaysWeek.Mercredi,
+                        ReveilModel.DaysWeek.Jeudi,
+                        ReveilModel.DaysWeek.Vendredi,
+                        ReveilModel.DaysWeek.Samedi,
+                        ReveilModel.DaysWeek.Dimanche
+                    )
+                    reveilModel.repetition = ReveilModel.ReveilMode.TousLesJours
+                } else if (which == 3) {
+                    // setup the alert builder
+                    val builder2 = AlertDialog.Builder(this)
+                    builder2.setTitle("Jours de la semaine")
+                    val listDaySelected = mutableListOf<ReveilModel.DaysWeek>()
+                    if (reveilModel.repetition != ReveilModel.ReveilMode.Personnalise) {
+                        listDaySelected.add(ReveilModel.DaysWeek.Lundi)
+                        listDaySelected.add(ReveilModel.DaysWeek.Mardi)
+                        listDaySelected.add(ReveilModel.DaysWeek.Mercredi)
+                        listDaySelected.add(ReveilModel.DaysWeek.Jeudi)
+                        listDaySelected.add(ReveilModel.DaysWeek.Vendredi)
+                    } else {
+                        listDaySelected.addAll(reveilModel.listActifDays)
+                    }
+                    reveilModel.repetition = ReveilModel.ReveilMode.Personnalise
+
+                    // add a checkbox list
+                    val daysWeek = arrayOf(
+                        ReveilModel.DaysWeek.Lundi.name,
+                        ReveilModel.DaysWeek.Mardi.name,
+                        ReveilModel.DaysWeek.Mercredi.name,
+                        ReveilModel.DaysWeek.Jeudi.name,
+                        ReveilModel.DaysWeek.Vendredi.name,
+                        ReveilModel.DaysWeek.Samedi.name,
+                        ReveilModel.DaysWeek.Dimanche.name
+                    )
+
+                    val checkedItems =
+                        booleanArrayOf(false, false, false, false, false, false, false)
+                    for (d in ReveilModel.DaysWeek.values()) {
+                        checkedItems[d.ordinal] = listDaySelected.contains(d)
+                    }
+
+                    builder2.setMultiChoiceItems(daysWeek, checkedItems) { _, which2, isChecked ->
+                        if (isChecked) {
+                            listDaySelected.add(ReveilModel.DaysWeek.values()[which2])
+                        } else {
+                            listDaySelected.remove(ReveilModel.DaysWeek.values()[which2])
+                        }
+                    }
+
+                    // add OK and Cancel buttons
+                    builder2.setPositiveButton("OK") { _, _ ->
+                        reveilModel.listActifDays = listDaySelected
+                        adaptTextDays(reveilModel)
+                    }
+                    //todo text string
+                    builder2.setNegativeButton("Annuler") { _, _ ->
+                        val dialog3 = builder.create()
+                        dialog3.show()
+                    }
+
+                    // create and show the alert dialog
+                    val dialog2 = builder2.create()
+                    dialog2.show()
+                    adaptTextDays(reveilModel)
+                }
+                adaptTextDays(reveilModel)
+                dialog.dismiss()
+            }
+
+            // create and show the alert dialog
+            val dialog = builder.create()
+            dialog.show()
+        }
         when (intent.getIntExtra("requestCode", -1)) {
             ReveilModel.CREATE_REQUEST_CODE -> {
                 reveilModel = ReveilModel()
-                Log.e("ReveilEdit", "new -> " + reveilModel.idReveil)
-                bouton_ajouter_reveil.setOnClickListener {
+                bouton_editer_reveil_valider.setText(R.string.ajouter_r_veil)
+                bouton_editer_reveil_valider.setOnClickListener {
                     reveilModel.nextAlarm = calculeNextCalendar(reveilModel)
                     intent.putParcelableExtra(ReveilModel.REVEIL, reveilModel)
                     setResult(Activity.RESULT_OK, intent)
                     finish()
                 }
-                bouton_annuler_ajout.setOnClickListener {
+                bouton_editer_reveil_annuler.setText(R.string.annuler)
+                bouton_editer_reveil_annuler.setOnClickListener {
                     setResult(Activity.RESULT_CANCELED, intent)
                     finish()
                 }
-                bouton_editer_reveil.visibility = View.GONE
-                bouton_supprimer_reveil.visibility = View.GONE
             }
             ReveilModel.EDIT_REQUEST_CODE -> {
                 reveilModel = intent.getSerializableExtra(ReveilModel.REVEIL) as ReveilModel
-                bouton_editer_reveil.setOnClickListener {
+                bouton_editer_reveil_valider.setText(R.string.modifier_r_veil)
+                bouton_editer_reveil_valider.setOnClickListener {
                     reveilModel.nextAlarm = calculeNextCalendar(reveilModel)
                     intent.putParcelableExtra(ReveilModel.REVEIL, reveilModel)
                     setResult(Activity.RESULT_OK, intent)
                     finish()
                 }
-                bouton_supprimer_reveil.setOnClickListener {
+                bouton_editer_reveil_annuler.setText(R.string.supprimer_r_veil)
+                bouton_editer_reveil_annuler.setOnClickListener {
                     setResult(Activity.RESULT_OK, intent)
                     intent.putParcelableExtra(ReveilModel.REVEIL, reveilModel)
                     intent.putExtra(ReveilModel.DELETE, true)
                     finish()
                 }
-                bouton_ajouter_reveil.visibility = View.GONE
-                bouton_annuler_ajout.visibility = View.GONE
             }
             else -> {
                 return
@@ -101,55 +179,9 @@ class ReveilEdit : AppCompatActivity() {
 
         edit_time_picker.hour = reveilModel.nextAlarm.get(Calendar.HOUR_OF_DAY)
         edit_time_picker.minute = reveilModel.nextAlarm.get(Calendar.MINUTE)
-        dayButtonUpdate(ReveilModel.DaysWeek.Lundi, edit_liste_jour_lundi)
-        dayButtonUpdate(ReveilModel.DaysWeek.Mardi, edit_liste_jour_mardi)
-        dayButtonUpdate(ReveilModel.DaysWeek.Mercredi, edit_liste_jour_mercredi)
-        dayButtonUpdate(ReveilModel.DaysWeek.Jeudi, edit_liste_jour_jeudi)
-        dayButtonUpdate(ReveilModel.DaysWeek.Vendredi, edit_liste_jour_vendredi)
-        dayButtonUpdate(ReveilModel.DaysWeek.Samedi, edit_liste_jour_samedi)
-        dayButtonUpdate(ReveilModel.DaysWeek.Dimanche, edit_liste_jour_dimanche)
-
-        edit_liste_jour_lundi.setOnClickListener {
-            dayButtonClicked(ReveilModel.DaysWeek.Lundi, edit_liste_jour_lundi)
-        }
-        edit_liste_jour_mardi.setOnClickListener {
-            dayButtonClicked(ReveilModel.DaysWeek.Mardi, edit_liste_jour_mardi)
-        }
-        edit_liste_jour_mercredi.setOnClickListener {
-            dayButtonClicked(ReveilModel.DaysWeek.Mercredi, edit_liste_jour_mercredi)
-        }
-        edit_liste_jour_jeudi.setOnClickListener {
-            dayButtonClicked(ReveilModel.DaysWeek.Jeudi, edit_liste_jour_jeudi)
-        }
-        edit_liste_jour_vendredi.setOnClickListener {
-            dayButtonClicked(ReveilModel.DaysWeek.Vendredi, edit_liste_jour_vendredi)
-        }
-        edit_liste_jour_samedi.setOnClickListener {
-            dayButtonClicked(ReveilModel.DaysWeek.Samedi, edit_liste_jour_samedi)
-        }
-        edit_liste_jour_dimanche.setOnClickListener {
-            dayButtonClicked(ReveilModel.DaysWeek.Dimanche, edit_liste_jour_dimanche)
-        }
-
-
+        adaptTextDays(reveilModel)
     }
 
-    private fun createDialogReveilEdit() {
-        val builder = AlertDialog.Builder(this)
-
-        val viewDialogReveil =
-            this!!.layoutInflater.inflate(R.layout.activity_reveil_edit, null)
-        builder.setTitle(" Choissisez une répétition du reveil :")
-            .setView(viewDialogReveil)
-            .setPositiveButton("Quotidient") { _, _ ->
-                boolEdit = true
-
-            }
-            .setNegativeButton("Poncutel") { _, _ ->
-                boolEdit = false
-            }
-            .create()
-    }
 
     private fun calculeNextCalendar(reveilModel: ReveilModel): Calendar {
         val now = Calendar.getInstance()
@@ -168,5 +200,25 @@ class ReveilEdit : AppCompatActivity() {
             next.set(Calendar.DAY_OF_YEAR, next.get(Calendar.DAY_OF_YEAR) + 1)
         }
         return next
+    }
+
+    private fun adaptTextDays(reveil: ReveilModel) {
+        when (reveil.repetition) {
+            ReveilModel.ReveilMode.PasDeRepetition -> textEditReveilJoursChoisis.setText("Pas de répétition")
+            ReveilModel.ReveilMode.Semaine -> textEditReveilJoursChoisis.setText("Du lundi au vendredi")
+            ReveilModel.ReveilMode.TousLesJours -> textEditReveilJoursChoisis.setText("Tous les jours")
+            ReveilModel.ReveilMode.Personnalise -> {
+                var txt = ""
+                for (d in reveil.listActifDays) {
+                    txt = txt + d.name + ", "
+                }
+                if (txt != "") {
+                    txt = txt.substring(0, txt.length - 2)
+                } else {
+                    txt = "Jamais"
+                }
+                textEditReveilJoursChoisis.setText(txt)
+            }
+        }
     }
 }

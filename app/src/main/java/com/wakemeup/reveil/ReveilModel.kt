@@ -28,8 +28,15 @@ class ReveilModel(
         set(Calendar.MINUTE, 0)
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)
-    }, var isActif: Boolean = true, val idReveil: Int = getUnicId()
+    },
+    var isActif: Boolean = true,
+    var repetition: ReveilMode = ReveilMode.PasDeRepetition,
+    val idReveil: Int = getUnicId()
 ) : Parcelable, Serializable {
+
+    enum class ReveilMode {
+        PasDeRepetition, Semaine, TousLesJours, Personnalise
+    }
 
     fun getHeureTexte(): String {
         var texteHeure = "" + nextAlarm.get(Calendar.HOUR_OF_DAY) + ":"
@@ -40,7 +47,11 @@ class ReveilModel(
     }
 
     fun getJoursTexte(): String {
-        return listActifDays.toString()
+        if (listActifDays.size == 7) {
+            return "[Tous les jours]"
+        } else {
+            return listActifDays.toString()
+        }
     }
 
     enum class DaysWeek {
