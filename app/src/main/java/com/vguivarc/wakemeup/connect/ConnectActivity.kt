@@ -1,4 +1,4 @@
-package com.wakemeup.connect
+package com.vguivarc.wakemeup.connect
 
 import android.app.Activity
 import android.content.Intent
@@ -10,13 +10,13 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
-import com.wakemeup.AppWakeUp
-import com.wakemeup.MainActivity
-import com.wakemeup.R
-import com.wakemeup.connect.ui.LoginActivity
-import com.wakemeup.connect.ui.SignupActivity
-import com.wakemeup.notification.MyFirebaseMessagingService
-import com.wakemeup.notification.Token
+import com.vguivarc.wakemeup.AppWakeUp
+import com.vguivarc.wakemeup.MainActivity
+import com.vguivarc.wakemeup.R
+import com.vguivarc.wakemeup.connect.ui.LoginActivity
+import com.vguivarc.wakemeup.connect.ui.SignupActivity
+import com.vguivarc.wakemeup.notification.MyFirebaseMessagingService
+import com.vguivarc.wakemeup.notification.Token
 import kotlinx.android.synthetic.main.activity_connect.*
 
 
@@ -50,7 +50,9 @@ class ConnectActivity : AppCompatActivity() {
                     if (it.isSuccessful) {
                         startMainActivityBeingConnected()
                     } else {
-                        Log.e("MyApp", "Anonymous login failed.")
+                        //TODO anonymous ?
+                        startMainActivityBeingConnected()
+//                        Log.e("MyApp", "Anonymous login failed.")
                     }
                 }
 
@@ -111,7 +113,8 @@ class ConnectActivity : AppCompatActivity() {
     private fun sayWelcome(){
 
         val reference =
-            AppWakeUp.database.getReference("Users").child(AppWakeUp.auth.currentUser!!.uid)
+            AppWakeUp.repository.database.getReference("Users")
+                .child(AppWakeUp.auth.currentUser!!.uid)
 
         reference.addValueEventListener(
             object : ValueEventListener {
