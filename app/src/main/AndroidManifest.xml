@@ -1,58 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wakemeup">
+    package="com.vguivarc.wakemeup">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-
-
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
-    <permission
-        android:name="com.wakemeup.permission.C2D_MESSAGE"
-        android:protectionLevel="signature"
-        />
 
-    <uses-permission android:name="com.wakemeup.permission.C2D_MESSAGE" />
+    <permission
+        android:name="com.vguivarc.wakemeup.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.vguivarc.wakemeup.permission.C2D_MESSAGE" />
 
     <application
         android:name=".AppWakeUp"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
         android:allowBackup="false"
         android:fullBackupContent="false"
+        android:icon="@drawable/main_logo_white"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/main_logo_white"
+        android:screenOrientation="landscape"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-            <intent-filter>
+        <activity android:name=".YoutubeFavori">
+            <intent-filter android:label="Music Me !">
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="www.youtube.com"
+                    android:mimeType="text/*" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".LinkContactActivity">
+            <intent-filter android:autoVerify="false">
                 <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:host="lesseptrois.freeboxos.fr" />
+                <data android:pathPrefix="/demande" />
+                <data android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity">
+            <intent-filter android:label="Music Me !">
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <!--
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:host="www.youtube.com" android:mimeType="text/*" />
+                -->
             </intent-filter>
         </activity>
         <activity android:name=".reveil.ReveilEdit" />
         <activity android:name=".reveil.ReveilSonneActivity" />
-        <service android:name=".reveil.ReveilSonneService"
-            android:enabled="true"
-            />
-        <activity android:name=".contact.ListFriendToSendMusicActivity" />
+
+        <service
+            android:name=".reveil.ReveilSonneService"
+            android:enabled="true" />
+
         <activity android:name=".connect.ConnectActivity" />
         <activity android:name=".connect.ui.LoginActivity" />
         <activity android:name=".connect.ui.SignupActivity" />
-        <activity android:name=".connect.ui.EditUser.EditUser"
-            android:parentActivityName=".MainActivity"/>
-
-        <meta-data
+        <activity
+            android:name=".connect.ui.edituser.EditUser"
+            android:parentActivityName=".MainActivity" />
+        <!--
+      <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
         <activity
@@ -71,9 +96,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".connect.ui.EditUser.LanceurFragment"/>
-
-
+        <activity android:name=".connect.ui.EditUser.LanceurFragment"/>!
+        -->
         <service
             android:name=".notification.MyFirebaseMessagingService"
             android:stopWithTask="false">
@@ -86,10 +110,12 @@
         <receiver
             android:name=".reveil.AlertReceiver"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
+
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>

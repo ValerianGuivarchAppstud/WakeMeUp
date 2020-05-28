@@ -1,43 +1,50 @@
 {
   "project_info": {
-    "project_number": "330824332061",
-    "firebase_url": "https://wakemeup-d8f76.firebaseio.com",
-    "project_id": "wakemeup-d8f76",
-    "storage_bucket": "wakemeup-d8f76.appspot.com"
+    "project_number": "250636742364",
+    "firebase_url": "https://wake-me-up-35646.firebaseio.com",
+    "project_id": "wake-me-up-35646",
+    "storage_bucket": "wake-me-up-35646.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:330824332061:android:f404615928fa1d5a6827f4",
+        "mobilesdk_app_id": "1:250636742364:android:cb080ed42ccb9c4658ce19",
         "android_client_info": {
-          "package_name": "com.wakemeup"
+          "package_name": "com.vguivarc.wakemeup"
         }
       },
       "oauth_client": [
         {
-          "client_id": "330824332061-qpna2b1usfsrd0ka1fq1c4tnd1vja01u.apps.googleusercontent.com",
+          "client_id": "250636742364-4afvodu7oco89snjb1aqq42vg1t74su2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.wakemeup",
+            "package_name": "com.vguivarc.wakemeup",
             "certificate_hash": "db95857c356bacd2c63fc70ae6e6c66c20e0f5cc"
           }
         },
         {
-          "client_id": "330824332061-mggkj7b9cfn3qqneesl2fvkbhtlngjql.apps.googleusercontent.com",
+          "client_id": "250636742364-ptfrgaqi4c4tc22rh6rub50g2is7btnl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD0ig29oIGlPdzRFFf2J30Q6ERwHrMKypw"
+          "current_key": "AIzaSyAOuQX3BaGHDssOX7jeLCq56IdailOZE-c"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "330824332061-mggkj7b9cfn3qqneesl2fvkbhtlngjql.apps.googleusercontent.com",
+              "client_id": "250636742364-ptfrgaqi4c4tc22rh6rub50g2is7btnl.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "250636742364-740pfhlbth9ihbns8m1bi231fuiljh0m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vguivarc.wakemeup"
+              }
             }
           ]
         }

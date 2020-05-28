@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
@@ -23,10 +24,11 @@
 
         <TextView
             android:id="@+id/recherche"
+            android:layout_margin="8sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="recherche"
-            android:textSize="20sp"
+            android:textSize="24sp"
+            tools:text="recherche"
             android:background="@color/grey"/>
         </RelativeLayout>
 

@@ -65,18 +65,19 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:checked="true"
-                    app:layout_constraintBottom_toTopOf="@+id/item_reveil_delete"
+                    app:layout_constraintBottom_toTopOf="@+id/fav_tv_delete"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
                 <ImageButton
-                    android:id="@+id/item_reveil_delete"
+                    android:id="@+id/fav_tv_delete"
                     style="@style/AppTheme.BoutonItem"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_weight="4"
+                    android:backgroundTint="@color/design_default_color_surface"
                     android:contentDescription="@string/delete_clock"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

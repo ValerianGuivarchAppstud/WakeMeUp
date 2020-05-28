@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/id_dialog_saisie_manuel_titre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/colorPrimary"
+        android:text="Saisie manuelle"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/id_dialog_saisie_manuel_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Veuillez copier-coller l'adresse du la vidéo Youtube :"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/id_dialog_saisie_manuel_titre" />
+
+    <EditText
+        android:id="@+id/id_dialog_saisie_manuel_url"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autofillHints="Lien youtube"
+        android:fontFamily="sans-serif"
+        android:hint="Lien youtube"
+        android:inputType="textUri"
+        app:layout_constraintEnd_toEndOf="@+id/id_dialog_saisie_manuel_text"
+        app:layout_constraintStart_toStartOf="@+id/id_dialog_saisie_manuel_text"
+        app:layout_constraintTop_toBottomOf="@+id/id_dialog_saisie_manuel_text" />
+
+
+    <TextView
+        android:id="@+id/id_dialog_saisie_manuel_text2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Saisissez un pseudo, ou connectez-vous"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/id_dialog_saisie_manuel_url" />
+
+    <EditText
+        android:id="@+id/id_dialog_saisie_manuel_pseudo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autofillHints="Pseudonyme"
+        android:fontFamily="sans-serif"
+        android:hint="Pseudonyme"
+        android:inputType="text"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/id_dialog_saisie_manuel_text"
+        app:layout_constraintStart_toStartOf="@+id/id_dialog_saisie_manuel_text"
+        app:layout_constraintTop_toBottomOf="@+id/id_dialog_saisie_manuel_text2" />
+</androidx.constraintlayout.widget.ConstraintLayout>

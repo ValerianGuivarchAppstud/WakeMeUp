@@ -1,113 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".reveil.ReveilSonneActivity"
+    android:background="@color/black"
     android:orientation="vertical">
 
     <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
         android:id="@+id/youtubePlayReveil"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heure_sonnerie"
         app:showFullScreenButton="false" />
-
-    <Button
-        android:id="@+id/button_favoris_reveil_sonne"
-        style="@style/AppTheme.BoutonReveil"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/youtubePlayReveil"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/rounded_button"
-        android:text="@string/favori" />
 
     <TextView
         android:id="@+id/date_sonnerie"
+        style="@style/AppTheme.BoutonReveil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/button_favoris_reveil_sonne"
-        android:layout_marginTop="30dp"
-        android:text="DATE"
-        android:textSize="15sp"
-        style="@style/AppTheme.BoutonReveil"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/grey"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="26 janvier 2020" />
 
     <TextView
         android:id="@+id/heure_sonnerie"
+        style="@style/AppTheme.BoutonReveil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/date_sonnerie"
-        style="@style/AppTheme.BoutonReveil"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/grey"
+        app:layout_constraintEnd_toEndOf="@+id/youtubePlayReveil"
         android:textSize="80sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_sonnerie"
+        tools:text="18 : 51" />
 
-        android:text="HEURE"/>
 
-
-    <RelativeLayout
+    <ImageButton
+        android:id="@+id/bouton_reveil_snooze"
+        style="@style/snooze"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="40dp"
-        android:layout_marginBottom="40dp"
-        android:orientation="vertical">
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:adjustViewBounds="true"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:contentDescription="@string/snooze"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bouton_reveil_stop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/youtubePlayReveil"
+        app:layout_constraintVertical_bias="0.3" />
 
-        <ImageButton
-            android:id="@+id/bouton_reveil_snooze"
-            style="@style/snooze"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/snooze" />
-
-        <TextView
-            style="@style/AppTheme.BoutonReveil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/bouton_reveil_snooze"
-            android:layout_centerInParent="true"
-            android:text="@string/snooze"
-            android:textColor="@color/green" />
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:layout_width="100dp"
+    <TextView
+        android:id="@+id/textView3"
+        style="@style/AppTheme.BoutonReveil"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/bouton_reveil_snooze"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="32dp"
+        android:text="@string/snooze"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="@+id/bouton_reveil_snooze"
+        app:layout_constraintStart_toStartOf="@+id/bouton_reveil_snooze"
+        app:layout_constraintTop_toBottomOf="@+id/bouton_reveil_snooze" />
+
+
+    <ImageButton
+        android:id="@+id/bouton_reveil_stop"
+        style="@style/stop"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="40dp"
-        android:orientation="vertical">
-
-        <ImageButton
-            android:id="@+id/bouton_reveil_stop"
-            style="@style/stop"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/stop"
-            android:hapticFeedbackEnabled="true"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:adjustViewBounds="true"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:contentDescription="@string/stop"
+        android:hapticFeedbackEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/bouton_reveil_snooze"
+        app:layout_constraintTop_toBottomOf="@+id/youtubePlayReveil"
+        app:layout_constraintVertical_bias="0.3" />
 
 
-        <TextView
-            style="@style/AppTheme.BoutonReveil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/bouton_reveil_stop"
-            android:layout_centerInParent="true"
-            android:text="@string/stop"
-            android:textColor="@color/red" />
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/textView2"
+        style="@style/AppTheme.BoutonReveil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bouton_reveil_stop"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="32dp"
+        android:text="@string/stop"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="@+id/bouton_reveil_stop"
+        app:layout_constraintStart_toStartOf="@+id/bouton_reveil_stop"
+        app:layout_constraintTop_toBottomOf="@+id/bouton_reveil_stop" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

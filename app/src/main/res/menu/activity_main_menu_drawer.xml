@@ -4,53 +4,41 @@
     tools:showIn="navigation_view">
 
 
-    <item
-        android:id="@+id/activity_main_drawer_connecter"
-        android:icon="@drawable/icon_main_menu_login"
-        android:title="@string/action_login" />
-
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/activity_main_drawer_reveil"
+            android:id="@+id/activity_main_drawer_connecter"
+            android:icon="@drawable/icon_main_menu_login"
+            android:title="@string/action_login" />
+        <item
+            android:id="@+id/reveilsListeFragment"
             android:icon="@drawable/icon_main_menu_alarms"
             android:title="@string/reveils" />
         <item
-            android:id="@+id/activity_main_drawer_musiques"
-            android:icon="@drawable/icon_main_menu_musiques"
-            android:title="@string/musiques" />
-        <item
-            android:id="@+id/activity_main_drawer_favoris"
+            android:id="@+id/favorisFragment"
             android:icon="@drawable/icon_main_menu_favoris"
             android:title="@string/favori" />
         <item
-            android:id="@+id/activity_main_drawer_musiques_en_attente"
+            android:id="@+id/musiquesRecuesFragment"
             android:icon="@drawable/icon_main_menu_musiques"
             android:title="@string/musiques_recues" />
-        <item android:title="Social">
-            <menu>
-                <item
-                    android:id="@+id/activity_main_drawer_partage"
-                    android:icon="@drawable/share"
-                    android:title="Demander une musique" />
-                <item
-                    android:id="@+id/activity_main_drawer_amis"
-                    android:icon="@drawable/icon_main_menu_friends"
-                    android:title="@string/amis" />
-            </menu>
-        </item>
+        <item
+            android:id="@+id/contactsListeFragment"
+            android:icon="@drawable/icon_main_menu_friends"
+            android:title="@string/amis" />
+        <item
+            android:id="@+id/demanderMusique"
+            android:icon="@drawable/share"
+            android:title="Partager" />
 
-        <item android:title="Compte">
-            <menu>
-                <item
-                    android:id="@+id/activity_main_drawer_parametre"
-                    android:icon="@drawable/ic_launcher_foreground"
-                    android:title="Paramètres" />
-            </menu>
-        </item>
+        <!--        <item
+                    android:id="@+id/settingsUser"
+                    android:icon="@drawable/ic_settings_black_24dp"
+                    android:title="Paramètres" />!-->
+        <item
+            android:id="@+id/activity_main_drawer_deconnecter"
+            android:icon="@drawable/icon_main_menu_logout"
+            android:title="@string/SeDeconnecter" />
 
     </group>
-    <item
-        android:id="@+id/activity_main_drawer_deconnecter"
-        android:icon="@drawable/icon_main_menu_logout"
-        android:title="@string/SeDeconnecter" />
+
 </menu>

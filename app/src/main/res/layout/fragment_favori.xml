@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,95 +7,92 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/title_favoris"
-        style="@style/AppTheme.BoutonReveil"
-        android:layout_width="match_parent"
+        android:id="@+id/textPasFavori"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:gravity="center"
-        android:text="@string/titre_favoris"
-        android:textSize="20sp" />
-
-    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-        android:id="@+id/youtube_player_view_favoris"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/aucune_musique_n_a_t_ajout_e_vos_favoris_pour_le_moment"
+        android:textAlignment="center"
+        android:textSize="30sp"
         android:visibility="gone"
-        app:showFullScreenButton="false" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-        <Button
-            android:id="@+id/button_partage_favori"
-            style="@style/AppTheme.BoutonReveil"
-            android:layout_width="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_list_video"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/recycler_list_video"
+        app:layout_constraintTop_toTopOf="parent" />
+    <!--
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/EnsembleVideo"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:visibility="gone"
-            android:text="@string/partager" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/bouton_supprimer_favori"
-            style="@style/AppTheme.BoutonReveil"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:visibility="gone"
-            android:text="@string/supprimer" />
-
-
-    </LinearLayout>
-    <Spinner
-        android:id="@+id/spinner_trie"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:pointerIcon="text"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="right"
-        android:gravity="right"
-        />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center">
-
-
-            <ProgressBar
-                android:id="@+id/pb_main_loader"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:visibility="visible" />
-            <TextView
-                android:id="@+id/texte_pas_de_favori"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vous n'avez aucun favoris"
-                android:gravity="center"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:textSize="30sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_list_video_favoris"
+            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                android:id="@+id/youtube_player_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:scrollbars="vertical"
-                tools:listitem="@layout/item_list_video" />
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:showFullScreenButton="false" />
 
+            <Button
+                android:id="@+id/list_video_partage"
+                style="@style/bouton_arrondi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:text="@string/partager"
+                app:layout_constraintEnd_toStartOf="@+id/list_video_supprimer_favori"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/youtube_player_view" />
 
-        </RelativeLayout>
+            <Button
+                android:id="@+id/list_video_supprimer_favori"
+                style="@style/bouton_arrondi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:text="@string/supprimer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/list_video_partage"
+                app:layout_constraintTop_toBottomOf="@+id/youtube_player_view" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>!-->
+    <ProgressBar
+        android:id="@+id/pb_main_loader"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/recycler_list_video"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_list_video"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/item_list_favori" />
 
-
-</LinearLayout>
-
+</androidx.constraintlayout.widget.ConstraintLayout>
