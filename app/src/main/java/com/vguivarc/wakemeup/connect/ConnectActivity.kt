@@ -3,21 +3,18 @@ package com.vguivarc.wakemeup.connect
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.iid.FirebaseInstanceId
+import androidx.lifecycle.ViewModelProvider
 import com.vguivarc.wakemeup.AppWakeUp
+import com.vguivarc.wakemeup.CurrentUserViewModel
 import com.vguivarc.wakemeup.MainActivity
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.connect.ui.LoginActivity
 import com.vguivarc.wakemeup.connect.ui.SignupActivity
-import com.vguivarc.wakemeup.notification.MyFirebaseMessagingService
-import com.vguivarc.wakemeup.notification.Token
+import com.vguivarc.wakemeup.repo.ViewModelFactory
+import com.vguivarc.wakemeup.util.Utility
 import kotlinx.android.synthetic.main.activity_connect.*
+import timber.log.Timber
 
 
 class ConnectActivity : AppCompatActivity() {
@@ -27,25 +24,39 @@ class ConnectActivity : AppCompatActivity() {
         const val CONNECTION_COMPTE = 2
     }
 
+    private lateinit var currentUserViewModel: CurrentUserViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connect)
+        Timber.e("C")
+        val factory = ViewModelFactory(AppWakeUp.repository)
+        currentUserViewModel =
+            ViewModelProvider(this, factory).get(CurrentUserViewModel::class.java)
 
         main_button_reveil.setOnClickListener {
             val intentCreerCompte = Intent(this, SignupActivity::class.java)
             startActivityForResult(intentCreerCompte, CREATION_COMPTE)
         }
 
+        currentUserViewModel.getCurrentUserLiveData().observe(this, androidx.lifecycle.Observer {
+            Timber.e("LOL-A")
+            if (it != null) {
+                Utility.createSimpleToast("Bonjour " + it.username + " !")
+            }
+        })
 
         connect_button_se_connecter.setOnClickListener {
             val intentSeConnecter = Intent(this, LoginActivity::class.java)
+            Timber.e("H")
             startActivityForResult(intentSeConnecter, CONNECTION_COMPTE)
         }
 
 
         connect_button_continuer_sans_compte.setOnClickListener {
 
-            AppWakeUp.auth.signInAnonymously()
+            startMainActivityBeingConnected()
+            /*AppWakeUp.auth.signInAnonymously()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         startMainActivityBeingConnected()
@@ -54,9 +65,9 @@ class ConnectActivity : AppCompatActivity() {
                         startMainActivityBeingConnected()
 //                        Log.e("MyApp", "Anonymous login failed.")
                     }
-                }
-
+                }*/
         }
+        Timber.e("D")
     }
 
 
@@ -67,18 +78,21 @@ class ConnectActivity : AppCompatActivity() {
         }
         when (requestCode) {
             CREATION_COMPTE -> {
-                if (AppWakeUp.auth.currentUser != null) {
+
+                //TODO déconncter pour forcer às e reconnecte rune fois mail de validation rempli
+/*                if (AppWakeUp.auth.currentUser != null) {
                     AppWakeUp.auth.signOut()
                     val intentSeConnecter = Intent(this, LoginActivity::class.java)
                     startActivityForResult(intentSeConnecter, CONNECTION_COMPTE)
-                    //startMainActivityBeingConnected()
-                }
+                }*/
+                startMainActivityBeingConnected()
             }
             CONNECTION_COMPTE -> {
-                if (AppWakeUp.auth.currentUser != null) {
+                /*if (AppWakeUp.auth.currentUser != null) {
                     sayWelcome()
                     startMainActivityBeingConnected()
-                }
+                }*/
+                startMainActivityBeingConnected()
             }
         }
 
@@ -91,48 +105,9 @@ class ConnectActivity : AppCompatActivity() {
     }
 
     private fun startMainActivityBeingConnected() {
-        FirebaseInstanceId.getInstance().instanceId
-            .addOnSuccessListener { instanceIdResult ->
-                val token = instanceIdResult.token
-                MyFirebaseMessagingService.registerInstanceOfUser(
-                    Token(token),
-                    AppWakeUp.auth.currentUser
-                )
-
-                // Do whatever you want with your token now
-                // i.e. store it on SharedPreferences or DB
-                // or directly send it to server
-            }
-
         val intent = Intent(this@ConnectActivity, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
     }
-
-    private fun sayWelcome(){
-
-        val reference =
-            AppWakeUp.repository.database.getReference("Users")
-                .child(AppWakeUp.auth.currentUser!!.uid)
-
-        reference.addValueEventListener(
-            object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val user: UserModel = dataSnapshot.getValue(UserModel::class.java)!!
-                    val welcome = getString(R.string.welcome)
-                        Toast.makeText(
-                            applicationContext,
-                            "$welcome ${user.username}",
-                            Toast.LENGTH_LONG
-                        ).show()
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.e("MainActivity", "loadPost:onCancelled ${databaseError.message}")
-                }
-            }
-        )
-    }
-
 }

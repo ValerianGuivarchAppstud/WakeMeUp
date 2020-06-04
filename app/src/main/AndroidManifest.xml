@@ -29,7 +29,7 @@
         android:screenOrientation="landscape"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".YoutubeFavori">
+        <activity android:name="com.vguivarc.wakemeup.YoutubeFavori">
             <intent-filter android:label="Music Me !">
                 <action android:name="android.intent.action.SEND" />
 
@@ -40,6 +40,9 @@
                     android:mimeType="text/*" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.vguivarc.wakemeup.Demo"
+            android:label="My Custom AppIntro" />
         <activity android:name=".LinkContactActivity">
             <intent-filter android:autoVerify="false">
                 <action android:name="android.intent.action.VIEW" />

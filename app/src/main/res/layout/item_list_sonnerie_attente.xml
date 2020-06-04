@@ -21,7 +21,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/image_ami_sonnerie_attente"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="8dp"
@@ -44,7 +44,7 @@
                 android:gravity="center"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintStart_toEndOf="@+id/image_ami_sonnerie_attente"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Envoyé par NomAmi" />
 
@@ -59,7 +59,7 @@
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintStart_toEndOf="@+id/image_ami_sonnerie_attente"
                 app:layout_constraintTop_toBottomOf="@+id/nom_ami_sonnerie_attente"
                 tools:text="Reçu le ..." />
         </androidx.constraintlayout.widget.ConstraintLayout>

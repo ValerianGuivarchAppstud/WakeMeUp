@@ -33,7 +33,6 @@
     <string name="titre_de_la_chanson">Titre de la chanson</string>
     <string name="artiste">Artiste</string>
     <string name="play">play</string>
-    <string name="partager">Partager</string>
     <string name="supprimer">Supprimer</string>
     <string name="favori">Favori</string>
     <string name="image_ami">Image ami</string>
@@ -81,6 +80,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="photo_de_profil">Photo de profil</string>
+    <string name="partager">Partager</string>
+    <string name="aucune_musique_en_attente_demandez_vos_amis_de_vous_en_envoyer">Aucune musique en attente... Demandez à vos amis de vous en envoyer !</string>
 
 
 </resources>

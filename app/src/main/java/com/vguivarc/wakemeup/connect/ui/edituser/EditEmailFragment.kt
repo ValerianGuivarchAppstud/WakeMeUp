@@ -1,20 +1,13 @@
 package com.vguivarc.wakemeup.connect.ui.edituser
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.connect.ConnectActivity
-import com.vguivarc.wakemeup.connect.UserModel
 import kotlinx.android.synthetic.main.fragment_update_email.*
 
 private lateinit var context: Context
@@ -54,6 +47,8 @@ class EditEmailFragment(val name: String) : Fragment() {
             }
 
             progressbar.visibility = View.VISIBLE
+            //TODO refaire ici
+            /*
             AppWakeUp.auth.currentUser?.let { user ->
                 val credential = EmailAuthProvider.getCredential(user.email!!, password)
                 user.reauthenticate(credential).addOnCompleteListener { task ->
@@ -74,7 +69,7 @@ class EditEmailFragment(val name: String) : Fragment() {
                         ).show()
                     }
                 }
-            }
+            }*/
         }
 
         button_update.setOnClickListener { view ->
@@ -90,6 +85,9 @@ class EditEmailFragment(val name: String) : Fragment() {
                 return@setOnClickListener
             }
             progressbar.visibility = View.VISIBLE
+
+            //TODO refaire ici
+            /*
             AppWakeUp.auth.currentUser?.let { user ->
                 progressbar.visibility = View.GONE
                 AppWakeUp.auth.currentUser!!.verifyBeforeUpdateEmail(email)
@@ -120,7 +118,7 @@ class EditEmailFragment(val name: String) : Fragment() {
                         }
 
                     }
-            }
+            }*/
         }
 
 
