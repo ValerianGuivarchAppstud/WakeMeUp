@@ -49,6 +49,7 @@
     <string name="ajouter_r_veil">Ajouter Réveil</string>
     <string name="supprimer_r_veil">Supprimer réveil</string>
     <string name="musiques_recues">Musiques reçues</string>
+    <string name="notif_recues">Notifications reçues</string>
     <string name="musiques_en_attente">En attente</string>
     <string name="musiques_passees">Passées</string>
     <string name="textNoneMusicPassees">Vous n\'avez aucune musique déjà passées</string>
@@ -82,6 +83,8 @@
     <string name="photo_de_profil">Photo de profil</string>
     <string name="partager">Partager</string>
     <string name="aucune_musique_en_attente_demandez_vos_amis_de_vous_en_envoyer">Aucune musique en attente... Demandez à vos amis de vous en envoyer !</string>
+    <string name="chargement_du_r_veil">Chargement du réveil...</string>
+    <string name="notifications">Notifications</string>
 
 
 </resources>

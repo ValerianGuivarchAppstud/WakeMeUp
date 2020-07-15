@@ -44,7 +44,7 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/heure_sonnerie"
+        app:layout_constraintTop_toBottomOf="@+id/sender_sonnerie"
         app:showFullScreenButton="false" />
 
 
@@ -57,7 +57,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:textColor="@color/grey"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -70,16 +70,31 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/date_sonnerie"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="16dp"
 
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:textColor="@color/grey"
-        app:layout_constraintEnd_toEndOf="@+id/youtubePlayReveil"
-        android:textSize="80sp"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_sonnerie"
         tools:text="18 : 51" />
+
+    <TextView
+        android:id="@+id/sender_sonnerie"
+        style="@style/AppTheme.BoutonReveil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/grey"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heure_sonnerie"
+        android:text="@string/chargement_du_r_veil" />
 
 
     <ImageButton
