@@ -2,14 +2,11 @@ package com.vguivarc.wakemeup.connect.ui.signup
 
 import android.app.Activity
 import android.util.Patterns
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.connect.ui.ConnectResult
 import com.vguivarc.wakemeup.repo.Repository
 

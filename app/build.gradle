@@ -117,4 +117,6 @@ dependencies {
     implementation 'net.frakbot:glowpadbackport:2.1.1'
 
     implementation 'com.github.AppIntro:AppIntro:6.0.0'
+
+    implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
 }

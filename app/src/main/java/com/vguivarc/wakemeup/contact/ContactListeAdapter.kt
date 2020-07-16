@@ -45,11 +45,11 @@ class ContactListeAdapter(
             card_view_contact.tag = contact
             card_view_contact.setOnClickListener(this@ContactListeAdapter)
             //item_contact_image.setImageDrawable((, null)))
-            item_contact_nom.text = contact.user!!.username
+            item_contact_nom.text = contact.user!!.displayName
 
-            if(contact.user!!.imageUrl!="") {
+            if(contact.user!!.photoUrl.toString()!="") {
                 Glide.with(context)
-                    .load(contact.user!!.imageUrl)
+                    .load(contact.user!!.photoUrl)
                     .into(item_contact_image)
             } else {
                 item_contact_image.setImageDrawable(

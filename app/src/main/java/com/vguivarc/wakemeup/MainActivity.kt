@@ -24,15 +24,16 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
 import com.bumptech.glide.Glide
+import com.facebook.AccessToken
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.vguivarc.wakemeup.connect.ConnectActivity
-import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.contact.ContactsListeFragmentDirections
 import com.vguivarc.wakemeup.notification.NotifListeViewModel
 import com.vguivarc.wakemeup.notification.NotificationMusicMe
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModelNotif: NotifListeViewModel
 
 
-    private var currentUser: UserModel? = null
+    private var currentUser: FirebaseUser? = null
     private lateinit var currentUserViewModel: CurrentUserViewModel
 
 
@@ -74,6 +75,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_musicme_app_main)
+
+
+        val accessToken = AccessToken.getCurrentAccessToken()
+        val isLoggedIn = accessToken != null && !accessToken!!.isExpired
+        Timber.e("isLoggedIn="+isLoggedIn)
+
 
         val toolbar: Toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
@@ -146,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         val baos = ByteArrayOutputStream()
         val storageRef = FirebaseStorage.getInstance()
             .reference
-            .child("pics/${currentUser!!.id}")
+            .child("pics/${currentUser!!.uid}")
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val image = baos.toByteArray()
 
@@ -163,9 +170,9 @@ class MainActivity : AppCompatActivity() {
                         navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil)
                             .setImageBitmap(bitmap)
                         val reference = AppWakeUp.repository.database.getReference("Users")
-                            .child(currentUser!!.id)
+                            .child(currentUser!!.uid)
                         val updatedUser =
-                            UserModel(currentUser!!.id, imageUri.toString(), currentUser!!.username)
+                            currentUser!!
                         reference.setValue(updatedUser)
                     }
                 }
@@ -344,10 +351,10 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             navView.getHeaderView(0).findViewById<TextView>(R.id.name_profil)
-                .setText(currentUser!!.username)
-            if (currentUser!!.imageUrl != "") {
+                .setText(currentUser!!.displayName)
+            if (currentUser!!.photoUrl.toString() != "") {
                 Glide.with(this)
-                    .load(currentUser!!.imageUrl)
+                    .load(currentUser!!.photoUrl)
                     .into(navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil))
             } else {
                 navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil)
@@ -367,7 +374,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val contactsPhone = mutableMapOf<String, String>()
-        val contactsApp = mutableListOf<UserModel>()
+        val contactsApp = mutableListOf<FirebaseUser>()
 
         if (ActivityCompat.checkSelfPermission(
                 applicationContext,
@@ -413,7 +420,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     for (snap in dataSnapshot.children) {
                         Log.i("MainActivity", snap.toString())
-                        val user: UserModel = snap.getValue(UserModel::class.java)!!
+                        val user: FirebaseUser = snap.getValue(FirebaseUser::class.java)!!
                         if (contactsPhone.containsKey(user.phone) && user.id != AppWakeUp.auth.uid) {
                             contactsApp.add(user)
                         }
@@ -468,7 +475,7 @@ class MainActivity : AppCompatActivity() {
                     object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             val lien = dataSnapshot.getValue(LienMusicMe::class.java)!!
-                            if (currentUser == null || lien.userID != currentUser!!.id) {
+                            if (currentUser == null || lien.userID != currentUser!!.uid) {
                                 val reference2 =
                                     AppWakeUp.repository.database.getReference("Users")
                                         .child(lien.userID)
@@ -476,7 +483,7 @@ class MainActivity : AppCompatActivity() {
                                     object : ValueEventListener {
                                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                                             val contact =
-                                                dataSnapshot.getValue(UserModel::class.java)!!
+                                                dataSnapshot.getValue(FirebaseUser::class.java)!!
                                             val action =
                                                 ContactsListeFragmentDirections.actionContactsListeFragmentToContactFragment(
                                                     contact

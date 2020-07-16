@@ -2,19 +2,24 @@ package com.vguivarc.wakemeup.repo
 
 import android.content.Context
 import android.os.AsyncTask
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.facebook.AccessToken
+import com.facebook.GraphRequest
+import com.facebook.HttpMethod
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.iid.FirebaseInstanceId
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.connect.ui.ConnectResult
 import com.vguivarc.wakemeup.contact.Contact
 import com.vguivarc.wakemeup.contact.ContactResult
@@ -30,6 +35,7 @@ import com.vguivarc.wakemeup.song.search.SearchYouTubeOneSong
 import com.vguivarc.wakemeup.song.search.VideoSearchResult
 import com.vguivarc.wakemeup.sonnerie.Sonnerie
 import com.vguivarc.wakemeup.util.AddFireBaseObjectResult
+import org.json.JSONException
 import timber.log.Timber
 import java.io.FileNotFoundException
 import java.io.ObjectInputStream
@@ -44,37 +50,20 @@ class Repository() {
     /********************** USER *********************/
     /*************************************************/
     val auth: FirebaseAuth
-    private var currentUser: UserModel? = null
-    private var currentUserLiveData= MutableLiveData<UserModel?>()
+    private var currentUserLiveData= MutableLiveData<FirebaseUser?>()
     val database: FirebaseDatabase = FirebaseDatabase.getInstance()
 
 
     fun getUserModelAfterConnection(){
         if(auth.currentUser!=null) {
-            val reference =
-                database.getReference("Users")
-                    .child(auth.currentUser!!.uid)
-
-            reference.addValueEventListener(
-                object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        val user: UserModel = dataSnapshot.getValue(UserModel::class.java)!!
-                        currentUser = user
-                        currentUserLiveData.value = currentUser
-                        updateSonneriesEnvoyees()
-                        updateSonneriesRecues()
-                        updateNotification()
-                        getFavoris()
-                        getContact()
-                    }
-
-                    override fun onCancelled(databaseError: DatabaseError) {
-                    }
-                }
-            )
+            currentUserLiveData.value=auth.currentUser
+            updateSonneriesEnvoyees()
+            updateSonneriesRecues()
+            updateNotification()
+            getFavoris()
+            getContact()
         } else {
-            currentUser = null
-            currentUserLiveData.value = currentUser
+            currentUserLiveData.value = null
         }
     }
     init {
@@ -82,7 +71,7 @@ class Repository() {
         getUserModelAfterConnection()
     }
 
-    fun getCurentUserLiveData() : LiveData<UserModel?> = currentUserLiveData
+    fun getCurentUserLiveData() : LiveData<FirebaseUser?> = currentUserLiveData
     private val _signupResult = MutableLiveData<ConnectResult>()
     val signupResult: LiveData<ConnectResult> = _signupResult
 
@@ -108,7 +97,7 @@ class Repository() {
                                 MyFirebaseMessagingService.registerInstanceOfUser(
                                     Token(token),
                                     auth.currentUser,
-                                    currentUser!!.id
+                                    auth.currentUser!!.uid
                                 )
                             }
                     } else {
@@ -158,12 +147,31 @@ class Repository() {
         }
     }
 
+
+    fun signInWithCredential(credential: AuthCredential) {
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener{ it ->
+                if (it.isSuccessful){// && AppWakeUp.auth.currentUser!!.isEmailVerified) {
+                    _loginResult.value =
+                        ConnectResult(auth.currentUser)
+                    Timber.e( "signInWithCredential:success")
+                    Timber.e("provider = "+credential.provider)
+                    getUserModelAfterConnection()
+                } else {
+                    Timber.e(it.exception.toString())
+                    Timber.e( "signInWithCredential:failure"+ it.exception)
+                    disconnect()
+                    _loginResult.value =
+                        ConnectResult(error = R.string.login_failed)
+                }
+            }
+    }
+
     //TODO quand disconnect, go activity connexion plutôt que laisser activity réveil pas connecté
 
     fun disconnect() {
         auth.signOut()
-        currentUser = null
-        currentUserLiveData.value = currentUser
+        currentUserLiveData.value = null
         _loginResult.value = null
         _signupResult.value = null
     }
@@ -263,21 +271,20 @@ class Repository() {
     private val contactStateAddResult = MutableLiveData<AddFireBaseObjectResult>()
     fun getContactStateAddResult(): MutableLiveData<AddFireBaseObjectResult> = contactStateAddResult
 
-    fun addContact(contactUserModel: UserModel) {
-        if (contactListLiveData.value != null && (contactListLiveData.value!!.contactList.filter { cont -> cont.value.idContact == contactUserModel.id }).size > 0) {
+    fun addContact(contactUserModel: FirebaseUser) {
+        if (contactListLiveData.value != null && (contactListLiveData.value!!.contactList.filter { cont -> cont.value.idContact == contactUserModel.uid }).size > 0) {
             contactStateAddResult.value =
                 AddFireBaseObjectResult(error = Exception("AlreadyExistingContact"))
         } else {
             val referenceCont = database.getReference("Contact")
-            val currentuser = currentUser!!
-            val contact = Contact(contactUserModel.id, currentuser.id)
+            val contact = Contact(contactUserModel.uid, auth.currentUser!!.uid)
             val refContPush = referenceCont.push()
             val keyCont = refContPush.key!!
             refContPush.setValue(contact).addOnCompleteListener {
                 if (it.isSuccessful) {
                     contactStateAddResult.value =
                         AddFireBaseObjectResult(keyCont)
-                    addNotif(NotificationMusicMe.newInstance_AjoutContact(contactUserModel.id, currentuser.id))
+                    addNotif(NotificationMusicMe.newInstance_AjoutContact(contactUserModel.uid, auth.currentUser!!.uid))
                 } else {
                     contactStateAddResult.value =
                         AddFireBaseObjectResult(error = it.exception)
@@ -288,22 +295,120 @@ class Repository() {
 
 
 
-    fun deleteContact(contact: UserModel) {
+
+    fun deleteContact(contact: FirebaseUser) {
         val keyContToDelete =
-            contactsList.filterValues { it.idContact == contact.id }.keys.toList()[0]
+            contactsList.filterValues { it.idContact == contact.uid }.keys.toList()[0]
         database.getReference("Contact").child(keyContToDelete).removeValue()
     }
 
 
+    fun requestData(){
+
+        val request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), GraphRequest.GraphJSONObjectCallback() { obj, response->
+            GraphRequest(
+                AccessToken.getCurrentAccessToken(),  // "/me/friends",
+                //"me/taggable_friends",
+                "me/friends",
+                null,
+                HttpMethod.GET,
+                GraphRequest.Callback { response ->
+                    try {
+
+
+
+                        val rawName = response.jsonObject.getJSONArray("data")
+                        contactsList.clear()
+                        if (rawName.length() == 0) {
+                            contactListLiveData.value =
+                                ContactResult(contactList = contactsList)
+                        } else {
+
+                            for (i in 0 until rawName.length()) {
+                                val c = rawName.getJSONObject(i)
+                                val name = c.getString("name")
+                                val fbId = c.getString("id")
+                                Timber.e( "JSON NAME :$name")
+                                val phone = c.getJSONObject("picture")
+                                Timber.e( "" + phone.getString("data"))
+                                val jsonObject = phone.getJSONObject("data")
+                                val url = jsonObject.getString("url").toString()
+                                Timber.e(
+                                    "@@@@" + jsonObject.getString("url").toString()
+                                )
+
+                                val cont: Contact = Contact(i.toString(), auth.currentUser!!.uid)
+                                contactsList.put(i.toString(), cont)
+                                contactListLiveData.value =
+                                    ContactResult(contactList = contactsList)
+                            }
+                        }
+                        for (i in 0 until rawName.length()) {
+
+                        }
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
+                }
+            ).executeAsync()
+
+        })
+
+        val parameters = Bundle()
+        parameters.putString("fields", "id,name,link,email,picture")
+        request.parameters = parameters
+        request.executeAsync()
+
+    }
+
+    var token: AccessToken?=null
     fun getContact() {
-        val rootRef =
+
+        requestData()
+
+        /*
+        val token = AccessToken.getCurrentAccessToken()
+        val graphRequest =
+            GraphRequest.newMeRequest(
+                token
+            ) { jsonObject, graphResponse ->
+                try {
+                    val jsonArrayFriends: JSONArray =
+                        jsonObject.getJSONObject("friendlist").getJSONArray("data")
+                    val friendlistObject: JSONObject = jsonArrayFriends.getJSONObject(0)
+                    val friendListID: String = friendlistObject.getString("id")
+                    Timber.e(friendListID.toString())
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            }
+
+
+        val param = Bundle()
+        param.putString("fields", "friendlist")
+        graphRequest.parameters = param
+        graphRequest.executeAsync()
+
+        val request = GraphRequest.newGraphPathRequest(
+            token,
+            "/{user-id}/friends"
+        ) {
+            // Insert your code here
+            Timber.e("END")
+            Timber.e(it.jsonArray.toString())
+            Timber.e(it.jsonArray.toString())
+        }
+
+        request.executeAsync()*/
+
+/*        val rootRef =
             database.reference.child("Contact")//.equalTo(currentUser?.uid!!, "appartientA")
 
-        if (currentUser == null) {
+        if (auth.currentUser == null) {
             contactListLiveData.value = ContactResult()
         } else {
             val query: Query =
-                rootRef.orderByChild("ajoutePar").equalTo(currentUser?.id!!)
+                rootRef.orderByChild("ajoutePar").equalTo(auth.currentUser?.uid!!)
 
             query.addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
@@ -319,25 +424,15 @@ class Repository() {
                     } else {
                         for (ds in p0.getChildren()) {
                             val cont: Contact = ds.getValue(Contact::class.java)!!
-                            val referenceUser =
-                                database.getReference("Users").child(cont.idContact)
-                            referenceUser.addValueEventListener(
-                                object : ValueEventListener {
-                                    override fun onCancelled(p0: DatabaseError) {}
-                                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                        val u: UserModel =
-                                            dataSnapshot.getValue(UserModel::class.java)!!
-                                        cont.user = u
-                                        contactsList.put(ds.key!!, cont)
+                            cont.user=auth.currentUser
+                            contactsList.put(ds.key!!, cont)
                                         contactListLiveData.value =
                                             ContactResult(contactList = contactsList)
-                                    }
-                                })
                         }
                     }
                 }
             })
-        }
+        }*/
     }
 
 
@@ -422,7 +517,7 @@ class Repository() {
         val rootRef =
             database.reference.child("Favoris")//.equalTo(currentUser?.id!!, "appartientA")
             val query: Query =
-                rootRef.orderByChild("appartientA").equalTo(currentUser?.id!!)
+                rootRef.orderByChild("appartientA").equalTo(auth.currentUser?.uid!!)
             query.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
                 }
@@ -433,8 +528,7 @@ class Repository() {
                             AddFireBaseObjectResult(error = Exception("AlreadyExistingFavori"))
                     } else {
                         val referenceFav = database.getReference("Favoris")
-                        val currentuser = currentUser!!
-                        val favori = Favori(getNowTxt(), song.id, currentuser.id)
+                        val favori = Favori(getNowTxt(), song.id, auth.currentUser!!.uid)
                         val rootRef = database.reference.child("Song").child(song.id)
                         rootRef.setValue(song).addOnCompleteListener {
                             if (it.isSuccessful) {
@@ -477,11 +571,11 @@ class Repository() {
         val rootRef =
             database.reference.child("Favoris")//.equalTo(currentUser?.id!!, "appartientA")
 
-        if (currentUser == null) {
+        if (auth.currentUser == null) {
             favorisListLiveData.value = VideoFavoriResult()
         } else {
             val query: Query =
-                rootRef.orderByChild("appartientA").equalTo(currentUser?.id!!)
+                rootRef.orderByChild("appartientA").equalTo(auth.currentUser?.uid!!)
 
             query.addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
@@ -560,7 +654,7 @@ class Repository() {
             database.reference.child("Sonnerie")//.equalTo(currentUser?.id!!, "appartientA")
 
         val query: Query =
-            rootRef.orderByChild("senderId").equalTo(currentUser?.id!!)
+            rootRef.orderByChild("senderId").equalTo(auth.currentUser?.uid!!)
 
         query.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -582,7 +676,7 @@ class Repository() {
         val rootRef =
             database.reference.child("Sonnerie")//.equalTo(currentUser?.id!!, "appartientA")
         val query: Query =
-            rootRef.orderByChild("idReceiver").equalTo(currentUser?.id!!)
+            rootRef.orderByChild("idReceiver").equalTo(auth.currentUser?.uid!!)
         query.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }
@@ -596,15 +690,7 @@ class Repository() {
                     val rootSong =
                         database.reference.child("Song").child(sonnerie.idSong)
                     if (sonnerie.senderId != "") {
-                        val referenceUser =
-                            database.getReference("Users").child(sonnerie.senderId)
-                        referenceUser.addValueEventListener(
-                            object : ValueEventListener {
-                                override fun onCancelled(p0: DatabaseError) {}
-                                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                    val u: UserModel =
-                                        dataSnapshot.getValue(UserModel::class.java)!!
-                                    sonnerie.sender = u
+                        sonnerie.sender = auth.currentUser
                                     rootSong.addValueEventListener(object : ValueEventListener {
                                         override fun onCancelled(p0: DatabaseError) {}
                                         override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -617,9 +703,6 @@ class Repository() {
                                             }
                                         }
                                     })
-                                }
-                            }
-                        )
                     } else {
                         rootSong.addValueEventListener(object : ValueEventListener {
                             override fun onCancelled(p0: DatabaseError) {}
@@ -679,16 +762,15 @@ class Repository() {
 
     fun addSonnerieToUser(
         song: Song,
-        contact: UserModel
+        contact: FirebaseUser
     ) {
-        val currentuser = currentUser
 
         val sonnerie = Sonnerie(
             song.id,
             Timestamp.now().seconds,
             false,
-            contact.id,
-            currentuser!!.id,
+            contact.uid,
+            auth.currentUser!!.uid,
             ""
         )
         val referenceSon = database.getReference("Sonnerie")
@@ -710,12 +792,12 @@ class Repository() {
     fun addSonnerieUrlToUser(
         lco: LifecycleOwner,
         url: String,
-        contact: UserModel?,
+        contact: FirebaseUser?,
         senderName: String?
     ) {
         //TODO pas possible d'ajouter pkus de X chansons en X temps ?
         val referenceSon = database.getReference("Sonnerie")
-        val currentuser = currentUser
+        val currentuser = auth.currentUser
         val extractId = if (url.contains("youtu.be")) {
             url.substring(url.indexOf("youtu.be/") + 9)
         } else if (url.contains("youtube.com/watch?")) {
@@ -744,8 +826,8 @@ class Repository() {
                             song.id,
                             Timestamp.now().seconds,
                             false,
-                            contact!!.id,
-                            currentuser.id,
+                            contact!!.uid,
+                            currentuser.uid,
                             ""
                         )
                     } else {
@@ -753,7 +835,7 @@ class Repository() {
                             song.id,
                             Timestamp.now().seconds,
                             false,
-                            contact!!.id,
+                            contact!!.uid,
                             "",
                             senderName!!
                         )
@@ -844,7 +926,7 @@ class Repository() {
         val rootRef =
             database.reference.child("Notification")
         val query: Query =
-            rootRef.orderByChild("idReceiver").equalTo(currentUser?.id!!)
+            rootRef.orderByChild("idReceiver").equalTo(auth.currentUser?.uid!!)
         query.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }
@@ -853,19 +935,9 @@ class Repository() {
                 listNotifications.clear()
                 for (ds in p0.getChildren()) {
                     val notif = ds.getValue(NotificationMusicMe::class.java)!!
-                    val referenceUser =
-                        database.getReference("Users").child(notif.senderId)
-                    referenceUser.addValueEventListener(
-                        object : ValueEventListener {
-                            override fun onCancelled(p0: DatabaseError) {}
-                            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                val u: UserModel =
-                                    dataSnapshot.getValue(UserModel::class.java)!!
-                                notif.sender = u
+                    notif.sender =auth.currentUser
                                 listNotifications.put(ds.key!!, notif)
                                 listNotificationsLiveData.value=listNotifications
-                            }
-                    })
                 }
                 if(!p0.hasChildren()){
                     listNotificationsLiveData.value=listNotifications

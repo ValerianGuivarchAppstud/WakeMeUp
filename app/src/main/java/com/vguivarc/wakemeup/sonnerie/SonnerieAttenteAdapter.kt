@@ -30,7 +30,7 @@ class SonnerieAttenteAdapter(
         val sonnerie = sonnerieList.get(position)
         //todo translate
         if(sonnerie.sender!=null){
-            holder.sender.text = "Envoyé par : ${sonnerie.sender!!.username}"
+            holder.sender.text = "Envoyé par : ${sonnerie.sender!!.displayName}"
         } else {
             holder.sender.text = "Envoyé par : ${sonnerie.senderName}"
         }
@@ -41,10 +41,10 @@ class SonnerieAttenteAdapter(
         calendar.timeInMillis = sonnerie.dateEnvoie*1000
 
         holder.date.text = "Reçue le ${formatterDay.format(calendar.time)} à ${formatterHour.format(calendar.time)}"
-        if(sonnerie.sender==null || sonnerie.sender!!.imageUrl==""){
+        if(sonnerie.sender==null || sonnerie.sender!!.photoUrl.toString()==""){
             holder.image.setImageDrawable(ContextCompat.getDrawable(AppWakeUp.appContext, R.drawable.empty_picture_profil))
         } else {
-            Picasso.get().load(sonnerie.sender!!.imageUrl).placeholder(R.drawable.music_placeholder)
+            Picasso.get().load(sonnerie.sender!!.photoUrl).placeholder(R.drawable.music_placeholder)
                 .into(holder.image)
         }
         holder.bind(sonnerie, listener)

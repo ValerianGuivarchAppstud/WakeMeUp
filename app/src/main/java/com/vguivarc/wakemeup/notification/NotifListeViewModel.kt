@@ -1,10 +1,7 @@
 package com.vguivarc.wakemeup.notification
 
 import androidx.lifecycle.*
-import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.repo.Repository
-import com.vguivarc.wakemeup.song.Song
-import com.vguivarc.wakemeup.util.AddFireBaseObjectResult
 
 class NotifListeViewModel(val repo: Repository) : ViewModel() {
 

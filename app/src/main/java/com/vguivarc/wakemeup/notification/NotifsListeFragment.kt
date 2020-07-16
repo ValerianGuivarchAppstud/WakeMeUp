@@ -9,10 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseUser
 import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.connect.UserModel
 
 class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListener {
 
@@ -63,7 +63,7 @@ class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListe
         return view
     }
 
-    override fun onSenderClicked(sender: UserModel) {
+    override fun onSenderClicked(sender: FirebaseUser) {
         val action = NotifsListeFragmentDirections.actionNotifsListeFragmentToContactFragment(sender)
         findNavController().navigate(action)
     }

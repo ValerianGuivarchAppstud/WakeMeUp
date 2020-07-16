@@ -10,9 +10,9 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseUser
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.connect.UserModel
 
 class NotifsListeAdapter(
     private val notifs: MutableMap<String, NotificationMusicMe>,
@@ -21,7 +21,7 @@ class NotifsListeAdapter(
     View.OnClickListener {
 
     interface NotifListAdapterListener {
-        fun onSenderClicked(sender: UserModel)
+        fun onSenderClicked(sender: FirebaseUser)
         fun onNotifDelete(notifKey: String)
     }
 
@@ -44,15 +44,15 @@ class NotifsListeAdapter(
         val notif = notifs.toList()[index].second
         with(holder) {
             notif_card_view.tag = notif
-            if(notif.sender!!.imageUrl!="") {
+            if(notif.sender!!.photoUrl.toString()!="") {
                 Glide.with(AppWakeUp.appContext)
-                    .load(notif.sender!!.imageUrl)
+                    .load(notif.sender!!.photoUrl)
                     .into(id_item_notif_profil)
             } else {
                 id_item_notif_profil.setImageDrawable(
                     ContextCompat.getDrawable(AppWakeUp.appContext, R.drawable.empty_picture_profil))
             }
-            nom_sender_notif_link.text = "  "+notif.sender!!.username+"  "
+            nom_sender_notif_link.text = "  "+notif.sender!!.displayName+"  "
             nom_sender_notif_link.setOnClickListener {
                 listener?.onSenderClicked(notif.sender!!)
             }

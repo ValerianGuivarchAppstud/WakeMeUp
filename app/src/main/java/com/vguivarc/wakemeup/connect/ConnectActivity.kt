@@ -2,9 +2,20 @@ package com.vguivarc.wakemeup.connect
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Base64
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginResult
+import com.facebook.login.widget.LoginButton
+import com.google.firebase.auth.FacebookAuthProvider
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.CurrentUserViewModel
 import com.vguivarc.wakemeup.MainActivity
@@ -15,21 +26,49 @@ import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.util.Utility
 import kotlinx.android.synthetic.main.activity_connect.*
 import timber.log.Timber
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 
 class ConnectActivity : AppCompatActivity() {
+
 
     companion object {
         const val CREATION_COMPTE = 1
         const val CONNECTION_COMPTE = 2
     }
 
+
     private lateinit var currentUserViewModel: CurrentUserViewModel
 
+    lateinit var  callbackManager : CallbackManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connect)
-        Timber.e("C")
+        callbackManager = CallbackManager.Factory.create()
+
+
+        val loginButton = findViewById(R.id.login_button) as LoginButton
+        loginButton.setReadPermissions("email", "public_profile", "user_friends")
+
+        loginButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(loginResult: LoginResult) {
+                Timber.e( "facebook:onSuccess:$loginResult")
+                handleFacebookAccessToken(loginResult.accessToken)
+            }
+
+            override fun onCancel() {
+                Timber.e( "facebook:onCancel")
+                // ...
+            }
+
+            override fun onError(error: FacebookException) {
+                Timber.e( "facebook:onError"+ error)
+                // ...
+            }
+        })
+
+
         val factory = ViewModelFactory(AppWakeUp.repository)
         currentUserViewModel =
             ViewModelProvider(this, factory).get(CurrentUserViewModel::class.java)
@@ -40,9 +79,8 @@ class ConnectActivity : AppCompatActivity() {
         }
 
         currentUserViewModel.getCurrentUserLiveData().observe(this, androidx.lifecycle.Observer {
-            Timber.e("LOL-A")
             if (it != null) {
-                Utility.createSimpleToast("Bonjour " + it.username + " !")
+                Utility.createSimpleToast("Bonjour " + it.displayName + " !")
             }
         })
 
@@ -70,9 +108,32 @@ class ConnectActivity : AppCompatActivity() {
         Timber.e("D")
     }
 
+    private fun handleFacebookAccessToken(token: AccessToken?) {
+        if(token==null){
+            Timber.e("null")
+        } else {
+            Timber.e(token.userId)
+            Timber.e(token.permissions.toString())
+        }
+
+        Timber.e( "handleFacebookAccessToken:$token")
+
+        val credential = FacebookAuthProvider.getCredential(token!!.token)
+
+        AppWakeUp.repository.signInWithCredential(credential)
+        for(p in token.permissions){
+            Timber.e("perm="+p)
+        }
+        AppWakeUp.repository.token=token
+
+
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data)
+
         if (resultCode != Activity.RESULT_OK) {
             return
         }

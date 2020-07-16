@@ -3,9 +3,8 @@ package com.vguivarc.wakemeup.contact
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import com.vguivarc.wakemeup.connect.UserModel
+import com.google.firebase.auth.FirebaseUser
 import com.vguivarc.wakemeup.repo.Repository
-import com.vguivarc.wakemeup.song.favori.VideoFavoriResult
 import com.vguivarc.wakemeup.util.AddFireBaseObjectResult
 
 class ContactListeViewModel(val repo: Repository) : ViewModel(){
@@ -26,11 +25,11 @@ class ContactListeViewModel(val repo: Repository) : ViewModel(){
 
     }
 
-    fun removeContact(newUser: UserModel) {
+    fun removeContact(newUser: FirebaseUser) {
         repo.deleteContact(newUser)
     }
 
-    fun addContact(newUser: UserModel) {
+    fun addContact(newUser: FirebaseUser) {
         repo.addContact(newUser)
     }
 

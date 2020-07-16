@@ -2,8 +2,10 @@ package com.vguivarc.wakemeup
 
 import android.app.Application
 import android.content.Context
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 import com.google.firebase.auth.FirebaseAuth
-import com.vguivarc.wakemeup.connect.UserModel
+import com.google.firebase.auth.FirebaseUser
 import com.vguivarc.wakemeup.repo.Repository
 import timber.log.Timber
 
@@ -31,7 +33,7 @@ class AppWakeUp : Application() {
         lateinit var repository: Repository
         const val NAME_FILE_REVEIL = "clock_list.file"
         const val NAME_FILE_HISTORIQUE = "historique.file"
-        lateinit var listeAmis: MutableList<UserModel>
+        lateinit var listeAmis: MutableList<FirebaseUser>
 
 
         lateinit var appContext: Context
@@ -42,6 +44,9 @@ class AppWakeUp : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
+        AppEventsLogger.activateApp(this)
+
+
         appContext = applicationContext
         repository = Repository()
         repository.chargement()
