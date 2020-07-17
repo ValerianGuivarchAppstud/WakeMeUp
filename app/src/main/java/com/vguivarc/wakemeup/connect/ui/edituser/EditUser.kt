@@ -4,19 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.connect.ConnectActivity
-import com.vguivarc.wakemeup.connect.UserModel
 import kotlinx.android.synthetic.main.activity_edit_user.*
 
 class EditUser : AppCompatActivity() {
 
 
-    lateinit var currentUserModel: UserModel
+    lateinit var currentUserModel: FirebaseUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +75,7 @@ class EditUser : AppCompatActivity() {
         button_email.setOnClickListener(){
             val intent = Intent(this, LanceurFragment::class.java)
             intent.putExtra("categorie","email")
-            intent.putExtra("name",currentUserModel.username)
+            intent.putExtra("name",currentUserModel.displayName)
             startActivity(intent)
         }
     }

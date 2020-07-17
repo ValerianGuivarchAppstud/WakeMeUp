@@ -12,14 +12,15 @@ import com.facebook.GraphRequest
 import com.facebook.HttpMethod
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.iid.FirebaseInstanceId
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.R
+import com.vguivarc.wakemeup.connect.LinkFirebaseAndFacebookIds
 import com.vguivarc.wakemeup.connect.ui.ConnectResult
 import com.vguivarc.wakemeup.contact.Contact
 import com.vguivarc.wakemeup.contact.ContactResult
@@ -148,14 +149,56 @@ class Repository() {
     }
 
 
-    fun signInWithCredential(credential: AuthCredential) {
+    fun signInWithCredential(accessToken: AccessToken) {
+        val credential = FacebookAuthProvider.getCredential(accessToken.token)
         auth.signInWithCredential(credential)
             .addOnCompleteListener{ it ->
                 if (it.isSuccessful){// && AppWakeUp.auth.currentUser!!.isEmailVerified) {
-                    _loginResult.value =
-                        ConnectResult(auth.currentUser)
+
                     Timber.e( "signInWithCredential:success")
                     Timber.e("provider = "+credential.provider)
+                    Timber.e(accessToken.userId)
+                    when(credential.provider){
+                        "facebook.com"-> {
+
+                            val rootRef =
+                                database.reference.child("LinkFirebaseAndFacebookIds")
+                            val query: Query =
+                                rootRef.orderByChild("idFirebase").equalTo(auth.currentUser?.uid!!)
+                            query.addValueEventListener(object : ValueEventListener {
+                                override fun onCancelled(p0: DatabaseError) {
+                                    Log.e("LinkFirebaseAndFbIds", "cancelled " + p0.message)
+                                    _loginResult.value =
+                                        ConnectResult(error = R.string.login_failed)
+                                }
+                                override fun onDataChange(p0: DataSnapshot) {
+                                    if (p0.childrenCount.toInt() == 0) {
+                                        val referenceCont = database.getReference("LinkFirebaseAndFacebookIds")
+                                        val link = LinkFirebaseAndFacebookIds(auth.currentUser!!.uid, accessToken.userId)
+                                        val refLinkPush = referenceCont.push()
+                                        val keyLink = refLinkPush.key!!
+                                        refLinkPush.setValue(link).addOnCompleteListener {
+                                            if (it.isSuccessful) {
+                                                _loginResult.value =
+                                                    ConnectResult(auth.currentUser)
+                                            } else {
+                                                _loginResult.value =
+                                                    ConnectResult(error = R.string.login_failed)
+                                            }
+                                        }
+                                    } else {
+                                        //TODO tester si l'id FB est tjr le même, si non, modifier.. A moins que ça soit jamais possible simplement ?
+                                        _loginResult.value =
+                                            ConnectResult(auth.currentUser)
+                                    }
+                                }
+                            })
+                        }
+                        else -> {
+                            _loginResult.value =
+                            ConnectResult(auth.currentUser)
+                        }
+                    }
                     getUserModelAfterConnection()
                 } else {
                     Timber.e(it.exception.toString())
@@ -176,9 +219,6 @@ class Repository() {
         _signupResult.value = null
     }
 
-    fun connected() {
-
-    }
 
     /*************************************************/
     /******************** REVEILS ********************/
@@ -303,6 +343,8 @@ class Repository() {
     }
 
 
+    private val facebookFriendsList = mutableMapOf<String, FirebaseUser>()
+
     fun requestData(){
 
         val request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), GraphRequest.GraphJSONObjectCallback() { obj, response->
@@ -314,15 +356,53 @@ class Repository() {
                 HttpMethod.GET,
                 GraphRequest.Callback { response ->
                     try {
-
-
-
                         val rawName = response.jsonObject.getJSONArray("data")
                         contactsList.clear()
                         if (rawName.length() == 0) {
                             contactListLiveData.value =
                                 ContactResult(contactList = contactsList)
                         } else {
+                            val listIdFb = mutableListOf<String>()
+                            for (i in 0 until rawName.length()) {
+                                listIdFb.add(rawName.getJSONObject(i).getString("id"))
+                            }
+
+                            val iter = listIdFb.iterator()
+                            getFacebookFriends(iter)
+
+
+                                val rootRef =
+                                database.reference.child("LinkFirebaseAndFacebookIds")//.equalTo(currentUser?.uid!!, "appartientA")
+                            if (auth.currentUser == null) {
+                                contactListLiveData.value = ContactResult()
+                            } else {
+
+                         val query: Query =
+                                    rootRef.orderByChild("IdFirebase").equalTo(rawName.getJSONObject(0).getString("id"))
+
+                                query.addValueEventListener(object : ValueEventListener {
+                                    override fun onCancelled(p0: DatabaseError) {
+                                        Log.e("RepositoryGetContact", "cancelled " + p0.message)
+                                        contactListLiveData.value = ContactResult(error = p0.toException())
+                                    }
+
+                                    override fun onDataChange(p0: DataSnapshot) {
+                                        contactsList.clear()
+                                        if (p0.childrenCount.toInt() == 0) {
+                                            contactListLiveData.value =
+                                                ContactResult(contactList = contactsList)
+                                        } else {
+                                            for (ds in p0.getChildren()) {
+                                                val cont: Contact = ds.getValue(Contact::class.java)!!
+                                                cont.user=auth.currentUser
+                                                contactsList.put(ds.key!!, cont)
+                                                contactListLiveData.value =
+                                                    ContactResult(contactList = contactsList)
+                                            }
+                                        }
+                                    }
+                                })
+                            }
 
                             for (i in 0 until rawName.length()) {
                                 val c = rawName.getJSONObject(i)
@@ -361,7 +441,43 @@ class Repository() {
 
     }
 
-    var token: AccessToken?=null
+
+    private fun getFacebookFriends(iter: MutableIterator<String>) {
+        val fbId = iter.next()
+        val referenceFb =
+            database.getReference("LinkFirebaseAndFacebookIds").equalTo("IdFacebook",fbId)
+        referenceFb.addValueEventListener(
+            object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val f: LinkFirebaseAndFacebookIds = dataSnapshot.getValue(LinkFirebaseAndFacebookIds::class.java)!!
+
+                    val referenceFb2 =
+                        database.getReference("LinkFirebaseAndFacebookIds").equalTo("IdFacebook",fbId)
+                    referenceFb.addValueEventListener(
+                        object : ValueEventListener {
+                            override fun onCancelled(p0: DatabaseError) {}
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                            }
+                        }
+                    )
+
+
+
+                  /*  favorisList.put(fbId.key!!, fav)
+
+                    if(dataIterator.hasNext()){
+                        getSongForFavori(dataIterator)
+                    } else {
+                        favorisListLiveData.value =
+                            VideoFavoriResult(favoriList = favorisList)
+                    }*/
+                }
+            })
+    }
+
+
     fun getContact() {
 
         requestData()

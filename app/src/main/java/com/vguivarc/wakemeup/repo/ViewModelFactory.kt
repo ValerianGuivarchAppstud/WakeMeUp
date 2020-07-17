@@ -3,6 +3,7 @@ package com.vguivarc.wakemeup.repo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.vguivarc.wakemeup.CurrentUserViewModel
+import com.vguivarc.wakemeup.connect.ui.login.FbLoginViewModel
 import com.vguivarc.wakemeup.connect.ui.login.LoginViewModel
 import com.vguivarc.wakemeup.connect.ui.signup.SignupViewModel
 import com.vguivarc.wakemeup.contact.ContactListeViewModel
@@ -38,6 +39,9 @@ class ViewModelFactory(private val repository: Repository) :
                 repository
             )
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(
+                repository
+            )
+            modelClass.isAssignableFrom(FbLoginViewModel::class.java) -> FbLoginViewModel(
                 repository
             )
             modelClass.isAssignableFrom(NotifListeViewModel::class.java) -> NotifListeViewModel(

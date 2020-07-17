@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class UserModel(
+class LinkFirebaseAndFacebookIds(
     val idFirebase: String,
     val idFacebook: String
 ) : Parcelable {

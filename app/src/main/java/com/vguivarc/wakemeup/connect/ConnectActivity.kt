@@ -2,14 +2,9 @@ package com.vguivarc.wakemeup.connect
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Base64
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -22,12 +17,11 @@ import com.vguivarc.wakemeup.MainActivity
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.connect.ui.LoginActivity
 import com.vguivarc.wakemeup.connect.ui.SignupActivity
+import com.vguivarc.wakemeup.connect.ui.login.FbLoginViewModel
 import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.util.Utility
 import kotlinx.android.synthetic.main.activity_connect.*
 import timber.log.Timber
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 
 
 class ConnectActivity : AppCompatActivity() {
@@ -40,6 +34,7 @@ class ConnectActivity : AppCompatActivity() {
 
 
     private lateinit var currentUserViewModel: CurrentUserViewModel
+    private lateinit var fbLoginViewModel: FbLoginViewModel
 
     lateinit var  callbackManager : CallbackManager
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,33 +42,34 @@ class ConnectActivity : AppCompatActivity() {
         setContentView(R.layout.activity_connect)
         callbackManager = CallbackManager.Factory.create()
 
+        val fb_login_button = findViewById(R.id.fb_login_button) as LoginButton
+        fb_login_button.setReadPermissions("email", "public_profile", "user_friends")
 
-        val loginButton = findViewById(R.id.login_button) as LoginButton
-        loginButton.setReadPermissions("email", "public_profile", "user_friends")
+        val factory = ViewModelFactory(AppWakeUp.repository)
+        fbLoginViewModel =
+            ViewModelProvider(this, factory).get(FbLoginViewModel::class.java)
 
-        loginButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+        fbLoginViewModel.getLoginResultLiveData()
+
+        fb_login_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
-                Timber.e( "facebook:onSuccess:$loginResult")
-                handleFacebookAccessToken(loginResult.accessToken)
+                fbLoginViewModel.login(loginResult.accessToken)
             }
 
             override fun onCancel() {
                 Timber.e( "facebook:onCancel")
-                // ...
             }
 
             override fun onError(error: FacebookException) {
                 Timber.e( "facebook:onError"+ error)
-                // ...
             }
         })
 
 
-        val factory = ViewModelFactory(AppWakeUp.repository)
         currentUserViewModel =
             ViewModelProvider(this, factory).get(CurrentUserViewModel::class.java)
 
-        main_button_reveil.setOnClickListener {
+        creer_son_compte.setOnClickListener {
             val intentCreerCompte = Intent(this, SignupActivity::class.java)
             startActivityForResult(intentCreerCompte, CREATION_COMPTE)
         }
@@ -86,7 +82,6 @@ class ConnectActivity : AppCompatActivity() {
 
         connect_button_se_connecter.setOnClickListener {
             val intentSeConnecter = Intent(this, LoginActivity::class.java)
-            Timber.e("H")
             startActivityForResult(intentSeConnecter, CONNECTION_COMPTE)
         }
 
@@ -106,27 +101,6 @@ class ConnectActivity : AppCompatActivity() {
                 }*/
         }
         Timber.e("D")
-    }
-
-    private fun handleFacebookAccessToken(token: AccessToken?) {
-        if(token==null){
-            Timber.e("null")
-        } else {
-            Timber.e(token.userId)
-            Timber.e(token.permissions.toString())
-        }
-
-        Timber.e( "handleFacebookAccessToken:$token")
-
-        val credential = FacebookAuthProvider.getCredential(token!!.token)
-
-        AppWakeUp.repository.signInWithCredential(credential)
-        for(p in token.permissions){
-            Timber.e("perm="+p)
-        }
-        AppWakeUp.repository.token=token
-
-
     }
 
 

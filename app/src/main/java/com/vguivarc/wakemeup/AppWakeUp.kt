@@ -26,6 +26,7 @@ class AppWakeUp : Application() {
     // système de notif...
     // choisir sa sonnerie par défaut
     // lien FB marche pas
+    // TODO voir le cas où on refuse l'accès aux amis, que ça marche et qu'on puisse accepter après coup
 
 
     companion object {
