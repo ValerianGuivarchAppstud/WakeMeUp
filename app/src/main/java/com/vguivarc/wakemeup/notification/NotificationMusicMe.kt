@@ -1,6 +1,6 @@
 package com.vguivarc.wakemeup.notification
 
-import com.google.firebase.auth.FirebaseUser
+import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.sonnerie.Sonnerie
 
 
@@ -9,7 +9,7 @@ open class NotificationMusicMe (
     val senderId: String,
     val vue : Boolean,
     val type : NotificationType)  {
-    var sender: FirebaseUser?=null
+    var sender: UserModel?=null
     var sonnerieName : String? = null
 
     constructor() : this(

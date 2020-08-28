@@ -5,11 +5,12 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 class UserModel(
-    val idFirebase: String,
-    val idFacebook: String
+    val id: String,
+    val imageUrl: String,
+    val username: String
 ) : Parcelable {
 
 
-    constructor() : this("", "")
+    constructor() : this("", "", "")
 
 }

@@ -4,7 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -45,11 +46,11 @@ class ContactListeAdapter(
             card_view_contact.tag = contact
             card_view_contact.setOnClickListener(this@ContactListeAdapter)
             //item_contact_image.setImageDrawable((, null)))
-            item_contact_nom.text = contact.user!!.displayName
+            item_contact_nom.text = contact.user!!.username
 
-            if(contact.user!!.photoUrl.toString()!="") {
+            if(contact.user!!.imageUrl!="") {
                 Glide.with(context)
-                    .load(contact.user!!.photoUrl)
+                    .load(contact.user!!.imageUrl)
                     .into(item_contact_image)
             } else {
                 item_contact_image.setImageDrawable(

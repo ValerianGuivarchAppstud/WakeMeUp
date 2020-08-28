@@ -27,13 +27,13 @@ import com.bumptech.glide.Glide
 import com.facebook.AccessToken
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.vguivarc.wakemeup.connect.ConnectActivity
+import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.contact.ContactsListeFragmentDirections
 import com.vguivarc.wakemeup.notification.NotifListeViewModel
 import com.vguivarc.wakemeup.notification.NotificationMusicMe
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModelNotif: NotifListeViewModel
 
 
-    private var currentUser: FirebaseUser? = null
+    private var currentUser: UserModel? = null
     private lateinit var currentUserViewModel: CurrentUserViewModel
 
 
@@ -135,9 +135,6 @@ class MainActivity : AppCompatActivity() {
                 //val extras = data!!.extras
              //   val imageBitmap = extras!!["data"] as Bitmap?
                // uploadImageAndSaveUri(imageBitmap!!)
-
-
-
                  val extras = data!!.extras
                 if (extras != null) {
                     val newProfilePic = extras.getParcelable<Bitmap>("data")
@@ -153,7 +150,7 @@ class MainActivity : AppCompatActivity() {
         val baos = ByteArrayOutputStream()
         val storageRef = FirebaseStorage.getInstance()
             .reference
-            .child("pics/${currentUser!!.uid}")
+            .child("pics/${currentUser!!.id}")
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val image = baos.toByteArray()
 
@@ -170,9 +167,9 @@ class MainActivity : AppCompatActivity() {
                         navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil)
                             .setImageBitmap(bitmap)
                         val reference = AppWakeUp.repository.database.getReference("Users")
-                            .child(currentUser!!.uid)
+                            .child(currentUser!!.id)
                         val updatedUser =
-                            currentUser!!
+                            UserModel(currentUser!!.id, imageUri.toString(), currentUser!!.username)
                         reference.setValue(updatedUser)
                     }
                 }
@@ -194,6 +191,16 @@ class MainActivity : AppCompatActivity() {
 
         val alertMenuItem = menu.findItem(R.id.id_menu_bar_message)
         val notifMenuItem = menu.findItem(R.id.id_menu_bar_notif)
+        val ajout_facebook = menu.findItem(R.id.id_menu_bar_ajout_facebook)
+
+        val rootViewFacebook = ajout_facebook.actionView as RelativeLayout
+        rootViewFacebook.setOnClickListener {
+            navController.navigate(
+                R.id.facebookListeFragment
+            )
+        }
+
+
 
         val rootViewReveil = alertMenuItem.actionView as RelativeLayout
         viewNbMusiquesEnAttente = rootViewReveil.findViewById<TextView>(R.id.text_message_reveil)
@@ -351,10 +358,10 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             navView.getHeaderView(0).findViewById<TextView>(R.id.name_profil)
-                .setText(currentUser!!.displayName)
-            if (currentUser!!.photoUrl.toString() != "") {
+                .setText(currentUser!!.username)
+            if (currentUser!!.imageUrl != "") {
                 Glide.with(this)
-                    .load(currentUser!!.photoUrl)
+                    .load(currentUser!!.imageUrl)
                     .into(navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil))
             } else {
                 navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil)
@@ -374,7 +381,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val contactsPhone = mutableMapOf<String, String>()
-        val contactsApp = mutableListOf<FirebaseUser>()
+        val contactsApp = mutableListOf<UserModel>()
 
         if (ActivityCompat.checkSelfPermission(
                 applicationContext,
@@ -420,7 +427,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     for (snap in dataSnapshot.children) {
                         Log.i("MainActivity", snap.toString())
-                        val user: FirebaseUser = snap.getValue(FirebaseUser::class.java)!!
+                        val user: UserModel = snap.getValue(UserModel::class.java)!!
                         if (contactsPhone.containsKey(user.phone) && user.id != AppWakeUp.auth.uid) {
                             contactsApp.add(user)
                         }
@@ -475,7 +482,7 @@ class MainActivity : AppCompatActivity() {
                     object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             val lien = dataSnapshot.getValue(LienMusicMe::class.java)!!
-                            if (currentUser == null || lien.userID != currentUser!!.uid) {
+                            if (currentUser == null || lien.userID != currentUser!!.id) {
                                 val reference2 =
                                     AppWakeUp.repository.database.getReference("Users")
                                         .child(lien.userID)
@@ -483,7 +490,7 @@ class MainActivity : AppCompatActivity() {
                                     object : ValueEventListener {
                                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                                             val contact =
-                                                dataSnapshot.getValue(FirebaseUser::class.java)!!
+                                                dataSnapshot.getValue(UserModel::class.java)!!
                                             val action =
                                                 ContactsListeFragmentDirections.actionContactsListeFragmentToContactFragment(
                                                     contact

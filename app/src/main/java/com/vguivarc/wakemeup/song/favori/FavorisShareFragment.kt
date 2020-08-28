@@ -95,10 +95,10 @@ class FavorisShareFragment : Fragment(), FavorisShareAdaptater.RecyclerItemClick
             }
         }
 
-        currentView.findViewById<TextView>(R.id.share_contact_name).setText(contact.displayName)
-        if (contact.photoUrl.toString() != "") {
+        currentView.findViewById<TextView>(R.id.share_contact_name).setText(contact.username)
+        if (contact.imageUrl != "") {
             Glide.with(requireContext())
-                .load(contact.photoUrl)
+                .load(contact.imageUrl)
                 .into(currentView.findViewById(R.id.share_contact_image))
         } else {
             currentView.findViewById<ImageView>(R.id.share_contact_image).setImageDrawable(

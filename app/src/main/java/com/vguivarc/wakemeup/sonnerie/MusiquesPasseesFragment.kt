@@ -12,9 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseUser
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.R
+import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.song.favori.Favori
 import com.vguivarc.wakemeup.song.favori.FavorisViewModel
@@ -141,7 +141,7 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
         fragFather.share(sonnerie.song!!)
     }
 
-    override fun onNameListener(user: FirebaseUser?, position: Int) {
+    override fun onNameListener(user: UserModel?, position: Int) {
         fragFather.name(user)
     }
 

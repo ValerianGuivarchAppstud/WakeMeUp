@@ -46,11 +46,11 @@ class ContactListeShareAdapter(
         val contact = contacts.toList()[position].second
         with(holder) {
             //item_contact_image.setImageDrawable((, null)))
-            item_contact_nom.text = contact.user!!.displayName
+            item_contact_nom.text = contact.user!!.username
 
-            if (contact.user!!.photoUrl.toString() != "") {
+            if (contact.user!!.imageUrl != "") {
                 Glide.with(context)
-                    .load(contact.user!!.photoUrl)
+                    .load(contact.user!!.imageUrl)
                     .into(item_contact_image)
             } else {
                 item_contact_image.setImageDrawable(

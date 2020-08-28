@@ -16,10 +16,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseUser
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.CurrentUserViewModel
 import com.vguivarc.wakemeup.R
+import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.sonnerie.SonnerieListeViewModel
 import com.vguivarc.wakemeup.util.Utility
@@ -32,7 +32,7 @@ class ContactFragment : Fragment() {
     private lateinit var favoriButton : Button
     private lateinit var viewModelSonnerie : SonnerieListeViewModel
 
-    private var  currentUser : FirebaseUser? = null
+    private var  currentUser : UserModel? = null
     private lateinit var currentUserViewModel: CurrentUserViewModel
 
     override fun onCreateView(
@@ -43,10 +43,10 @@ class ContactFragment : Fragment() {
         val contact = ContactFragmentArgs.fromBundle(requireArguments()).contact
         val view =  inflater.inflate(R.layout.fragment_contact, container, false)
 
-        view.findViewById<TextView>(R.id.id_contact_nom).setText(contact.displayName)
-        if(contact.photoUrl.toString()!="") {
+        view.findViewById<TextView>(R.id.id_contact_nom).setText(contact.username)
+        if(contact.imageUrl!="") {
             Glide.with(requireContext())
-                .load(contact.photoUrl)
+                .load(contact.imageUrl)
                 .into(view.findViewById<ImageView>(R.id.profil_picture))
         } else {
             view.findViewById<ImageView>(R.id.profil_picture).setImageDrawable(
@@ -72,7 +72,7 @@ class ContactFragment : Fragment() {
 
         viewModelContact.getContactsListeLiveData().observe(requireActivity(), androidx.lifecycle.Observer {
             if(it.error==null) {
-                if(it.contactList.size==0 || it.contactList.filter { entry -> entry.value.idContact==contact.uid }.size==0){
+                if(it.contactList.size==0 || it.contactList.filter { entry -> entry.value.idContact==contact.id }.size==0){
                     addOrRemoveButton.text="Ajouter aux contacts"
                     addOrRemoveButton.setOnClickListener {
                         viewModelContact.addContact(contact)

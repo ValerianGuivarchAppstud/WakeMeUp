@@ -1,6 +1,6 @@
 package com.vguivarc.wakemeup.contact
 
-import com.google.firebase.auth.FirebaseUser
+import com.vguivarc.wakemeup.connect.UserModel
 import java.io.Serializable
 
 
@@ -11,5 +11,5 @@ data class Contact(
 
     constructor() : this("", "")
 
-    var user: FirebaseUser? = null
+    var user: UserModel? = null
 }

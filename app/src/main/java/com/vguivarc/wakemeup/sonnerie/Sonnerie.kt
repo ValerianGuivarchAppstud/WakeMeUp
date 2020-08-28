@@ -1,6 +1,6 @@
 package com.vguivarc.wakemeup.sonnerie
 
-import com.google.firebase.auth.FirebaseUser
+import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.song.Song
 import java.io.Serializable
 
@@ -28,7 +28,7 @@ data class Sonnerie(
     )
     lateinit var idSonnerie:String
     var song:Song?=null
-    var sender: FirebaseUser?=null
+    var sender: UserModel?=null
 
 
    // constructor(sentMusic: SonnerieRecue) : this(sentMusic.sender,  sentMusic.senderName, sentMusic.receiverId,

@@ -9,9 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseUser
 import com.squareup.picasso.Picasso
 import com.vguivarc.wakemeup.R
+import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.song.favori.Favori
 
 class SonneriePasseAdapter (private val context: Context,
@@ -33,7 +33,7 @@ class SonneriePasseAdapter (private val context: Context,
         if(sonnerie.sender!=null){
             holder.sender.text = "Envoyé par : "
             holder.link.visibility = View.VISIBLE
-            holder.link.text="    "+sonnerie.sender!!.displayName+"    "
+            holder.link.text="    "+sonnerie.sender!!.username+"    "
 
         } else {
             holder.sender.text = "Envoyé par : ${sonnerie.senderName}"
@@ -69,7 +69,7 @@ class SonneriePasseAdapter (private val context: Context,
         val ivFavori: ImageView = itemView.findViewById<View>(R.id.pas_tv_fav) as ImageView
         val link: TextView = itemView.findViewById(R.id.nom_ami_sonnerie_passe_link)
 
-        fun bind(song: Sonnerie, user: FirebaseUser?, listener: RecyclerItemClickListener) {
+        fun bind(song: Sonnerie, user: UserModel?, listener: RecyclerItemClickListener) {
             ivPlayActive.setOnClickListener { listener.onPlayListener(song, layoutPosition) }
             ivShare.setOnClickListener { listener.onShareListener(song, layoutPosition) }
             ivDelete.setOnClickListener { listener.onDeleteListener(song, layoutPosition) }
@@ -84,7 +84,7 @@ class SonneriePasseAdapter (private val context: Context,
         fun onShareListener(sonnerie: Sonnerie, position: Int)
         fun onDeleteListener(sonnerie: Sonnerie, position: Int)
         fun onFavoriListener(sonnerie: Sonnerie, position: Int)
-        fun onNameListener(user: FirebaseUser?, position: Int)
+        fun onNameListener(user: UserModel?, position: Int)
 
 
     }

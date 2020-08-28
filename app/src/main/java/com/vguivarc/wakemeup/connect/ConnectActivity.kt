@@ -10,7 +10,6 @@ import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
-import com.google.firebase.auth.FacebookAuthProvider
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.CurrentUserViewModel
 import com.vguivarc.wakemeup.MainActivity
@@ -76,7 +75,7 @@ class ConnectActivity : AppCompatActivity() {
 
         currentUserViewModel.getCurrentUserLiveData().observe(this, androidx.lifecycle.Observer {
             if (it != null) {
-                Utility.createSimpleToast("Bonjour " + it.displayName + " !")
+                Utility.createSimpleToast("Bonjour " + it.username + " !")
             }
         })
 

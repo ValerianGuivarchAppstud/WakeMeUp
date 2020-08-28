@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseUser
 import com.vguivarc.wakemeup.R
+import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.song.Song
 import kotlinx.android.synthetic.main.fragment_musiques_recues.view.*
 
@@ -140,8 +140,9 @@ class MusiquesRecuesFragment : Fragment() {
 
     }
 
-    fun name(user: FirebaseUser?) {
+    fun name(user: UserModel?) {
         if(user!=null){
+
             val action = MusiquesRecuesFragmentDirections.actionMusiquesRecuesFragmentToContactFragment(user)
             findNavController().navigate(action)
         }

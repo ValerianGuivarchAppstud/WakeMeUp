@@ -1,7 +1,7 @@
 package com.vguivarc.wakemeup.sonnerie
 
 import androidx.lifecycle.*
-import com.google.firebase.auth.FirebaseUser
+import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.repo.Repository
 import com.vguivarc.wakemeup.song.Song
 import com.vguivarc.wakemeup.util.AddFireBaseObjectResult
@@ -45,11 +45,11 @@ class SonnerieListeViewModel(val repo: Repository) : ViewModel() {
         repo.deleteSonneriePassee(sonnerie)
     }
 
-    fun addSonnerieUrlToUser(lco : LifecycleOwner, url: String, contact: FirebaseUser?, senderName : String?) {
+    fun addSonnerieUrlToUser(lco : LifecycleOwner, url: String, contact: UserModel?, senderName : String?) {
         repo.addSonnerieUrlToUser(lco, url, contact, senderName)
     }
 
-    fun addSonnerieToUser(song : Song, contact: FirebaseUser) {
+    fun addSonnerieToUser(song : Song, contact: UserModel) {
         repo.addSonnerieToUser(song, contact)
     }
     fun getSonnerieStateAddResult(): MutableLiveData<AddFireBaseObjectResult> {

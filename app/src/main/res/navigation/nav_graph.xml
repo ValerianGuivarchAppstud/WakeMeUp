@@ -51,7 +51,7 @@
         tools:layout="@layout/fragment_contact" >
         <argument
             android:name="contact"
-            app:argType="com.google.firebase.auth.FirebaseUser" />
+            app:argType="com.vguivarc.wakemeup.connect.UserModel" />
         <action
             android:id="@+id/action_contactFragment_to_favorisShareFragment"
             app:destination="@id/favorisShareFragment" />
@@ -82,7 +82,7 @@
         android:label="@string/partager">
         <argument
             android:name="contact"
-            app:argType="com.google.firebase.auth.FirebaseUser" />
+            app:argType="com.vguivarc.wakemeup.connect.UserModel" />
     </fragment>
     <fragment
         android:id="@+id/notifsListeFragment"
@@ -91,5 +91,10 @@
         <action
             android:id="@+id/action_notifsListeFragment_to_contactFragment"
             app:destination="@id/contactFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/facebookListeFragment"
+        android:name="com.vguivarc.wakemeup.facebook.FacebookListeFragment"
+        android:label="FacebookListeFragment">
     </fragment>
 </navigation>

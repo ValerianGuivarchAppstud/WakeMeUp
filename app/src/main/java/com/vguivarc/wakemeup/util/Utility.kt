@@ -1,13 +1,11 @@
 package com.vguivarc.wakemeup.util
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.Toast
-import com.google.firebase.auth.FirebaseUser
 import com.vguivarc.wakemeup.AppWakeUp
 
 
@@ -27,16 +25,6 @@ object Utility {
             text,
             Toast.LENGTH_SHORT
         ).show()
-    }
-
-    class UserModel(val uid : String ?, val name : String?, val email: String?, val photoUrl : Uri?)
-
-    fun getUserModel(user : FirebaseUser) : UserModel{
-            val uid = user.uid
-            val name = user.displayName
-            val email = user.email
-            val photoUrl = user.photoUrl
-        return UserModel(uid, name, email, photoUrl)
     }
 
 }

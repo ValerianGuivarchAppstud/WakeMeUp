@@ -15,20 +15,21 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.CurrentUserViewModel
 import com.vguivarc.wakemeup.R
+import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.repo.ViewModelFactory
 import java.sql.Timestamp
 
 
 class DemanderMusiqueFragment : Fragment() {
+    private lateinit var username: String
 
-    private var  currentUser : FirebaseUser? = null
+    private var  currentUser : UserModel? = null
     private lateinit var currentUserViewModel: CurrentUserViewModel
 
     override fun onCreateView(
@@ -68,19 +69,21 @@ class DemanderMusiqueFragment : Fragment() {
     if(currentUser!=null) {
         //on récupére l'user pour l'username
         val referenceUsername =
-            AppWakeUp.repository.database.getReference("Users").child(currentUser!!.uid)
+            AppWakeUp.repository.database.getReference("Users").child(currentUser!!.id)
 
         referenceUsername.addValueEventListener(
             object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {}
 
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val user: UserModel = dataSnapshot.getValue(UserModel::class.java)!!
+                    username = user.username
 
                     //création de la demande de musique
                     val reference = AppWakeUp.repository.database.getReference("LienMusicMe")
                     val demande = LienMusicMe(
-                        currentUser!!.uid,
-                        currentUser!!.displayName!!,
+                        currentUser!!.id,
+                        username,
                         Timestamp(System.currentTimeMillis()).time
                     )
                     val refpush = reference.push()
