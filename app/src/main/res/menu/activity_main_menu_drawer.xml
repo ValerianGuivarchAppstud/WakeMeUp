@@ -5,14 +5,18 @@
 
 
     <group android:checkableBehavior="single">
-        <item
+        <!--<item
             android:id="@+id/activity_main_drawer_connecter"
             android:icon="@drawable/icon_main_menu_login"
-            android:title="@string/action_login" />
+            android:title="@string/action_login" />!-->
         <item
             android:id="@+id/reveilsListeFragment"
             android:icon="@drawable/icon_main_menu_alarms"
             android:title="@string/reveils" />
+        <item
+            android:id="@+id/profilFragment"
+            android:icon="@drawable/icon_main_menu_login"
+            android:title="Profil" />
         <item
             android:id="@+id/favorisFragment"
             android:icon="@drawable/icon_main_menu_favoris"
@@ -25,19 +29,19 @@
             android:id="@+id/contactsListeFragment"
             android:icon="@drawable/icon_main_menu_friends"
             android:title="@string/amis" />
-        <item
+        <!--<item
             android:id="@+id/demanderMusique"
             android:icon="@drawable/share"
-            android:title="@string/partager" />
+            android:title="@string/partager" />!-->
 
         <!--        <item
                     android:id="@+id/settingsUser"
                     android:icon="@drawable/ic_settings_black_24dp"
                     android:title="Paramètres" />!-->
-        <item
+        <!--<item
             android:id="@+id/activity_main_drawer_deconnecter"
             android:icon="@drawable/icon_main_menu_logout"
-            android:title="@string/SeDeconnecter" />
+            android:title="@string/SeDeconnecter" />!-->
 
     </group>
 

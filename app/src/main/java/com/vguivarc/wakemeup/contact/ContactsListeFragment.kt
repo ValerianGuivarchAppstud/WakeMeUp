@@ -1,18 +1,21 @@
 package com.vguivarc.wakemeup.contact
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.AppWakeUp
-import androidx.navigation.fragment.findNavController
 import com.vguivarc.wakemeup.R
+import com.vguivarc.wakemeup.connect.UserModel
+import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.sonnerie.Sonnerie
 import com.vguivarc.wakemeup.sonnerie.SonnerieListeViewModel
 
@@ -25,7 +28,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
     private lateinit var adapter: ContactListeAdapter
     private lateinit var loading : ProgressBar
     private lateinit var textePasDeContact : TextView
-    private val contactsList = mutableMapOf<String, Contact>()
+    private val contactsList = mutableMapOf<String, UserModel>()
     private val sonneriesEnvoyeesList = mutableListOf<Sonnerie>()
     private val sonneriesAttenteList = mutableListOf<Sonnerie>()
     private val sonneriesPasseList = mutableListOf<Sonnerie>()
@@ -77,13 +80,13 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
             viewLifecycleOwner,
             Observer { it ->
                 if(it.error==null) {
-                    if(it.contactList.size==0){
+                    if(it.friendList.size==0){
                         contactsList.clear()
                         adapter.notifyDataSetChanged()
                         textePasDeContact.visibility = View.VISIBLE
                     } else {
                         contactsList.clear()
-                        contactsList.putAll(it.contactList)
+                        contactsList.putAll(it.friendList)
                         adapter.notifyDataSetChanged()
                         textePasDeContact.visibility = View.GONE
                     }
@@ -104,8 +107,8 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         return view
     }
 
-    override fun onContactClicked(contact: Contact, itemView: View) {
-        val action = ContactsListeFragmentDirections.actionContactsListeFragmentToContactFragment(contact.user!!)
+    override fun onContactClicked(contact: UserModel, itemView: View) {
+        val action = ContactsListeFragmentDirections.actionContactsListeFragmentToContactFragment(contact)
         findNavController().navigate(action)
     }
 

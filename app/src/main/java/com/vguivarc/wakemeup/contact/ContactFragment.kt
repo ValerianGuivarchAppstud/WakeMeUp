@@ -28,7 +28,6 @@ import com.vguivarc.wakemeup.util.Utility
 class ContactFragment : Fragment() {
 
     private lateinit var viewModelContact : ContactListeViewModel
-    private lateinit var addOrRemoveButton : Button
     private lateinit var favoriButton : Button
     private lateinit var viewModelSonnerie : SonnerieListeViewModel
 
@@ -58,33 +57,12 @@ class ContactFragment : Fragment() {
         viewModelSonnerie = ViewModelProvider(this, factory).get(SonnerieListeViewModel::class.java)
         currentUserViewModel =
             ViewModelProvider(this, factory).get(CurrentUserViewModel::class.java)
-
-        addOrRemoveButton = view.findViewById<Button>(R.id.id_contact_ajouter_supprimer)
         favoriButton = view.findViewById<Button>(R.id.id_contact_partage_favori)
 
         currentUserViewModel.getCurrentUserLiveData().observe(requireActivity(), androidx.lifecycle.Observer {
             currentUser=it
             if (currentUser==null) {
-                addOrRemoveButton.visibility=View.GONE
                 favoriButton.visibility=View.GONE
-            }
-        })
-
-        viewModelContact.getContactsListeLiveData().observe(requireActivity(), androidx.lifecycle.Observer {
-            if(it.error==null) {
-                if(it.contactList.size==0 || it.contactList.filter { entry -> entry.value.idContact==contact.id }.size==0){
-                    addOrRemoveButton.text="Ajouter aux contacts"
-                    addOrRemoveButton.setOnClickListener {
-                        viewModelContact.addContact(contact)
-                    }
-                    } else {
-                        addOrRemoveButton.text="Supprimer des contacts"
-                        addOrRemoveButton.setOnClickListener{
-                            viewModelContact.removeContact(contact)
-                }
-            }
-            } else {
-                addOrRemoveButton.text="BUG"
             }
         })
 

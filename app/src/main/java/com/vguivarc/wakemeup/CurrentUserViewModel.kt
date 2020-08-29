@@ -22,8 +22,4 @@ class CurrentUserViewModel(val repo: Repository) : ViewModel() {
         repo.addFavoriString(mainActivity, favyt)
     }
 
-    fun disconnect() {
-        repo.disconnect()
-    }
-
 }

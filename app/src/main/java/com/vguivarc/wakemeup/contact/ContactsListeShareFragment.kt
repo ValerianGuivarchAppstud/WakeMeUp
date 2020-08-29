@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.R
+import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.sonnerie.Sonnerie
 import com.vguivarc.wakemeup.sonnerie.SonnerieListeViewModel
@@ -31,11 +32,11 @@ class ContactsListeShareFragment : Fragment(),
     private lateinit var adapter: ContactListeShareAdapter
     private lateinit var loading: ProgressBar
     private lateinit var textePasDeContact: TextView
-    private val contactsList = mutableMapOf<String, Contact>()
+    private val contactsList = mutableMapOf<String, UserModel>()
     private val sonneriesEnvoyeesList = mutableListOf<Sonnerie>()
     private val sonneriesAttenteList = mutableListOf<Sonnerie>()
     private val sonneriesPasseList = mutableListOf<Sonnerie>()
-    private val selections = mutableListOf<Contact>()
+    private val selections = mutableListOf<UserModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,13 +79,13 @@ class ContactsListeShareFragment : Fragment(),
             viewLifecycleOwner,
             Observer { it ->
                 if (it.error == null) {
-                    if (it.contactList.size == 0) {
+                    if (it.friendList.size == 0) {
                         contactsList.clear()
                         adapter.notifyDataSetChanged()
                         textePasDeContact.visibility = View.VISIBLE
                     } else {
                         contactsList.clear()
-                        contactsList.putAll(it.contactList)
+                        contactsList.putAll(it.friendList)
                         adapter.notifyDataSetChanged()
                         textePasDeContact.visibility = View.GONE
                     }
@@ -119,7 +120,7 @@ class ContactsListeShareFragment : Fragment(),
 
         view.findViewById<Button>(R.id.valid_share_contact_button).setOnClickListener {
             for (c in selections) {
-                viewModelSonnerie.addSonnerieToUser(song, c.user!!)
+                viewModelSonnerie.addSonnerieToUser(song, c)
             }
             if (selections.size > 0) {
                 Utility.createSimpleToast("Sonneries envoyées !")
@@ -132,7 +133,7 @@ class ContactsListeShareFragment : Fragment(),
         return view
     }
 
-    override fun onContactClicked(contact: Contact, itemView: View) {
+    override fun onContactClicked(contact: UserModel, itemView: View) {
         if (selections.contains(contact)) {
             selections.remove(contact)
         } else {

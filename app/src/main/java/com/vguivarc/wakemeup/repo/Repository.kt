@@ -22,8 +22,6 @@ import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.connect.LinkFirebaseAndFacebookIds
 import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.connect.ui.ConnectResult
-import com.vguivarc.wakemeup.contact.Contact
-import com.vguivarc.wakemeup.contact.ContactResult
 import com.vguivarc.wakemeup.facebook.FacebookResult
 import com.vguivarc.wakemeup.notification.MyFirebaseMessagingService
 import com.vguivarc.wakemeup.notification.NotificationMusicMe
@@ -73,7 +71,7 @@ class Repository() {
                         updateSonneriesRecues()
                         updateNotification()
                         getFavoris()
-                        getContact()
+                        requestFacebookFriendData()
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {
@@ -268,6 +266,7 @@ class Repository() {
         currentUserLiveData.value = currentUser
         _loginResult.value = null
         _signupResult.value = null
+        getUserModelAfterConnection()
     }
 
 
@@ -354,6 +353,7 @@ class Repository() {
     /**************************************************/
     /******************** CONTACTS ********************/
     /**************************************************/
+    /*
     private val contactsList = mutableMapOf<String, Contact>()
 
     private val contactListLiveData = MutableLiveData<ContactResult>()
@@ -392,38 +392,51 @@ class Repository() {
             contactsList.filterValues { it.idContact == contact.id }.keys.toList()[0]
         database.getReference("Contact").child(keyContToDelete).removeValue()
     }
-
+*/
 
     private val facebookFriendsList = mutableMapOf<String, UserModel>()
     private val facebookListLiveData = MutableLiveData<FacebookResult>()
     fun getFacebookListLiveData(): LiveData<FacebookResult> = facebookListLiveData
 
-    fun requestFacebookFriendData(){
+    fun requestFacebookFriendData() {
 
-        val request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), GraphRequest.GraphJSONObjectCallback() { obj, response->
-            GraphRequest(
-                AccessToken.getCurrentAccessToken(),  // "/me/friends",
-                //"me/taggable_friends",
-                "me/friends",
-                null,
-                HttpMethod.GET,
-                GraphRequest.Callback { response ->
-                    try {
-                        val rawName = response.jsonObject.getJSONArray("data")
-                        contactsList.clear()
-                        if (rawName.length() == 0) {
-                            facebookFriendsList.clear()
-                            facebookListLiveData.value =
-                                FacebookResult(facebookFriendsList)
-                        } else {
-                            val listIdFb = mutableListOf<String>()
-                            for (i in 0 until rawName.length()) {
-                                listIdFb.add(rawName.getJSONObject(i).getString("id"))
-                            }
+        if (currentUser == null) {
+            facebookFriendsList.clear()
+            facebookListLiveData.value =
+                FacebookResult(facebookFriendsList)
+        } else {
 
-                            val iter = listIdFb.iterator()
-                            facebookFriendsList.clear()
-                            getFacebookFriends(iter)
+            val request = GraphRequest.newMeRequest(
+                AccessToken.getCurrentAccessToken(),
+                GraphRequest.GraphJSONObjectCallback() { obj, response ->
+                    GraphRequest(
+                        AccessToken.getCurrentAccessToken(),  // "/me/friends",
+                        //"me/taggable_friends",
+                        "me/friends",
+                        null,
+                        HttpMethod.GET,
+                        GraphRequest.Callback { response ->
+                            try {
+                                Timber.e(response.toString())
+                                Timber.e(response.jsonObject.toString())
+                                Timber.e(response.jsonObject.has("error").toString())
+                                if(response.jsonObject.has("error")){
+
+                                }
+                                val rawName = response.jsonObject.getJSONArray("data")
+                                if (rawName.length() == 0) {
+                                    facebookFriendsList.clear()
+                                    facebookListLiveData.value =
+                                        FacebookResult(facebookFriendsList)
+                                } else {
+                                    val listIdFb = mutableListOf<String>()
+                                    for (i in 0 until rawName.length()) {
+                                        listIdFb.add(rawName.getJSONObject(i).getString("id"))
+                                    }
+
+                                    val iter = listIdFb.iterator()
+                                    facebookFriendsList.clear()
+                                    getFacebookFriends(iter)
 /*
                                 val rootRef =
                                 database.reference.child("LinkFirebaseAndFacebookIds")//.equalTo(currentUser?.uid!!, "appartientA")
@@ -476,20 +489,21 @@ class Repository() {
                                 contactListLiveData.value =
                                     ContactResult(contactList = contactsList)
                             }*/
+                                }
+                            } catch (e: JSONException) {
+                                e.printStackTrace()
+                            }
                         }
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
-                }
-            ).executeAsync()
+                    ).executeAsync()
 
-        })
+                })
 
-        val parameters = Bundle()
-        parameters.putString("fields", "id,name,link,email,picture")
-        request.parameters = parameters
-        request.executeAsync()
+            val parameters = Bundle()
+            parameters.putString("fields", "id,name,link,email,picture")
+            request.parameters = parameters
+            request.executeAsync()
 
+        }
     }
 
 
@@ -511,10 +525,13 @@ class Repository() {
                     override fun onCancelled(p0: DatabaseError) {}
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                   //      for (ds in dataSnapshot.getChildren()) {
+                        val v1=dataSnapshot.getChildren()
+                        if(dataSnapshot.hasChildren()) {
                             val fbLink =
-                                dataSnapshot.getChildren().first().getValue(LinkFirebaseAndFacebookIds::class.java)!!
-                        val referenceFb2 = database.getReference("Users")
-                            .child(fbLink.idFirebase)
+                                dataSnapshot.getChildren().first()
+                                    .getValue(LinkFirebaseAndFacebookIds::class.java)!!
+                            val referenceFb2 = database.getReference("Users")
+                                .child(fbLink.idFirebase)
                             referenceFb2.addValueEventListener(
                                 object : ValueEventListener {
                                     override fun onCancelled(p0: DatabaseError) {}
@@ -526,6 +543,9 @@ class Repository() {
                                     }
                                 }
                             )
+                        } else {
+                            getFacebookFriends(iter)
+                        }
                     }
                 })
         }
@@ -554,7 +574,7 @@ class Repository() {
                             VideoFavoriResult(favoriList = favorisList)
                     }*/
 
-
+/*
     fun getContact() {
         val rootRef =
             database.reference.child("Contact")//.equalTo(currentUser?.uid!!, "appartientA")
@@ -589,7 +609,7 @@ class Repository() {
             })
         }
     }
-
+*/
 
     /*************************************************/
     /******************* RECHERCHE********************/
@@ -1104,7 +1124,7 @@ class Repository() {
                 for (ds in p0.getChildren()) {
                     val notif = ds.getValue(NotificationMusicMe::class.java)!!
                     val referenceUser =
-                        database.getReference("Users").child(notif.senderId)
+                        database.getReference("Users").child(notif.idReceiver)
                     referenceUser.addValueEventListener(
                         object : ValueEventListener {
                             override fun onCancelled(p0: DatabaseError) {}

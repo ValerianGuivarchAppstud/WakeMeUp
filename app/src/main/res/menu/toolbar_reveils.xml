@@ -12,11 +12,6 @@
         android:title="@string/musiques_recues"
         app:actionLayout="@layout/action_bar_notification_icon_reveils"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/id_menu_bar_ajout_facebook"
-        android:title="Importer depuis Facebook"
-        app:actionLayout="@layout/action_bar_notification_icon_notif"
-        app:showAsAction="never" />
 
 
 </menu>

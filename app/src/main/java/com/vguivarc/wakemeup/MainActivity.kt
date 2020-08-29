@@ -1,11 +1,8 @@
 package com.vguivarc.wakemeup
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
@@ -25,14 +22,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.*
 import com.bumptech.glide.Glide
 import com.facebook.AccessToken
+import com.facebook.CallbackManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.storage.FirebaseStorage
-import com.vguivarc.wakemeup.connect.ConnectActivity
 import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.contact.ContactsListeFragmentDirections
 import com.vguivarc.wakemeup.notification.NotifListeViewModel
@@ -41,12 +37,14 @@ import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.share.LienMusicMe
 import com.vguivarc.wakemeup.sonnerie.Sonnerie
 import com.vguivarc.wakemeup.sonnerie.SonnerieListeViewModel
-import com.vguivarc.wakemeup.util.Utility
 import timber.log.Timber
-import java.io.ByteArrayOutputStream
 
 
 class MainActivity : AppCompatActivity() {
+
+    companion object{
+        lateinit var  callbackManager : CallbackManager
+    }
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navView: NavigationView
@@ -76,11 +74,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_musicme_app_main)
 
-
-        val accessToken = AccessToken.getCurrentAccessToken()
-        val isLoggedIn = accessToken != null && !accessToken!!.isExpired
-        Timber.e("isLoggedIn="+isLoggedIn)
-
+        callbackManager = CallbackManager.Factory.create()
 
         val toolbar: Toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
@@ -90,17 +84,23 @@ class MainActivity : AppCompatActivity() {
         navView = findViewById(R.id.nav_view)
         appBarConfiguration = AppBarConfiguration(
             setOf(
+                R.id.profilFragment,
                 R.id.reveilsListeFragment,
                 R.id.favorisFragment,
                 R.id.musiquesRecuesFragment,
                 R.id.contactsListeFragment,
-                R.id.demanderMusique,
+                R.id.demanderMusique
                 //R.id.settingsUser,
-                R.id.activity_main_drawer_deconnecter
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+
+      val accessToken = AccessToken.getCurrentAccessToken()
+        val isLoggedIn = accessToken != null && !accessToken!!.isExpired
+       Timber.e("isLoggedIn="+isLoggedIn)
+
 
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
@@ -127,6 +127,8 @@ class MainActivity : AppCompatActivity() {
         this.configureNavigationView()
     }
 
+
+    /*
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -181,24 +183,26 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
+*/
     private lateinit var viewNbMusiquesEnAttente: TextView
     private lateinit var viewIconeMusiquesEnAttente: ImageView
     private lateinit var viewNbNotifEnAttente: TextView
     private lateinit var viewIconeNotifEnAttente: ImageView
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Pass the activity result back to the Facebook SDK
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_reveils, menu)
 
         val alertMenuItem = menu.findItem(R.id.id_menu_bar_message)
         val notifMenuItem = menu.findItem(R.id.id_menu_bar_notif)
-        val ajout_facebook = menu.findItem(R.id.id_menu_bar_ajout_facebook)
 
-        val rootViewFacebook = ajout_facebook.actionView as RelativeLayout
-        rootViewFacebook.setOnClickListener {
-            navController.navigate(
-                R.id.facebookListeFragment
-            )
-        }
 
 
 
@@ -248,18 +252,15 @@ class MainActivity : AppCompatActivity() {
                 viewIconeMusiquesEnAttente.visibility = View.INVISIBLE
                 viewNbNotifEnAttente.visibility = View.INVISIBLE
                 viewIconeNotifEnAttente.visibility = View.INVISIBLE
-                navView.menu.findItem(R.id.activity_main_drawer_connecter).isVisible = true
-                navView.menu.findItem(R.id.activity_main_drawer_deconnecter).isVisible = false
+
             } else {
-                updateProfilView()
                 val extrasToDealWith= intent.extras
                 dealWithExtra(extrasToDealWith)
                 intent.replaceExtras(null)
                 viewIconeMusiquesEnAttente.visibility = View.VISIBLE
                 viewIconeNotifEnAttente.visibility = View.VISIBLE
-                navView.menu.findItem(R.id.activity_main_drawer_connecter).isVisible = false
-                navView.menu.findItem(R.id.activity_main_drawer_deconnecter).isVisible = true
             }
+            updateProfilView()
         })
             // viewModelSonnerie.updateSonneries()
            // viewModelSonnerie.updateSonneriesEnvoyees()
@@ -320,19 +321,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun configureNavigationView() {
         updateProfilView()
-
-        //DataSnapshot
-        navView.menu.findItem(R.id.activity_main_drawer_connecter).setOnMenuItemClickListener {
-            connect(true)
-            true
-        }
-        navView.menu.findItem(R.id.activity_main_drawer_deconnecter).setOnMenuItemClickListener {
-            disconnect()
-            true
-        }
-
-
-//            auth.currentUser!!.displayName
     }
 
     private fun updateProfilView() {
@@ -441,7 +429,7 @@ class MainActivity : AppCompatActivity() {
             }
         )
     }*/
-
+/*
     fun connect(clear: Boolean = true) {
         Timber.e("A")
         val intent = Intent(this@MainActivity, ConnectActivity::class.java)
@@ -462,7 +450,7 @@ class MainActivity : AppCompatActivity() {
         }
         startActivity(intent)
     }
-
+*/
 
     fun dealWithExtra(extrasToDealWith: Bundle?) {
         if (extrasToDealWith != null) {

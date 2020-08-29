@@ -93,8 +93,7 @@
             app:destination="@id/contactFragment" />
     </fragment>
     <fragment
-        android:id="@+id/facebookListeFragment"
-        android:name="com.vguivarc.wakemeup.facebook.FacebookListeFragment"
-        android:label="FacebookListeFragment">
-    </fragment>
+        android:id="@+id/profilFragment"
+        android:name="com.vguivarc.wakemeup.connect.ProfilFragment"
+        android:label="ProfilFragment" />
 </navigation>

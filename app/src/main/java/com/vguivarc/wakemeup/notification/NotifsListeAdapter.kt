@@ -57,7 +57,6 @@ class NotifsListeAdapter(
                 listener?.onSenderClicked(notif.sender!!)
             }
             id_item_notif_titre_text.text = when(notif.type){
-                NotificationMusicMe.NotificationType.AJOUT_CONTACT -> " t'a rajouté dans ses contacts."
                 NotificationMusicMe.NotificationType.ENVOIE_MUSIQUE ->" t'a envoyé une sonnerie."
                 NotificationMusicMe.NotificationType.SONNERIE_UTILISEE ->" a été réveillé par ta sonnerie : "+(notif.sonnerieName!!)
             }

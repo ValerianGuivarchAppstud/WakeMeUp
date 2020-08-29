@@ -21,4 +21,9 @@ class FbLoginViewModel(val repo : Repository) : ViewModel() {
     fun login(accessToken: AccessToken) {
         repo.signInWithCredential(accessToken)
     }
+
+
+    fun disconnect() {
+        repo.disconnect()
+    }
 }

@@ -7,7 +7,6 @@ import com.vguivarc.wakemeup.connect.ui.login.FbLoginViewModel
 import com.vguivarc.wakemeup.connect.ui.login.LoginViewModel
 import com.vguivarc.wakemeup.connect.ui.signup.SignupViewModel
 import com.vguivarc.wakemeup.contact.ContactListeViewModel
-import com.vguivarc.wakemeup.facebook.FacebookListeViewModel
 import com.vguivarc.wakemeup.notification.NotifListeViewModel
 import com.vguivarc.wakemeup.reveil.ReveilListeViewModel
 import com.vguivarc.wakemeup.song.favori.FavorisViewModel
@@ -25,9 +24,6 @@ class ViewModelFactory(private val repository: Repository) :
             modelClass.isAssignableFrom(RechercheVideoViewModel::class.java) -> RechercheVideoViewModel(repository
             )
             modelClass.isAssignableFrom(ContactListeViewModel::class.java) -> ContactListeViewModel(
-                repository
-            )
-            modelClass.isAssignableFrom(FacebookListeViewModel::class.java) -> FacebookListeViewModel(
                 repository
             )
                     modelClass.isAssignableFrom(FavorisViewModel::class.java) -> FavorisViewModel(
