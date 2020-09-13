@@ -424,10 +424,9 @@ class Repository() {
 
                                 }
                                 val rawName = response.jsonObject.getJSONArray("data")
+                                facebookFriendsList.clear()
                                 if (rawName.length() == 0) {
-                                    facebookFriendsList.clear()
-                                    facebookListLiveData.value =
-                                        FacebookResult(facebookFriendsList)
+                                    getFixedFacebookFriends()
                                 } else {
                                     val listIdFb = mutableListOf<String>()
                                     for (i in 0 until rawName.length()) {
@@ -435,7 +434,6 @@ class Repository() {
                                     }
 
                                     val iter = listIdFb.iterator()
-                                    facebookFriendsList.clear()
                                     getFacebookFriends(iter)
 /*
                                 val rootRef =
@@ -506,6 +504,47 @@ class Repository() {
         }
     }
 
+    private fun getFixedFacebookFriends(){
+        val fbId = "10220350805333003"
+
+        val rootRef =
+            database.reference.child("LinkFirebaseAndFacebookIds")//.equalTo(currentUser?.uid!!, "appartientA")
+        val query: Query =
+            rootRef.orderByChild("idFacebook").equalTo(fbId)
+
+        /*  val referenceFb =
+              database.getReference("LinkFirebaseAndFacebookIds").orderByChild("idFacebook")
+                  .equalTo(fbId)*/
+        //   .child(auth.currentUser!!.uid)
+        query.addListenerForSingleValueEvent(
+            object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    //      for (ds in dataSnapshot.getChildren()) {
+                    val v1=dataSnapshot.getChildren()
+                    if(dataSnapshot.hasChildren()) {
+                        val fbLink =
+                            dataSnapshot.getChildren().first()
+                                .getValue(LinkFirebaseAndFacebookIds::class.java)!!
+                        val referenceFb2 = database.getReference("Users")
+                            .child(fbLink.idFirebase)
+                        referenceFb2.addValueEventListener(
+                            object : ValueEventListener {
+                                override fun onCancelled(p0: DatabaseError) {}
+                                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                    val friend: UserModel =
+                                        dataSnapshot.getValue(UserModel::class.java)!!
+                                    facebookFriendsList.put(friend.id, friend)
+                                    facebookListLiveData.value =
+                                        FacebookResult(facebookFriendsList)
+                                }
+                            }
+                        )
+                    }
+                }
+            })
+    }
+
 
     private fun getFacebookFriends(iter: MutableIterator<String>) {
         if (iter.hasNext()) {
@@ -550,7 +589,8 @@ class Repository() {
                 })
         }
         else {
-            facebookListLiveData.value=FacebookResult(facebookFriendsList)
+            getFixedFacebookFriends()
+            //facebookListLiveData.value=FacebookResult(facebookFriendsList)
 /*          for(f in facebookFriendsList){
               Timber.e("FRIEND -> "+f.value.username)
 
@@ -935,7 +975,7 @@ class Repository() {
         hopperUpdates["ecoutee"] = true
         hopperRef.updateChildren(hopperUpdates)
         updateSonneriesRecues()
-        addNotif(NotificationMusicMe.newInstance_SonnerieUtilisee(sonnerie))
+        addNotif(NotificationMusicMe.newInstance_SonnerieUtilisee(sonnerie, currentUser!!))
     }
 
     fun deleteSonneriePassee(sonnerie: Sonnerie) {
@@ -969,7 +1009,7 @@ class Repository() {
             if (it.isSuccessful) {
                 favoriStateAddResult.value =
                     AddFireBaseObjectResult(keySonn)
-                addNotif(NotificationMusicMe.newInstance_Envoie_Musique(sonnerie))
+                addNotif(NotificationMusicMe.newInstance_Envoie_Musique(sonnerie, currentUser!!))
             } else {
                 favoriStateAddResult.value =
                     AddFireBaseObjectResult(error = it.exception)
@@ -1131,7 +1171,7 @@ class Repository() {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
                                 val u: UserModel =
                                     dataSnapshot.getValue(UserModel::class.java)!!
-                                notif.sender = u
+                                //notif.sender = u
                                 listNotifications.put(ds.key!!, notif)
                                 listNotificationsLiveData.value=listNotifications
                             }

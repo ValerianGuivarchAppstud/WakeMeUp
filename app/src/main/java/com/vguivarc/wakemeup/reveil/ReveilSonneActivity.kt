@@ -1,10 +1,8 @@
 package com.vguivarc.wakemeup.reveil
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.view.View
@@ -124,18 +122,16 @@ class ReveilSonneActivity : AppCompatActivity() {
     private lateinit var loadingView : ProgressBar
     private lateinit var senderView : TextView
     private lateinit var viewModelReveil : ReveilListeViewModel
-    private lateinit var text_pas_de_musique_attente : TextView
+    private lateinit var textPasDeMusiqueAttente : TextView
 
 
-    @SuppressLint("InvalidWakeLockTag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //TODO erreur à gérer ici
         setContentView(R.layout.activity_reveil_sonne)
         youTubePlayerView = findViewById(R.id.youtubePlayReveil)
         loadingView = findViewById(R.id.id_loading_sonnerie)
         senderView = findViewById(R.id.sender_sonnerie)
-        text_pas_de_musique_attente = findViewById(R.id.text_pas_de_musique_attente)
+        textPasDeMusiqueAttente = findViewById(R.id.text_pas_de_musique_attente)
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         initialVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
 
@@ -148,10 +144,6 @@ class ReveilSonneActivity : AppCompatActivity() {
         })
         loading.value=true
         youTubePlayerView.visibility = View.INVISIBLE
-      //  setProgressifVolume()
-
-
-     //   data.putString("idReveil", idReveil.toString())
 
         val request = OneTimeWorkRequest.Builder(SonnerieAlarmWorker::class.java)
             .setInitialDelay(10000, TimeUnit.MILLISECONDS)
@@ -162,9 +154,9 @@ class ReveilSonneActivity : AppCompatActivity() {
 
 
         WorkManager.getInstance(this).getWorkInfoByIdLiveData(request.id).observe(this, androidx.lifecycle.Observer {workStatus->
-            if (workStatus != null && workStatus.getState().isFinished()) {
+            if (workStatus != null && workStatus.state.isFinished) {
                 if(youTubePlayerView.visibility!=View.VISIBLE) {
-                    val resID = this.getResources()
+                    val resID = this.resources
                         .getIdentifier("sonnerie_default1", "raw", this.packageName)
                     mediaPlayer = MediaPlayer.create(this, resID)
                    /* audioManager.setStreamVolume(
@@ -174,7 +166,7 @@ class ReveilSonneActivity : AppCompatActivity() {
                     )*/
                     volumeProgressif()
                     mediaPlayer!!.start()
-                    text_pas_de_musique_attente.visibility = View.VISIBLE
+                    textPasDeMusiqueAttente.visibility = View.VISIBLE
                     senderView.visibility = View.INVISIBLE
                     loading.postValue(false)
                 }
@@ -188,8 +180,8 @@ class ReveilSonneActivity : AppCompatActivity() {
         val powermanager =
             this.getSystemService(Context.POWER_SERVICE) as PowerManager
         val wakeLock = powermanager.newWakeLock(
-            PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
-            "tag"
+            PowerManager.ACQUIRE_CAUSES_WAKEUP,
+            "musicme:tag"
         )
         wakeLock.acquire(5 * 60 * 1000L /*10 minutes*/)
 
@@ -207,14 +199,14 @@ class ReveilSonneActivity : AppCompatActivity() {
 
 
         viewModelSonnerie.getListeAttenteLiveData().observe(this, androidx.lifecycle.Observer {
-            if (it.size == 0) {
+            if (it.isEmpty()) {
                 // pas de musique
             } else {
                 currentSonnerie = it.values.toMutableList()[0]
                 //Init du youTubePlayerView-----------------------------------------------------------------------
                 lifecycle.addObserver(youTubePlayerView)
                 Timber.e("ytPlayer")
-                senderView.text="Envoyée par ${currentSonnerie!!.senderName}"
+                senderView.text=this.getString(R.string.envoyee_par, currentSonnerie!!.senderName)
 
                 /*audioManager.setStreamVolume(
                     AudioManager.STREAM_MUSIC, // Stream type
@@ -257,8 +249,7 @@ class ReveilSonneActivity : AppCompatActivity() {
         val calendar : Calendar = Calendar.getInstance()
 
         val jour = calendar.get(Calendar.DAY_OF_MONTH)
-        val mois = calendar.get(Calendar.MONTH) +1
-        val moisTxt = when(mois){
+        val moisTxt = when(calendar.get(Calendar.MONTH) +1){
             1 -> "janvier"
             2 -> "février"
             3 -> "mars"

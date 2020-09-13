@@ -43,7 +43,7 @@ class AppWakeUp : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
-        AppEventsLogger.activateApp(this)
+        AppEventsLogger.activateApp(this);
 
 
         appContext = applicationContext

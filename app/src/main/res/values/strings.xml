@@ -85,6 +85,7 @@
     <string name="aucune_musique_en_attente_demandez_vos_amis_de_vous_en_envoyer">Aucune musique en attente… Demandez à vos amis de vous en envoyer !</string>
     <string name="chargement_du_r_veil">Chargement du réveil…</string>
     <string name="notifications">Notifications</string>
+    <string name="envoyee_par">Envoyée par %1$s</string>
 
 
 </resources>

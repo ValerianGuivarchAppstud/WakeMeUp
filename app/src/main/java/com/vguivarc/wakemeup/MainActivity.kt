@@ -74,6 +74,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_musicme_app_main)
 
+/*        try {
+            val info: PackageInfo = packageManager.getPackageInfo(
+                "com.vguivarc.wakemeup",  //Insert your own package name.
+                PackageManager.GET_SIGNATURES
+            )
+            for (signature in info.signatures) {
+                val md: MessageDigest = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                val v = Base64.encodeToString(md.digest(), Base64.DEFAULT)
+
+                Timber.e("KeyHash:"+Base64.encodeToString(md.digest(), Base64.DEFAULT))
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+        } catch (e: NoSuchAlgorithmException) {
+        }*/
+
+
         callbackManager = CallbackManager.Factory.create()
 
         val toolbar: Toolbar = findViewById(R.id.toolbar_main)
@@ -99,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
       val accessToken = AccessToken.getCurrentAccessToken()
         val isLoggedIn = accessToken != null && !accessToken!!.isExpired
-       Timber.e("isLoggedIn="+isLoggedIn)
+       Timber.e("isLoggedIn=" + isLoggedIn)
 
 
         FirebaseInstanceId.getInstance().instanceId
@@ -246,15 +263,15 @@ class MainActivity : AppCompatActivity() {
         })
 
         currentUserViewModel.getCurrentUserLiveData().observe(this, androidx.lifecycle.Observer {
-            currentUser=it
-            if(currentUser==null){
+            currentUser = it
+            if (currentUser == null) {
                 viewNbMusiquesEnAttente.visibility = View.INVISIBLE
                 viewIconeMusiquesEnAttente.visibility = View.INVISIBLE
                 viewNbNotifEnAttente.visibility = View.INVISIBLE
                 viewIconeNotifEnAttente.visibility = View.INVISIBLE
 
             } else {
-                val extrasToDealWith= intent.extras
+                val extrasToDealWith = intent.extras
                 dealWithExtra(extrasToDealWith)
                 intent.replaceExtras(null)
                 viewIconeMusiquesEnAttente.visibility = View.VISIBLE

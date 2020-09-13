@@ -42,44 +42,15 @@
         </activity>
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
-        <activity android:name="com.facebook.CustomTabActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/fb_login_protocol_scheme" />
-            </intent-filter>
-        </activity>
 
         <activity
             android:name="com.vguivarc.wakemeup.Demo"
             android:label="My Custom AppIntro" />
-        <activity android:name=".LinkContactActivity">
-            <intent-filter android:autoVerify="false">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:host="lesseptrois.freeboxos.fr" />
-                <data android:pathPrefix="/demande" />
-                <data android:scheme="https" />
-            </intent-filter>
-        </activity>
         <activity android:name=".MainActivity">
             <intent-filter android:label="Music Me !">
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-                <!--
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:host="www.youtube.com" android:mimeType="text/*" />
-                -->
             </intent-filter>
         </activity>
         <activity android:name=".reveil.ReveilEdit" />
@@ -95,31 +66,10 @@
         <activity
             android:name=".connect.ui.edituser.EditUser"
             android:parentActivityName=".MainActivity" />
-        <!--
-      <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
-        <activity
-            android:name="com.facebook.FacebookActivity"
-            android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name"
-            />
-
-        <activity
-            android:name="com.facebook.CustomTabActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/fb_login_protocol_scheme" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".connect.ui.EditUser.LanceurFragment"/>!
-        -->
         <service
             android:name=".notification.MyFirebaseMessagingService"
-            android:stopWithTask="false">
+            android:stopWithTask="false"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -138,6 +88,19 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
-    </application>
 
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity android:name="com.facebook.CustomTabActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
+    </application>
 </manifest>

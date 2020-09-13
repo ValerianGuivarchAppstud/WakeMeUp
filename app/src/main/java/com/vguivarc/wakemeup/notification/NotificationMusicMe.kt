@@ -6,14 +6,15 @@ import com.vguivarc.wakemeup.sonnerie.Sonnerie
 
 open class NotificationMusicMe(
     val idReceiver: String,
+    val sender: UserModel?,
     val vue: Boolean,
     val type: NotificationType
 )  {
-    var sender: UserModel?=null
+    //var sender: UserModel?=null
     var sonnerieName : String? = null
 
     constructor() : this(
-        "", false, NotificationType.ENVOIE_MUSIQUE
+        "", null,false, NotificationType.ENVOIE_MUSIQUE
     )
 
      enum class NotificationType{
@@ -22,12 +23,13 @@ open class NotificationMusicMe(
      }
 
      companion object {
-         fun newInstance_Envoie_Musique(sonnerie: Sonnerie): NotificationMusicMe {
-             return NotificationMusicMe(sonnerie.idReceiver, false, NotificationType.ENVOIE_MUSIQUE)
+         fun newInstance_Envoie_Musique(sonnerie: Sonnerie, sender: UserModel): NotificationMusicMe {
+             return NotificationMusicMe(sonnerie.idReceiver, sender, false, NotificationType.ENVOIE_MUSIQUE)
          }
-         fun newInstance_SonnerieUtilisee(sonnerie: Sonnerie): NotificationMusicMe {
+         fun newInstance_SonnerieUtilisee(sonnerie: Sonnerie, sender: UserModel): NotificationMusicMe {
              val not= NotificationMusicMe(
                  sonnerie.senderId,
+                 sender,
                  false,
                  NotificationType.SONNERIE_UTILISEE
              )

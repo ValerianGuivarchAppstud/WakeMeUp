@@ -47,7 +47,7 @@ class ProfilFragment : Fragment() {
     ): View? {
         currentView =  inflater.inflate(R.layout.profil_fragment, container, false)
 
-        val profileTracker = object : ProfileTracker() {
+       object : ProfileTracker() {
             override fun onCurrentProfileChanged(
                 oldProfile: Profile?,
                 currentProfile: Profile?
@@ -57,11 +57,9 @@ class ProfilFragment : Fragment() {
                 }
             }
         }
-        
-
 
         val fb_login_button = currentView.findViewById<LoginButton>(R.id.fb_login_button)
-        fb_login_button.setReadPermissions("email", "public_profile", "user_friends")
+        fb_login_button.setReadPermissions("email")//TODO FACEBOOK, "user_friends")
 
         val factory = ViewModelFactory(AppWakeUp.repository)
         fbLoginViewModel =
