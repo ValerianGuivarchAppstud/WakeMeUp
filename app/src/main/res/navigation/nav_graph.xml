@@ -33,10 +33,6 @@
         android:name="com.vguivarc.wakemeup.share.DemanderMusiqueFragment"
         android:label="@string/partager" />
     <fragment
-        android:id="@+id/settingsUser"
-        android:name="com.vguivarc.wakemeup.SettingsUser"
-        android:label="Paramètres" />
-    <fragment
         android:id="@+id/contactsListeFragment"
         android:name="com.vguivarc.wakemeup.contact.ContactsListeFragment"
         android:label="@string/amis" >

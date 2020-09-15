@@ -60,12 +60,6 @@
             android:name=".reveil.ReveilSonneService"
             android:enabled="true" />
 
-        <activity android:name=".connect.ConnectActivity" />
-        <activity android:name=".connect.ui.LoginActivity" />
-        <activity android:name=".connect.ui.SignupActivity" />
-        <activity
-            android:name=".connect.ui.edituser.EditUser"
-            android:parentActivityName=".MainActivity" />
         <service
             android:name=".notification.MyFirebaseMessagingService"
             android:stopWithTask="false"

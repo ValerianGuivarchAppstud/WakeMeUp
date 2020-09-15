@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.ResolveInfo
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +22,7 @@ import com.vguivarc.wakemeup.CurrentUserViewModel
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.repo.ViewModelFactory
+import timber.log.Timber
 import java.sql.Timestamp
 
 
@@ -90,9 +90,9 @@ class DemanderMusiqueFragment : Fragment() {
                     val key = refpush.key!!
                     refpush.setValue(demande).addOnCompleteListener {
                         if (it.isSuccessful) {
-                            Log.i("LienMusicMe", "lien ajouté")
+                            Timber.i("lien ajouté")
                         } else {
-                            Log.i("LienMusicMe", "erreur lien")
+                            Timber.i("erreur lien")
                         }
                     }
                     val lien = "https://lesseptrois.freeboxos.fr/demande?id=" + key

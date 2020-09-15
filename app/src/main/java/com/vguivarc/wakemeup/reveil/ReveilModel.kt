@@ -148,7 +148,7 @@ class ReveilModel(
 
         val request = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
             .setInitialDelay(t- Timestamp.now().seconds, TimeUnit.SECONDS)
-//            .setInitialDelay(3000, TimeUnit.MILLISECONDS)
+        //    .setInitialDelay(10, TimeUnit.SECONDS)
             .setInputData(data.build())
             .build()
 
@@ -201,6 +201,7 @@ class ReveilModel(
             PendingIntent.getBroadcast(AppWakeUp.appContext, this.idReveil, intent, 0)
         //pendingIntent doit être le même qu'avant
         alarmManager.cancel(pendingIntent)
+        //TODO urgent, volume pas bon
     }
 
     fun calculeNextCalendarWithNewHours(_hour : Int, _minute : Int) {

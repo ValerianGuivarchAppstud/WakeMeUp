@@ -1,10 +1,9 @@
-package com.vguivarc.wakemeup.connect.ui.login
+package com.vguivarc.wakemeup.connect
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.facebook.AccessToken
-import com.vguivarc.wakemeup.connect.ui.ConnectResult
 import com.vguivarc.wakemeup.repo.Repository
 
 class FbLoginViewModel(val repo : Repository) : ViewModel() {

@@ -1,4 +1,4 @@
-package com.vguivarc.wakemeup.connect.ui
+package com.vguivarc.wakemeup.connect
 
 import com.google.firebase.auth.FirebaseUser
 

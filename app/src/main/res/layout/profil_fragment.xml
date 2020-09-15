@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".connect.ConnectActivity">
+    tools:context=".connect.ProfilFragment">
 
     <TextView
         android:id="@+id/profil_fragment_nom"
@@ -34,7 +34,7 @@
         android:layout_marginEnd="50dp"
         android:contentDescription="@string/logo"
         android:src="@drawable/main_logo"
-        android:tint="@color/colorPrimary"
+        app:tint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profil_fragment_nom" />
@@ -48,7 +48,6 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:text="Connection Facebook"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profil_fragment_picture" />

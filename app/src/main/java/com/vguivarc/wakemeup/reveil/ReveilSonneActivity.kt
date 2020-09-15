@@ -29,6 +29,11 @@ import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+/**
+ * Reveil sonne activity
+ *
+ * @constructor Create empty Reveil sonne activity
+ */
 class ReveilSonneActivity : AppCompatActivity() {
 
     private var mediaPlayer : MediaPlayer? = null
@@ -179,10 +184,16 @@ class ReveilSonneActivity : AppCompatActivity() {
 
         val powermanager =
             this.getSystemService(Context.POWER_SERVICE) as PowerManager
+
         val wakeLock = powermanager.newWakeLock(
-            PowerManager.ACQUIRE_CAUSES_WAKEUP,
+            PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
             "musicme:tag"
         )
+
+     /*   val wakeLock = powermanager.newWakeLock(
+            PowerManager.ACQUIRE_CAUSES_WAKEUP,
+            "musicme:tag"
+        )*/
         wakeLock.acquire(5 * 60 * 1000L /*10 minutes*/)
 
         if (wakeLock.isHeld) {

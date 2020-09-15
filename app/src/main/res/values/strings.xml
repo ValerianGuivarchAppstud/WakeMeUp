@@ -86,6 +86,7 @@
     <string name="chargement_du_r_veil">Chargement du réveil…</string>
     <string name="notifications">Notifications</string>
     <string name="envoyee_par">Envoyée par %1$s</string>
+    <string name="utilisateur_anonyme">Utilisateur anonyme</string>
 
 
 </resources>

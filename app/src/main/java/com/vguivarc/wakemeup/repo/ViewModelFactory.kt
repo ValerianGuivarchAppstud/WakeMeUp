@@ -3,9 +3,7 @@ package com.vguivarc.wakemeup.repo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.vguivarc.wakemeup.CurrentUserViewModel
-import com.vguivarc.wakemeup.connect.ui.login.FbLoginViewModel
-import com.vguivarc.wakemeup.connect.ui.login.LoginViewModel
-import com.vguivarc.wakemeup.connect.ui.signup.SignupViewModel
+import com.vguivarc.wakemeup.connect.FbLoginViewModel
 import com.vguivarc.wakemeup.contact.ContactListeViewModel
 import com.vguivarc.wakemeup.notification.NotifListeViewModel
 import com.vguivarc.wakemeup.reveil.ReveilListeViewModel
@@ -35,16 +33,10 @@ class ViewModelFactory(private val repository: Repository) :
             modelClass.isAssignableFrom(CurrentUserViewModel::class.java) -> CurrentUserViewModel(
                 repository
             )
-            modelClass.isAssignableFrom(SignupViewModel::class.java) -> SignupViewModel(
-                repository
-            )
-            modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(
+            modelClass.isAssignableFrom(NotifListeViewModel::class.java) -> NotifListeViewModel(
                 repository
             )
             modelClass.isAssignableFrom(FbLoginViewModel::class.java) -> FbLoginViewModel(
-                repository
-            )
-            modelClass.isAssignableFrom(NotifListeViewModel::class.java) -> NotifListeViewModel(
                 repository
             )
             else -> throw IllegalArgumentException("Unexpected model class $modelClass")

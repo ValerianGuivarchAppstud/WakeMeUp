@@ -2,7 +2,6 @@ package com.vguivarc.wakemeup.contact
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +22,7 @@ import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.sonnerie.SonnerieListeViewModel
 import com.vguivarc.wakemeup.util.Utility
+import timber.log.Timber
 
 
 class ContactFragment : Fragment() {
@@ -108,7 +108,7 @@ class ContactFragment : Fragment() {
                 Utility.createSimpleToast("Sonnerie envoyée")
             } else {
                 Utility.createSimpleToast("Erreur dans l'envoie de la sonnerie")
-                Log.e("ContactFragment", it.error.toString())
+                Timber.e(it.error.toString())
             }
         })
 

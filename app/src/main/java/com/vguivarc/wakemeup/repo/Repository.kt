@@ -19,9 +19,9 @@ import com.google.firebase.database.*
 import com.google.firebase.iid.FirebaseInstanceId
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.R
+import com.vguivarc.wakemeup.connect.ConnectResult
 import com.vguivarc.wakemeup.connect.LinkFirebaseAndFacebookIds
 import com.vguivarc.wakemeup.connect.UserModel
-import com.vguivarc.wakemeup.connect.ui.ConnectResult
 import com.vguivarc.wakemeup.facebook.FacebookResult
 import com.vguivarc.wakemeup.notification.MyFirebaseMessagingService
 import com.vguivarc.wakemeup.notification.NotificationMusicMe

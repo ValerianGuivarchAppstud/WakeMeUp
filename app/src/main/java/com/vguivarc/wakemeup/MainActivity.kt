@@ -21,20 +21,13 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
 import com.bumptech.glide.Glide
-import com.facebook.AccessToken
-import com.facebook.CallbackManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.vguivarc.wakemeup.connect.UserModel
-import com.vguivarc.wakemeup.contact.ContactsListeFragmentDirections
 import com.vguivarc.wakemeup.notification.NotifListeViewModel
 import com.vguivarc.wakemeup.notification.NotificationMusicMe
 import com.vguivarc.wakemeup.repo.ViewModelFactory
-import com.vguivarc.wakemeup.share.LienMusicMe
 import com.vguivarc.wakemeup.sonnerie.Sonnerie
 import com.vguivarc.wakemeup.sonnerie.SonnerieListeViewModel
 import timber.log.Timber
@@ -42,9 +35,6 @@ import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    companion object{
-        lateinit var  callbackManager : CallbackManager
-    }
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navView: NavigationView
@@ -74,6 +64,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_musicme_app_main)
 
+
+
 /*        try {
             val info: PackageInfo = packageManager.getPackageInfo(
                 "com.vguivarc.wakemeup",  //Insert your own package name.
@@ -91,7 +83,6 @@ class MainActivity : AppCompatActivity() {
         }*/
 
 
-        callbackManager = CallbackManager.Factory.create()
 
         val toolbar: Toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
@@ -114,12 +105,12 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
 
-      val accessToken = AccessToken.getCurrentAccessToken()
-        val isLoggedIn = accessToken != null && !accessToken!!.isExpired
-       Timber.e("isLoggedIn=" + isLoggedIn)
+/*      val accessToken = AccessToken.getCurrentAccessToken()
+        val isLoggedIn = accessToken != null && !accessToken.isExpired
+       Timber.e("isLoggedIn=" + isLoggedIn)*/
 
 
-        FirebaseInstanceId.getInstance().instanceId
+       FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
                     Timber.tag("MainActivity").w(task.exception, "getInstanceId failed")
@@ -140,79 +131,17 @@ class MainActivity : AppCompatActivity() {
         currentUserViewModel =
             ViewModelProvider(this, factory).get(CurrentUserViewModel::class.java)
 
-        checkFirstRun()
+     //TODO décommenter :   checkFirstRun()
+
         this.configureNavigationView()
     }
 
-
-    /*
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-                //val extras = data!!.extras
-             //   val imageBitmap = extras!!["data"] as Bitmap?
-               // uploadImageAndSaveUri(imageBitmap!!)
-                 val extras = data!!.extras
-                if (extras != null) {
-                    val newProfilePic = extras.getParcelable<Bitmap>("data")
-                    uploadImageAndSaveUri(newProfilePic!!)
-                }
-            }
-        }
-    }
-
-    private lateinit var imageUri: Uri
-
-    private fun uploadImageAndSaveUri(bitmap: Bitmap) {
-        val baos = ByteArrayOutputStream()
-        val storageRef = FirebaseStorage.getInstance()
-            .reference
-            .child("pics/${currentUser!!.id}")
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val image = baos.toByteArray()
-
-        val upload = storageRef.putBytes(image)
-
-        //progressbar_pic.visibility = View.VISIBLE
-        upload.addOnCompleteListener { uploadTask ->
-            //  progressbar_pic.visibility = View.INVISIBLE
-
-            if (uploadTask.isSuccessful) {
-                storageRef.downloadUrl.addOnCompleteListener { urlTask ->
-                    urlTask.result?.let {
-                        imageUri = it
-                        navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil)
-                            .setImageBitmap(bitmap)
-                        val reference = AppWakeUp.repository.database.getReference("Users")
-                            .child(currentUser!!.id)
-                        val updatedUser =
-                            UserModel(currentUser!!.id, imageUri.toString(), currentUser!!.username)
-                        reference.setValue(updatedUser)
-                    }
-                }
-            } else {
-                uploadTask.exception?.let {
-                    Utility.createSimpleToast(it.toString())
-                }
-            }
-        }
-
-    }
-*/
     private lateinit var viewNbMusiquesEnAttente: TextView
     private lateinit var viewIconeMusiquesEnAttente: ImageView
     private lateinit var viewNbNotifEnAttente: TextView
     private lateinit var viewIconeNotifEnAttente: ImageView
 
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        // Pass the activity result back to the Facebook SDK
-        callbackManager.onActivityResult(requestCode, resultCode, data)
-    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_reveils, menu)
@@ -224,8 +153,8 @@ class MainActivity : AppCompatActivity() {
 
 
         val rootViewReveil = alertMenuItem.actionView as RelativeLayout
-        viewNbMusiquesEnAttente = rootViewReveil.findViewById<TextView>(R.id.text_message_reveil)
-        viewIconeMusiquesEnAttente = rootViewReveil.findViewById<ImageView>(R.id.icone_musique_attente)
+        viewNbMusiquesEnAttente = rootViewReveil.findViewById(R.id.text_message_reveil)
+        viewIconeMusiquesEnAttente = rootViewReveil.findViewById(R.id.icone_musique_attente)
         rootViewReveil.setOnClickListener {
             navController.navigate(
                 R.id.musiquesRecuesFragment
@@ -234,8 +163,8 @@ class MainActivity : AppCompatActivity() {
 
 
         val rootViewNotif = notifMenuItem.actionView as RelativeLayout
-        viewNbNotifEnAttente = rootViewNotif.findViewById<TextView>(R.id.text_message_notification)
-        viewIconeNotifEnAttente = rootViewNotif.findViewById<ImageView>(R.id.icone_notif_attente)
+        viewNbNotifEnAttente = rootViewNotif.findViewById(R.id.text_message_notification)
+        viewIconeNotifEnAttente = rootViewNotif.findViewById(R.id.icone_notif_attente)
         rootViewNotif.setOnClickListener {
             navController.navigate(
                 R.id.notifsListeFragment
@@ -310,7 +239,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateNotifHotCountNumber(listSonnerieAttente: Map<String, NotificationMusicMe>) {
-        val newHotNumber = listSonnerieAttente.filter { entry -> entry.value.vue == false }.size
+        val newHotNumber = listSonnerieAttente.filter { entry -> !entry.value.vue }.size
         if (newHotNumber == 0) {
             viewNbNotifEnAttente.visibility = View.INVISIBLE
             viewIconeNotifEnAttente.setImageResource(R.drawable.icon_notif_no)
@@ -362,114 +291,24 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-            navView.getHeaderView(0).findViewById<TextView>(R.id.name_profil)
-                .setText(currentUser!!.username)
+            navView.getHeaderView(0).findViewById<TextView>(R.id.name_profil).text = currentUser!!.username
             if (currentUser!!.imageUrl != "") {
                 Glide.with(this)
                     .load(currentUser!!.imageUrl)
-                    .into(navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil))
+                    .into(navView.getHeaderView(0).findViewById(R.id.pictur_profil))
             } else {
                 navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil)
                     .setImageDrawable(ContextCompat.getDrawable(this, R.drawable.photo_profil))
             }
         } else {
             navView.getHeaderView(0).findViewById<TextView>(R.id.name_profil)
-                .setText("Utilisateur anonyme")
+                .setText(R.string.utilisateur_anonyme)
             navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil)
                 .setImageDrawable(ContextCompat.getDrawable(this, R.drawable.empty_picture_profil))
         }
     }
 
-
-    /*private fun updateListeAmis() {
-        //TODO PARSE
-
-
-        val contactsPhone = mutableMapOf<String, String>()
-        val contactsApp = mutableListOf<UserModel>()
-
-        if (ActivityCompat.checkSelfPermission(
-                applicationContext,
-                Manifest.permission.READ_CONTACTS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // if (shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS))
-            requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), 2)
-        }
-
-        val cursor = contentResolver.query(
-            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-            arrayOf(
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME_ALTERNATIVE,
-                ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER,
-                ContactsContract.CommonDataKinds.Phone.NUMBER
-            ),
-            null,
-            null,
-            null
-        )
-
-        if (cursor == null) {
-            Log.e("AmisFragment", "cursor == null")
-        } else {
-
-            while (cursor.moveToNext()) {
-                val name =
-                    cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME_ALTERNATIVE))
-                if (cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER)) == "1") {
-                    var phone =
-                        cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                    phone = phone.replace("+33", "0")
-                    phone = phone.replace(" ", "")
-                    contactsPhone[phone] = name
-                }
-            }
-            cursor.close()
-        }
-
-        AppWakeUp.repository.database.getReference("Users").addValueEventListener(
-            object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    for (snap in dataSnapshot.children) {
-                        Log.i("MainActivity", snap.toString())
-                        val user: UserModel = snap.getValue(UserModel::class.java)!!
-                        if (contactsPhone.containsKey(user.phone) && user.id != AppWakeUp.auth.uid) {
-                            contactsApp.add(user)
-                        }
-                    }
-                    AppWakeUp.listeAmis = contactsApp
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.e("MainActivity", "loadPost:onCancelled ${databaseError.message}")
-                }
-            }
-        )
-    }*/
-/*
-    fun connect(clear: Boolean = true) {
-        Timber.e("A")
-        val intent = Intent(this@MainActivity, ConnectActivity::class.java)
-        if (clear) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        }
-        Timber.e("B")
-        startActivity(intent)
-    }
-
-    fun disconnect(clear: Boolean = true) {
-        currentUserViewModel.disconnect()
-        val intent = Intent(this@MainActivity, MainActivity::class.java)
-        if (clear) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        }
-        startActivity(intent)
-    }
-*/
-
-    fun dealWithExtra(extrasToDealWith: Bundle?) {
+    private fun dealWithExtra(extrasToDealWith: Bundle?) {
         if (extrasToDealWith != null) {
             val favyt = extrasToDealWith.getString("favyt")
             if (favyt != null) {
@@ -477,52 +316,6 @@ class MainActivity : AppCompatActivity() {
                     currentUserViewModel.addFavoriString(this, favyt)
                     navController.navigate(R.id.favorisFragment, extrasToDealWith)
                 }
-            }
-
-            val link = extrasToDealWith.getString("link")
-            if (link != null) {
-                val reference =
-                    AppWakeUp.repository.database.getReference("LienMusicMe").child(link)
-                reference.addValueEventListener(
-                    object : ValueEventListener {
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            val lien = dataSnapshot.getValue(LienMusicMe::class.java)!!
-                            if (currentUser == null || lien.userID != currentUser!!.id) {
-                                val reference2 =
-                                    AppWakeUp.repository.database.getReference("Users")
-                                        .child(lien.userID)
-                                reference2.addValueEventListener(
-                                    object : ValueEventListener {
-                                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                            val contact =
-                                                dataSnapshot.getValue(UserModel::class.java)!!
-                                            val action =
-                                                ContactsListeFragmentDirections.actionContactsListeFragmentToContactFragment(
-                                                    contact
-                                                )
-                                            extrasToDealWith!!.putParcelable("contact", contact)
-                                            navController.navigate(
-                                                R.id.contactFragment,
-                                                extrasToDealWith
-                                            )
-
-                                        }
-
-                                        override fun onCancelled(databaseError: DatabaseError) {
-                                            Timber.e(
-                                                "Link:getUser ${databaseError.message}"
-                                            )
-                                        }
-                                    }
-                                )
-                            }
-                        }
-
-                        override fun onCancelled(databaseError: DatabaseError) {
-                            Timber.e("Link:getLink ${databaseError.message}")
-                        }
-                    }
-                )
             }
         }
     }
