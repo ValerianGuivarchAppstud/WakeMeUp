@@ -6,9 +6,21 @@ import androidx.lifecycle.ViewModel
 import com.facebook.AccessToken
 import com.vguivarc.wakemeup.repo.Repository
 
+/**
+ * Fb login view model
+ *
+ * @property repo
+ * @constructor Create empty Fb login view model
+ */
 class FbLoginViewModel(val repo : Repository) : ViewModel() {
 
     private val _loginResultState = MediatorLiveData<ConnectResult>()
+
+    /**
+     * Get login result live data
+     *
+     * @return
+     */
     fun getLoginResultLiveData(): LiveData<ConnectResult> = _loginResultState
 
     init {
@@ -17,11 +29,20 @@ class FbLoginViewModel(val repo : Repository) : ViewModel() {
         }
     }
 
+    /**
+     * Login
+     *
+     * @param accessToken
+     */
     fun login(accessToken: AccessToken) {
         repo.signInWithCredential(accessToken)
     }
 
 
+    /**
+     * Disconnect
+     *
+     */
     fun disconnect() {
         repo.disconnect()
     }

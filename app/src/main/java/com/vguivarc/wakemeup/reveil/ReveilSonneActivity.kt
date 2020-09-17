@@ -42,6 +42,14 @@ class ReveilSonneActivity : AppCompatActivity() {
     private lateinit var audioManager: AudioManager
     private var initialVolume = 0
 
+    /**
+     * Sonnerie alarm worker
+     *
+     * @property context
+     * @constructor
+     *
+     * @param params
+     */
     class SonnerieAlarmWorker(val context: Context, params: WorkerParameters) : Worker(context, params) {
         override fun doWork(): Result {
            /* val audioManager = context.getSystemService(AUDIO_SERVICE) as AudioManager
@@ -71,6 +79,11 @@ class ReveilSonneActivity : AppCompatActivity() {
     }*/
 
     private var requestVolume : PeriodicWorkRequest?= null
+
+    /**
+     * Volume progressif
+     *
+     */
     fun volumeProgressif(){
        /* for(progressionVolume in 0..10){
             val newVol = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
