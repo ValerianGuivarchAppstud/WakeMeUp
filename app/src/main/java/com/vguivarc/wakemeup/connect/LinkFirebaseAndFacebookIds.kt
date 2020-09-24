@@ -11,6 +11,7 @@ class LinkFirebaseAndFacebookIds(
 ) : Parcelable {
 
 
+    @Suppress("unused")
     constructor() : this("", "")
 
 }

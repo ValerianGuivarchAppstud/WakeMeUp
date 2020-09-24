@@ -16,25 +16,25 @@ import java.io.IOException
 import java.security.GeneralSecurityException
 
 
-class SearchYouTube(val videoSearchResultLiveData : MutableLiveData<VideoSearchResult>) : AsyncTask<String, Void, String>() {
+class SearchYouTube(private val videoSearchResultLiveData : MutableLiveData<VideoSearchResult>) : AsyncTask<String, Void, String>() {
 
     lateinit var  result: VideoSearchResult
     override fun doInBackground(vararg searchWord: String): String {
-         try {
-             val reponse =
-                 InternalSearchYouTube.search(
-                     searchWord[0],
-                     searchWord[1].toInt()
-                 ) ?: mutableListOf()
-             val songList = mutableListOf<Song>()
-             for(sr in reponse){
-                 songList.add(Song(sr))
-             }
+        result = try {
+            val reponse =
+                InternalSearchYouTube.search(
+                    searchWord[0],
+                    searchWord[1].toInt()
+                ) ?: mutableListOf()
+            val songList = mutableListOf<Song>()
+            for(sr in reponse){
+                songList.add(Song(sr))
+            }
 
-             result= VideoSearchResult(songList)
+            VideoSearchResult(songList)
         } catch (e: Exception) {
-             result= VideoSearchResult(error = e)
-         }
+            VideoSearchResult(error = e)
+        }
         return ""
     }
 
@@ -44,8 +44,8 @@ class SearchYouTube(val videoSearchResultLiveData : MutableLiveData<VideoSearchR
 
 
 object InternalSearchYouTube {
-    private val DEVELOPER_KEY = YouTubeConfig.apiKey
-    private val APPLICATION_NAME =
+    private const val DEVELOPER_KEY = YouTubeConfig.apiKey
+    private const val APPLICATION_NAME =
         YouTubeConfig.appName
     private val JSON_FACTORY = JacksonFactory.getDefaultInstance()
 

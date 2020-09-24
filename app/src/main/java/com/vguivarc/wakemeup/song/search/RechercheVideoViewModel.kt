@@ -10,20 +10,21 @@ import com.vguivarc.wakemeup.util.SortedListType
 
 class RechercheVideoViewModel(private val repo : Repository) : ViewModel() {
 
-    private val MUSIC_TO_LOAD = 20
-
+    companion object {
+        private const val MUSIC_TO_LOAD = 20
+    }
     private val currentSong = MutableLiveData<Song>()
     fun getCurrentSong() : LiveData<Song> = currentSong
 
     fun setCurrentSong(index: Int) {
-        currentSong.value=rechercheVideosState.value!!.searchList.get(index)
+        currentSong.value= rechercheVideosState.value!!.searchList[index]
     }
 
     private val rechercheVideosState = MediatorLiveData<VideoSearchResult>()
     fun getRechercheVideosLiveData(): LiveData<VideoSearchResult> = rechercheVideosState
 
     private val historiqueSearch = MediatorLiveData<List<String>>()
-    var sortedType : SortedListType = SortedListType.date
+    private var sortedType : SortedListType = SortedListType.Date
 
     fun getSortedHistoriqueSearchLiveData(): LiveData<List<String>> = historiqueSearch
 
@@ -38,22 +39,22 @@ class RechercheVideoViewModel(private val repo : Repository) : ViewModel() {
         }
         historiqueSearch.addSource(repo.getVideoSearchHistorique()) { newSearch ->
             historiqueSearch.value = when(sortedType){
-                SortedListType.date -> {
+                SortedListType.Date -> {
                     val sortedAlphaList = sortedSetOf<String>()
                     sortedAlphaList.addAll(newSearch.keys)
                     sortedAlphaList.toList()
                 }
-                SortedListType.alphabetique -> {
+                SortedListType.Alphabetique -> {
                     val copyKeyMapInverse = mutableMapOf<Long, String>()
                     for( kv in newSearch.entries ) {
-                        copyKeyMapInverse.put(kv.value, kv.key)
+                        copyKeyMapInverse[kv.value] = kv.key
                     }
                     val sortedDateListKey = sortedSetOf<Long>()
                     sortedDateListKey.addAll(copyKeyMapInverse.keys)
 
                     val sortedDateList = mutableListOf<String>()
                     for(d in sortedDateListKey){
-                        sortedDateList.add(copyKeyMapInverse.get(d)!!)
+                        sortedDateList.add(copyKeyMapInverse[d]!!)
                     }
                     sortedDateList
                 }

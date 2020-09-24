@@ -10,6 +10,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.sonnerie.Sonnerie
@@ -29,10 +30,10 @@ class ContactListeAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val card_view_contact = itemView.findViewById<CardView>(R.id.card_view_contact)!!
-        var item_contact_image = itemView.findViewById<ImageView>(R.id.item_contact_image)!!
-        var item_contact_nom = itemView.findViewById<TextView>(R.id.item_contact_nom)!!
-        var item_contact_musique_envoyee = itemView.findViewById<TextView>(R.id.item_contact_musique_envoyee)!!
+        val cardViewContact = itemView.findViewById<CardView>(R.id.card_view_contact)!!
+        var itemContactImage = itemView.findViewById<ImageView>(R.id.item_contact_image)!!
+        var itemContactNom = itemView.findViewById<TextView>(R.id.item_contact_nom)!!
+        var itemContactMusiqueEnvoyee = itemView.findViewById<TextView>(R.id.item_contact_musique_envoyee)!!
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -44,23 +45,27 @@ class ContactListeAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val contact = contacts.toList()[position].second
         with(holder) {
-            card_view_contact.tag = contact
-            card_view_contact.setOnClickListener(this@ContactListeAdapter)
+            cardViewContact.tag = contact
+            cardViewContact.setOnClickListener(this@ContactListeAdapter)
             //item_contact_image.setImageDrawable((, null)))
-            item_contact_nom.text = contact.username
+            itemContactNom.text = contact.username
 
             if(contact.imageUrl!="") {
                 Glide.with(context)
                     .load(contact.imageUrl)
-                    .into(item_contact_image)
+                    .into(itemContactImage)
             } else {
-                item_contact_image.setImageDrawable(
+                itemContactImage.setImageDrawable(
                     ContextCompat.getDrawable(context, R.drawable.empty_picture_profil))
             }
 
             val recu = sonneriesAttente.filter { son -> son.senderId==contact.id }.size + sonneriesPassees.filter { son -> son.senderId==contact.id }.size
             val envoye = sonneriesEnvoyees.filter { son -> son.idReceiver==contact.id }.size
-            item_contact_musique_envoyee.text = "Musique reçue : ${recu} - Musique envoyée : ${envoye}"
+            itemContactMusiqueEnvoyee.text = AppWakeUp.appContext.resources.getString(
+                R.string.txt_trait_txt,
+                AppWakeUp.appContext.resources.getQuantityString(R.plurals.musique_envoyée, recu),
+                AppWakeUp.appContext.resources.getQuantityString(R.plurals.musique_recu, envoye)
+            )
         }
     }
 

@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,13 +44,13 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
         viewModelSonneries = ViewModelProvider(requireActivity(), factory).get(SonnerieListeViewModel::class.java)
         viewModelSonneries.getListePasseesLiveData().observe(
             viewLifecycleOwner,
-            Observer { nouvelleListe ->
+            { nouvelleListe ->
                 updateMusiqueListe(nouvelleListe)
             })
         viewModelFavoris = ViewModelProvider(requireActivity(), factory).get(FavorisViewModel::class.java)
         viewModelFavoris.getFavoriVideosLiveData().observe(
             viewLifecycleOwner,
-            Observer { nouvelleListe ->
+            { nouvelleListe ->
                 updateFavorisListe(nouvelleListe.favoriList)
             })
 
@@ -131,7 +130,7 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
     }
 
     override fun onFavoriListener(sonnerie: Sonnerie, position: Int) {
-        if(listMusicFav.filter { fav -> fav.idSong == sonnerie.idSong }.size==0)
+        if(listMusicFav.filter { fav -> fav.idSong == sonnerie.idSong }.isEmpty())
             viewModelFavoris.addFavori(sonnerie.song!!)
         else
             viewModelFavoris.deleteFavori(sonnerie.song!!)

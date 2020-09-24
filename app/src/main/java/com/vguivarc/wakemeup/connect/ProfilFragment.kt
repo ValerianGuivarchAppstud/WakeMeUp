@@ -17,19 +17,16 @@ import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.CurrentUserViewModel
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.repo.ViewModelFactory
-import timber.log.Timber
 
 
 class ProfilFragment : Fragment() {
 
 
-    lateinit var  callbackManager : CallbackManager
+    private lateinit var  callbackManager : CallbackManager
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Timber.e("lol")
         callbackManager.onActivityResult(requestCode, resultCode, data)
-        Timber.e("lol2")
 
     }
 
@@ -39,7 +36,6 @@ class ProfilFragment : Fragment() {
 
 
     private lateinit var currentView : View
-    //private lateinit var callbackManager : CallbackManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,13 +55,13 @@ class ProfilFragment : Fragment() {
         }
 
       //  callbackManager = CallbackManager.Factory.create();
-        val fb_login_button = currentView.findViewById<LoginButton>(R.id.fb_login_button)
-        fb_login_button.setPermissions("email")//TODO FACEBOOK, "user_friends")
-        fb_login_button.setFragment(this)
+        val fbLoginButton = currentView.findViewById<LoginButton>(R.id.fb_login_button)
+        fbLoginButton.setPermissions("user_friends")
+        fbLoginButton.fragment = this
 
         callbackManager = CallbackManager.Factory.create()
 
-        fb_login_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult?> {
+        fbLoginButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult?> {
             override fun onSuccess(loginResult: LoginResult?) {
                 AppWakeUp.makeToastShort("facebook:onSuccess - ${loginResult!!.accessToken.userId}")
                 fbLoginViewModel.login(loginResult.accessToken)
@@ -92,22 +88,21 @@ class ProfilFragment : Fragment() {
 
         currentUserViewModel.getCurrentUserLiveData().observe(
             requireActivity(),
-            androidx.lifecycle.Observer {
+            {
                 if (it != null) {
                     currentView.findViewById<ProgressBar>(R.id.loading_profil_fragment).visibility =
                         View.VISIBLE
                     currentView.findViewById<TextView>(R.id.profil_fragment_nom).text = it.username
-                    Glide.with(this).load(it.imageUrl)
-                        .placeholder(R.drawable.empty_picture_profil)
-                        .error(R.drawable.empty_picture_profil)
+                    Glide.with(AppWakeUp.appContext).load(it.imageUrl)
+                        .placeholder(R.drawable.main_logo)
+                        .error(R.drawable.main_logo)
                         .into(currentView.findViewById(R.id.profil_fragment_picture))
-                    //  Glide.with(requireContext()).load(it.imageUrl).into(currentView.findViewById(R.id.profil_fragment_picture))
                     currentView.findViewById<ProgressBar>(R.id.loading_profil_fragment).visibility =
                         View.GONE
                 } else {
                     currentView.findViewById<TextView>(R.id.profil_fragment_nom).text =
                         AppWakeUp.appContext.resources.getString(R.string.utilisateur_anonyme)
-                    Glide.with(requireContext()).load(R.drawable.empty_picture_profil).into(
+                    Glide.with(AppWakeUp.appContext).load(R.drawable.main_logo).into(
                         currentView.findViewById(
                             R.id.profil_fragment_picture
                         )

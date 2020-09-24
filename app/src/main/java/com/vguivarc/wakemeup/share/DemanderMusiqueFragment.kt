@@ -25,7 +25,8 @@ import com.vguivarc.wakemeup.repo.ViewModelFactory
 import timber.log.Timber
 import java.sql.Timestamp
 
-
+//TODO refaire ça : le lien donne sur le site mais peut être ouvert dans l'appli (ça génère un truc partageable en mode Facebook ?)
+//TODO ajouter le fait de demander par notif ?
 class DemanderMusiqueFragment : Fragment() {
     private lateinit var username: String
 
@@ -45,7 +46,7 @@ class DemanderMusiqueFragment : Fragment() {
         currentUserViewModel =
             ViewModelProvider(this, factory).get(CurrentUserViewModel::class.java)
 
-        currentUserViewModel.getCurrentUserLiveData().observe(requireActivity(), androidx.lifecycle.Observer {
+        currentUserViewModel.getCurrentUserLiveData().observe(requireActivity(), {
             currentUser=it
             if (currentUser==null) {
                 view.findViewById<TextView>(R.id.id_partage_text_pas_connecte).visibility= View.VISIBLE
@@ -95,7 +96,7 @@ class DemanderMusiqueFragment : Fragment() {
                             Timber.i("erreur lien")
                         }
                     }
-                    val lien = "https://lesseptrois.freeboxos.fr/demande?id=" + key
+                    val lien = "https://lesseptrois.freeboxos.fr/demande?id=$key"
 
                     //liste des intents pour chaque application
                     val applicationCible: MutableList<Parcelable> = ArrayList()
@@ -111,97 +112,13 @@ class DemanderMusiqueFragment : Fragment() {
                     shareIntent.type = "text/plain"
                     val resInfos =
                         requireContext().packageManager.queryIntentActivities(shareIntent, 0)
-                    if (!resInfos.isEmpty()) {
-                        for (i in 0..resInfos.size - 1) {
-                            val appli: ResolveInfo = resInfos.get(i)
+                    if (resInfos.isNotEmpty()) {
+                        for (i in 0 until resInfos.size) {
+                            val appli: ResolveInfo = resInfos[i]
                             val packageName = appli.activityInfo.packageName
 
-                            if (packageName.contains("com.google.android.gm")) {
-                                val intent = Intent()
-                                intent.component =
-                                    ComponentName(packageName, appli.activityInfo.name)
-                                intent.action = Intent.ACTION_SEND
-                                intent.type = "text/plain"
-                                intent.putExtra(
-                                    Intent.EXTRA_TEXT,
-                                    getString(R.string.message_partage_general) + "\n" + lien
-                                )
-                                intent.setPackage(packageName)
-                                applicationCible.add(intent)
-                            } else
-                            if (packageName.contains("com.twitter.android")) {
-                                val intent = Intent()
-                                intent.action = Intent.ACTION_SEND
-                                intent.type = "text/plain"
-                                intent.putExtra(
-                                    Intent.EXTRA_TEXT,
-                                    getString(R.string.message_partage_twitter) + "\n" + lien
-                                )
-                                intent.setPackage(packageName)
-                                applicationCible.add(intent)
-                            } else
-                            if (packageName.contains("mms")) {
-                                val intent = Intent()
-                                intent.action = Intent.ACTION_SEND
-                                intent.type = "text/plain"
-                                intent.putExtra(
-                                    Intent.EXTRA_TEXT,
-                                    getString(R.string.message_partage_general) + "\n" + lien
-                                )
-                                intent.setPackage(packageName)
-                                applicationCible.add(intent)
-                            } else
-                            if (packageName.contains("sms")) {
-                                val intent = Intent()
-                                intent.action = Intent.ACTION_SEND
-                                intent.type = "text/plain"
-                                intent.putExtra(
-                                    Intent.EXTRA_TEXT,
-                                    getString(R.string.message_partage_general) + "\n" + lien
-                                )
-                                intent.setPackage(packageName)
-                                applicationCible.add(intent)
-                            } else
-                            if (packageName.contains("com.instagram.android")) {
-                                val intent = Intent()
-                                intent.component =
-                                    ComponentName(packageName, appli.activityInfo.name)
-                                intent.action = Intent.ACTION_SEND
-                                intent.type = "text/plain"
-                                intent.putExtra(
-                                    Intent.EXTRA_TEXT,
-                                    getString(R.string.message_partage_general) + "\n" + lien
-                                )
-                                intent.setPackage(packageName)
-                                applicationCible.add(intent)
-                            } else
-                            if (packageName.contains("snapchat")) {
-                                val intent = Intent()
-                                intent.component =
-                                    ComponentName(packageName, appli.activityInfo.name)
-                                intent.action = Intent.ACTION_SEND
-                                intent.type = "text/plain"
-                                intent.putExtra(
-                                    Intent.EXTRA_TEXT,
-                                    getString(R.string.message_partage_general) + "\n" + lien
-                                )
-                                intent.setPackage(packageName)
-                                applicationCible.add(intent)
-                            } else
-                            if (packageName.contains("facebook")) {
-                                val intent = Intent()
-                                intent.component =
-                                    ComponentName(packageName, appli.activityInfo.name)
-                                intent.action = Intent.ACTION_SEND
-                                intent.type = "text/plain"
-                                intent.putExtra(
-                                    Intent.EXTRA_TEXT,
-                                    getString(R.string.message_partage_facebook) + "\n" + lien
-                                )
-                                intent.setPackage(packageName)
-                                applicationCible.add(intent)
-                            } else
-                                if (packageName.contains("discord")) {
+                            when {
+                                packageName.contains("com.google.android.gm") -> {
                                     val intent = Intent()
                                     intent.component =
                                         ComponentName(packageName, appli.activityInfo.name)
@@ -214,34 +131,120 @@ class DemanderMusiqueFragment : Fragment() {
                                     intent.setPackage(packageName)
                                     applicationCible.add(intent)
                                 }
-                            else {
-                                val intent = Intent()
-                                intent.component =
-                                    ComponentName(packageName, appli.activityInfo.name)
-                                intent.action = Intent.ACTION_SEND
-                                intent.type = "text/plain"
-                                intent.putExtra(
-                                    Intent.EXTRA_TEXT,
-                                    getString(R.string.message_partage_general) + "\n" + lien
-                                )
-                                intent.setPackage(packageName)
-                                applicationCible.add(intent)
+                                packageName.contains("com.twitter.android") -> {
+                                    val intent = Intent()
+                                    intent.action = Intent.ACTION_SEND
+                                    intent.type = "text/plain"
+                                    intent.putExtra(
+                                        Intent.EXTRA_TEXT,
+                                        getString(R.string.message_partage_twitter) + "\n" + lien
+                                    )
+                                    intent.setPackage(packageName)
+                                    applicationCible.add(intent)
+                                }
+                                packageName.contains("mms") -> {
+                                    val intent = Intent()
+                                    intent.action = Intent.ACTION_SEND
+                                    intent.type = "text/plain"
+                                    intent.putExtra(
+                                        Intent.EXTRA_TEXT,
+                                        getString(R.string.message_partage_general) + "\n" + lien
+                                    )
+                                    intent.setPackage(packageName)
+                                    applicationCible.add(intent)
+                                }
+                                packageName.contains("sms") -> {
+                                    val intent = Intent()
+                                    intent.action = Intent.ACTION_SEND
+                                    intent.type = "text/plain"
+                                    intent.putExtra(
+                                        Intent.EXTRA_TEXT,
+                                        getString(R.string.message_partage_general) + "\n" + lien
+                                    )
+                                    intent.setPackage(packageName)
+                                    applicationCible.add(intent)
+                                }
+                                packageName.contains("com.instagram.android") -> {
+                                    val intent = Intent()
+                                    intent.component =
+                                        ComponentName(packageName, appli.activityInfo.name)
+                                    intent.action = Intent.ACTION_SEND
+                                    intent.type = "text/plain"
+                                    intent.putExtra(
+                                        Intent.EXTRA_TEXT,
+                                        getString(R.string.message_partage_general) + "\n" + lien
+                                    )
+                                    intent.setPackage(packageName)
+                                    applicationCible.add(intent)
+                                }
+                                packageName.contains("snapchat") -> {
+                                    val intent = Intent()
+                                    intent.component =
+                                        ComponentName(packageName, appli.activityInfo.name)
+                                    intent.action = Intent.ACTION_SEND
+                                    intent.type = "text/plain"
+                                    intent.putExtra(
+                                        Intent.EXTRA_TEXT,
+                                        getString(R.string.message_partage_general) + "\n" + lien
+                                    )
+                                    intent.setPackage(packageName)
+                                    applicationCible.add(intent)
+                                }
+                                packageName.contains("facebook") -> {
+                                    val intent = Intent()
+                                    intent.component =
+                                        ComponentName(packageName, appli.activityInfo.name)
+                                    intent.action = Intent.ACTION_SEND
+                                    intent.type = "text/plain"
+                                    intent.putExtra(
+                                        Intent.EXTRA_TEXT,
+                                        getString(R.string.message_partage_facebook) + "\n" + lien
+                                    )
+                                    intent.setPackage(packageName)
+                                    applicationCible.add(intent)
+                                }
+                                packageName.contains("discord") -> {
+                                    val intent = Intent()
+                                    intent.component =
+                                        ComponentName(packageName, appli.activityInfo.name)
+                                    intent.action = Intent.ACTION_SEND
+                                    intent.type = "text/plain"
+                                    intent.putExtra(
+                                        Intent.EXTRA_TEXT,
+                                        getString(R.string.message_partage_general) + "\n" + lien
+                                    )
+                                    intent.setPackage(packageName)
+                                    applicationCible.add(intent)
+                                }
+                                else -> {
+                                    val intent = Intent()
+                                    intent.component =
+                                        ComponentName(packageName, appli.activityInfo.name)
+                                    intent.action = Intent.ACTION_SEND
+                                    intent.type = "text/plain"
+                                    intent.putExtra(
+                                        Intent.EXTRA_TEXT,
+                                        getString(R.string.message_partage_general) + "\n" + lien
+                                    )
+                                    intent.setPackage(packageName)
+                                    applicationCible.add(intent)
+                                }
                             }
                         }
 
                         //on vérifie la présence d'application
-                        if (!applicationCible.isEmpty()) {
+                        if (applicationCible.isNotEmpty()) {
                             val intentVide = Intent()
 
                             //tableau parcelable qui contiendra les intents des applications
-                            val arrayIntent = Array<Intent>(applicationCible.size) { intentVide }
+                            val arrayIntent = Array(applicationCible.size) { intentVide }
 
                             val chooserIntent = Intent.createChooser(
                                 applicationCible.removeAt(0) as Intent,
                                 "choix application"
                             )
-                            for (j in 0..applicationCible.size - 1) {
-                                arrayIntent[j] = applicationCible.get(j) as Intent
+                            for (j in 0 until applicationCible.size) {
+                                arrayIntent[j] = applicationCible[j] as Intent
                             }
                             chooserIntent.putExtra(
                                 Intent.EXTRA_ALTERNATE_INTENTS, arrayIntent

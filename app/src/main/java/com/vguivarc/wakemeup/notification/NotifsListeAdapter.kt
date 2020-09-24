@@ -26,11 +26,11 @@ class NotifsListeAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val notif_card_view = itemView.findViewById<CardView>(R.id.notif_card_view)!!
-        val id_item_notif_profil = itemView.findViewById<ImageView>(R.id.id_item_notif_profil)!!
-        var nom_sender_notif_link = itemView.findViewById<TextView>(R.id.nom_sender_notif_link)!!
-        var id_item_notif_titre_text = itemView.findViewById<TextView>(R.id.id_item_notif_titre_text)!!
-        var id_item_notif_delete = itemView.findViewById<ImageButton>(R.id.id_item_notif_delete)!!
+        val notifCardView = itemView.findViewById<CardView>(R.id.notif_card_view)!!
+        val idItemNotifProfil = itemView.findViewById<ImageView>(R.id.id_item_notif_profil)!!
+        var nomSenderNotifLink = itemView.findViewById<TextView>(R.id.nom_sender_notif_link)!!
+        var idItemNotifTitreText = itemView.findViewById<TextView>(R.id.id_item_notif_titre_text)!!
+        var idItemNotifDelete = itemView.findViewById<ImageButton>(R.id.id_item_notif_delete)!!
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -43,24 +43,24 @@ class NotifsListeAdapter(
         val index = notifs.toList().size-position-1
         val notif = notifs.toList()[index].second
         with(holder) {
-            notif_card_view.tag = notif
+            notifCardView.tag = notif
             if(notif.sender!!.imageUrl!="") {
                 Glide.with(AppWakeUp.appContext)
-                    .load(notif.sender!!.imageUrl)
-                    .into(id_item_notif_profil)
+                    .load(notif.sender.imageUrl)
+                    .into(idItemNotifProfil)
             } else {
-                id_item_notif_profil.setImageDrawable(
+                idItemNotifProfil.setImageDrawable(
                     ContextCompat.getDrawable(AppWakeUp.appContext, R.drawable.empty_picture_profil))
             }
-            nom_sender_notif_link.text = "  "+notif.sender!!.username+"  "
-            nom_sender_notif_link.setOnClickListener {
-                listener?.onSenderClicked(notif.sender!!)
+            nomSenderNotifLink.text = "  "+ notif.sender.username+"  "
+            nomSenderNotifLink.setOnClickListener {
+                listener?.onSenderClicked(notif.sender)
             }
-            id_item_notif_titre_text.text = when(notif.type){
+            idItemNotifTitreText.text = when(notif.type){
                 NotificationMusicMe.NotificationType.ENVOIE_MUSIQUE ->" t'a envoyé une sonnerie."
                 NotificationMusicMe.NotificationType.SONNERIE_UTILISEE ->" a été réveillé par ta sonnerie : "+(notif.sonnerieName!!)
             }
-            id_item_notif_delete.setOnClickListener {
+            idItemNotifDelete.setOnClickListener {
                 listener?.onNotifDelete( notifs.toList()[index].first)
             }
         }

@@ -3,7 +3,6 @@ package com.vguivarc.wakemeup
 import android.app.Application
 import android.content.Context
 import android.widget.Toast
-import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.repo.Repository
 import timber.log.Timber
 
@@ -37,24 +36,17 @@ class AppWakeUp : Application() {
         lateinit var repository: Repository
         const val NAME_FILE_REVEIL = "clock_list.file"
         const val NAME_FILE_HISTORIQUE = "historique.file"
-        lateinit var listeAmis: MutableList<UserModel>
 
 
         lateinit var appContext: Context
-        const val NOTIFICATION_CHANNEL_ID = "WakeMeUp"
-        const val NOTIFICATION_Test = 0
     }
 
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
-        //AppEventsLogger.activateApp(this)
-
-
         appContext = applicationContext
         repository = Repository()
         repository.chargement()
-
     }
 
 }

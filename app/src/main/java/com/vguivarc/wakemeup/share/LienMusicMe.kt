@@ -1,7 +1,6 @@
 package com.vguivarc.wakemeup.share
 
 import java.io.Serializable
-import java.sql.Timestamp
 
 data class LienMusicMe(
     val userID : String,

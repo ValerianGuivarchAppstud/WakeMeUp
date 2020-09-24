@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -20,10 +19,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
-import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.Query
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
+import com.vguivarc.wakemeup.connect.LinkFirebaseAndFacebookIds
 import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.notification.NotifListeViewModel
 import com.vguivarc.wakemeup.notification.NotificationMusicMe
@@ -34,6 +37,12 @@ import timber.log.Timber
 
 
 class MainActivity : AppCompatActivity() {
+
+    companion object{
+        const val PREFS_NAME = "MyPrefsFile"
+        const val PREF_VERSION_CODE_KEY = "version_code"
+        const val DOESNT_EXIST = -1
+    }
 
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -57,16 +66,48 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-
-    private val REQUEST_IMAGE_CAPTURE = 100
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_musicme_app_main)
 
 
+        val rootRef =
+           AppWakeUp.repository.database.reference.child("LinkFirebaseAndFacebookIds")//.equalTo(currentUser?.uid!!, "appartientA")
+        val query: Query =
+            rootRef.orderByChild("IdFirebase")
 
-/*        try {
+        query.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                AppWakeUp.repository.listeFriendStatic.clear()
+                if (p0.childrenCount.toInt() > 0) {
+                    for (ds in p0.children) {
+                        val link = ds.getValue(LinkFirebaseAndFacebookIds::class.java)!!
+                        AppWakeUp.repository.listeFriendStatic.add(link.idFacebook)
+                    }
+                }
+            }
+        })
+
+
+    /*    try {
+            val info = packageManager.getPackageInfo(
+                "com.vguivarc.wakemeup",  //Insert your own package name.
+                PackageManager.GET_SIGNATURES
+            )
+            for (signature in info.signatures) {
+                val md = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                Timber.e("KeyHash:"+ Base64.encodeToString(md.digest(), Base64.DEFAULT))
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+        } catch (e: NoSuchAlgorithmException) {
+        }
+
+        try {
             val info: PackageInfo = packageManager.getPackageInfo(
                 "com.vguivarc.wakemeup",  //Insert your own package name.
                 PackageManager.GET_SIGNATURES
@@ -76,12 +117,12 @@ class MainActivity : AppCompatActivity() {
                 md.update(signature.toByteArray())
                 val v = Base64.encodeToString(md.digest(), Base64.DEFAULT)
 
-                Timber.e("KeyHash:"+Base64.encodeToString(md.digest(), Base64.DEFAULT))
+                Timber.e("KeyHash:" + Base64.encodeToString(md.digest(), Base64.DEFAULT))
             }
         } catch (e: PackageManager.NameNotFoundException) {
         } catch (e: NoSuchAlgorithmException) {
-        }*/
-
+        }
+*/
 
 
         val toolbar: Toolbar = findViewById(R.id.toolbar_main)
@@ -110,6 +151,7 @@ class MainActivity : AppCompatActivity() {
        Timber.e("isLoggedIn=" + isLoggedIn)*/
 
 
+
        FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
@@ -131,9 +173,8 @@ class MainActivity : AppCompatActivity() {
         currentUserViewModel =
             ViewModelProvider(this, factory).get(CurrentUserViewModel::class.java)
 
-     //TODO décommenter :   checkFirstRun()
+     checkFirstRun()
 
-        this.configureNavigationView()
     }
 
     private lateinit var viewNbMusiquesEnAttente: TextView
@@ -179,19 +220,19 @@ class MainActivity : AppCompatActivity() {
         viewModelNotif =
             ViewModelProvider(this, factory).get(NotifListeViewModel::class.java)
 
-        viewModelSonnerie.getListeAttenteLiveData().observe(this, androidx.lifecycle.Observer {
+        viewModelSonnerie.getListeAttenteLiveData().observe(this, {
             updateSonnerieHotCountNumber(it)
         })
-        viewModelSonnerie.getListeVueLiveData().observe(this, androidx.lifecycle.Observer {
+        viewModelSonnerie.getListeVueLiveData().observe(this, {
             updateHotCountSonnerieActivated(it)
         })
 
 
-        viewModelNotif.getNotifLiveData().observe(this, androidx.lifecycle.Observer {
+        viewModelNotif.getNotifLiveData().observe(this, {
             updateNotifHotCountNumber(it)
         })
 
-        currentUserViewModel.getCurrentUserLiveData().observe(this, androidx.lifecycle.Observer {
+        currentUserViewModel.getCurrentUserLiveData().observe(this, {
             currentUser = it
             if (currentUser == null) {
                 viewNbMusiquesEnAttente.visibility = View.INVISIBLE
@@ -206,7 +247,6 @@ class MainActivity : AppCompatActivity() {
                 viewIconeMusiquesEnAttente.visibility = View.VISIBLE
                 viewIconeNotifEnAttente.visibility = View.VISIBLE
             }
-            updateProfilView()
         })
             // viewModelSonnerie.updateSonneries()
            // viewModelSonnerie.updateSonneriesEnvoyees()
@@ -263,13 +303,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Configure NavigationView
-
-    private fun configureNavigationView() {
-        updateProfilView()
-    }
-
-    private fun updateProfilView() {
+   /* private fun updateProfilView() {
         if (currentUser != null) {
             navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil)
                 .setOnClickListener {
@@ -306,7 +340,7 @@ class MainActivity : AppCompatActivity() {
             navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil)
                 .setImageDrawable(ContextCompat.getDrawable(this, R.drawable.empty_picture_profil))
         }
-    }
+    }*/*/
 
     private fun dealWithExtra(extrasToDealWith: Bundle?) {
         if (extrasToDealWith != null) {
@@ -322,9 +356,6 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun checkFirstRun() {
-        val PREFS_NAME = "MyPrefsFile"
-        val PREF_VERSION_CODE_KEY = "version_code"
-        val DOESNT_EXIST = -1
 
         // Get current version code
         val currentVersionCode = BuildConfig.VERSION_CODE
@@ -335,17 +366,21 @@ class MainActivity : AppCompatActivity() {
         val savedVersionCode: Int = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST)
 
         // Check for first run or upgrade
-        if (currentVersionCode == savedVersionCode) {
-            // This is just a normal run
-            return
-        } else if (savedVersionCode == DOESNT_EXIST) {
-            // TODO This is a new install (or the user cleared the shared preferences)
-            intent = Intent(this, Demo::class.java)
-            startActivity(intent)
-        } else if (currentVersionCode > savedVersionCode) {
-            // TODO This is an upgrade
-            intent = Intent(this, Demo::class.java)
-            startActivity(intent)
+        when {
+            currentVersionCode == savedVersionCode -> {
+                // This is just a normal run
+                return
+            }
+            savedVersionCode == DOESNT_EXIST -> {
+                // TODO This is a new install (or the user cleared the shared preferences)
+                intent = Intent(this, Demo::class.java)
+                startActivity(intent)
+            }
+            currentVersionCode > savedVersionCode -> {
+                // TODO This is an upgrade
+                intent = Intent(this, Demo::class.java)
+                startActivity(intent)
+            }
         }
 
         // Update the shared preferences with the current version code

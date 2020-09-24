@@ -6,11 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.util.Utility
 
 
 //----------------------------------------------------------------//
@@ -59,9 +57,9 @@ class FavorisAdaptater(
 
         val tvTitle: TextView = itemView.findViewById<View>(R.id.fav_tv_title) as TextView
         val ivArtwork: ImageView = itemView.findViewById<View>(R.id.fav_iv_artwork) as ImageView
-        val ivPlayActive: ImageView = itemView.findViewById<View>(R.id.fav_iv_play_active) as ImageView
-        val ivShare: ImageView = itemView.findViewById<View>(R.id.fav_tv_share) as ImageView
-        val ivDelete: ImageView = itemView.findViewById<View>(R.id.fav_tv_delete) as ImageView
+        private val ivPlayActive: ImageView = itemView.findViewById<View>(R.id.fav_iv_play_active) as ImageView
+        private val ivShare: ImageView = itemView.findViewById<View>(R.id.fav_tv_share) as ImageView
+        private val ivDelete: ImageView = itemView.findViewById<View>(R.id.fav_tv_delete) as ImageView
 
         fun bind(song: Favori, listener: RecyclerItemClickListener) {
             ivPlayActive.setOnClickListener { listener.onPlayListener(song, layoutPosition) }

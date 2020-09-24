@@ -63,8 +63,8 @@
     <string name="delete_clock">Delete Clock</string>
     <string name="prompt_phone">Numéro de téléphone</string>
     <string name="message_partage_general">Voici mon contact sur MusicMe!, n\'hésite pas à me proposer des musiques pour mon prochain réveil !</string>
-    <string name="message_partage_facebook">Voici mon contact sur MusicMe!, n\'hésitez pas à me proposer des musiques pour mon prochain réveil !</string>
-    <string name="message_partage_twitter">Voici mon contact sur MusicMe!, n\'hésitez pas à me proposer des musiques pour mon prochain réveil !</string>
+    <string name="message_partage_facebook">Voici mon contact sur MusicMe!, n\'hésite pas à me proposer des musiques pour mon prochain réveil !</string>
+    <string name="message_partage_twitter">Voici mon contact sur MusicMe!, n\'hésite pas à me proposer des musiques pour mon prochain réveil !</string>
     <string name="heure_choix_temps">Heure</string>
     <string name="minute_choix_temps">Minute</string>
     <string name="seconde_choix_temps">Seconde</string>
@@ -86,7 +86,16 @@
     <string name="chargement_du_r_veil">Chargement du réveil…</string>
     <string name="notifications">Notifications</string>
     <string name="envoyee_par">Envoyée par %1$s</string>
-    <string name="utilisateur_anonyme">Utilisateur anonyme</string>
-
-
+    <string name="utilisateur_anonyme">Non connecté</string>
+    <string name="txt_trait_txt">%s1 - %s2</string>
+    <plurals name="musique_recu">
+        <item quantity="zero">Musique reçue : %d</item>
+        <item quantity="one">Musique reçue : %d</item>
+        <item quantity="other">Musiques reçues : %d</item>
+    </plurals>
+    <plurals name="musique_envoyée">
+        <item quantity="zero">Musique envoyée : %d</item>
+        <item quantity="one">Musique envoyée : %d</item>
+        <item quantity="other">Musiques envoyées : %d</item>
+    </plurals>
 </resources>

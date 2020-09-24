@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.Switch
 import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.vguivarc.wakemeup.R
@@ -23,11 +23,11 @@ class ReveilListeAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val reveil_card_view = itemView.findViewById<CardView>(R.id.reveil_card_view)!!
-        var item_reveil_heure = itemView.findViewById<TextView>(R.id.item_reveil_heure)!!
-        var item_reveil_jours = itemView.findViewById<TextView>(R.id.item_reveil_jours)!!
-        var item_reveil_switch = itemView.findViewById<Switch>(R.id.item_reveil_switch)!!
-        var item_reveil_delete = itemView.findViewById<ImageButton>(R.id.fav_tv_delete)!!
+        val reveilCardView = itemView.findViewById<CardView>(R.id.reveil_card_view)!!
+        var itemReveilHeure = itemView.findViewById<TextView>(R.id.item_reveil_heure)!!
+        var itemReveilJours = itemView.findViewById<TextView>(R.id.item_reveil_jours)!!
+        var itemReveilSwitch = itemView.findViewById<SwitchCompat>(R.id.item_reveil_switch)!!
+        var itemReveilDelete = itemView.findViewById<ImageButton>(R.id.fav_tv_delete)!!
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,15 +39,15 @@ class ReveilListeAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val reveil = reveils.toList()[position].second
         with(holder) {
-            reveil_card_view.tag = reveil
-            reveil_card_view.setOnClickListener(this@ReveilListeAdapter)
-            item_reveil_heure.text = reveil.getHeureTexte()
-            item_reveil_jours.text = reveil.getJoursTexte()
-            item_reveil_switch.isChecked = reveil.isActif
-            item_reveil_switch.setOnClickListener {
+            reveilCardView.tag = reveil
+            reveilCardView.setOnClickListener(this@ReveilListeAdapter)
+            itemReveilHeure.text = reveil.getHeureTexte()
+            itemReveilJours.text = reveil.getJoursTexte()
+            itemReveilSwitch.isChecked = reveil.isActif
+            itemReveilSwitch.setOnClickListener {
                 listener?.onReveilSwitched(reveil)
             }
-            item_reveil_delete.setOnClickListener {
+            itemReveilDelete.setOnClickListener {
                 listener?.onReveilDelete(reveil)
             }
         }

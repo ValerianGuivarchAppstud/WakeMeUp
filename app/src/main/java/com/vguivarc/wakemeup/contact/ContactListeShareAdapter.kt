@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.sonnerie.Sonnerie
@@ -30,9 +31,9 @@ class ContactListeShareAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var item_contact_image = itemView.findViewById<ImageView>(R.id.item_contact_image)!!
-        var item_contact_nom = itemView.findViewById<TextView>(R.id.item_contact_nom)!!
-        var item_contact_musique_envoyee =
+        var itemContactImage = itemView.findViewById<ImageView>(R.id.item_contact_image)!!
+        var itemContactNom = itemView.findViewById<TextView>(R.id.item_contact_nom)!!
+        var itemContactMusiqueEnvoyee =
             itemView.findViewById<TextView>(R.id.item_contact_musique_envoyee)!!
         var checkBoxContact = itemView.findViewById<CheckBox>(R.id.checkBoxContact)!!
     }
@@ -47,14 +48,14 @@ class ContactListeShareAdapter(
         val contact = contacts.toList()[position].second
         with(holder) {
             //item_contact_image.setImageDrawable((, null)))
-            item_contact_nom.text = contact.username
+            itemContactNom.text = contact.username
 
             if (contact.imageUrl != "") {
                 Glide.with(context)
                     .load(contact.imageUrl)
-                    .into(item_contact_image)
+                    .into(itemContactImage)
             } else {
-                item_contact_image.setImageDrawable(
+                itemContactImage.setImageDrawable(
                     ContextCompat.getDrawable(context, R.drawable.empty_picture_profil)
                 )
             }
@@ -63,8 +64,11 @@ class ContactListeShareAdapter(
                 sonneriesAttente.filter { son -> son.senderId == contact.id }.size + sonneriesPassees.filter { son -> son.senderId == contact.id }.size
             val envoye =
                 sonneriesEnvoyees.filter { son -> son.idReceiver == contact.id }.size
-            item_contact_musique_envoyee.text =
-                "Musique reçue : ${recu} - Musique envoyée : ${envoye}"
+            itemContactMusiqueEnvoyee.text = AppWakeUp.appContext.resources.getString(
+                R.string.txt_trait_txt,
+                AppWakeUp.appContext.resources.getQuantityString(R.plurals.musique_envoyée, recu),
+                AppWakeUp.appContext.resources.getQuantityString(R.plurals.musique_recu, envoye)
+            )
             checkBoxContact.isSelected = selection.contains(contact)
             checkBoxContact.visibility = View.VISIBLE
             checkBoxContact.tag = contact

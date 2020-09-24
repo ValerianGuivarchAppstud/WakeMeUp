@@ -1,4 +1,4 @@
 package com.vguivarc.wakemeup.util
 
-enum class SortedListType{date, alphabetique}
+enum class SortedListType{Date, Alphabetique}
 

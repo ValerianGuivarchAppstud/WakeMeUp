@@ -29,7 +29,7 @@ class SonneriePasseAdapter (private val context: Context,
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: SonnerieViewHolder, position: Int) {
 
-        val sonnerie = sonnerieList.get(position)
+        val sonnerie = sonnerieList[position]
         if(sonnerie.sender!=null){
             holder.sender.text = "Envoyé par : "
             holder.link.visibility = View.VISIBLE
@@ -42,7 +42,7 @@ class SonneriePasseAdapter (private val context: Context,
         val song = sonnerieList[position].song!!
         holder.tvTitle.text = song.title
         //holder.tvArtist.text = song.artist
-        if(favoriList.filter { fav -> fav.idSong==sonnerie.idSong }.size==0){
+        if(favoriList.filter { fav -> fav.idSong == sonnerie.idSong }.isEmpty()){
             holder.ivFavori.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_fav_not_yet))
         } else {
             holder.ivFavori.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_main_menu_favoris))
@@ -63,9 +63,9 @@ class SonneriePasseAdapter (private val context: Context,
 
         val tvTitle: TextView = itemView.findViewById<View>(R.id.tv_title_sonnerie_passe) as TextView
         val ivArtwork: ImageView = itemView.findViewById<View>(R.id.iv_artwork_sonnerie_passe) as ImageView
-        val ivPlayActive: ImageView = itemView.findViewById<View>(R.id.iv_play_active_sonnerie_passe) as ImageView
-        val ivShare: ImageView = itemView.findViewById<View>(R.id.pas_tv_share) as ImageView
-        val ivDelete: ImageView = itemView.findViewById<View>(R.id.pas_tv_delete) as ImageView
+        private val ivPlayActive: ImageView = itemView.findViewById<View>(R.id.iv_play_active_sonnerie_passe) as ImageView
+        private val ivShare: ImageView = itemView.findViewById<View>(R.id.pas_tv_share) as ImageView
+        private val ivDelete: ImageView = itemView.findViewById<View>(R.id.pas_tv_delete) as ImageView
         val ivFavori: ImageView = itemView.findViewById<View>(R.id.pas_tv_fav) as ImageView
         val link: TextView = itemView.findViewById(R.id.nom_ami_sonnerie_passe_link)
 

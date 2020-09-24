@@ -23,10 +23,10 @@ open class NotificationMusicMe(
      }
 
      companion object {
-         fun newInstance_Envoie_Musique(sonnerie: Sonnerie, sender: UserModel): NotificationMusicMe {
+         fun newInstanceEnvoieMusique(sonnerie: Sonnerie, sender: UserModel): NotificationMusicMe {
              return NotificationMusicMe(sonnerie.idReceiver, sender, false, NotificationType.ENVOIE_MUSIQUE)
          }
-         fun newInstance_SonnerieUtilisee(sonnerie: Sonnerie, sender: UserModel): NotificationMusicMe {
+         fun newInstanceSonnerieUtilisee(sonnerie: Sonnerie, sender: UserModel): NotificationMusicMe {
              val not= NotificationMusicMe(
                  sonnerie.senderId,
                  sender,

@@ -4,22 +4,20 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.MainActivity
 import com.vguivarc.wakemeup.R
+import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.util.Utility
 import com.vguivarc.wakemeup.util.putParcelableExtra
 import kotlinx.android.synthetic.main.fragment_reveil_list.view.*
@@ -41,7 +39,7 @@ class ReveilsListeFragment : Fragment(), ReveilListeAdapter.ReveilListAdapterLis
         viewModel = ViewModelProvider(this, factory).get(ReveilListeViewModel::class.java)
         viewModel.getReveilsListeLiveData().observe(
             viewLifecycleOwner,
-            androidx.lifecycle.Observer { nouvelleListeReveils ->
+            { nouvelleListeReveils ->
                 updateReveilsListe(
                     nouvelleListeReveils
                 )
@@ -53,7 +51,7 @@ class ReveilsListeFragment : Fragment(), ReveilListeAdapter.ReveilListAdapterLis
         reveils.clear()
         reveils.putAll(nouvelleListeReveils)
         adapter.notifyDataSetChanged()
-        if(reveils.size>0){
+        if(reveils.isNotEmpty()){
             var minR = nouvelleListeReveils.toList()[0].second
             for(r in nouvelleListeReveils.values){
                 if(r.nextAlarmCalendar.before(minR.nextAlarmCalendar)){
@@ -120,7 +118,7 @@ class ReveilsListeFragment : Fragment(), ReveilListeAdapter.ReveilListAdapterLis
             )
         }
 
-        requireActivity().setTitle("Réveils")
+        requireActivity().title = "Réveils"
         return view
     }
 
@@ -147,7 +145,7 @@ class ReveilsListeFragment : Fragment(), ReveilListeAdapter.ReveilListAdapterLis
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle("Supprimer réveil")
         builder.setMessage("Voulez-vous supprimer ce réveil ?")
-        builder.setPositiveButton("Supprimer") { dialog, which ->
+        builder.setPositiveButton("Supprimer") { _, _ ->
             viewModel.removeReveil(reveilModel.idReveil)
         }
         builder.setNeutralButton("Annuler") { _, _ -> }
@@ -157,6 +155,7 @@ class ReveilsListeFragment : Fragment(), ReveilListeAdapter.ReveilListAdapterLis
 
 
 
+    //TODO notif n'est pas le bon truc à faire pour ça
     private fun notification(textProchainReveil : String){
 
         lateinit var notificationChannel : NotificationChannel
@@ -165,9 +164,8 @@ class ReveilsListeFragment : Fragment(), ReveilListeAdapter.ReveilListAdapterLis
         val description = "Music Me ! Alarme prévue ...(TODO add texte)"
         val notificationManage =  requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val main_activity_intent = Intent(requireActivity(), MainActivity::class.java)
-        val pi = PendingIntent.getActivity(requireContext(),0,main_activity_intent,0)
-        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val mainActivityIntent = Intent(requireActivity(), MainActivity::class.java)
+        val pi = PendingIntent.getActivity(requireContext(),0,mainActivityIntent,0)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationChannel =

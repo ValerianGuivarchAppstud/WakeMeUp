@@ -1,4 +1,4 @@
-package com.vguivarc.wakemeup.facebook
+package com.vguivarc.wakemeup.contact
 
 import com.vguivarc.wakemeup.connect.UserModel
 

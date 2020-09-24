@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,8 +19,6 @@ import com.vguivarc.wakemeup.sonnerie.Sonnerie
 import com.vguivarc.wakemeup.sonnerie.SonnerieListeViewModel
 
 class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapterListener {
-
-    //TODO item musique cherché enlever durée
 
     private lateinit var viewModelContact: ContactListeViewModel
     private lateinit var viewModelSonnerie: SonnerieListeViewModel
@@ -53,7 +50,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
 
         viewModelSonnerie.getSonneriesEnvoyees().observe(
             viewLifecycleOwner,
-            Observer {
+            {
                 sonneriesEnvoyeesList.clear()
                 sonneriesEnvoyeesList.addAll(it)
                 adapter.notifyDataSetChanged()
@@ -61,7 +58,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         )
         viewModelSonnerie.getListeAttenteLiveData().observe(
             viewLifecycleOwner,
-            Observer {
+            {
                 sonneriesAttenteList.clear()
                 sonneriesAttenteList.addAll(it.values)
                 adapter.notifyDataSetChanged()
@@ -69,7 +66,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         )
         viewModelSonnerie.getListePasseesLiveData().observe(
             viewLifecycleOwner,
-            Observer {
+            {
                 sonneriesPasseList.clear()
                 sonneriesPasseList.addAll(it.values)
                 adapter.notifyDataSetChanged()
@@ -78,9 +75,9 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
 
         viewModelContact.getContactsListeLiveData().observe(
             viewLifecycleOwner,
-            Observer { it ->
+            {
                 if(it.error==null) {
-                    if(it.friendList.size==0){
+                    if(it.friendList.isEmpty()){
                         contactsList.clear()
                         adapter.notifyDataSetChanged()
                         textePasDeContact.visibility = View.VISIBLE

@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,19 +56,18 @@ class FavorisFragment : Fragment(),  FavorisAdaptater.RecyclerItemClickListener 
         //Initialisation des vues-------------------------------------------------------------
         currentView = inflater.inflate(R.layout.fragment_favori, container, false)
         fAdapter= FavorisAdaptater(requireContext(), favorisList, this)
-        requireActivity().setTitle("Favoris")
+        requireActivity().title = "Favoris"
 
         textePasDeFavori = currentView.findViewById(R.id.textPasFavori)
         loading = currentView.findViewById(R.id.pb_main_loader)
 
-        viewModelFavori.getFavoriVideosLiveData().observe(requireActivity(), androidx.lifecycle.Observer {
+        viewModelFavori.getFavoriVideosLiveData().observe(requireActivity(), {
             if(it.error==null) {
-                if(it.favoriList.size==0){
+                if(it.favoriList.isEmpty()){
                     favorisList.clear()
                     fAdapter.notifyDataSetChanged()
                     textePasDeFavori.visibility = View.VISIBLE
                 } else {
-                    Log.e("bug", "A")
                     favorisList.clear()
                     favorisList.putAll(it.favoriList)
                     fAdapter.notifyDataSetChanged()

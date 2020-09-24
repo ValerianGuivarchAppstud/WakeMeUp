@@ -11,7 +11,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -42,11 +41,11 @@ class ContactFragment : Fragment() {
         val contact = ContactFragmentArgs.fromBundle(requireArguments()).contact
         val view =  inflater.inflate(R.layout.fragment_contact, container, false)
 
-        view.findViewById<TextView>(R.id.id_contact_nom).setText(contact.username)
+        view.findViewById<TextView>(R.id.id_contact_nom).text = contact.username
         if(contact.imageUrl!="") {
             Glide.with(requireContext())
                 .load(contact.imageUrl)
-                .into(view.findViewById<ImageView>(R.id.profil_picture))
+                .into(view.findViewById(R.id.profil_picture))
         } else {
             view.findViewById<ImageView>(R.id.profil_picture).setImageDrawable(
                 ContextCompat.getDrawable(requireContext(), R.drawable.empty_picture_profil))
@@ -57,9 +56,9 @@ class ContactFragment : Fragment() {
         viewModelSonnerie = ViewModelProvider(this, factory).get(SonnerieListeViewModel::class.java)
         currentUserViewModel =
             ViewModelProvider(this, factory).get(CurrentUserViewModel::class.java)
-        favoriButton = view.findViewById<Button>(R.id.id_contact_partage_favori)
+        favoriButton = view.findViewById(R.id.id_contact_partage_favori)
 
-        currentUserViewModel.getCurrentUserLiveData().observe(requireActivity(), androidx.lifecycle.Observer {
+        currentUserViewModel.getCurrentUserLiveData().observe(requireActivity(), {
             currentUser=it
             if (currentUser==null) {
                 favoriButton.visibility=View.GONE
@@ -87,7 +86,7 @@ class ContactFragment : Fragment() {
             builder.setView(layout)
             builder.setPositiveButton(
                 "Envoyer"
-            ) { dialog, which ->
+            ) { dialog, _ ->
                 dialog.dismiss()
                 if (currentUser==null) {
                     viewModelSonnerie.addSonnerieUrlToUser(requireActivity(), urlYT.text.toString(), contact,
@@ -98,12 +97,12 @@ class ContactFragment : Fragment() {
             }
             builder.setNegativeButton(
                 "Annuler"
-            ) { dialog, which -> dialog.dismiss() }
+            ) { dialog, _ -> dialog.dismiss() }
             val dialog = builder.create()
             dialog.show()
         }
 
-        viewModelSonnerie.getSonnerieStateAddResult().observe(requireActivity(), Observer {
+        viewModelSonnerie.getSonnerieStateAddResult().observe(requireActivity(), {
             if(it.error==null){
                 Utility.createSimpleToast("Sonnerie envoyée")
             } else {

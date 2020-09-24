@@ -35,8 +35,8 @@ class ReveilModel(
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)
     },
-    var hour: Int = 9,
-    var minute: Int = 0,
+    private var hour: Int = 9,
+    private var minute: Int = 0,
     var isActif: Boolean = true,
     var repetition: ReveilMode = ReveilMode.Semaine,
     val idReveil: Int = getUnicId()
@@ -55,12 +55,12 @@ class ReveilModel(
     }
 
     fun getJoursTexte(): String {
-        if(repetition.equals(ReveilMode.PasDeRepetition)){
-            return "[Pas de répétition]"
+        return if(repetition == ReveilMode.PasDeRepetition){
+            "[Pas de répétition]"
         } else if (listActifDays.size == 7) {
-            return "[Tous les jours]"
+            "[Tous les jours]"
         } else  {
-            return listActifDays.toString()
+            listActifDays.toString()
         }
     }
 
@@ -91,14 +91,12 @@ class ReveilModel(
         private var idCount = 1
 
         fun getUnicId(): Int {
-            Timber.e("new -> " + idCount)
-            idCount = idCount + 1
-            Timber.e("new -> " + idCount)
+            idCount += 1
             return idCount - 1
         }
 
         fun chargement(listeReveils: MutableMap<Int, ReveilModel>) {
-            idCount = listeReveils.keys.max() ?: 0
+            idCount = listeReveils.keys.maxOrNull() ?: 0
             idCount++
         }
 
@@ -136,47 +134,26 @@ class ReveilModel(
 
     fun startAlarm(snoozing : Boolean = false) {
 
-        val data = Data.Builder()
+   val data = Data.Builder()
         data.putString("idReveil", idReveil.toString())
         val nextAlarmCalendarToUse = nextAlarmCalendar
             if(snoozing){
                 nextAlarmCalendarToUse.add(Calendar.MINUTE, DUREE_SNOOZE)
             }
+/*        val calTemp = Calendar.getInstance()
+        calTemp.add(Calendar.SECOND, 3)
+        AppWakeUp.repository.alarmSetter.setInexactAlarm(idReveil, calTemp)*/
+
+
         val t = nextAlarmCalendarToUse.timeInMillis/1000
 
-        //nextAlarmCalendarSnoze = nextAlarmCalendar.add(Calendar.MINUTE, DUREE_SNOOZE)
-
         val request = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
-            .setInitialDelay(t- Timestamp.now().seconds, TimeUnit.SECONDS)
-        //    .setInitialDelay(10, TimeUnit.SECONDS)
+           .setInitialDelay(t- Timestamp.now().seconds, TimeUnit.SECONDS)
+          //  .setInitialDelay(5, TimeUnit.SECONDS)
             .setInputData(data.build())
             .build()
 
-        //WorkManager.getInstance(AppWakeUp.appContext).enqueue(request)
         WorkManager.getInstance(AppWakeUp.appContext).beginUniqueWork(idReveil.toString(), ExistingWorkPolicy.REPLACE, request).enqueue()
-
-        /*WorkManager.getInstance(AppWakeUp.appContext).getWorkInfoByIdLiveData(request.id).observe(
-            this,
-        )*/
-
-            /*
-
-        val alarmManager =
-            AppWakeUp.appContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(AppWakeUp.appContext, AlertReceiver::class.java)
-        intent.putExtra("idReveil", idReveil)
-        val pendingIntent = PendingIntent.getBroadcast(
-            AppWakeUp.appContext,
-            this.idReveil,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-
-        alarmManager.setExact(
-            AlarmManager.RTC_WAKEUP,
-            this.nextAlarm.timeInMillis, pendingIntent
-        )*/
     }
 
     fun snooze(){

@@ -27,7 +27,7 @@ class SonnerieAttenteAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: SonnerieViewHolder, position: Int) {
 
-        val sonnerie = sonnerieList.get(position)
+        val sonnerie = sonnerieList[position]
         //todo translate
         if(sonnerie.sender!=null){
             holder.sender.text = "Envoyé par : ${sonnerie.sender!!.username}"
@@ -35,8 +35,8 @@ class SonnerieAttenteAdapter(
             holder.sender.text = "Envoyé par : ${sonnerie.senderName}"
         }
 
-        val formatterDay = SimpleDateFormat("dd/MM/yyyy")
-        val formatterHour = SimpleDateFormat("hh:mm")
+        val formatterDay = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val formatterHour = SimpleDateFormat("hh:mm", Locale.getDefault())
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = sonnerie.dateEnvoie*1000
 
@@ -57,9 +57,9 @@ class SonnerieAttenteAdapter(
 
     class SonnerieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val sender = itemView.findViewById<TextView>(R.id.nom_ami_sonnerie_attente)
-        val date = itemView.findViewById<TextView>(R.id.date_sonnerie_attente)
-        val image = itemView.findViewById<ImageView>(R.id.image_ami_sonnerie_attente)
+        val sender : TextView= itemView.findViewById(R.id.nom_ami_sonnerie_attente)
+        val date : TextView= itemView.findViewById(R.id.date_sonnerie_attente)
+        val image : ImageView = itemView.findViewById(R.id.image_ami_sonnerie_attente)
 
         fun bind(sonnerie: Sonnerie, listener: RecyclerItemClickListener) {
             itemView.setOnClickListener { listener.onClickSonnerieListener(sonnerie, layoutPosition) }

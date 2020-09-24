@@ -13,7 +13,7 @@ class Song(
 ) : Comparable<Song>, Parcelable, Serializable {
 
     override fun toString(): String {
-        return ""+id+" : "+title
+        return "$id : $title"
     }
 
     constructor(parcel: Parcel) : this(
@@ -57,7 +57,7 @@ class Song(
 
 
     companion object CREATOR : Parcelable.Creator<Song> {
-        private val serialVersionUid : Long = 123456789
+        private const val serialVersionUid : Long = 123456789
 
         override fun createFromParcel(parcel: Parcel): Song {
             return Song(parcel)

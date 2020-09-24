@@ -61,9 +61,9 @@ class FavorisShareFragment : Fragment(), FavorisShareAdaptater.RecyclerItemClick
         loading = currentView.findViewById(R.id.pb_main_loader)
 
         viewModelFavori.getFavoriVideosLiveData()
-            .observe(requireActivity(), androidx.lifecycle.Observer {
+            .observe(requireActivity(), {
                 if (it.error == null) {
-                    if (it.favoriList.size == 0) {
+                    if (it.favoriList.isEmpty()) {
                         favorisList.clear()
                         fAdapter.notifyDataSetChanged()
                         textePasDeFavori.visibility = View.VISIBLE
@@ -95,7 +95,7 @@ class FavorisShareFragment : Fragment(), FavorisShareAdaptater.RecyclerItemClick
             }
         }
 
-        currentView.findViewById<TextView>(R.id.share_contact_name).setText(contact.username)
+        currentView.findViewById<TextView>(R.id.share_contact_name).text = contact.username
         if (contact.imageUrl != "") {
             Glide.with(requireContext())
                 .load(contact.imageUrl)

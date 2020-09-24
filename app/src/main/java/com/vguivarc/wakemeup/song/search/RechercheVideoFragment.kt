@@ -1,8 +1,7 @@
 package com.vguivarc.wakemeup.song.search
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.vguivarc.wakemeup.AppWakeUp
-import com.vguivarc.wakemeup.MainActivity
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.song.Song
@@ -43,7 +41,6 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
     private lateinit var recyclerView : RecyclerView
 
     private var currentIndex: Int = 0
-    private var currentSongLength: Int = 0
     private var currentSong: Song? = null
 
     private var youTubePlayer: YouTubePlayer? = null
@@ -56,7 +53,7 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
     private lateinit var searchVideoAdapter: SongAdapter
     private lateinit var viewModelSearchVideo : RechercheVideoViewModel
     private lateinit var viewModelFavori : FavorisViewModel
-    private lateinit var pb_main_loader : ProgressBar
+    private lateinit var pbMainLoader : ProgressBar
 
 
     override fun onCreateView(
@@ -66,7 +63,7 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
     ): View? {
 
         super.onCreate(savedInstanceState)
-        requireActivity().setTitle("Musiques")
+        requireActivity().title = "Musiques"
         val factory = ViewModelFactory(AppWakeUp.repository)
         viewModelSearchVideo = ViewModelProvider(this, factory).get(RechercheVideoViewModel::class.java)
         viewModelFavori = ViewModelProvider(this, factory).get(FavorisViewModel::class.java)
@@ -79,9 +76,9 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
         //------------------------------------------------------------------------------------
         textPasDeRecherche = currentView.findViewById(R.id.textPasDeRecherche)
         rechercheView.visibility = View.GONE
-        pb_main_loader = currentView.findViewById(R.id.pb_main_loader)
+        pbMainLoader = currentView.findViewById(R.id.pb_main_loader)
 
-        viewModelSearchVideo.getRechercheVideosLiveData().observe(requireActivity(), androidx.lifecycle.Observer {
+        viewModelSearchVideo.getRechercheVideosLiveData().observe(requireActivity(), {
             if(it.error==null) {
                 if(it.searchList.size==0){
                     searchVideosList.clear()
@@ -95,7 +92,7 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
                     rechercheView.visibility = View.VISIBLE
                 }
             }
-            pb_main_loader.visibility=View.GONE
+            pbMainLoader.visibility=View.GONE
         })
 
         searchVideoAdapter = SongAdapter(requireContext(), searchVideosList, this)
@@ -127,7 +124,7 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 this@RechercheVideoFragment.youTubePlayer = youTubePlayer
-                viewModelSearchVideo.getCurrentSong().observe (requireActivity(), androidx.lifecycle.Observer { song ->
+                viewModelSearchVideo.getCurrentSong().observe (requireActivity(), { song ->
                     if (song != null) {
                         currentSong = song
 
@@ -251,18 +248,16 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
                 .setView(view)
                 .setNegativeButton("Annuler") { _, _ ->}
                 .setOnItemSelectedListener(object : OnItemSelectedListener {
+                    @SuppressLint("LogNotTimber")
                     override fun onItemSelected(
                         parent: AdapterView<*>?, view: View,
                         position: Int, id: Long
                     ) {
-                        Log.e("lol", "A")
                         if (ensembleVideo.visibility == View.GONE) { // rendre le youtubeplayer et les bouton visible
                             ensembleVideo.visibility = View.VISIBLE
                         }
-                        Log.e("lol", "B")
                         viewModelSearchVideo.searchVideos(historiqueSearch[position])
                         dialogueHistory.hide()
-                        Log.e("lol", "C")
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -272,11 +267,12 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
 
 
 
-        viewModelSearchVideo.getSortedHistoriqueSearchLiveData().observe(requireActivity(), androidx.lifecycle.Observer { historiqueVideoListe ->
-            historiqueSearch.clear()
-            historiqueSearch.addAll(historiqueVideoListe)
-            hvAdapter.notifyDataSetChanged()
-        })
+        viewModelSearchVideo.getSortedHistoriqueSearchLiveData().observe(requireActivity(),
+            { historiqueVideoListe ->
+                historiqueSearch.clear()
+                historiqueSearch.addAll(historiqueVideoListe)
+                hvAdapter.notifyDataSetChanged()
+            })
 
         //Initialisation du recyclerView de l'historique---------------------------
         recyclerViewRecherche.layoutManager = LinearLayoutManager(view.context!!)
@@ -289,8 +285,8 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
         val spinner = view.findViewById<Spinner>(R.id.spinner_trie)
         val trie = arrayOf("Date d'ajout","Alphabétique")
 
-        spinner.adapter = ArrayAdapter<String>(this.requireContext(),android.R.layout.simple_list_item_1,trie)
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        spinner.adapter = ArrayAdapter(this.requireContext(),android.R.layout.simple_list_item_1,trie)
+        spinner.onItemSelectedListener = object : OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
             override fun onItemSelected(
@@ -301,10 +297,10 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
             ) {
                 when (trie[position]){
                     "Alphabétique"  -> {
-                        viewModelSearchVideo.changeSortedType(SortedListType.alphabetique)
+                        viewModelSearchVideo.changeSortedType(SortedListType.Alphabetique)
                     }
                     "Date d'ajout" -> {
-                        viewModelSearchVideo.changeSortedType(SortedListType.date)
+                        viewModelSearchVideo.changeSortedType(SortedListType.Date)
                     }
                 }
             }
@@ -367,35 +363,33 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
 
     //Gestion du clic sur le bouton rechercher
     private fun gestionBoutonSearch(){
-        val bt_search = currentView.findViewById<FloatingActionButton>(R.id.fab_search)
-        bt_search.setOnClickListener {
+        val btSearch = currentView.findViewById<FloatingActionButton>(R.id.fab_search)
+        btSearch.setOnClickListener {
             createDialogForSearch()
         }
     }
 
     //Gestion du clic sur le bouton Historique
     private fun gestionBoutonHistorique(){
-        val bt_Historique = currentView.findViewById<FloatingActionButton>(R.id.fab_history)
-        bt_Historique.setOnClickListener {
+        val btHistorique = currentView.findViewById<FloatingActionButton>(R.id.fab_history)
+        btHistorique.setOnClickListener {
             createDialogForHistory()
         }
     }
 
+    @SuppressLint("LogNotTimber")
     override fun onHistoriqueClicked(recherche: String, itemView: View) {
-        Log.e("lol", "A")
         if (ensembleVideo.visibility == View.GONE) { // rendre le youtubeplayer et les bouton visible
             ensembleVideo.visibility = View.VISIBLE
         }
-        Log.e("lol", "B")
         viewModelSearchVideo.searchVideos(recherche)
         dialogueHistory.hide()
-        Log.e("lol", "C")
     }
 //TODO historique marche pas, et inversion alphabétique et date ajout
     //TODO quand on descend ça marche pas
     //TODO remettre le dernier truc cherché dans la barre de recherche
+    @SuppressLint("LogNotTimber")
     override fun onSongClickListener(position: Int) {
-        Log.e("lol", "D")
         if (ensembleVideo.visibility == View.GONE) { // rendre le youtubeplayer et les bouton visible
             ensembleVideo.visibility = View.VISIBLE
         }

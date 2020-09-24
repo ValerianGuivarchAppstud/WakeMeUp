@@ -6,10 +6,12 @@
     app:startDestination="@id/reveilsListeFragment">
 
     <fragment
+        tools:layout="@layout/fragment_reveil_list"
         android:id="@+id/reveilsListeFragment"
         android:name="com.vguivarc.wakemeup.reveil.ReveilsListeFragment"
         android:label="@string/reveils" />
     <fragment
+        tools:layout="@layout/fragment_favori"
         android:id="@+id/favorisFragment"
         android:name="com.vguivarc.wakemeup.song.favori.FavorisFragment"
         android:label="@string/favori" >
@@ -29,6 +31,7 @@
             app:destination="@id/contactFragment" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_partage"
         android:id="@+id/demanderMusique"
         android:name="com.vguivarc.wakemeup.share.DemanderMusiqueFragment"
         android:label="@string/partager" />
@@ -53,6 +56,7 @@
             app:destination="@id/favorisShareFragment" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_musiques_passees"
         android:id="@+id/musiquesPasseesFragment"
         android:name="com.vguivarc.wakemeup.sonnerie.MusiquesPasseesFragment"
         android:label="MusiquesPasseesFragment" />
@@ -65,6 +69,7 @@
             app:destination="@id/contactFragment" />
     </fragment>
     <fragment
+
         android:id="@+id/contactsListeShareFragment"
         android:name="com.vguivarc.wakemeup.contact.ContactsListeShareFragment"
         android:label="@string/partager" >
@@ -89,6 +94,7 @@
             app:destination="@id/contactFragment" />
     </fragment>
     <fragment
+        tools:layout="@layout/profil_fragment"
         android:id="@+id/profilFragment"
         android:name="com.vguivarc.wakemeup.connect.ProfilFragment"
         android:label="ProfilFragment" />

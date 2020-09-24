@@ -1,17 +1,5 @@
 package com.vguivarc.wakemeup.song
 
-import android.content.Context
-import android.content.Intent
-import android.os.Parcelable
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-
-import androidx.fragment.app.FragmentActivity
-import com.vguivarc.wakemeup.MainActivity
-import com.vguivarc.wakemeup.R
-
 //TODO Fait crash quand on utilise cette classe
 /*
 class DialogueYoutube(val activity: FragmentActivity) {

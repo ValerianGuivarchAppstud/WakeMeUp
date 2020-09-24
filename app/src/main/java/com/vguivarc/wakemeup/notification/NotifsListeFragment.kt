@@ -29,7 +29,7 @@ class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListe
         viewModel.notifAffichee()
         viewModel.getNotifLiveData().observe(
             viewLifecycleOwner,
-            androidx.lifecycle.Observer { nouvelleListeNotif ->
+            { nouvelleListeNotif ->
                 updateNotifListe(
                     nouvelleListeNotif
                 )
@@ -59,7 +59,7 @@ class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListe
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
-        requireActivity().setTitle("Notifications")
+        requireActivity().title = "Notifications"
         return view
     }
 

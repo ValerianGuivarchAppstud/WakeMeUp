@@ -153,7 +153,7 @@ class ReveilSonneActivity : AppCompatActivity() {
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         initialVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
 
-        loading.observe(this, androidx.lifecycle.Observer {
+        loading.observe(this, {
             if(it){
                 loadingView.visibility = View.VISIBLE
             } else {
@@ -171,7 +171,7 @@ class ReveilSonneActivity : AppCompatActivity() {
             .enqueue()
 
 
-        WorkManager.getInstance(this).getWorkInfoByIdLiveData(request.id).observe(this, androidx.lifecycle.Observer {workStatus->
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(request.id).observe(this, { workStatus->
             if (workStatus != null && workStatus.state.isFinished) {
                 if(youTubePlayerView.visibility!=View.VISIBLE) {
                     val resID = this.resources
@@ -222,7 +222,7 @@ class ReveilSonneActivity : AppCompatActivity() {
 
 
 
-        viewModelSonnerie.getListeAttenteLiveData().observe(this, androidx.lifecycle.Observer {
+        viewModelSonnerie.getListeAttenteLiveData().observe(this, {
             if (it.isEmpty()) {
                 // pas de musique
             } else {
@@ -292,7 +292,7 @@ class ReveilSonneActivity : AppCompatActivity() {
         val heure = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
 
-        date_sonnerie.text = "${jour} / ${moisTxt} / ${annee}"
+        date_sonnerie.text = "$jour / $moisTxt / $annee"
         if (minute<10)
             heure_sonnerie.text = "$heure : 0$minute"
         else

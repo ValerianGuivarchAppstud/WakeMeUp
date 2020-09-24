@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,8 +23,6 @@ import com.vguivarc.wakemeup.util.Utility
 
 class ContactsListeShareFragment : Fragment(),
     ContactListeShareAdapter.ContactListShareAdapterListener {
-
-    //TODO item musique cherché enlever durée
 
     private lateinit var viewModelContact: ContactListeViewModel
     private lateinit var viewModelSonnerie: SonnerieListeViewModel
@@ -52,7 +49,7 @@ class ContactsListeShareFragment : Fragment(),
 
         viewModelSonnerie.getSonneriesEnvoyees().observe(
             viewLifecycleOwner,
-            Observer {
+            {
                 sonneriesEnvoyeesList.clear()
                 sonneriesEnvoyeesList.addAll(it)
                 adapter.notifyDataSetChanged()
@@ -60,7 +57,7 @@ class ContactsListeShareFragment : Fragment(),
         )
         viewModelSonnerie.getListeAttenteLiveData().observe(
             viewLifecycleOwner,
-            Observer {
+            {
                 sonneriesAttenteList.clear()
                 sonneriesAttenteList.addAll(it.values)
                 adapter.notifyDataSetChanged()
@@ -68,7 +65,7 @@ class ContactsListeShareFragment : Fragment(),
         )
         viewModelSonnerie.getListePasseesLiveData().observe(
             viewLifecycleOwner,
-            Observer {
+            {
                 sonneriesPasseList.clear()
                 sonneriesPasseList.addAll(it.values)
                 adapter.notifyDataSetChanged()
@@ -77,9 +74,9 @@ class ContactsListeShareFragment : Fragment(),
 
         viewModelContact.getContactsListeLiveData().observe(
             viewLifecycleOwner,
-            Observer { it ->
+            {
                 if (it.error == null) {
-                    if (it.friendList.size == 0) {
+                    if (it.friendList.isEmpty()) {
                         contactsList.clear()
                         adapter.notifyDataSetChanged()
                         textePasDeContact.visibility = View.VISIBLE
@@ -116,7 +113,7 @@ class ContactsListeShareFragment : Fragment(),
         val song = ContactsListeShareFragmentArgs.fromBundle(requireArguments()).songToShare
         Picasso.get().load(song.artworkUrl).placeholder(R.drawable.music_placeholder)
             .into(view.findViewById<ImageView>(R.id.share_music_image))
-        view.findViewById<TextView>(R.id.share_music_titre).setText(song.title)
+        view.findViewById<TextView>(R.id.share_music_titre).text = song.title
 
         view.findViewById<Button>(R.id.valid_share_contact_button).setOnClickListener {
             for (c in selections) {

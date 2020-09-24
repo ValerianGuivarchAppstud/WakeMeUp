@@ -10,7 +10,7 @@ import com.vguivarc.wakemeup.R
 
 
 class HistoriqueAdapter(
-    val recherhes: MutableList<String>
+    private val recherhes: MutableList<String>
     , val listener: RechercheVideoAdapterListener
 ) : RecyclerView.Adapter<HistoriqueAdapter.ViewHolder>(),
     View.OnClickListener {
@@ -20,8 +20,8 @@ class HistoriqueAdapter(
     }
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        val cardView = itemView.findViewById<TextView>(R.id.cardView_history) as CardView
-        val recherche = itemView.findViewById<TextView>(R.id.recherche)
+        val cardView : CardView = itemView.findViewById(R.id.cardView_history)
+        val recherche: TextView = itemView.findViewById(R.id.recherche)
 
     }
 
