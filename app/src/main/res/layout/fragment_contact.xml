@@ -17,17 +17,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_contact_nom"
-        app:srcCompat="@drawable/empty_picture_profil" />
+        app:srcCompat="@drawable/empty_picture_profil"
+        android:contentDescription="@string/photo_de_profil" />
 
     <TextView
         android:id="@+id/id_contact_nom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-
-        android:text="UserName"
+        tools:text="UserName"
         android:textColor="@color/black"
-
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +42,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:text="Saisir musique manuellement"
+        android:text="@string/saisir_musique_manuellement"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +50,7 @@
 
     <Button
         android:id="@+id/id_contact_partage_favori"
-        android:text="Rechercher une musique dans les favoris"
+        android:text="@string/rechercher_une_musique_dans_les_favoris"
         style="@style/bouton_arrondi"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

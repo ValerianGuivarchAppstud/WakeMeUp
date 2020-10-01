@@ -1,21 +1,13 @@
 package com.vguivarc.wakemeup.reveil
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.os.Parcelable
 import androidx.work.Data
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
-import com.google.firebase.Timestamp
 import com.vguivarc.wakemeup.AppWakeUp
+import com.vguivarc.wakemeup.reveil.adds.AlarmSetter.Companion.EXTRA_ID
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
 import java.io.Serializable
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
 
 
@@ -133,9 +125,10 @@ class ReveilModel(
     }
 
     fun startAlarm(snoozing : Boolean = false) {
+        calculeNextCalendar()
 
    val data = Data.Builder()
-        data.putString("idReveil", idReveil.toString())
+        data.putString(EXTRA_ID, idReveil.toString())
         val nextAlarmCalendarToUse = nextAlarmCalendar
             if(snoozing){
                 nextAlarmCalendarToUse.add(Calendar.MINUTE, DUREE_SNOOZE)
@@ -144,8 +137,12 @@ class ReveilModel(
         calTemp.add(Calendar.SECOND, 3)
         AppWakeUp.repository.alarmSetter.setInexactAlarm(idReveil, calTemp)*/
 
+        val nextAlarmCalendarToUseBis= Calendar.getInstance()
+        nextAlarmCalendarToUseBis.add(Calendar.SECOND, 3)
 
-        val t = nextAlarmCalendarToUse.timeInMillis/1000
+
+
+/*        val t = nextAlarmCalendarToUse.timeInMillis/1000
 
         val request = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
            .setInitialDelay(t- Timestamp.now().seconds, TimeUnit.SECONDS)
@@ -154,6 +151,12 @@ class ReveilModel(
             .build()
 
         WorkManager.getInstance(AppWakeUp.appContext).beginUniqueWork(idReveil.toString(), ExistingWorkPolicy.REPLACE, request).enqueue()
+
+*/
+
+        AppWakeUp.alarmSetterImpl.setInexactAlarm(idReveil, nextAlarmCalendarToUse)
+
+
     }
 
     fun snooze(){
@@ -171,13 +174,15 @@ class ReveilModel(
         }
     }
     fun cancelAlarm() {
+        /*
         val alarmManager =
             AppWakeUp.appContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(AppWakeUp.appContext, AlertReceiver::class.java)
         val pendingIntent =
             PendingIntent.getBroadcast(AppWakeUp.appContext, this.idReveil, intent, 0)
         //pendingIntent doit être le même qu'avant
-        alarmManager.cancel(pendingIntent)
+        alarmManager.cancel(pendingIntent)*/
+        AppWakeUp.alarmSetterImpl.removeInexactAlarm(idReveil)
         //TODO urgent, volume pas bon
     }
 

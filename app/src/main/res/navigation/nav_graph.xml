@@ -20,6 +20,7 @@
             app:destination="@id/contactsListeShareFragment" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_musiques_recues"
         android:id="@+id/musiquesRecuesFragment"
         android:name="com.vguivarc.wakemeup.sonnerie.MusiquesRecuesFragment"
         android:label="@string/musiques_recues" >
@@ -36,6 +37,7 @@
         android:name="com.vguivarc.wakemeup.share.DemanderMusiqueFragment"
         android:label="@string/partager" />
     <fragment
+        tools:layout="@layout/fragment_contact_list"
         android:id="@+id/contactsListeFragment"
         android:name="com.vguivarc.wakemeup.contact.ContactsListeFragment"
         android:label="@string/amis" >
@@ -63,13 +65,14 @@
     <fragment
         android:id="@+id/musiquesAttenteFragment"
         android:name="com.vguivarc.wakemeup.sonnerie.MusiquesAttenteFragment"
-        android:label="MusiquesAttenteFragment" >
+        android:label="MusiquesAttenteFragment"
+        tools:layout="@layout/fragment_musiques_attente" >
         <action
             android:id="@+id/action_musiquesAttenteFragment_to_contactFragment"
             app:destination="@id/contactFragment" />
     </fragment>
     <fragment
-
+        tools:layout="@layout/fragment_contact_share_list"
         android:id="@+id/contactsListeShareFragment"
         android:name="com.vguivarc.wakemeup.contact.ContactsListeShareFragment"
         android:label="@string/partager" >
@@ -78,6 +81,7 @@
             app:argType="com.vguivarc.wakemeup.song.Song" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_favori_share"
         android:id="@+id/favorisShareFragment"
         android:name="com.vguivarc.wakemeup.song.favori.FavorisShareFragment"
         android:label="@string/partager">
@@ -86,6 +90,7 @@
             app:argType="com.vguivarc.wakemeup.connect.UserModel" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_notif_list"
         android:id="@+id/notifsListeFragment"
         android:name="com.vguivarc.wakemeup.notification.NotifsListeFragment"
         android:label= "@string/notifications">
@@ -98,4 +103,14 @@
         android:id="@+id/profilFragment"
         android:name="com.vguivarc.wakemeup.connect.ProfilFragment"
         android:label="ProfilFragment" />
+
+    <fragment
+        tools:layout="@layout/fragment_video"
+        android:id="@+id/rechercheVideoFragment"
+        android:name="com.vguivarc.wakemeup.song.search.RechercheVideoFragment"
+        android:label="RechercheVideoFragment" >
+        <action
+            android:id="@+id/action_rechercheVideoFragment_to_contactsListeShareFragment"
+            app:destination="@id/contactsListeShareFragment" />
+    </fragment>
 </navigation>

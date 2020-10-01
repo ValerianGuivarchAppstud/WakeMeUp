@@ -44,8 +44,9 @@ class Repository {
     /********************** USER *********************/
     /*************************************************/
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private var currentUser: UserModel? = null
+//    private var currentUser: UserModel? = null
     private var currentUserLiveData= MutableLiveData<UserModel?>()
+    fun getCurrentUser() = currentUserLiveData.value
     val database: FirebaseDatabase = FirebaseDatabase.getInstance()
 
     private fun getUserModelAfterConnection(){
@@ -58,8 +59,7 @@ class Repository {
                 object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val user: UserModel = dataSnapshot.getValue(UserModel::class.java)!!
-                        currentUser = user
-                        currentUserLiveData.value = currentUser
+                        currentUserLiveData.value = user
                         updateSonneriesEnvoyees()
                         updateSonneriesRecues()
                         updateNotification()
@@ -72,8 +72,7 @@ class Repository {
                 }
             )
         } else {
-            currentUser = null
-            currentUserLiveData.value = currentUser
+            currentUserLiveData.value = null
         }
     }
     init {
@@ -129,18 +128,6 @@ class Repository {
                                 }
                             }
                         })
-                        /*
-                       //Exemple Messaging ?
-
-                        FirebaseInstanceId.getInstance().instanceId
-                            .addOnSuccessListener { instanceIdResult ->
-                                val token = instanceIdResult.token
-                                MyFirebaseMessagingService.registerInstanceOfUser(
-                                    Token(token),
-                                    auth.currentUser,
-                                    auth.currentUser!!.uid
-                                )
-                            }*/
                     } else {
                         _signupResult.value =
                             ConnectResult(error = R.string.signup_failed)
@@ -158,7 +145,7 @@ class Repository {
         val credential = FacebookAuthProvider.getCredential(accessToken.token)
         auth.signInWithCredential(credential)
             .addOnCompleteListener{
-                if (it.isSuccessful){// && AppWakeUp.auth.currentUser!!.isEmailVerified) {
+                if (it.isSuccessful){
                     when(credential.provider){
                         "facebook.com"-> {
                             createUserWithFacebook(accessToken)
@@ -185,8 +172,7 @@ class Repository {
 
     fun disconnect() {
         auth.signOut()
-        currentUser = null
-        currentUserLiveData.value = currentUser
+        currentUserLiveData.value = null
         _loginResult.value = null
         _signupResult.value = null
         getUserModelAfterConnection()
@@ -326,7 +312,7 @@ class Repository {
     val listeFriendStatic = mutableListOf<String>()
 
     fun requestFacebookFriendData() {
-        if (currentUser == null) {
+        if (getCurrentUser() == null) {
             facebookFriendsList.clear()
             facebookListLiveData.value =
                 FacebookResult(facebookFriendsList)
@@ -338,7 +324,7 @@ class Repository {
                 GraphRequest(
                     AccessToken.getCurrentAccessToken(),  // "/me/friends",
                     //"me/taggable_friends",
-                    currentUser!!.facebookId + "/friends",
+                    getCurrentUser()!!.facebookId + "/friends",
                     null,
                     HttpMethod.GET
                 ) { response2 ->
@@ -607,7 +593,7 @@ class Repository {
     /******************** FAVORIS*********************/
     /*************************************************/
 
-    //TODO bug : quand on clique sur un contact, et qu'on revient en arrière, les onglets sont pas bons
+
 
     private val favorisList = mutableMapOf<String, Favori>()
 
@@ -622,7 +608,7 @@ class Repository {
         val rootRef =
             database.reference.child("Favoris")//.equalTo(currentUser?.id!!, "appartientA")
             val query: Query =
-                rootRef.orderByChild("appartientA").equalTo(currentUser?.id!!)
+                rootRef.orderByChild("appartientA").equalTo(getCurrentUser()?.id!!)
             query.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
                 }
@@ -633,8 +619,7 @@ class Repository {
                             AddFireBaseObjectResult(error = Exception("AlreadyExistingFavori"))
                     } else {
                         val referenceFav = database.getReference("Favoris")
-                        val currentuser = currentUser!!
-                        val favori = Favori(getNowTxt(), song.id, currentuser.id)
+                        val favori = Favori(getNowTxt(), song.id, getCurrentUser()!!.id)
                         val rootRef2 = database.reference.child("Song").child(song.id)
                         rootRef2.setValue(song).addOnCompleteListener {
                             if (it.isSuccessful) {
@@ -676,11 +661,11 @@ class Repository {
         val rootRef =
             database.reference.child("Favoris")//.equalTo(currentUser?.id!!, "appartientA")
 
-        if (currentUser == null) {
+        if (getCurrentUser() == null) {
             favorisListLiveData.value = VideoFavoriResult()
         } else {
             val query: Query =
-                rootRef.orderByChild("appartientA").equalTo(currentUser?.id!!)
+                rootRef.orderByChild("appartientA").equalTo(getCurrentUser()?.id!!)
 
             query.addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
@@ -758,7 +743,7 @@ class Repository {
             database.reference.child("Sonnerie")//.equalTo(currentUser?.id!!, "appartientA")
 
         val query: Query =
-            rootRef.orderByChild("senderId").equalTo(currentUser?.id!!)
+            rootRef.orderByChild("senderId").equalTo(getCurrentUser()?.id!!)
 
         query.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -780,7 +765,7 @@ class Repository {
         val rootRef =
             database.reference.child("Sonnerie")//.equalTo(currentUser?.id!!, "appartientA")
         val query: Query =
-            rootRef.orderByChild("idReceiver").equalTo(currentUser?.id!!)
+            rootRef.orderByChild("idReceiver").equalTo(getCurrentUser()?.id!!)
         query.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }
@@ -806,6 +791,7 @@ class Repository {
                                     rootSong.addValueEventListener(object : ValueEventListener {
                                         override fun onCancelled(p0: DatabaseError) {}
                                         override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                            Timber.e(dataSnapshot.toString())
                                             val s: Song = dataSnapshot.getValue(Song::class.java)!!
                                             sonnerie.song = s
                                             if (sonnerie.ecoutee) {
@@ -863,7 +849,7 @@ class Repository {
         hopperUpdates["ecoutee"] = true
         hopperRef.updateChildren(hopperUpdates)
         updateSonneriesRecues()
-        addNotif(NotificationMusicMe.newInstanceSonnerieUtilisee(sonnerie, currentUser!!))
+        addNotif(NotificationMusicMe.newInstanceSonnerieUtilisee(sonnerie, getCurrentUser()!!))
     }
 
     fun deleteSonneriePassee(sonnerie: Sonnerie) {
@@ -879,16 +865,16 @@ class Repository {
         song: Song,
         contact: UserModel
     ) {
-        val currentuser = currentUser
 
         val sonnerie = Sonnerie(
             song.id,
             Timestamp.now().seconds,
             false,
             contact.id,
-            currentuser!!.id,
+            getCurrentUser()!!.id,
             ""
         )
+
         val referenceSon = database.getReference("Sonnerie")
         val refSonnPush = referenceSon.push()
         val keySonn = refSonnPush.key!!
@@ -897,7 +883,7 @@ class Repository {
             if (it.isSuccessful) {
                 favoriStateAddResult.value =
                     AddFireBaseObjectResult(keySonn)
-                addNotif(NotificationMusicMe.newInstanceEnvoieMusique(sonnerie, currentUser!!))
+                addNotif(NotificationMusicMe.newInstanceEnvoieMusique(sonnerie, getCurrentUser()!!))
             } else {
                 favoriStateAddResult.value =
                     AddFireBaseObjectResult(error = it.exception)
@@ -913,7 +899,6 @@ class Repository {
     ) {
         //TODO pas possible d'ajouter pkus de X chansons en X temps ?
         val referenceSon = database.getReference("Sonnerie")
-        val currentuser = currentUser
         val extractId = if (url.contains("youtu.be")) {
             url.substring(url.indexOf("youtu.be/") + 9)
         } else if (url.contains("youtube.com/watch?")) {
@@ -937,13 +922,13 @@ class Repository {
                         it.searchList[0].title,
                         it.searchList[0].artworkUrl
                     )
-                    val sonnerie = if (currentuser != null) {
+                    val sonnerie = if (getCurrentUser() != null) {
                         Sonnerie(
                             song.id,
                             Timestamp.now().seconds,
                             false,
                             contact!!.id,
-                            currentuser.id,
+                            getCurrentUser()!!.id,
                             ""
                         )
                     } else {
@@ -1031,18 +1016,39 @@ class Repository {
         updateNotification()
     }
 
-    private fun addNotif(notificationAjoutContact: NotificationMusicMe) {
+    private fun addNotif(notification: NotificationMusicMe) {
         val referenceNotif = database.getReference("Notification")
         val refNotifPush = referenceNotif.push()
-        refNotifPush.setValue(notificationAjoutContact)
+        refNotifPush.setValue(notification)
 
+
+      /*  val payload = JSONObject()
+
+        try {
+            //payload.put("sender", ParseInstallation.getCurrentInstallation().installationId)
+            payload.put("sender", notification.sender!!.username)
+
+            payload.put("notificationType", notification.type.name)
+            payload.put("discussion", message.getDiscussion().objectId)
+            val type = message.getDiscussion().getAssociatedFunctionality().name//message::class.java.simpleName.toString()
+            payload.put("type", type)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val data: HashMap<String, String?> = HashMap()
+        data["messageData"] = payload.toString()
+
+
+
+        ParseCloud.callFunctionInBackground<String>("notifMessage", data)*/
     }
 
     fun updateNotification() {
         val rootRef =
             database.reference.child("Notification")
         val query: Query =
-            rootRef.orderByChild("idReceiver").equalTo(currentUser?.id!!)
+            rootRef.orderByChild("idReceiver").equalTo(getCurrentUser()?.id!!)
         query.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }

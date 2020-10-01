@@ -11,7 +11,7 @@ import com.vguivarc.wakemeup.util.SortedListType
 class RechercheVideoViewModel(private val repo : Repository) : ViewModel() {
 
     companion object {
-        private const val MUSIC_TO_LOAD = 20
+        private const val MUSIC_TO_LOAD = 25
     }
     private val currentSong = MutableLiveData<Song>()
     fun getCurrentSong() : LiveData<Song> = currentSong

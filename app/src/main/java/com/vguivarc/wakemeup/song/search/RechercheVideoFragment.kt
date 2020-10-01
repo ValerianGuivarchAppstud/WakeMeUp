@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -26,6 +27,7 @@ import com.vguivarc.wakemeup.song.favori.FavorisViewModel
 import com.vguivarc.wakemeup.util.SortedListType
 import com.vguivarc.wakemeup.util.Utility
 import kotlinx.android.synthetic.main.fragment_video.view.*
+import timber.log.Timber
 
 
 class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapterListener, SongAdapter.SongItemClickListener  {
@@ -77,6 +79,7 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
         textPasDeRecherche = currentView.findViewById(R.id.textPasDeRecherche)
         rechercheView.visibility = View.GONE
         pbMainLoader = currentView.findViewById(R.id.pb_main_loader)
+        searchVideoAdapter = SongAdapter(requireContext(), searchVideosList, this)
 
         viewModelSearchVideo.getRechercheVideosLiveData().observe(requireActivity(), {
             if(it.error==null) {
@@ -95,7 +98,7 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
             pbMainLoader.visibility=View.GONE
         })
 
-        searchVideoAdapter = SongAdapter(requireContext(), searchVideosList, this)
+
         hvAdapter = HistoriqueAdapter(historiqueSearch, this)
 
         recyclerView = currentView.findViewById(R.id.recycler_list_video)
@@ -106,14 +109,14 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
 
 
         //Si on est a la fin du recycler view---------------------------------------------------
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+      /*  recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
                     viewModelSearchVideo.addSearchVideo()
                 }
             }
-        })
+        })*/
         //---------------------------------------------------------------------------------------
 
 
@@ -311,12 +314,14 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
 
     //Gestion du clic sur le bouton partage
     private fun gestionBoutonPartage(){
-/*        btPartage.setOnClickListener {
-            if (AppWakeUp.auth.currentUser!!.isAnonymous) {
-                dialogue.createAlertDialogNotConnected(requireContext(), this.requireActivity() as MainActivity)
+       btPartage.setOnClickListener {
+            if (AppWakeUp.repository.getCurrentUser()==null) {
+            //TODO remplacer par alertdialog (en commentaire) pour envoyer vers le fragment de connection
+                Utility.createSimpleToast(AppWakeUp.appContext.resources.getString(R.string.vous_netes_pas_connecte))
             } else {
                 if (currentSong != null) {
-                    dialogue.createDialoguePartage(currentSong) //lance la dialogue pour preciser le temps
+                    val action = RechercheVideoFragmentDirections.actionRechercheVideoFragmentToContactsListeShareFragment(currentSong!!)
+                    findNavController().navigate(action)
                 }
                 else{
                     Toast.makeText(
@@ -326,27 +331,24 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
                     ).show()
                 }
             }
-        }*/
+        }
     }
 
 
     //Gestion du clic sur le bouton favori
     private fun gestionBoutonFavori() {
-   /*     btFavori.setOnClickListener {
-            if (AppWakeUp.auth.currentUser!!.isAnonymous) {
-                dialogue.createAlertDialogNotConnected(
-                    requireContext(),
-                    this.requireActivity() as MainActivity
-                )
+        btFavori.setOnClickListener {
+            if (AppWakeUp.repository.getCurrentUser()==null) {
+                Utility.createSimpleToast(AppWakeUp.appContext.resources.getString(R.string.vous_netes_pas_connecte))
             } else {
                 if (currentSong != null) {
                     viewModelFavori.addFavori(currentSong!!)
                 } else {
-                    Utility.createSimpleToast("Aucune vidéo sélectionnée")
+                    Utility.createSimpleToast(AppWakeUp.appContext.resources.getString(R.string.aucune_video_selectionnee))
                 }
             }
         }
-        viewModelFavori.getAddFavoriStateLiveData().observe(requireActivity(), androidx.lifecycle.Observer {
+        viewModelFavori.getAddFavoriStateLiveData().observe(requireActivity(), {
             if(it.error!=null){
                 if(it.error.equals("AlreadyExistingFavori")){
                     Utility.createSimpleToast("Favori déjà enregistré")
@@ -354,11 +356,11 @@ class RechercheVideoFragment : Fragment(), HistoriqueAdapter.RechercheVideoAdapt
                 {
                     Utility.createSimpleToast("Erreur dans l'ajout du favori")
                 }
-                Log.e("RechercheVideoFragment", it.error.toString())
+                Timber.e("RechercheVideoFragment: ${it.error.toString()}")
             } else {
                 Utility.createSimpleToast("Nouveau favori ajouté à votre liste")
             }
-        })*/
+        })
     }
 
     //Gestion du clic sur le bouton rechercher

@@ -61,11 +61,11 @@ class ContactListeAdapter(
 
             val recu = sonneriesAttente.filter { son -> son.senderId==contact.id }.size + sonneriesPassees.filter { son -> son.senderId==contact.id }.size
             val envoye = sonneriesEnvoyees.filter { son -> son.idReceiver==contact.id }.size
-            itemContactMusiqueEnvoyee.text = AppWakeUp.appContext.resources.getString(
-                R.string.txt_trait_txt,
-                AppWakeUp.appContext.resources.getQuantityString(R.plurals.musique_envoyée, recu),
-                AppWakeUp.appContext.resources.getQuantityString(R.plurals.musique_recu, envoye)
-            )
+            val txtEnvoye = AppWakeUp.appContext.resources.getQuantityString(R.plurals.musique_envoyée, recu)
+            val txtRecu = AppWakeUp.appContext.resources.getQuantityString(R.plurals.musique_recu, envoye)
+            val final = "$txtEnvoye $envoye - $txtRecu $recu"
+
+            itemContactMusiqueEnvoyee.text =final
         }
     }
 

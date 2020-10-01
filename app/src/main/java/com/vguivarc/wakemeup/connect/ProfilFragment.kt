@@ -17,6 +17,7 @@ import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.CurrentUserViewModel
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.repo.ViewModelFactory
+import com.vguivarc.wakemeup.util.Utility
 
 
 class ProfilFragment : Fragment() {
@@ -63,16 +64,16 @@ class ProfilFragment : Fragment() {
 
         fbLoginButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult?> {
             override fun onSuccess(loginResult: LoginResult?) {
-                AppWakeUp.makeToastShort("facebook:onSuccess - ${loginResult!!.accessToken.userId}")
+                Utility.createSimpleToast("facebook:onSuccess - ${loginResult!!.accessToken.userId}")
                 fbLoginViewModel.login(loginResult.accessToken)
             }
 
             override fun onCancel() {
-                AppWakeUp.makeToastShort("facebook:onCancel")
+                Utility.createSimpleToast("facebook:onCancel")
             }
 
             override fun onError(exception: FacebookException) {
-                AppWakeUp.makeToastShort("facebook:onError - ${exception.message!!}")
+                Utility.createSimpleToast("facebook:onError - ${exception.message!!}")
             }
         })
 

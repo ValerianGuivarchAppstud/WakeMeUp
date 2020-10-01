@@ -40,6 +40,16 @@
                     android:mimeType="text/*" />
             </intent-filter>
         </activity>
+
+
+        <service
+            android:name=".notification.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
@@ -59,16 +69,6 @@
         <service
             android:name=".reveil.ReveilSonneService"
             android:enabled="true" />
-
-        <service
-            android:name=".notification.MyFirebaseMessagingService"
-            android:stopWithTask="false"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
 
         <receiver
             android:name=".reveil.AlertReceiver"

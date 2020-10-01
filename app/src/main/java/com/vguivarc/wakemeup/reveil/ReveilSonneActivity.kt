@@ -3,8 +3,7 @@ package com.vguivarc.wakemeup.reveil
 import android.content.Context
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.os.Bundle
-import android.os.PowerManager
+import android.os.*
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -13,7 +12,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.work.*
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -21,13 +19,13 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.repo.ViewModelFactory
+import com.vguivarc.wakemeup.reveil.adds.AlarmSetter.Companion.EXTRA_ID
 import com.vguivarc.wakemeup.sonnerie.Sonnerie
 import com.vguivarc.wakemeup.sonnerie.SonnerieListeViewModel
 import com.vguivarc.wakemeup.util.Utility
 import kotlinx.android.synthetic.main.activity_reveil_sonne.*
 import timber.log.Timber
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * Reveil sonne activity
@@ -42,15 +40,87 @@ class ReveilSonneActivity : AppCompatActivity() {
     private lateinit var audioManager: AudioManager
     private var initialVolume = 0
 
-    /**
-     * Sonnerie alarm worker
-     *
-     * @property context
-     * @constructor
-     *
-     * @param params
-     */
-    class SonnerieAlarmWorker(val context: Context, params: WorkerParameters) : Worker(context, params) {
+    private var threadVolumeProgressif : Thread? = null
+    private var threadNoMusic : Thread? = null
+
+
+    private fun dealWithNoMusic(): Thread {
+        class WorkerDealWithNoMusic(private val handler: Handler) : Runnable {
+            override fun run() {
+                try {
+                    Thread.sleep(10_000)
+                    handler.sendEmptyMessage(0)
+                } catch (e : InterruptedException){
+
+                }
+            }
+        }
+
+        val handler = object : Handler(Looper.getMainLooper()) {
+            override fun handleMessage(msg: Message) {
+                super.handleMessage(msg)
+                threadVolumeProgressif= dealWithVolume()
+                    val resID = AppWakeUp.appContext.resources.getIdentifier("sonnerie_default1", "raw", AppWakeUp.appContext.packageName)
+                    mediaPlayer = MediaPlayer.create(AppWakeUp.appContext, resID)
+                    /* audioManager.setStreamVolume(
+                         AudioManager.STREAM_MUSIC, // Stream type
+                         audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), // Volume index
+                         AudioManager.FLAG_SHOW_UI// Flags
+                     )*/
+
+                    mediaPlayer!!.start()
+                    textPasDeMusiqueAttente.visibility = View.VISIBLE
+                    senderView.visibility = View.INVISIBLE
+                    loading.postValue(false)
+            }
+        }
+
+        val workerDealWithNoMusic = WorkerDealWithNoMusic(handler)
+        val thread = Thread(workerDealWithNoMusic)
+        thread.start()
+        return thread
+    }
+
+    private fun dealWithVolume(): Thread {
+        class WorkerDealWithVolume(private val handler: Handler) : Runnable {
+            override fun run() {
+                try {
+                    for (progressionVolume in 0..10) {
+                        val newVol = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            (audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) - audioManager.getStreamMinVolume(
+                                AudioManager.STREAM_MUSIC
+                            ) / 10) * progressionVolume
+                        } else {
+                            (audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 10) * progressionVolume
+                        }
+                        val msg = Message.obtain()
+                        msg.arg1 = newVol
+                        handler.sendMessage(msg)
+                        Thread.sleep(2_000)
+                    }
+                } catch (e: InterruptedException) {
+                }
+            }
+        }
+
+        val handler = object : Handler(Looper.getMainLooper()) {
+            override fun handleMessage(msg: Message) {
+                super.handleMessage(msg)
+                    audioManager.setStreamVolume(
+                        AudioManager.STREAM_MUSIC, // Stream type
+                        msg.arg1, // Volume index
+                        AudioManager.FLAG_SHOW_UI// Flags
+                    )
+            }
+        }
+
+        val workerDealWithVolume = WorkerDealWithVolume(handler)
+        val thread = Thread(workerDealWithVolume)
+        thread.start()
+        return thread
+    }
+
+/*    class SonnerieAlarmWorker(val context: Context, params: WorkerParameters) : Worker(context, params) {
         override fun doWork(): Result {
            /* val audioManager = context.getSystemService(AUDIO_SERVICE) as AudioManager
             for(progressionVolume in 0..10){
@@ -69,7 +139,7 @@ class ReveilSonneActivity : AppCompatActivity() {
             }*/
             return Result.success()
         }
-    }
+    }*/
 /*
     class SonnerieVolumeAlarmWorker(val context: Context, params: WorkerParameters) : Worker(context, params) {
         override fun doWork(): Result {
@@ -77,60 +147,6 @@ class ReveilSonneActivity : AppCompatActivity() {
             return Result.success()
         }
     }*/
-
-    private var requestVolume : PeriodicWorkRequest?= null
-
-    /**
-     * Volume progressif
-     *
-     */
-    fun volumeProgressif(){
-       /* for(progressionVolume in 0..10){
-            val newVol = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                (audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) - audioManager.getStreamMinVolume(AudioManager.STREAM_MUSIC) / 10) * progressionVolume
-            } else {
-                (audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 10) * progressionVolume
-            }
-            Timber.e("volume=$newVol")
-            audioManager.setStreamVolume(
-                AudioManager.STREAM_MUSIC, // Stream type
-                newVol, // Volume index
-                AudioManager.FLAG_SHOW_UI// Flags
-            )
-            Thread.sleep(3_000)
-        }*/
-        audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-    }
-/*    fun setProgressifVolume(){
-        Timber.e("setProgressifVolume")
-        requestVolume = PeriodicWorkRequestBuilder<SonnerieVolumeAlarmWorker>(1, TimeUnit.SECONDS)
-            .build()
-        WorkManager.getInstance(this)
-            .enqueue(requestVolume!!)
-
-        WorkManager.getInstance(this).getWorkInfoByIdLiveData(requestVolume!!.id).observe(this, androidx.lifecycle.Observer {workStatus->
-            Timber.e("getWorkInfoByIdLiveData"+workStatus.toString())
-            if (workStatus != null) {
-                Timber.e("progressionVolume++")
-                    progressionVolume++
-                    if(progressionVolume<=10) {
-                        val newVol = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                            (audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) - audioManager.getStreamMinVolume(AudioManager.STREAM_MUSIC) / 10) * progressionVolume
-                        } else {
-                            (audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 10) * progressionVolume
-                        }
-                        Timber.e("volume="+newVol)
-                        audioManager.setStreamVolume(
-                            AudioManager.STREAM_MUSIC, // Stream type
-                            newVol, // Volume index
-                            AudioManager.FLAG_SHOW_UI// Flags
-                        )
-                    }
-            }
-        })
-    }
-
-*/
 
     private var youTubePlayer: YouTubePlayer? = null
     private lateinit var youTubePlayerView: YouTubePlayerView
@@ -163,7 +179,7 @@ class ReveilSonneActivity : AppCompatActivity() {
         loading.value=true
         youTubePlayerView.visibility = View.INVISIBLE
 
-        val request = OneTimeWorkRequest.Builder(SonnerieAlarmWorker::class.java)
+     /*   val request = OneTimeWorkRequest.Builder(SonnerieAlarmWorker::class.java)
             .setInitialDelay(10000, TimeUnit.MILLISECONDS)
             .build()
         WorkManager.getInstance(AppWakeUp.appContext)
@@ -189,7 +205,7 @@ class ReveilSonneActivity : AppCompatActivity() {
                     loading.postValue(false)
                 }
             }
-        })
+        })*/
 
         val window: Window = this.window
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
@@ -202,11 +218,6 @@ class ReveilSonneActivity : AppCompatActivity() {
             PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
             "musicme:tag"
         )
-
-     /*   val wakeLock = powermanager.newWakeLock(
-            PowerManager.ACQUIRE_CAUSES_WAKEUP,
-            "musicme:tag"
-        )*/
         wakeLock.acquire(5 * 60 * 1000L /*10 minutes*/)
 
         if (wakeLock.isHeld) {
@@ -221,10 +232,11 @@ class ReveilSonneActivity : AppCompatActivity() {
 
 
 
+        threadNoMusic = dealWithNoMusic()
 
         viewModelSonnerie.getListeAttenteLiveData().observe(this, {
             if (it.isEmpty()) {
-                // pas de musique
+                // pas de musique, ou pas encore chargé donc on fait rien
             } else {
                 currentSonnerie = it.values.toMutableList()[0]
                 //Init du youTubePlayerView-----------------------------------------------------------------------
@@ -238,7 +250,6 @@ class ReveilSonneActivity : AppCompatActivity() {
                     AudioManager.FLAG_SHOW_UI// Flags
                 )*/
 
-
                 youTubePlayerView.addYouTubePlayerListener(object :
                     AbstractYouTubePlayerListener() {
                     override fun onError(
@@ -249,7 +260,6 @@ class ReveilSonneActivity : AppCompatActivity() {
                         Timber.e("Error YT %s", error.name)
                         Timber.e("Error YT %s", currentSonnerie)
                         Timber.e("Error YT %s", currentSonnerie!!.idSong)
-
                         //TODO musique par défaut -> marche pas, error se lance pas si pas internet
 
                     }
@@ -260,8 +270,9 @@ class ReveilSonneActivity : AppCompatActivity() {
                         prepareSong(currentSonnerie!!)
                         youTubePlayerView.visibility=View.VISIBLE
                         loading.value = false
-                        WorkManager.getInstance(AppWakeUp.appContext).cancelAllWork()
-                        volumeProgressif()
+                        //WorkManager.getInstance(AppWakeUp.appContext).cancelAllWork()
+                        threadNoMusic?.interrupt()
+                        threadVolumeProgressif= dealWithVolume()
                     }
                 })
                 //-------------------------------------------------------------------------------------------------
@@ -317,7 +328,10 @@ class ReveilSonneActivity : AppCompatActivity() {
     }
 
     private fun stop() {
-        WorkManager.getInstance(this).getWorkInfoById(requestVolume!!.id).cancel(true)
+        threadVolumeProgressif?.interrupt()
+        threadNoMusic?.interrupt()
+
+        //WorkManager.getInstance(this).getWorkInfoById(requestVolume!!.id).cancel(true)
         audioManager.setStreamVolume(
             AudioManager.STREAM_MUSIC, // Stream type
             initialVolume, // Volume index
@@ -327,7 +341,8 @@ class ReveilSonneActivity : AppCompatActivity() {
         if(mediaPlayer!=null){
             mediaPlayer!!.stop()
         }
-        val idReveil = intent!!.getIntExtra("idReveil", -1)
+        val idReveil = intent!!.getIntExtra(EXTRA_ID, -1)
+        Timber.e("Stop : %s", idReveil.toString())
         if(idReveil!=-1)
         {
             Timber.e("Stop : %s", idReveil.toString())
@@ -336,8 +351,14 @@ class ReveilSonneActivity : AppCompatActivity() {
         }
     }
 
+    override fun finish() {
+        super.finish()
+        threadVolumeProgressif?.interrupt()
+        threadNoMusic?.interrupt()
+    }
+
     private fun snooze(){
-        val idReveil = intent!!.getIntExtra("idReveil", -1)
+        val idReveil = intent!!.getIntExtra(EXTRA_ID, -1)
         if(idReveil!=-1)
         {
             viewModelReveil.snoozeReveil(idReveil)

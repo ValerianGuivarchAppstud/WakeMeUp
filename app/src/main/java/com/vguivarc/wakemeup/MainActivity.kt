@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
+import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.DataSnapshot
@@ -138,7 +139,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.favorisFragment,
                 R.id.musiquesRecuesFragment,
                 R.id.contactsListeFragment,
-                R.id.demanderMusique
+                R.id.demanderMusique,
+                R.id.rechercheVideoFragment
                 //R.id.settingsUser,
             ), drawerLayout
         )
@@ -173,7 +175,11 @@ class MainActivity : AppCompatActivity() {
         currentUserViewModel =
             ViewModelProvider(this, factory).get(CurrentUserViewModel::class.java)
 
-     checkFirstRun()
+  checkFirstRun()
+
+
+
+        this.configureNavigationView()
 
     }
 
@@ -247,6 +253,7 @@ class MainActivity : AppCompatActivity() {
                 viewIconeMusiquesEnAttente.visibility = View.VISIBLE
                 viewIconeNotifEnAttente.visibility = View.VISIBLE
             }
+            updateProfilView()
         })
             // viewModelSonnerie.updateSonneries()
            // viewModelSonnerie.updateSonneriesEnvoyees()
@@ -303,28 +310,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-   /* private fun updateProfilView() {
+    // Configure NavigationView
+
+    private fun configureNavigationView() {
+        updateProfilView()
+    }
+
+    private fun updateProfilView() {
         if (currentUser != null) {
-            navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil)
-                .setOnClickListener {
-                    Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { pictureIntent ->
-                        pictureIntent.resolveActivity(this.packageManager)?.also {
-                            val intent = Intent(
-                                Intent.ACTION_PICK,
-                                MediaStore.Images.Media.INTERNAL_CONTENT_URI
-                            )
-                            intent.type = "image/*"
-                            intent.putExtra("crop", "true")
-                            intent.putExtra("scale", true)
-                            intent.putExtra("outputX", 256)
-                            intent.putExtra("outputY", 256)
-                            intent.putExtra("aspectX", 1)
-                            intent.putExtra("aspectY", 1)
-                            intent.putExtra("return-data", true)
-                            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
-                        }
-                    }
-                }
             navView.getHeaderView(0).findViewById<TextView>(R.id.name_profil).text = currentUser!!.username
             if (currentUser!!.imageUrl != "") {
                 Glide.with(this)
@@ -332,15 +325,15 @@ class MainActivity : AppCompatActivity() {
                     .into(navView.getHeaderView(0).findViewById(R.id.pictur_profil))
             } else {
                 navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil)
-                    .setImageDrawable(ContextCompat.getDrawable(this, R.drawable.photo_profil))
+                    .setImageDrawable(ContextCompat.getDrawable(this, R.drawable.main_logo))
             }
         } else {
             navView.getHeaderView(0).findViewById<TextView>(R.id.name_profil)
                 .setText(R.string.utilisateur_anonyme)
             navView.getHeaderView(0).findViewById<ImageView>(R.id.pictur_profil)
-                .setImageDrawable(ContextCompat.getDrawable(this, R.drawable.empty_picture_profil))
+                .setImageDrawable(ContextCompat.getDrawable(this, R.drawable.main_logo))
         }
-    }*/*/
+    }
 
     private fun dealWithExtra(extrasToDealWith: Bundle?) {
         if (extrasToDealWith != null) {

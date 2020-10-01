@@ -77,9 +77,6 @@
     <string name="horaire">Horaire :</string>
     <string name="r_p_ter">Répéter :</string>
     <string name="aucune_musique_n_a_t_ajout_e_vos_favoris_pour_le_moment">Aucune musique n\'a été ajoutée à vos favoris pour le moment</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="photo_de_profil">Photo de profil</string>
     <string name="partager">Partager</string>
     <string name="aucune_musique_en_attente_demandez_vos_amis_de_vous_en_envoyer">Aucune musique en attente… Demandez à vos amis de vous en envoyer !</string>
@@ -87,15 +84,20 @@
     <string name="notifications">Notifications</string>
     <string name="envoyee_par">Envoyée par %1$s</string>
     <string name="utilisateur_anonyme">Non connecté</string>
-    <string name="txt_trait_txt">%s1 - %s2</string>
+    <string name="txt_trait_txt">%1$s - %2$s</string>
+    <string name="saisir_musique_manuellement">Saisir musique manuellement</string>
+    <string name="rechercher_une_musique_dans_les_favoris">Rechercher une musique dans les favoris</string>
+    <string name="profil">Profil</string>
+    <string name="vous_netes_pas_connecte">Vous n\'êtes pas connecté</string>
+    <string name="aucune_video_selectionnee">Aucune vidéo sélectionnéee</string>
     <plurals name="musique_recu">
-        <item quantity="zero">Musique reçue : %d</item>
-        <item quantity="one">Musique reçue : %d</item>
-        <item quantity="other">Musiques reçues : %d</item>
+        <item quantity="zero">Musique reçue : </item>
+        <item quantity="one">Musique reçue : </item>
+        <item quantity="other">Musiques reçues : </item>
     </plurals>
     <plurals name="musique_envoyée">
-        <item quantity="zero">Musique envoyée : %d</item>
-        <item quantity="one">Musique envoyée : %d</item>
-        <item quantity="other">Musiques envoyées : %d</item>
+        <item quantity="zero">Musique envoyée : </item>
+        <item quantity="one">Musique envoyée : </item>
+        <item quantity="other">Musiques envoyées : </item>
     </plurals>
 </resources>

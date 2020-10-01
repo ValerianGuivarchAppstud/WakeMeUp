@@ -105,6 +105,7 @@ class ContactFragment : Fragment() {
         viewModelSonnerie.getSonnerieStateAddResult().observe(requireActivity(), {
             if(it.error==null){
                 Utility.createSimpleToast("Sonnerie envoyée")
+                requireActivity().onBackPressed()
             } else {
                 Utility.createSimpleToast("Erreur dans l'envoie de la sonnerie")
                 Timber.e(it.error.toString())

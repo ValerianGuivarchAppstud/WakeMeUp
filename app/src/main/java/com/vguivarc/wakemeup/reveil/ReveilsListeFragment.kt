@@ -58,7 +58,7 @@ class ReveilsListeFragment : Fragment(), ReveilListeAdapter.ReveilListAdapterLis
                     minR=r
                 }
             }
-            notification(""+minR.getText())
+          //  notification(""+minR.getText())
         } else {
             deleteNotification()
         }
