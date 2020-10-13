@@ -16,6 +16,7 @@ import com.vguivarc.wakemeup.connect.UserModel
 
 class NotifsListeAdapter(
     private val notifs: MutableMap<String, NotificationMusicMe>,
+    private val contacts: MutableMap<String, UserModel>,
     private val listener: NotifListAdapterListener?
 ) : RecyclerView.Adapter<NotifsListeAdapter.ViewHolder>(),
     View.OnClickListener {
@@ -44,17 +45,19 @@ class NotifsListeAdapter(
         val notif = notifs.toList()[index].second
         with(holder) {
             notifCardView.tag = notif
-            if(notif.sender!!.imageUrl!="") {
+            if(notif.urlPicture!="") {
                 Glide.with(AppWakeUp.appContext)
-                    .load(notif.sender.imageUrl)
+                    .load(notif.urlPicture)
                     .into(idItemNotifProfil)
             } else {
                 idItemNotifProfil.setImageDrawable(
                     ContextCompat.getDrawable(AppWakeUp.appContext, R.drawable.empty_picture_profil))
             }
-            nomSenderNotifLink.text = "  "+ notif.sender.username+"  "
+            nomSenderNotifLink.text = "  "+ notif.usernameSender+"  "
             nomSenderNotifLink.setOnClickListener {
-                listener?.onSenderClicked(notif.sender)
+                if(notif.idSender!=null && contacts.containsKey(notif.idSender)){
+                listener?.onSenderClicked(contacts.get(notif.idSender)!!)
+                    }
             }
             idItemNotifTitreText.text = when(notif.type){
                 NotificationMusicMe.NotificationType.ENVOIE_MUSIQUE ->" t'a envoyé une sonnerie."

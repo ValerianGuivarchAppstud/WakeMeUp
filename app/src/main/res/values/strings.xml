@@ -90,6 +90,8 @@
     <string name="profil">Profil</string>
     <string name="vous_netes_pas_connecte">Vous n\'êtes pas connecté</string>
     <string name="aucune_video_selectionnee">Aucune vidéo sélectionnéee</string>
+    <string name="envoie_musique">Tu as reçu une musique, envoyée par %s !</string>
+    <string name="sonnerie_utilisee">Ta musique a réveillé %s !</string>
     <plurals name="musique_recu">
         <item quantity="zero">Musique reçue : </item>
         <item quantity="one">Musique reçue : </item>

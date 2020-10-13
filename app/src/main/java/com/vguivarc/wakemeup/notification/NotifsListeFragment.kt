@@ -12,28 +12,42 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.connect.UserModel
+import com.vguivarc.wakemeup.contact.ContactListeViewModel
 import com.vguivarc.wakemeup.repo.ViewModelFactory
 
 class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListener {
 
 
-    private lateinit var viewModel: NotifListeViewModel
+    private lateinit var notifViewModel: NotifListeViewModel
+    private lateinit var contactViewModel: ContactListeViewModel
     private lateinit var adapter: NotifsListeAdapter
     private val notifs = mutableMapOf<String, NotificationMusicMe>()
+    private val contacts = mutableMapOf<String, UserModel>()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setHasOptionsMenu(false)
         val factory = ViewModelFactory(AppWakeUp.repository)
-        viewModel = ViewModelProvider(this, factory).get(NotifListeViewModel::class.java)
-        viewModel.notifAffichee()
-        viewModel.getNotifLiveData().observe(
+        notifViewModel = ViewModelProvider(this, factory).get(NotifListeViewModel::class.java)
+        notifViewModel.notifAffichee()
+        notifViewModel.getNotifLiveData().observe(
             viewLifecycleOwner,
             { nouvelleListeNotif ->
                 updateNotifListe(
                     nouvelleListeNotif
                 )
             })
+
+        contactViewModel = ViewModelProvider(this, factory).get(ContactListeViewModel::class.java)
+        contactViewModel.getContacts()
+        contactViewModel.getContactsListeLiveData().observe(
+            viewLifecycleOwner,
+            { nouvelleListeContact ->
+                updateContactListe(
+                    nouvelleListeContact.friendList
+                )
+            })
+
     }
 
 
@@ -46,6 +60,15 @@ class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListe
     }
 
 
+
+    private fun updateContactListe(nouvelleListContact: MutableMap<String, UserModel>) {
+        contacts.clear()
+        contacts.putAll(nouvelleListContact)
+        adapter.notifyDataSetChanged()
+        //TODO add text si 0 notifs
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,7 +78,7 @@ class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListe
         val view = inflater.inflate(R.layout.fragment_notif_list, container, false)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.list_notif)
-        adapter = NotifsListeAdapter(notifs, this)
+        adapter = NotifsListeAdapter(notifs, contacts, this)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
@@ -69,7 +92,7 @@ class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListe
     }
 
     override fun onNotifDelete(notifKey: String) {
-        viewModel.deleteNotif(notifKey)
+        notifViewModel.deleteNotif(notifKey)
     }
 
 }

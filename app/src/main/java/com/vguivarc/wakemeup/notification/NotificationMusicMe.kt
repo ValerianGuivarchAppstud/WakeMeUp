@@ -6,7 +6,9 @@ import com.vguivarc.wakemeup.sonnerie.Sonnerie
 
 open class NotificationMusicMe(
     val idReceiver: String,
-    val sender: UserModel?,
+    val idSender: String?,
+    val usernameSender: String?,
+    val urlPicture: String?,
     val vue: Boolean,
     val type: NotificationType
 )  {
@@ -14,7 +16,7 @@ open class NotificationMusicMe(
     var sonnerieName : String? = null
 
     constructor() : this(
-        "", null,false, NotificationType.ENVOIE_MUSIQUE
+        "", null,"", null, false, NotificationType.ENVOIE_MUSIQUE
     )
 
      enum class NotificationType{
@@ -23,13 +25,16 @@ open class NotificationMusicMe(
      }
 
      companion object {
+         //TODO mettre receveur ici
          fun newInstanceEnvoieMusique(sonnerie: Sonnerie, sender: UserModel): NotificationMusicMe {
-             return NotificationMusicMe(sonnerie.idReceiver, sender, false, NotificationType.ENVOIE_MUSIQUE)
+             return NotificationMusicMe(sonnerie.idReceiver, sender.id, sender.username, sender.imageUrl, false, NotificationType.ENVOIE_MUSIQUE)
          }
          fun newInstanceSonnerieUtilisee(sonnerie: Sonnerie, sender: UserModel): NotificationMusicMe {
              val not= NotificationMusicMe(
-                 sonnerie.senderId,
-                 sender,
+                 sonnerie.idReceiver,
+                 sender.id,
+                 sender.username,
+                 sender.imageUrl,
                  false,
                  NotificationType.SONNERIE_UTILISEE
              )

@@ -15,9 +15,10 @@ import android.os.SystemClock
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.vguivarc.wakemeup.AppWakeUp
 import com.vguivarc.wakemeup.MainActivity
 import com.vguivarc.wakemeup.R
-import org.json.JSONObject
+import com.vguivarc.wakemeup.util.Utility
 import timber.log.Timber
 
 
@@ -52,6 +53,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             } else {*/
             // Handle message within 10 seconds
             Timber.e("Data: ${remoteMessage.data}")
+            Timber.e("Sender: ${remoteMessage.data.get("sender")}")
+            Timber.e("Type: ${remoteMessage.data.get("notificationType")}")
             handleNow(remoteMessage.data)
             //}
         }
@@ -101,12 +104,16 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * Handle time allotted to BroadcastReceivers.
      */
     private fun handleNow(data: MutableMap<String, String>) {
-        val json = JSONObject(data["data"]!!)
-        val sender = json.get("sender").toString()
-      //  val notificationId = json.get("notificationId").toString()
-        val notificationType = json.get("notificationType").toString()
+
+        val sender=data.get("sender")!!
+        val notificationType=data.get("notificationType")!!
+        val urlPicture = data.get("urlPicture")!!
+        val usernameSender = data.get("usernameSender")!!
+        //val json = JSONObject(data["data"]!!)
+        //val sender = data.values.toList()[0]//sender
+        //val notificationType = data.values.toList()[1] //notificationType
         //if (AnnonceMessagerieFragment.currentDisplayedDiscussionId != discussionId)
-            notificationAnnonce(sender, notificationType)
+            notificationAnnonce(sender, notificationType, urlPicture, usernameSender)
     }
 
     var notificationChannel: NotificationChannel? =null
@@ -118,7 +125,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun notificationAnnonce(
         sender: String,
-        notificationType: String
+        notificationType: String,
+        urlPicture: String,
+        usernameSender: String
     ) {
         val mainActivityIntent = Intent(this.application, MainActivity::class.java)
 
@@ -131,10 +140,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val notificationManage = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val texte = when(notificationType){
-            NotificationMusicMe.NotificationType.ENVOIE_MUSIQUE.name -> "ENVOIE_MUSIQUE"
-            NotificationMusicMe.NotificationType.SONNERIE_UTILISEE.name -> "SONNERIE_UTILISEE"
+            NotificationMusicMe.NotificationType.ENVOIE_MUSIQUE.name -> AppWakeUp.appContext.resources.getString(R.string.envoie_musique, usernameSender)
+            NotificationMusicMe.NotificationType.SONNERIE_UTILISEE.name -> AppWakeUp.appContext.resources.getString(R.string.sonnerie_utilisee, usernameSender)
             else -> ""
-        } + " de "+ sender
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if(notificationChannel==null) {
@@ -154,11 +163,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             builder = Notification.Builder(applicationContext, channelId)
                 .setContentTitle(texte)
                 .setSmallIcon(R.drawable.main_logo)
-                .setContentText(texte)
+                .setLargeIcon(Utility.getBitmapFromURL(urlPicture))
                 .setOnlyAlertOnce(true)
                 .setContentIntent(pi)
                 .setAutoCancel(true)
                 .build()
+            notificationManage.notify(0, builder)
 
         }
         else{

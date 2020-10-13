@@ -6,6 +6,8 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import com.vguivarc.wakemeup.repo.Repository
 import com.vguivarc.wakemeup.reveil.ReveilSonneService.Companion.CHANNEL_ID
 import com.vguivarc.wakemeup.reveil.adds.AlarmSetter
@@ -42,6 +44,19 @@ class AppWakeUp : Application() {
         lateinit var appContext: Context
 
         lateinit var  alarmSetterImpl : AlarmSetter.AlarmSetterImpl
+
+        fun userMessageRegistration() {
+            if(FirebaseAuth.getInstance().currentUser==null){
+                Timber.e("no user !")
+            } else {
+                Timber.e("there is a user ! ${FirebaseAuth.getInstance().currentUser!!.uid}")
+                FirebaseMessaging.getInstance().subscribeToTopic("user_"+FirebaseAuth.getInstance().currentUser!!.uid)
+                    .addOnCompleteListener { task ->
+                        Timber.e("user registration : ${task.isSuccessful}")
+                        Timber.e("user registration : ${"user_"+FirebaseAuth.getInstance().currentUser!!.uid}")
+                    }
+            }
+        }
     }
 
     override fun onCreate() {

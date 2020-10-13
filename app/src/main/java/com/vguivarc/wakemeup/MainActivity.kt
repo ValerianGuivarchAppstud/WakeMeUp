@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
+import com.vguivarc.wakemeup.AppWakeUp.Companion.userMessageRegistration
 import com.vguivarc.wakemeup.connect.LinkFirebaseAndFacebookIds
 import com.vguivarc.wakemeup.connect.UserModel
 import com.vguivarc.wakemeup.notification.NotifListeViewModel
@@ -170,6 +171,9 @@ class MainActivity : AppCompatActivity() {
             }
             )
 
+
+
+            userMessageRegistration()
 
         val factory = ViewModelFactory(AppWakeUp.repository)
         currentUserViewModel =

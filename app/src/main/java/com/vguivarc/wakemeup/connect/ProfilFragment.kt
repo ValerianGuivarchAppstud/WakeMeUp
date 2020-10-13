@@ -109,6 +109,7 @@ class ProfilFragment : Fragment() {
                         )
                     )
                 }
+                AppWakeUp.userMessageRegistration()
             })
         return currentView
     }

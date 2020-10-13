@@ -86,7 +86,7 @@ class Repository {
 
 
 
-    private fun createUserWithFacebook(accessToken :AccessToken) {
+    private fun createUserWithFacebook(accessToken: AccessToken) {
         val firebaseUser = auth.currentUser!!
         val reference = database.getReference("Users").child(firebaseUser.uid)
         val hashmap = hashMapOf<String, String>()
@@ -107,10 +107,15 @@ class Repository {
                                 _signupResult.value =
                                     ConnectResult(error = R.string.signup_failed)
                             }
+
                             override fun onDataChange(p0: DataSnapshot) {
                                 if (p0.childrenCount.toInt() == 0) {
-                                    val referenceCont = database.getReference("LinkFirebaseAndFacebookIds")
-                                    val link = LinkFirebaseAndFacebookIds(auth.currentUser!!.uid, accessToken.userId)
+                                    val referenceCont =
+                                        database.getReference("LinkFirebaseAndFacebookIds")
+                                    val link = LinkFirebaseAndFacebookIds(
+                                        auth.currentUser!!.uid,
+                                        accessToken.userId
+                                    )
                                     val refLinkPush = referenceCont.push()
                                     refLinkPush.setValue(link).addOnCompleteListener { it2 ->
                                         if (it2.isSuccessful) {
@@ -147,7 +152,7 @@ class Repository {
             .addOnCompleteListener{
                 if (it.isSuccessful){
                     when(credential.provider){
-                        "facebook.com"-> {
+                        "facebook.com" -> {
                             createUserWithFacebook(accessToken)
                             _loginResult.value =
                                 ConnectResult(auth.currentUser)
@@ -160,7 +165,7 @@ class Repository {
                     getUserModelAfterConnection()
                 } else {
                     Timber.e(it.exception.toString())
-                    Timber.e( "signInWithCredential:failure${it.exception}")
+                    Timber.e("signInWithCredential:failure${it.exception}")
                     disconnect()
                     _loginResult.value =
                         ConnectResult(error = R.string.login_failed)
@@ -236,10 +241,10 @@ class Repository {
             ReveilModel.chargement(reveils)
         } catch (e: FileNotFoundException) {
 
-        } catch (e : java.lang.Exception){
+        } catch (e: java.lang.Exception){
             reveilsLiveData.value = mutableMapOf()
             enregistrementReveil()
-        } catch (e : ClassCastException){
+        } catch (e: ClassCastException){
 
         }
         try {
@@ -441,8 +446,8 @@ class Repository {
                 object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {}
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                  //      for (ds in dataSnapshot.getChildren()) {
-                        if(dataSnapshot.hasChildren()) {
+                        //      for (ds in dataSnapshot.getChildren()) {
+                        if (dataSnapshot.hasChildren()) {
                             val fbLink =
                                 dataSnapshot.children.first()
                                     .getValue(LinkFirebaseAndFacebookIds::class.java)!!
@@ -612,6 +617,7 @@ class Repository {
             query.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
                 }
+
                 override fun onDataChange(p0: DataSnapshot) {
                     val list = p0.children.toList()
                     if ((list.filter { fav -> fav.getValue(Favori::class.java)!!.idSong == song.id }).isNotEmpty()) {
@@ -679,13 +685,13 @@ class Repository {
                             VideoFavoriResult(favoriList = favorisList)
                     } else {
                         val dataIterator = p0.children.iterator()
-    //                    while (dataIterator.hasNext()) {
+                        //                    while (dataIterator.hasNext()) {
                         getSongForFavori(dataIterator)
 //                        }
-  //                      for (ds in p0.getChildren()) {
+                        //                      for (ds in p0.getChildren()) {
 
-                        }
                     }
+                }
                 //}
             })
         }
@@ -704,7 +710,7 @@ class Repository {
                     fav.song = s
                     favorisList[ds.key!!] = fav
 
-                    if(dataIterator.hasNext()){
+                    if (dataIterator.hasNext()) {
                         getSongForFavori(dataIterator)
                     } else {
                         favorisListLiveData.value =
@@ -997,10 +1003,10 @@ class Repository {
     /**************************************************/
 
     val listNotifications = mutableMapOf<String, NotificationMusicMe>()
-    private val listNotificationsLiveData = MutableLiveData<Map<String,NotificationMusicMe>>()
+    private val listNotificationsLiveData = MutableLiveData<Map<String, NotificationMusicMe>>()
  //   private val notifVueLiveData = MutableLiveData<Boolean>()
 
-    fun getNotifications(): LiveData<Map<String,NotificationMusicMe>> = listNotificationsLiveData
+    fun getNotifications(): LiveData<Map<String, NotificationMusicMe>> = listNotificationsLiveData
     //fun getNotifVue(): LiveData<Boolean> = notifVueLiveData
 
 
@@ -1016,13 +1022,30 @@ class Repository {
         updateNotification()
     }
 
+    fun sendNotificationToUser(user: String, message: String) {
+        val notifications =
+            database.getReference("notificationRequests")
+
+        val notification = HashMap<String, String>()
+        notification.put("username", user)
+        notification.put("message", message)
+
+        notifications.push().setValue(notification)
+    }
+
     private fun addNotif(notification: NotificationMusicMe) {
         val referenceNotif = database.getReference("Notification")
         val refNotifPush = referenceNotif.push()
-        refNotifPush.setValue(notification)
+        val e = refNotifPush.setValue(notification).exception
+        if(e!=null)
+            Timber.e(e.toString())
 
 
-      /*  val payload = JSONObject()
+      /*  Timber.e("sendNotificationToUser ${notification.idReceiver}")
+        sendNotificationToUser(notification.idReceiver, "Hi there puf!")
+
+
+        val payload = JSONObject()
 
         try {
             //payload.put("sender", ParseInstallation.getCurrentInstallation().installationId)
@@ -1064,18 +1087,19 @@ class Repository {
                             override fun onCancelled(p0: DatabaseError) {}
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
                                 listNotifications[ds.key!!] = notif
-                                listNotificationsLiveData.value=listNotifications
+                                listNotificationsLiveData.value = listNotifications
                             }
-                    })
+                        })
                 }
-                if(!p0.hasChildren()){
-                    listNotificationsLiveData.value=listNotifications
+                if (!p0.hasChildren()) {
+                    listNotificationsLiveData.value = listNotifications
                 }
             }
         })
     }
 
     fun deleteNotif(notifKey: String) {
+        Timber.e("delete")
         database.getReference("Notification").child(notifKey).removeValue()
         updateNotification()
     }
