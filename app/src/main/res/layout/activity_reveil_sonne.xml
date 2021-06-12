@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".reveil.ReveilSonneActivity"
-    android:background="@color/black"
+    tools:context=".ui.alarm.ReveilSonneActivity"
+    android:background="@color/background_sonnerie"
     android:orientation="vertical">
 
     <TextView
@@ -56,7 +56,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/grey"
+        android:textColor="@color/texte_sonnerie"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +74,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/grey"
+        android:textColor="@color/texte_sonnerie"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,7 +89,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/grey"
+        android:textColor="@color/texte_sonnerie"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +107,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:adjustViewBounds="true"
-        android:backgroundTint="@color/colorPrimaryDark"
+        app:backgroundTint="@color/colorPrimaryDark"
         android:contentDescription="@string/snooze"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bouton_reveil_stop"
@@ -116,7 +116,6 @@
         app:layout_constraintVertical_bias="0.3" />
 
     <TextView
-        android:id="@+id/textView3"
         style="@style/AppTheme.BoutonReveil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -143,7 +142,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:adjustViewBounds="true"
-        android:backgroundTint="@color/colorPrimaryDark"
+        app:backgroundTint="@color/colorPrimaryDark"
         android:contentDescription="@string/stop"
         android:hapticFeedbackEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -154,7 +153,6 @@
 
 
     <TextView
-        android:id="@+id/textView2"
         style="@style/AppTheme.BoutonReveil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

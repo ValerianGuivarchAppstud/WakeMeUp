@@ -2,18 +2,18 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
     app:startDestination="@id/reveilsListeFragment">
 
     <fragment
         tools:layout="@layout/fragment_reveil_list"
         android:id="@+id/reveilsListeFragment"
-        android:name="com.vguivarc.wakemeup.reveil.ReveilsListeFragment"
+        android:name="com.vguivarc.wakemeup.ui.alarm.AlarmsFragment"
         android:label="@string/reveils" />
+    <!--
     <fragment
         tools:layout="@layout/fragment_favori"
         android:id="@+id/favorisFragment"
-        android:name="com.vguivarc.wakemeup.song.favori.FavorisFragment"
+        android:name="com.vguivarc.wakemeup.ui.favori.FavorisFragment"
         android:label="@string/favori" >
         <action
             android:id="@+id/action_favorisFragment_to_contactsListeShareFragment"
@@ -22,7 +22,7 @@
     <fragment
         tools:layout="@layout/fragment_musiques_recues"
         android:id="@+id/musiquesRecuesFragment"
-        android:name="com.vguivarc.wakemeup.sonnerie.MusiquesRecuesFragment"
+        android:name="com.vguivarc.wakemeup.ui.sonnerie.MusiquesRecuesFragment"
         android:label="@string/musiques_recues" >
         <action
             android:id="@+id/action_musiquesRecuesFragment_to_contactsListeShareFragment"
@@ -34,12 +34,12 @@
     <fragment
         tools:layout="@layout/fragment_partage"
         android:id="@+id/demanderMusique"
-        android:name="com.vguivarc.wakemeup.share.DemanderMusiqueFragment"
+        android:name="com.vguivarc.wakemeup.ui.contact.DemanderMusiqueFragment"
         android:label="@string/partager" />
     <fragment
         tools:layout="@layout/fragment_contact_list"
         android:id="@+id/contactsListeFragment"
-        android:name="com.vguivarc.wakemeup.contact.ContactsListeFragment"
+        android:name="com.vguivarc.wakemeup.contact.view.ContactsListeFragment"
         android:label="@string/amis" >
         <action
             android:id="@+id/action_contactsListeFragment_to_contactFragment"
@@ -47,12 +47,12 @@
     </fragment>
     <fragment
         android:id="@+id/contactFragment"
-        android:name="com.vguivarc.wakemeup.contact.ContactFragment"
+        android:name="com.vguivarc.wakemeup.contact.view.ContactFragment"
         android:label="@string/amis"
         tools:layout="@layout/fragment_contact" >
         <argument
             android:name="contact"
-            app:argType="com.vguivarc.wakemeup.connect.UserModel" />
+            app:argType="com.vguivarc.wakemeup.domain.entity.UserModel" />
         <action
             android:id="@+id/action_contactFragment_to_favorisShareFragment"
             app:destination="@id/favorisShareFragment" />
@@ -60,11 +60,11 @@
     <fragment
         tools:layout="@layout/fragment_musiques_passees"
         android:id="@+id/musiquesPasseesFragment"
-        android:name="com.vguivarc.wakemeup.sonnerie.MusiquesPasseesFragment"
+        android:name="com.vguivarc.wakemeup.ui.sonnerie.MusiquesPasseesFragment"
         android:label="MusiquesPasseesFragment" />
     <fragment
         android:id="@+id/musiquesAttenteFragment"
-        android:name="com.vguivarc.wakemeup.sonnerie.MusiquesAttenteFragment"
+        android:name="com.vguivarc.wakemeup.ui.sonnerie.MusiquesAttenteFragment"
         android:label="MusiquesAttenteFragment"
         tools:layout="@layout/fragment_musiques_attente" >
         <action
@@ -74,7 +74,7 @@
     <fragment
         tools:layout="@layout/fragment_contact_share_list"
         android:id="@+id/contactsListeShareFragment"
-        android:name="com.vguivarc.wakemeup.contact.ContactsListeShareFragment"
+        android:name="com.vguivarc.wakemeup.contact.view.ContactsListeShareFragment"
         android:label="@string/partager" >
         <argument
             android:name="songToShare"
@@ -83,11 +83,11 @@
     <fragment
         tools:layout="@layout/fragment_favori_share"
         android:id="@+id/favorisShareFragment"
-        android:name="com.vguivarc.wakemeup.song.favori.FavorisShareFragment"
+        android:name="com.vguivarc.wakemeup.ui.favori.FavorisShareFragment"
         android:label="@string/partager">
         <argument
             android:name="contact"
-            app:argType="com.vguivarc.wakemeup.connect.UserModel" />
+            app:argType="com.vguivarc.wakemeup.domain.entity.UserModel" />
     </fragment>
     <fragment
         tools:layout="@layout/fragment_notif_list"
@@ -101,16 +101,23 @@
     <fragment
         tools:layout="@layout/profil_fragment"
         android:id="@+id/profilFragment"
-        android:name="com.vguivarc.wakemeup.connect.ProfilFragment"
-        android:label="ProfilFragment" />
+        android:name="com.vguivarc.wakemeup.connect.view.ProfilFragment"
+        android:label="Profil" />
+
+    <fragment
+        tools:layout="@layout/fragment_a_propos"
+        android:id="@+id/aPropos"
+        android:name="com.vguivarc.wakemeup.AProposFragment"
+        android:label="A propos" />
 
     <fragment
         tools:layout="@layout/fragment_video"
         android:id="@+id/rechercheVideoFragment"
-        android:name="com.vguivarc.wakemeup.song.search.RechercheVideoFragment"
+        android:name="com.vguivarc.wakemeup.ui.search.RechercheVideoFragment"
         android:label="RechercheVideoFragment" >
         <action
             android:id="@+id/action_rechercheVideoFragment_to_contactsListeShareFragment"
             app:destination="@id/contactsListeShareFragment" />
     </fragment>
+    !-->
 </navigation>

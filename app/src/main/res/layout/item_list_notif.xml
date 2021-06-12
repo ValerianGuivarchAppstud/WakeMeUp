@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/background">
 
     <androidx.cardview.widget.CardView
         style="@style/AppTheme.ItemReveil"
@@ -15,7 +16,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             style="@style/AppTheme.ItemReveil"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/background">
 
 
             <ImageButton
@@ -23,10 +25,9 @@
                 style="@style/AppTheme.BoutonItem"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:backgroundTint="@color/design_default_color_surface"
                 android:contentDescription="@string/delete_clock"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_delete_black_24dp" />
@@ -34,52 +35,44 @@
             <TextView
                 android:id="@+id/nom_sender_notif_link"
                 style="@style/bouton_arrondi"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:elegantTextHeight="false"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@+id/id_item_notif_titre_text"
+                app:layout_constraintEnd_toStartOf="@+id/id_item_notif_delete"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/id_item_notif_profil"
-                app:layout_constraintTop_toTopOf="@+id/id_item_notif_titre_text"
-                tools:text="    Valou    " />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text=" Valérian Guivarch" />
 
             <TextView
                 android:id="@+id/id_item_notif_titre_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-
-
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="Texte de notification voir ce que ça ddonne"
+                android:ellipsize="end"
+                android:maxEms="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/id_item_notif_delete"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/nom_sender_notif_link"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/id_item_notif_profil"
+                app:layout_constraintTop_toBottomOf="@+id/nom_sender_notif_link"
+                tools:text="a été réveillé par ta sonnerie : The Greatest SHowman -never enough lyric video trop coool on est biend'accord ?" />
 
             <ImageView
                 android:id="@+id/id_item_notif_profil"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:contentDescription="@string/photo_de_profil"
-                app:layout_constraintBottom_toBottomOf="@+id/id_item_notif_titre_text"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/id_item_notif_titre_text"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/empty_picture_profil" />
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorPrimaryDark"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
 
 
 

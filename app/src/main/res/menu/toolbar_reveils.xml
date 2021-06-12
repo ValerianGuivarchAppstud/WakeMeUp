@@ -6,12 +6,12 @@
         android:id="@+id/id_menu_bar_notif"
         android:title="@string/notif_recues"
         app:actionLayout="@layout/action_bar_notification_icon_notif"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/id_menu_bar_message"
         android:title="@string/musiques_recues"
         app:actionLayout="@layout/action_bar_notification_icon_reveils"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
 
 </menu>

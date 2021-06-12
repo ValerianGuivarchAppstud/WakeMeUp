@@ -1,3 +1,0 @@
-package com.vguivarc.wakemeup.notification
-
-class Sender(val data: Data, val to: String)

@@ -1,8 +1,7 @@
 package com.vguivarc.wakemeup.notification
 
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-
+//TODO delete ?
+/*
 class Client {
 
     companion object {
@@ -18,4 +17,4 @@ class Client {
     }
 
 
-}
+}*/

@@ -1,51 +1,21 @@
 <resources>
     <string name="app_name">Music Me !</string>
     <string name="rechercher">Rechercher</string>
-    <string name="ok">OK</string>
-    <string name="prompt_identifiant">Identifiant</string>
-    <string name="prompt_identifiant_mail">Identifiant mail</string>
-    <string name="prompt_password">Mot de passe</string>
-    <string name="prompt_password_again">Ressaisissez le Mot de passe</string>
-    <string name="prompt_mail">Adresse mail</string>
-    <string name="action_sign_up">Créer son compte</string>
-    <string name="action_login">Se connecter</string>
-    <string name="welcome">Bienvenue </string>
-    <string name="invalid_username">L\'identifiant doit comporter au moins 5 caractères, sans espace</string>
-    <string name="invalid_password">Le mot de passe doit comporter au moins 6 caractères</string>
-    <string name="invalid_password_again_signup">Les deux mots de passes doivent être identiques</string>
-    <string name="invalid_mail_signup">L\'adresse mail est invalide</string>
     <string name="signup_failed">"Echec création du compte"</string>
 
-    <string name="bouton_continuer_sans_compte">Continuer sans compte</string>
     <string name="logo">LOGO</string>
     <string name="login_failed">Echec de la connection</string>
 
-    <string name="lundi">lun</string>
-    <string name="mardi">mar</string>
-    <string name="mercredi">mer</string>
-    <string name="jeudi">jeu</string>
-    <string name="vendredi">ven</string>
-    <string name="samedi">sam</string>
-    <string name="dimanche">dim</string>
     <string name="snooze">Snooze</string>
     <string name="stop">Stop</string>
     <string name="logo_video">Logo vidéo</string>
     <string name="titre_de_la_chanson">Titre de la chanson</string>
-    <string name="artiste">Artiste</string>
     <string name="play">play</string>
-    <string name="supprimer">Supprimer</string>
     <string name="favori">Favori</string>
     <string name="image_ami">Image ami</string>
-    <string name="valider">Valider</string>
-    <string name="historique">Historique</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="reveils">Réveils</string>
-    <string name="musiques">Musiques</string>
     <string name="amis">Amis</string>
-    <string name="SeDeconnecter">Se déconnecter</string>
-    <string name="PhotoProfil">Photo de profil</string>
     <string name="ajouter_r_veil">Ajouter Réveil</string>
     <string name="supprimer_r_veil">Supprimer réveil</string>
     <string name="musiques_recues">Musiques reçues</string>
@@ -54,23 +24,14 @@
     <string name="musiques_passees">Passées</string>
     <string name="textNoneMusicPassees">Vous n\'avez aucune musique déjà passées</string>
     <string name="textNoneMusicEnAttente">Vous n\'avez aucune musique en attente</string>
-    <string name="selection">selection</string>
     <string name="icone_notifications_musiques">Icone notifications musiques</string>
-    <string name="text_erreur_contact_sans_connect">Vous ne pouve pas accéder à votre liste de contact tant que vous n\'êtes pas connecté</string>
     <string name="annuler">Annuler</string>
     <string name="modifier_r_veil">Modifier réveil</string>
     <string name="logo_sonnerie_en_attente">Logo sonnerie en attente</string>
     <string name="delete_clock">Delete Clock</string>
-    <string name="prompt_phone">Numéro de téléphone</string>
     <string name="message_partage_general">Voici mon contact sur MusicMe!, n\'hésite pas à me proposer des musiques pour mon prochain réveil !</string>
     <string name="message_partage_facebook">Voici mon contact sur MusicMe!, n\'hésite pas à me proposer des musiques pour mon prochain réveil !</string>
     <string name="message_partage_twitter">Voici mon contact sur MusicMe!, n\'hésite pas à me proposer des musiques pour mon prochain réveil !</string>
-    <string name="heure_choix_temps">Heure</string>
-    <string name="minute_choix_temps">Minute</string>
-    <string name="seconde_choix_temps">Seconde</string>
-    <string name="nouveau_email">Nouvel email</string>
-
-    <string name="titre_favoris">Vos Favoris</string>
 
     <string name="facebook_app_id">241537453728565</string>
     <string name="fb_login_protocol_scheme">fb241537453728565</string>
@@ -92,6 +53,17 @@
     <string name="aucune_video_selectionnee">Aucune vidéo sélectionnéee</string>
     <string name="envoie_musique">Tu as reçu une musique, envoyée par %s !</string>
     <string name="sonnerie_utilisee">Ta musique a réveillé %s !</string>
+    <string name="saisie_manuelle">Saisie manuelle</string>
+    <string name="veuillez_copier_coller_l_adresse_du_la_vid_o_youtube">Veuillez copier-coller l\'adresse du la vidéo Youtube :</string>
+    <string name="lien_youtube">Lien youtube</string>
+    <string name="saisissez_un_pseudo_ou_connectez_vous">Saisissez un pseudo, ou connectez-vous</string>
+    <string name="pseudonyme">Pseudonyme</string>
+    <string name="en_cliquant_sur_partager_tu_g_n_res_un_lien_qui_permettra_d_autres_utilisateurs_de_t_ajouter_leur_contact_et_ou_de_te_proposer_des_musiques_en_r_veil">En cliquant sur Partager, tu génères un lien qui permettra à d\'autres utilisateurs de t\'ajouter à leur contact et/ou de te proposer des musiques en réveil !</string>
+    <string name="pour_demander_des_musiques_d_autres_utilisateurs_il_faut_d_abord_se_connecter">Pour demander des musiques à d\'autres utilisateurs, il faut d\'abord se connecter !</string>
+    <string name="vous_n_avez_aucun_contact_pour_le_moment">Vous n\'avez aucun contact pour le moment</string>
+    <string name="saisissez_votre_recherche_pour_afficher_les_r_sultats">Saisissez votre recherche pour afficher les résultats</string>
+    <string name="ok">OK</string>
+    <string name="Apropos">A propos</string>
     <plurals name="musique_recu">
         <item quantity="zero">Musique reçue : </item>
         <item quantity="one">Musique reçue : </item>
@@ -102,4 +74,8 @@
         <item quantity="one">Musique envoyée : </item>
         <item quantity="other">Musiques envoyées : </item>
     </plurals>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_connectivity_exception_user_message">pas de connection</string>
+    <string name="error_retry">error_retry_todo</string>
 </resources>

@@ -20,7 +20,7 @@
     <uses-permission android:name="com.vguivarc.wakemeup.permission.C2D_MESSAGE" />
 
     <application
-        android:name=".AppWakeUp"
+        android:name=".AndroidApplication"
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:icon="@drawable/main_logo_white"
@@ -56,22 +56,22 @@
         <activity
             android:name="com.vguivarc.wakemeup.Demo"
             android:label="My Custom AppIntro" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter android:label="Music Me !">
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".reveil.ReveilEdit" />
-        <activity android:name=".reveil.ReveilSonneActivity" />
+        <activity android:name=".ui.alarm.ReveilEdit" />
+        <activity android:name=".ui.alarm.ReveilSonneActivity" />
 
         <service
-            android:name=".reveil.ReveilSonneService"
+            android:name=".ui.alarm.ReveilSonneService"
             android:enabled="true" />
 
         <receiver
-            android:name=".reveil.AlertReceiver"
+            android:name=".ui.alarm.AlertReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

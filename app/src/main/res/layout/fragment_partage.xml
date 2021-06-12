@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/id_partage_ensemble_connecte"
@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
-            android:text="En cliquant sur Partager, tu génères un lien qui permettra à d'autres utilisateurs de t'ajouter à leur contact et/ou de te proposer des musiques en réveil !"
+            android:text="@string/en_cliquant_sur_partager_tu_g_n_res_un_lien_qui_permettra_d_autres_utilisateurs_de_t_ajouter_leur_contact_et_ou_de_te_proposer_des_musiques_en_r_veil"
             android:textAlignment="center"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/id_partage_bouton"
@@ -28,10 +28,11 @@
             android:id="@+id/id_partage_bouton"
             android:layout_width="180dp"
             android:layout_height="180dp"
-            android:backgroundTint="@color/white"
+            app:backgroundTint="@color/texte"
             android:contentDescription="@string/partager"
-            android:src="@drawable/ic_screen_share_black_180dp"
+            app:srcCompat="@drawable/ic_screen_share_black_180dp"
             android:tint="@color/colorPrimary"
+            android:background="@color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -45,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Pour demander des musiques à d'autres utilisateurs, il faut d'abord se connecter !"
+        android:text="@string/pour_demander_des_musiques_d_autres_utilisateurs_il_faut_d_abord_se_connecter"
         android:textAlignment="center"
         android:textSize="30sp"
 

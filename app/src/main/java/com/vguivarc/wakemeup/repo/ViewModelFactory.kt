@@ -3,22 +3,21 @@ package com.vguivarc.wakemeup.repo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.vguivarc.wakemeup.CurrentUserViewModel
-import com.vguivarc.wakemeup.connect.FbLoginViewModel
-import com.vguivarc.wakemeup.contact.ContactListeViewModel
+import com.vguivarc.wakemeup.data.repository.Repository
+import com.vguivarc.wakemeup.ui.connect.viewmodel.FbLoginViewModel
+import com.vguivarc.wakemeup.ui.contact.ContactListeViewModel
 import com.vguivarc.wakemeup.notification.NotifListeViewModel
-import com.vguivarc.wakemeup.reveil.ReveilListeViewModel
-import com.vguivarc.wakemeup.song.favori.FavorisViewModel
-import com.vguivarc.wakemeup.song.search.RechercheVideoViewModel
-import com.vguivarc.wakemeup.sonnerie.SonnerieListeViewModel
+import com.vguivarc.wakemeup.ui.alarm.AlarmsViewModel
+import com.vguivarc.wakemeup.ui.favori.FavorisViewModel
+import com.vguivarc.wakemeup.ui.search.RechercheVideoViewModel
+import com.vguivarc.wakemeup.ui.sonnerie.SonnerieListeViewModel
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory(private val repository: Repository) :
     ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return when {
-            modelClass.isAssignableFrom(ReveilListeViewModel::class.java) -> ReveilListeViewModel(
-                repository
-            )
+
             modelClass.isAssignableFrom(RechercheVideoViewModel::class.java) -> RechercheVideoViewModel(repository
             )
             modelClass.isAssignableFrom(ContactListeViewModel::class.java) -> ContactListeViewModel(

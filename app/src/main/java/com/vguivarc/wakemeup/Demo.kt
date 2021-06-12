@@ -23,7 +23,7 @@ class Demo : AppIntro() {
                 title = "Etape 1",
                 description = "Connectez-vous pour accéder à toutes les fonctionnalités de l'application",
                 imageDrawable = R.drawable.demo1,
-                backgroundColor = R.color.colorPrimary
+                backgroundColor = resources.getColor(R.color.colorPrimary, theme)
                 //titleTypefaceFontRes = R.font.opensans_regular,
                 //descriptionTypefaceFontRes = R.font.opensans_regular,
             )
@@ -33,7 +33,7 @@ class Demo : AppIntro() {
                 title = "Etape 2",
                 description = "Ajoutez un ou plusieurs réveils selon vos besoins",
                 imageDrawable = R.drawable.demo2,
-                backgroundColor = R.color.colorPrimary
+                backgroundColor = resources.getColor(R.color.colorPrimary, theme)
             )
         )
         addSlide(
@@ -41,7 +41,7 @@ class Demo : AppIntro() {
                 title = "Etape 3",
                 description = "Partagez un lien permettant à vos amis de vous rajouter dans leurs contacts",
                 imageDrawable = R.drawable.demo3,
-                backgroundColor = R.color.colorPrimary
+                backgroundColor = resources.getColor(R.color.colorPrimary, theme)
             )
         )
         addSlide(
@@ -49,7 +49,7 @@ class Demo : AppIntro() {
                 title = "Etape 4",
                 description = "Lorsque vous recevez un lien de contact, ajouter le ou envoyez leur des musiques",
                 imageDrawable = R.drawable.demo4,
-                backgroundColor = R.color.colorPrimary
+                backgroundColor = resources.getColor(R.color.colorPrimary, theme)
             )
         )
         addSlide(
@@ -57,7 +57,7 @@ class Demo : AppIntro() {
                 title = "Etape 5",
                 description = "Directement dans l'applicaton YouTube, cliquez sur Partager pour ajouter une vidéo dans vos favoris",
                 imageDrawable = R.drawable.demo5,
-                backgroundColor = R.color.colorPrimary
+                backgroundColor = resources.getColor(R.color.colorPrimary, theme)
             )
         )
         addSlide(
@@ -65,7 +65,7 @@ class Demo : AppIntro() {
                 title = "Etape 6",
                 description = "Retrouvez vos favoris, et envoyez une vidéo à vos contacts !",
                 imageDrawable = R.drawable.demo6,
-                backgroundColor = R.color.colorPrimary
+                backgroundColor = resources.getColor(R.color.colorPrimary, theme)
             )
         )
         addSlide(
@@ -73,7 +73,7 @@ class Demo : AppIntro() {
                 title = "Etape 7",
                 description = "Lorsque votre réveil sonne, vous êtes réveillez par une musique choisie par un de vos contacts !",
                 imageDrawable = R.drawable.demo7,
-                backgroundColor = R.color.colorPrimary
+                backgroundColor = resources.getColor(R.color.colorPrimary, theme)
             )
         )
     }

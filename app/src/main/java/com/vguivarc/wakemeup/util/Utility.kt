@@ -8,7 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.Toast
-import com.vguivarc.wakemeup.AppWakeUp
+import com.vguivarc.wakemeup.AndroidApplication
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -42,7 +42,7 @@ object Utility {
 
     fun createSimpleToast(text: String){
         Toast.makeText(
-            AppWakeUp.appContext,
+            AndroidApplication.appContext,
             text,
             Toast.LENGTH_SHORT
         ).show()

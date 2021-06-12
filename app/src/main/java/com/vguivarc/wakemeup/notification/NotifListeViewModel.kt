@@ -3,7 +3,7 @@ package com.vguivarc.wakemeup.notification
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import com.vguivarc.wakemeup.repo.Repository
+import com.vguivarc.wakemeup.data.repository.Repository
 
 class NotifListeViewModel(val repo: Repository) : ViewModel() {
 

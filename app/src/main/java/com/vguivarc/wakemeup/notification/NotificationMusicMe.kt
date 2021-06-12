@@ -1,7 +1,7 @@
 package com.vguivarc.wakemeup.notification
 
-import com.vguivarc.wakemeup.connect.UserModel
-import com.vguivarc.wakemeup.sonnerie.Sonnerie
+import com.vguivarc.wakemeup.domain.entity.UserModel
+import com.vguivarc.wakemeup.domain.entity.Ringing
 
 
 open class NotificationMusicMe(
@@ -15,6 +15,7 @@ open class NotificationMusicMe(
     //var sender: UserModel?=null
     var sonnerieName : String? = null
 
+    @Suppress("unused")
     constructor() : this(
         "", null,"", null, false, NotificationType.ENVOIE_MUSIQUE
     )
@@ -25,20 +26,19 @@ open class NotificationMusicMe(
      }
 
      companion object {
-         //TODO mettre receveur ici
-         fun newInstanceEnvoieMusique(sonnerie: Sonnerie, sender: UserModel): NotificationMusicMe {
-             return NotificationMusicMe(sonnerie.idReceiver, sender.id, sender.username, sender.imageUrl, false, NotificationType.ENVOIE_MUSIQUE)
+         fun newInstanceEnvoieMusique(ringing: Ringing, sender: UserModel): NotificationMusicMe {
+             return NotificationMusicMe(ringing.idReceiver, sender.id, sender.username, sender.imageUrl, false, NotificationType.ENVOIE_MUSIQUE)
          }
-         fun newInstanceSonnerieUtilisee(sonnerie: Sonnerie, sender: UserModel): NotificationMusicMe {
+         fun newInstanceSonnerieUtilisee(ringing: Ringing, sender: UserModel): NotificationMusicMe {
              val not= NotificationMusicMe(
-                 sonnerie.idReceiver,
+                 ringing.senderId,
                  sender.id,
                  sender.username,
                  sender.imageUrl,
                  false,
                  NotificationType.SONNERIE_UTILISEE
              )
-             not.sonnerieName=sonnerie.song!!.title
+             not.sonnerieName=ringing.song!!.title
              return not
          }
      }

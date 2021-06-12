@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="176dp"
+    android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:orientation="vertical"
@@ -14,25 +14,28 @@
         android:id="@+id/name_profil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="UserName"
-        android:textSize="24sp"
-        android:textColor="@color/white"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:textAlignment="center"
+        android:textColor="@color/texte_bouton"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/pictur_profil"
 
+        app:layout_constraintEnd_toEndOf="@+id/pictur_profil"
         app:layout_constraintStart_toStartOf="@+id/pictur_profil"
-        app:layout_constraintTop_toBottomOf="@+id/pictur_profil" />
+        app:layout_constraintTop_toBottomOf="@+id/pictur_profil"
+        tools:text="UserName" />
 
     <ImageView
         android:id="@+id/pictur_profil"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/photo_de_profil"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/empty_picture_profil"/>
+        app:srcCompat="@drawable/empty_picture_profil"
+        tools:src="@drawable/empty_picture_profil" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

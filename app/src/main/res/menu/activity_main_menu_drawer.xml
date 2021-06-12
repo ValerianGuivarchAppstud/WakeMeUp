@@ -2,51 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-
-
-    <group android:checkableBehavior="single">
-        <!--<item
-            android:id="@+id/activity_main_drawer_connecter"
-            android:icon="@drawable/icon_main_menu_login"
-            android:title="@string/action_login" />!-->
         <item
-            android:id="@+id/reveilsListeFragment"
+            android:id="@+id/home_clock_navigation"
             android:icon="@drawable/icon_main_menu_alarms"
             android:title="@string/reveils" />
         <item
-            android:id="@+id/profilFragment"
+            android:id="@+id/friends_navigation"
             android:icon="@drawable/icon_main_menu_friends"
             android:title="@string/profil" />
         <item
-            android:id="@+id/favorisFragment"
+            android:id="@+id/other_navigation"
             android:icon="@drawable/icon_main_menu_favoris"
             android:title="@string/favori" />
         <item
-            android:id="@+id/musiquesRecuesFragment"
+            android:id="@+id/share_navigation"
             android:icon="@drawable/icon_main_menu_musiques"
             android:title="@string/musiques_recues" />
         <item
-            android:id="@+id/contactsListeFragment"
+            android:id="@+id/settings_navigation"
             android:icon="@drawable/ic_baseline_supervisor_account_24"
             android:title="@string/amis" />
-        <item
-            android:id="@+id/rechercheVideoFragment"
-            android:icon="@drawable/ic_baseline_search_24"
-            android:title="@string/rechercher" />
-        <!--<item
-            android:id="@+id/demanderMusique"
-            android:icon="@drawable/share"
-            android:title="@string/partager" />!-->
 
-        <!--        <item
-                    android:id="@+id/settingsUser"
-                    android:icon="@drawable/ic_settings_black_24dp"
-                    android:title="Paramètres" />!-->
-        <!--<item
-            android:id="@+id/activity_main_drawer_deconnecter"
-            android:icon="@drawable/icon_main_menu_logout"
-            android:title="@string/SeDeconnecter" />!-->
-
-    </group>
 
 </menu>

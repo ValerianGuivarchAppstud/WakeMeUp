@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.vguivarc.wakemeup.AppWakeUp
+import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.connect.UserModel
-import com.vguivarc.wakemeup.contact.ContactListeViewModel
+import com.vguivarc.wakemeup.domain.entity.UserModel
+import com.vguivarc.wakemeup.ui.contact.ContactListeViewModel
 import com.vguivarc.wakemeup.repo.ViewModelFactory
 
 class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListener {
@@ -27,7 +26,7 @@ class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListe
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setHasOptionsMenu(false)
-        val factory = ViewModelFactory(AppWakeUp.repository)
+        val factory = ViewModelFactory(AndroidApplication.repository)
         notifViewModel = ViewModelProvider(this, factory).get(NotifListeViewModel::class.java)
         notifViewModel.notifAffichee()
         notifViewModel.getNotifLiveData().observe(
@@ -87,8 +86,8 @@ class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListe
     }
 
     override fun onSenderClicked(sender: UserModel) {
-        val action = NotifsListeFragmentDirections.actionNotifsListeFragmentToContactFragment(sender)
-        findNavController().navigate(action)
+       /* val action = NotifsListeFragmentDirections.actionNotifsListeFragmentToContactFragment(sender)
+        findNavController().navigate(action)*/
     }
 
     override fun onNotifDelete(notifKey: String) {

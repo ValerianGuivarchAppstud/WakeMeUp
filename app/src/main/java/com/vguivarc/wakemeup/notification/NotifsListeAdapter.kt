@@ -10,9 +10,9 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.vguivarc.wakemeup.AppWakeUp
+import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.connect.UserModel
+import com.vguivarc.wakemeup.domain.entity.UserModel
 
 class NotifsListeAdapter(
     private val notifs: MutableMap<String, NotificationMusicMe>,
@@ -46,14 +46,14 @@ class NotifsListeAdapter(
         with(holder) {
             notifCardView.tag = notif
             if(notif.urlPicture!="") {
-                Glide.with(AppWakeUp.appContext)
+                Glide.with(AndroidApplication.appContext)
                     .load(notif.urlPicture)
                     .into(idItemNotifProfil)
             } else {
                 idItemNotifProfil.setImageDrawable(
-                    ContextCompat.getDrawable(AppWakeUp.appContext, R.drawable.empty_picture_profil))
+                    ContextCompat.getDrawable(AndroidApplication.appContext, R.drawable.empty_picture_profil))
             }
-            nomSenderNotifLink.text = "  "+ notif.usernameSender+"  "
+            nomSenderNotifLink.text = "  ${notif.usernameSender}  "
             nomSenderNotifLink.setOnClickListener {
                 if(notif.idSender!=null && contacts.containsKey(notif.idSender)){
                 listener?.onSenderClicked(contacts.get(notif.idSender)!!)

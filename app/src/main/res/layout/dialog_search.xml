@@ -12,6 +12,6 @@
         android:hint="@string/rechercher"
         android:importantForAutofill="no"
         android:inputType="text"
-        android:paddingLeft="@dimen/activity_horizontal_margin"/>
+        android:paddingStart="@dimen/activity_horizontal_margin"/>
 
 </LinearLayout>

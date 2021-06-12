@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Vous n'avez aucun contact pour le moment"
+        android:text="@string/vous_n_avez_aucun_contact_pour_le_moment"
         android:textAlignment="center"
         android:textSize="30sp"
         android:visibility="gone"

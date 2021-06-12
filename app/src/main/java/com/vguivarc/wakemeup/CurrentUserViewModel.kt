@@ -3,8 +3,9 @@ package com.vguivarc.wakemeup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import com.vguivarc.wakemeup.connect.UserModel
-import com.vguivarc.wakemeup.repo.Repository
+import com.vguivarc.wakemeup.data.repository.Repository
+import com.vguivarc.wakemeup.domain.entity.UserModel
+import com.vguivarc.wakemeup.ui.MainActivity
 
 class CurrentUserViewModel(val repo: Repository) : ViewModel() {
 
