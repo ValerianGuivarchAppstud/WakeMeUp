@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.entity.UserModel
-import com.vguivarc.wakemeup.ui.contact.ContactListeViewModel
-import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.domain.entity.Ringing
+import com.vguivarc.wakemeup.domain.entity.UserModel
+import com.vguivarc.wakemeup.repo.ViewModelFactory
+import com.vguivarc.wakemeup.ui.contact.ContactListeViewModel
 import com.vguivarc.wakemeup.ui.sonnerie.SonnerieListeViewModel
 
 class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapterListener {
@@ -23,8 +23,8 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
     private lateinit var viewModelContact: ContactListeViewModel
     private lateinit var viewModelSonnerie: SonnerieListeViewModel
     private lateinit var adapter: ContactListeAdapter
-    private lateinit var loading : ProgressBar
-    private lateinit var textePasDeContact : TextView
+    private lateinit var loading: ProgressBar
+    private lateinit var textePasDeContact: TextView
     private val contactsList = mutableMapOf<String, UserModel>()
     private val sonneriesEnvoyeesList = mutableListOf<Ringing>()
     private val sonneriesAttenteList = mutableListOf<Ringing>()
@@ -40,9 +40,9 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
 
         val factory = ViewModelFactory(AndroidApplication.repository)
         viewModelContact = ViewModelProvider(this, factory).get(ContactListeViewModel::class.java)
-        viewModelSonnerie= ViewModelProvider(this, factory).get(SonnerieListeViewModel::class.java)
+        viewModelSonnerie = ViewModelProvider(this, factory).get(SonnerieListeViewModel::class.java)
 
-        //put all Phonecontacts in viewModel
+        // put all Phonecontacts in viewModel
 /*
          for (user in getPhoneContacts().values){
                      viewModel.addContact(user)
@@ -76,8 +76,8 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         viewModelContact.getContactsListeLiveData().observe(
             viewLifecycleOwner,
             {
-                if(it.error==null) {
-                    if(it.friendList.isEmpty()){
+                if (it.error == null) {
+                    if (it.friendList.isEmpty()) {
                         contactsList.clear()
                         adapter.notifyDataSetChanged()
                         textePasDeContact.visibility = View.VISIBLE
@@ -89,7 +89,8 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
                     }
                 }
                 loading.visibility = View.GONE
-            })
+            }
+        )
 
         viewModelContact.getContacts()
 
@@ -110,7 +111,7 @@ class ContactsListeFragment : Fragment(), ContactListeAdapter.ContactListAdapter
         findNavController().navigate(action)*/
     }
 
-    //menu recherche
+    // menu recherche
     /*
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_search_contacts, menu)

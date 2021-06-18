@@ -12,14 +12,12 @@ import com.hsuaxo.rxtube.YTResult
 import com.squareup.picasso.Picasso
 import com.vguivarc.wakemeup.R
 
-
 class SongAdapter(
     private val context: Context,
     private var songList: List<Song>,
     private val listener: SongItemClickListener
 ) : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
     var selectedPosition: Int = 0
-
 
     fun setYTResult(ytResult: YTResult) {
         this.songList = ytResult.items.map { Song(it) }
@@ -41,23 +39,23 @@ class SongAdapter(
 
         val song = songList[position]
         if (selectedPosition == position) {
-                holder.itemView.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.colorPrimary
-                    )
+            holder.itemView.setBackgroundColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.colorPrimary
                 )
-            } else {
-                holder.itemView.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context,
-                        android.R.color.transparent
-                    )
+            )
+        } else {
+            holder.itemView.setBackgroundColor(
+                ContextCompat.getColor(
+                    context,
+                    android.R.color.transparent
                 )
+            )
         }
 
         holder.tvTitle.text = song.title
- //       holder.tvArtist.text = song.artist
+        //       holder.tvArtist.text = song.artist
 //        val duration = Utility.convertDuration(song.duration)
 
         Picasso.get().load(song.artworkUrl).placeholder(R.drawable.music_placeholder)
@@ -81,10 +79,9 @@ class SongAdapter(
             itemAddFavorite.setOnClickListener { listener.onSongFavoriteClickListener(layoutPosition) }
             itemShare.setOnClickListener { listener.onSongShareClickListener(layoutPosition) }
         }
-
     }
 
-    fun getSongWithPosition(position: Int) : Song {
+    fun getSongWithPosition(position: Int): Song {
         return songList[position]
     }
 }

@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.entity.UserModel
-import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.domain.entity.Favorite
 import com.vguivarc.wakemeup.domain.entity.Ringing
+import com.vguivarc.wakemeup.domain.entity.UserModel
+import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.ui.music.FavoriteViewModel
 import kotlinx.android.synthetic.main.fragment_musiques_passees.view.*
 
@@ -25,13 +25,12 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
     private lateinit var fragFather: MusiquesRecuesFragment
     private lateinit var mAdapter: SonneriePasseAdapter
 //    private lateinit var mAdapter: SongHistoriqueAdaptater
-    //private lateinit var youTubePlayerView: YouTubePlayerView
+    // private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var currentView: View
 
     private var currentIndex: Int = 0
 
-  //  private var youTubePlayer: YouTubePlayer? = null
-
+    //  private var youTubePlayer: YouTubePlayer? = null
 
     private lateinit var viewModelSonneries: SonnerieListeViewModel
     private lateinit var viewModelFavorite: FavoriteViewModel
@@ -41,39 +40,38 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-       val factory = ViewModelFactory(AndroidApplication.repository)
+        val factory = ViewModelFactory(AndroidApplication.repository)
         viewModelSonneries = ViewModelProvider(requireActivity(), factory).get(
-            SonnerieListeViewModel::class.java)
+            SonnerieListeViewModel::class.java
+        )
         viewModelSonneries.getListePasseesLiveData().observe(
             viewLifecycleOwner,
             { nouvelleListe ->
                 updateMusiqueListe(nouvelleListe)
-            })
+            }
+        )
         viewModelFavorite = ViewModelProvider(requireActivity(), factory).get(FavoriteViewModel::class.java)
         /*viewModelFavorite.getFavoriVideosLiveData().observe(
             viewLifecycleOwner,
             { nouvelleListe ->
                 updateFavorisListe(nouvelleListe.favoriList)
             })*/
-
     }
 
-
-    //TODO vérifier si ça marche, avec liste en .values
-    //TOD pas le cas !
-    private fun updateMusiqueListe(state: Map<String, Ringing>){
+    // TODO vérifier si ça marche, avec liste en .values
+    // TOD pas le cas !
+    private fun updateMusiqueListe(state: Map<String, Ringing>) {
         listMusicPass.clear()
         listMusicPass.addAll(state.values)
         mAdapter.notifyDataSetChanged()
-        if(listMusicPass.size!=0){
-            currentView.findViewById<TextView>(R.id.texte_pas_de_musiques_passees).visibility=View.GONE
+        if (listMusicPass.size != 0) {
+            currentView.findViewById<TextView>(R.id.texte_pas_de_musiques_passees).visibility = View.GONE
         } else {
-            currentView.findViewById<TextView>(R.id.texte_pas_de_musiques_passees).visibility=View.VISIBLE
+            currentView.findViewById<TextView>(R.id.texte_pas_de_musiques_passees).visibility = View.VISIBLE
         }
-
     }
 
-    private fun updateFavorisListe(state: Map<String, Favorite>){
+    private fun updateFavorisListe(state: Map<String, Favorite>) {
         listMusicFav.clear()
         listMusicFav.addAll(state.values)
         mAdapter.notifyDataSetChanged()
@@ -87,12 +85,12 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
         super.onCreate(savedInstanceState)
         currentView = inflater.inflate(R.layout.fragment_musiques_passees, container, false)
 
-        mAdapter = SonneriePasseAdapter(this.requireContext(), listMusicPass, listMusicFav,this)
+        mAdapter = SonneriePasseAdapter(this.requireContext(), listMusicPass, listMusicFav, this)
 
         val recyclerView = currentView.findViewById<RecyclerView>(R.id.recycler_list_video_musiques_passees)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
-        //---------------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------------
 
         currentIndex = 0
         currentView.pb_main_loader.visibility = View.GONE
@@ -106,8 +104,8 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
         fun newInstance(fragFather: MusiquesRecuesFragment): MusiquesPasseesFragment {
 
             val nf = MusiquesPasseesFragment()
-            nf.fragFather=fragFather
-            //TODO corriger ça ?
+            nf.fragFather = fragFather
+            // TODO corriger ça ?
             /*
             val songList: MutableList<Song> = mutableListOf()
             for(hs in nf.songList.list){
@@ -121,11 +119,10 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
         startActivity(
             Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("http://www.youtube.com/watch?v="+ringing.song!!.id)
+                Uri.parse("http://www.youtube.com/watch?v=" + ringing.song!!.id)
             )
         )
     }
-
 
     override fun onDeleteListener(ringing: Ringing, position: Int) {
         viewModelSonneries.deleteSonneriePassee(ringing)
@@ -145,5 +142,4 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
     override fun onNameListener(user: UserModel?, position: Int) {
         fragFather.name(user)
     }
-
 }

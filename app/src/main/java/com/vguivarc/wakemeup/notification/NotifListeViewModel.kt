@@ -7,12 +7,11 @@ import com.vguivarc.wakemeup.data.repository.Repository
 
 class NotifListeViewModel(val repo: Repository) : ViewModel() {
 
-    private val notifListeState = MediatorLiveData<Map<String,NotificationMusicMe>>()
-   // private val listeVueListeState = MediatorLiveData<Boolean>()
-    //TODO trié (encorE...) par date
-    fun getNotifLiveData(): LiveData<Map<String,NotificationMusicMe>> = notifListeState
-    //fun getNotifVueLiveData(): LiveData<Boolean> = listeVueListeState
-
+    private val notifListeState = MediatorLiveData<Map<String, NotificationMusicMe>>()
+    // private val listeVueListeState = MediatorLiveData<Boolean>()
+    // TODO trié (encorE...) par date
+    fun getNotifLiveData(): LiveData<Map<String, NotificationMusicMe>> = notifListeState
+    // fun getNotifVueLiveData(): LiveData<Boolean> = listeVueListeState
 
     init {
         notifListeState.addSource(repo.getNotifications()) { newListe ->
@@ -31,5 +30,4 @@ class NotifListeViewModel(val repo: Repository) : ViewModel() {
     fun deleteNotif(notifKey: String) {
         repo.deleteNotif(notifKey)
     }
-
 }

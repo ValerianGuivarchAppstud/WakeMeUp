@@ -20,43 +20,43 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAttenteAdapter.RecyclerItemC
 
     private lateinit var mAdapter: SonnerieAttenteAdapter
     private lateinit var currentView: View
-    private lateinit var recyclerView : RecyclerView
+    private lateinit var recyclerView: RecyclerView
 
     private lateinit var viewModel: SonnerieListeViewModel
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mAdapter =  SonnerieAttenteAdapter(sonnerieAttenteList, this)
+        mAdapter = SonnerieAttenteAdapter(sonnerieAttenteList, this)
         recyclerView = currentView.recycler_list_video_musiques_en_attente
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
 
         val factory = ViewModelFactory(AndroidApplication.repository)
         viewModel = ViewModelProvider(requireActivity(), factory).get(SonnerieListeViewModel::class.java)
-        viewModel.getListeAttenteLiveData().observe(viewLifecycleOwner, { list ->
-            updateAttenteListe(list)
-        })
+        viewModel.getListeAttenteLiveData().observe(
+            viewLifecycleOwner,
+            { list ->
+                updateAttenteListe(list)
+            }
+        )
         viewModel.listeAffichee()
     }
 
     private fun updateAttenteListe(state: Map<String, Ringing>) {
-            sonnerieAttenteList.clear()
-            sonnerieAttenteList.addAll(state.values)
-            //todo tri par date
-        if(sonnerieAttenteList.size>0) {
+        sonnerieAttenteList.clear()
+        sonnerieAttenteList.addAll(state.values)
+        // todo tri par date
+        if (sonnerieAttenteList.size> 0) {
             sonnerieAttenteList.sortWith(compareBy { v -> v.dateSent })
-            recyclerView.visibility=View.VISIBLE
+            recyclerView.visibility = View.VISIBLE
             mAdapter.notifyDataSetChanged()
             currentView.texte_pas_de_musiques_en_attente.visibility = View.GONE
         } else {
-            recyclerView.visibility=View.GONE
+            recyclerView.visibility = View.GONE
             currentView.texte_pas_de_musiques_en_attente.visibility = View.VISIBLE
         }
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,7 +66,6 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAttenteAdapter.RecyclerItemC
         super.onCreate(savedInstanceState)
         currentView = inflater.inflate(R.layout.fragment_musiques_attente, container, false)
         return currentView
-
     }
 
     companion object {
@@ -77,7 +76,7 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAttenteAdapter.RecyclerItemC
     }
 
     override fun onClickSonnerieListener(ringing: Ringing, position: Int) {
-        //TO
-        //todo ouverture d'une fenetre d'options ?
+        // TO
+        // todo ouverture d'une fenetre d'options ?
     }
 }

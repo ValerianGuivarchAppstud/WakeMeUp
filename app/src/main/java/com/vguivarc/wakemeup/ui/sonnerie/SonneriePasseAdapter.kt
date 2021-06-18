@@ -11,14 +11,15 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.entity.UserModel
 import com.vguivarc.wakemeup.domain.entity.Favorite
 import com.vguivarc.wakemeup.domain.entity.Ringing
+import com.vguivarc.wakemeup.domain.entity.UserModel
 
-class SonneriePasseAdapter (private val context: Context,
-                            private val ringingList: MutableList<Ringing>,
-                            private val favoriList: MutableList<Favorite>,
-                            private val listener: RecyclerItemClickListener
+class SonneriePasseAdapter(
+    private val context: Context,
+    private val ringingList: MutableList<Ringing>,
+    private val favoriList: MutableList<Favorite>,
+    private val listener: RecyclerItemClickListener
 ) : RecyclerView.Adapter<SonneriePasseAdapter.SonnerieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SonnerieViewHolder {
@@ -31,26 +32,24 @@ class SonneriePasseAdapter (private val context: Context,
     override fun onBindViewHolder(holder: SonnerieViewHolder, position: Int) {
 
         val sonnerie = ringingList[position]
-        if(sonnerie.sender!=null){
+        if (sonnerie.sender != null) {
             holder.sender.text = "Envoyé par : "
             holder.link.visibility = View.VISIBLE
-            holder.link.text="    "+sonnerie.sender!!.username+"    "
-
+            holder.link.text = "    " + sonnerie.sender!!.username + "    "
         } else {
             holder.sender.text = "Envoyé par : ${sonnerie.senderName}"
             holder.link.visibility = View.GONE
         }
         val song = ringingList[position].song!!
         holder.tvTitle.text = song.title
-        //holder.tvArtist.text = song.artist
-        if(favoriList.filter { fav -> fav.song!!.id == sonnerie.song!!.id }.isEmpty()){
+        // holder.tvArtist.text = song.artist
+        if (favoriList.filter { fav -> fav.song!!.id == sonnerie.song!!.id }.isEmpty()) {
             holder.ivFavori.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_fav_not_yet))
         } else {
             holder.ivFavori.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_main_menu_favoris))
         }
         Picasso.get().load(song.artworkUrl).placeholder(R.drawable.music_placeholder).into(holder.ivArtwork)
         holder.bind(sonnerie, sonnerie.sender, listener)
-
     }
 
     override fun getItemCount(): Int {
@@ -79,15 +78,11 @@ class SonneriePasseAdapter (private val context: Context,
         }
     }
 
-
     interface RecyclerItemClickListener {
         fun onPlayListener(ringing: Ringing, position: Int)
         fun onShareListener(ringing: Ringing, position: Int)
         fun onDeleteListener(ringing: Ringing, position: Int)
         fun onFavoriListener(ringing: Ringing, position: Int)
         fun onNameListener(user: UserModel?, position: Int)
-
-
     }
-
 }

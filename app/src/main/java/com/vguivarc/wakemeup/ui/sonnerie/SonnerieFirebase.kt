@@ -2,18 +2,15 @@ package com.vguivarc.wakemeup.ui.sonnerie
 
 import java.io.Serializable
 
-
 data class SonnerieFirebase(
     val IdSong: String = "",
-    val dateEnvoie : String = "",
-    val ecoutee : Boolean = false,
+    val dateEnvoie: String = "",
+    val ecoutee: Boolean = false,
     val idReceiver: String = "",
     val senderId: String = "",
-    val senderName : String = ""
+    val senderName: String = ""
 
-
-
-    //var notificationRecu: Boolean = false
+    // var notificationRecu: Boolean = false
 ) : Serializable {
 
     constructor(sentMusic: SonnerieFirebase) : this(
@@ -24,8 +21,5 @@ data class SonnerieFirebase(
         sentMusic.senderId,
         sentMusic.senderName
 
-
     )
-
 }
-

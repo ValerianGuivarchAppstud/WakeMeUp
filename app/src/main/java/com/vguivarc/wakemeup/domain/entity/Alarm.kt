@@ -10,8 +10,6 @@ import timber.log.Timber
 import java.util.*
 import kotlin.system.exitProcess
 
-
-
 @Parcelize
 @JsonClass(generateAdapter = true)
 class Alarm(
@@ -34,7 +32,7 @@ class Alarm(
     val idAlarms: Int = getUnicId()
 ) : Parcelable {
 
-    var hour : Int
+    var hour: Int
         get() {
             return nextAlarmCalendar.get(Calendar.HOUR_OF_DAY)
         }
@@ -42,7 +40,7 @@ class Alarm(
             nextAlarmCalendar.set(Calendar.HOUR_OF_DAY, value)
         }
 
-    var minute : Int
+    var minute: Int
         get() {
             return nextAlarmCalendar.get(Calendar.MINUTE)
         }
@@ -59,13 +57,13 @@ class Alarm(
     }
 
     fun getJoursTexte(): String {
-        return if(isRepeated){
-            //TODO déterminer "aujourdhui ou demain"
+        return if (isRepeated) {
+            // TODO déterminer "aujourdhui ou demain"
             "[Pas de répétition]"
         } else {
             if (listActifDays.size == 7) {
                 "[Tous les jours]"
-            } else  {
+            } else {
                 listActifDays.toString()
             }
         }
@@ -75,7 +73,6 @@ class Alarm(
         Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
     }
 
-
     companion object {
         var idCount = 1
 
@@ -84,7 +81,7 @@ class Alarm(
         const val NUM_REVEIL: String = "NUM_REVEIL"
         const val REVEIL: String = "REVEIL"
         const val DELETE: String = "DELETE"
-        const val DUREE_SNOOZE : Int = 5
+        const val DUREE_SNOOZE: Int = 5
 
         private val listDaysInWeek = listOf(
             DaysWeek.Sunday,
@@ -101,7 +98,7 @@ class Alarm(
             return idCount - 1
         }
 
-        fun getTextNextClock(time : Long) : String{
+        fun getTextNextClock(time: Long): String {
             var textClock = "Réveil prévu dans"
             var nextClockMinute =
                 (time / 1000 / 60) - (Calendar.getInstance().timeInMillis / 1000 / 60)
@@ -133,23 +130,21 @@ class Alarm(
         }
     }
 
-    fun startAlarm(snoozing : Boolean = false) {
+    fun startAlarm(snoozing: Boolean = false) {
         calculeNextCalendar()
 
-   val data = Data.Builder()
+        val data = Data.Builder()
         data.putString(EXTRA_ID, idAlarms.toString())
         val nextAlarmCalendarToUse = nextAlarmCalendar
-            if(snoozing){
-                nextAlarmCalendarToUse.add(Calendar.MINUTE, DUREE_SNOOZE)
-            }
+        if (snoozing) {
+            nextAlarmCalendarToUse.add(Calendar.MINUTE, DUREE_SNOOZE)
+        }
 /*        val calTemp = Calendar.getInstance()
         calTemp.add(Calendar.SECOND, 3)
         AppWakeUp.repository.alarmSetter.setInexactAlarm(idReveil, calTemp)*/
 
-        val nextAlarmCalendarToUseBis= Calendar.getInstance()
+        val nextAlarmCalendarToUseBis = Calendar.getInstance()
         nextAlarmCalendarToUseBis.add(Calendar.SECOND, 3)
-
-
 
 /*        val t = nextAlarmCalendarToUse.timeInMillis/1000
 
@@ -164,30 +159,26 @@ class Alarm(
 */
 
         AndroidApplication.alarmAndroidSetterImpl.setInexactAlarm(idAlarms, nextAlarmCalendarToUse)
-
-
     }
 
-    fun snooze(){
+    fun snooze() {
         startAlarm(true)
     }
 
-
-    fun stop(){
-        if(isRepeated) {
+    fun stop() {
+        if (isRepeated) {
             calculeNextCalendar()
             startAlarm()
         } else {
-            //TODO pas fait ici, faut supprimer
-         //   AndroidApplication.repository.switchReveil(idReveil)
+            // TODO pas fait ici, faut supprimer
+            //   AndroidApplication.repository.switchReveil(idReveil)
         }
     }
 
-
-    fun switch(){
+    fun switch() {
         isActif = !isActif
         if (isActif)
-           startAlarm()
+            startAlarm()
         else
             cancelAlarm()
     }
@@ -201,17 +192,17 @@ class Alarm(
         //pendingIntent doit être le même qu'avant
         alarmManager.cancel(pendingIntent)*/
         AndroidApplication.alarmAndroidSetterImpl.removeInexactAlarm(idAlarms)
-        //TODO urgent, volume pas bon
+        // TODO urgent, volume pas bon
     }
 
-    fun calculeNextCalendarWithNewHours(_hour : Int, _minute : Int) {
+    fun calculeNextCalendarWithNewHours(_hour: Int, _minute: Int) {
         hour = _hour
         minute = _minute
         calculeNextCalendar()
     }
 
-    //TODO notif pour le.s prochain.s reveil.s (snooze ou pas)
-    fun calculeNextCalendar(){
+    // TODO notif pour le.s prochain.s reveil.s (snooze ou pas)
+    fun calculeNextCalendar() {
         val now = Calendar.getInstance()
         nextAlarmCalendar = Calendar.getInstance()
         nextAlarmCalendar.set(Calendar.HOUR_OF_DAY, hour)
@@ -219,20 +210,21 @@ class Alarm(
         nextAlarmCalendar.set(Calendar.SECOND, 0)
         nextAlarmCalendar.set(Calendar.MILLISECOND, 0)
         if (this.listActifDays.isEmpty()) {
-            Timber.e( "ListActifDays empty")
+            Timber.e("ListActifDays empty")
             exitProcess(0)
         }
 
-
-        if(isRepeated){
+        if (isRepeated) {
             while (now > nextAlarmCalendar) {
                 nextAlarmCalendar.set(Calendar.DAY_OF_YEAR, nextAlarmCalendar.get(Calendar.DAY_OF_YEAR) + 1)
             }
         } else {
             while (now > nextAlarmCalendar || !this.listActifDays.contains(
-                    listDaysInWeek[nextAlarmCalendar.get(
-                        Calendar.DAY_OF_WEEK
-                    ) - 1]
+                    listDaysInWeek[
+                        nextAlarmCalendar.get(
+                                Calendar.DAY_OF_WEEK
+                            ) - 1
+                    ]
                 )
             ) {
                 nextAlarmCalendar.set(
@@ -242,19 +234,18 @@ class Alarm(
             }
         }
 
-        //TODO REMOVE
+        // TODO REMOVE
 /*        nextAlarmCalendar=Calendar.getInstance()
         nextAlarmCalendar.add(Calendar.SECOND, 3)*/
     }
 
     fun getText(): String {
-        var s =  ""+ listDaysInWeek[nextAlarmCalendar.get(Calendar.DAY_OF_WEEK)-1]+" à "+nextAlarmCalendar.get(Calendar.HOUR_OF_DAY)+":"
-        s += if(nextAlarmCalendar.get(Calendar.MINUTE)<10) {
-            "0"+nextAlarmCalendar.get(Calendar.MINUTE)
+        var s = "" + listDaysInWeek[nextAlarmCalendar.get(Calendar.DAY_OF_WEEK) - 1] + " à " + nextAlarmCalendar.get(Calendar.HOUR_OF_DAY) + ":"
+        s += if (nextAlarmCalendar.get(Calendar.MINUTE) <10) {
+            "0" + nextAlarmCalendar.get(Calendar.MINUTE)
         } else {
             nextAlarmCalendar.get(Calendar.MINUTE)
         }
         return s
     }
-
 }

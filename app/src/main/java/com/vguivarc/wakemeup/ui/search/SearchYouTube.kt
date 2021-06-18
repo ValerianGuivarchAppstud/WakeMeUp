@@ -1,24 +1,5 @@
 package com.vguivarc.wakemeup.ui.search
 
-
-import android.os.AsyncTask
-import androidx.lifecycle.MutableLiveData
-import com.google.api.client.googleapis.json.GoogleJsonResponseException
-import com.google.api.client.http.apache.ApacheHttpTransport
-import com.google.api.client.json.jackson2.JacksonFactory
-
-import com.google.api.services.youtube.YouTube
-import com.google.api.services.youtube.model.SearchResult
-import com.vguivarc.wakemeup.base.Fail
-import com.vguivarc.wakemeup.base.Loading
-import com.vguivarc.wakemeup.base.Resource
-import com.vguivarc.wakemeup.base.Success
-import com.vguivarc.wakemeup.ui.song.Song
-import com.vguivarc.wakemeup.ui.song.YouTubeConfig
-
-import java.io.IOException
-import java.security.GeneralSecurityException
-
 /*
 class SearchYouTube(private val videoSearchResult : MutableLiveData<Resource<List<Song>>>) : AsyncTask<String, Void, String>() {
 

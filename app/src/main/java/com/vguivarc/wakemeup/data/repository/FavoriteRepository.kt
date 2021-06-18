@@ -2,7 +2,6 @@ package com.vguivarc.wakemeup.data.repository
 
 import com.vguivarc.wakemeup.domain.entity.Favorite
 import com.vguivarc.wakemeup.domain.service.FavoriteService
-import com.vguivarc.wakemeup.ui.song.Song
 import io.reactivex.Single
 
 class FavoriteRepository : FavoriteService {
@@ -20,5 +19,4 @@ class FavoriteRepository : FavoriteService {
     override fun removeFavorite(favorite: Favorite) {
         mockList.remove(favorite)
     }
-
 }

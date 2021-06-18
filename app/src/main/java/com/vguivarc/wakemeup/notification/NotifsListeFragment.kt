@@ -11,11 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.UserModel
-import com.vguivarc.wakemeup.ui.contact.ContactListeViewModel
 import com.vguivarc.wakemeup.repo.ViewModelFactory
+import com.vguivarc.wakemeup.ui.contact.ContactListeViewModel
 
 class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListener {
-
 
     private lateinit var notifViewModel: NotifListeViewModel
     private lateinit var contactViewModel: ContactListeViewModel
@@ -35,7 +34,8 @@ class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListe
                 updateNotifListe(
                     nouvelleListeNotif
                 )
-            })
+            }
+        )
 
         contactViewModel = ViewModelProvider(this, factory).get(ContactListeViewModel::class.java)
         contactViewModel.getContacts()
@@ -45,27 +45,22 @@ class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListe
                 updateContactListe(
                     nouvelleListeContact.friendList
                 )
-            })
-
+            }
+        )
     }
-
 
     private fun updateNotifListe(nouvelleListNotif: Map<String, NotificationMusicMe>) {
         notifs.clear()
         notifs.putAll(nouvelleListNotif)
         adapter.notifyDataSetChanged()
-        //TODO add text si 0 notifs
-
+        // TODO add text si 0 notifs
     }
-
-
 
     private fun updateContactListe(nouvelleListContact: MutableMap<String, UserModel>) {
         contacts.clear()
         contacts.putAll(nouvelleListContact)
         adapter.notifyDataSetChanged()
-        //TODO add text si 0 notifs
-
+        // TODO add text si 0 notifs
     }
 
     override fun onCreateView(
@@ -93,5 +88,4 @@ class NotifsListeFragment : Fragment(), NotifsListeAdapter.NotifListAdapterListe
     override fun onNotifDelete(notifKey: String) {
         notifViewModel.deleteNotif(notifKey)
     }
-
 }

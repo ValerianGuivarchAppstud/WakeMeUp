@@ -11,7 +11,6 @@ import com.squareup.picasso.Picasso
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.Favorite
 
-
 class FavorisShareAdaptater(
     private val favorisVideo: MutableMap<String, Favorite>,
     private val selection: MutableList<Favorite>,
@@ -38,7 +37,7 @@ class FavorisShareAdaptater(
         val song = favorisVideo.toList()[position].second.song!!
         holder.tvTitle.text = song.title
 
-        //TODO remplacer par l'autre, glide ?
+        // TODO remplacer par l'autre, glide ?
         Picasso.get().load(song.artworkUrl).placeholder(R.drawable.music_placeholder).into(holder.ivArtwork)
         holder.bind(favorisVideo.values.toList()[position], listener)
 
@@ -48,7 +47,6 @@ class FavorisShareAdaptater(
         holder.checkbox.visibility = View.VISIBLE
         holder.checkbox.isSelected = selection.contains(favorisVideo.values.toList()[position])
     }
-
 
     interface RecyclerItemClickListener {
         fun onSelect(recherche: Favorite, position: Int)
@@ -68,6 +66,4 @@ class FavorisShareAdaptater(
             checkbox.setOnClickListener { listener.onSelect(song, layoutPosition) }
         }
     }
-
-
 }

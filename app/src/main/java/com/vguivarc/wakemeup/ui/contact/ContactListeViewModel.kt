@@ -5,7 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.vguivarc.wakemeup.data.repository.Repository
 
-class ContactListeViewModel(val repo: Repository) : ViewModel(){
+class ContactListeViewModel(val repo: Repository) : ViewModel() {
 
     private val contactListeState = MediatorLiveData<FacebookResult>()
     fun getContactsListeLiveData(): LiveData<FacebookResult> = contactListeState
@@ -14,7 +14,6 @@ class ContactListeViewModel(val repo: Repository) : ViewModel(){
         contactListeState.addSource(repo.getFacebookListLiveData()) { newContacts ->
             contactListeState.value = newContacts
         }
-
     }
 
     fun getContacts() {

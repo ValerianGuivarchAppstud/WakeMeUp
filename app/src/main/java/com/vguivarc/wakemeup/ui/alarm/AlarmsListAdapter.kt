@@ -58,7 +58,7 @@ class AlarmsListAdapter(
         with(holder) {
             itemAlarmEditArrow.setOnClickListener {
                 closeEditingAlarm(currentEditingAlarm)
-                if(currentEditingAlarm != holder) {
+                if (currentEditingAlarm != holder) {
                     currentEditingAlarm = holder
                     openEditingAlarm(holder)
                 } else {
@@ -99,13 +99,12 @@ class AlarmsListAdapter(
             }
             itemAlarmRepeatCheck.setOnCheckedChangeListener { _, isChecked ->
                 listener?.onAlarmRepeatCheck(alarm, isChecked)
-                if(isChecked){
+                if (isChecked) {
                     itemAlarmDaysList.visibility = View.VISIBLE
                 } else {
                     itemAlarmDaysList.visibility = View.GONE
                 }
             }
-
         }
     }
 
@@ -113,9 +112,9 @@ class AlarmsListAdapter(
         itemAlarmDay.setOnClickListener {
             listener?.onAlarmDaySelected(alarm, day)
         }
-        if(alarm.listActifDays.contains(day)) {
+        if (alarm.listActifDays.contains(day)) {
             itemAlarmDay.textColor = R.color.texte_bouton
-  //          itemAlarmDay.background = itemAlarmDay.resources.getColor(R.color.transparent, null)
+            //          itemAlarmDay.background = itemAlarmDay.resources.getColor(R.color.transparent, null)
         } else {
             itemAlarmDay.textColor = R.color.colorPrimary
 //            itemAlarmDay.background = itemAlarmDay.resources.getColor(R.color.transparent, null)

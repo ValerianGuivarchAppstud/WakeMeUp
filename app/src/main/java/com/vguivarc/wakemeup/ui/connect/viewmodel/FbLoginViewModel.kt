@@ -12,7 +12,7 @@ import com.vguivarc.wakemeup.data.repository.Repository
  * @property repo
  * @constructor Create empty Fb login view model
  */
-class FbLoginViewModel(val repo : Repository) : ViewModel() {
+class FbLoginViewModel(val repo: Repository) : ViewModel() {
 
     private val _loginResultState = MediatorLiveData<ConnectResult>()
 
@@ -37,7 +37,6 @@ class FbLoginViewModel(val repo : Repository) : ViewModel() {
     fun login(accessToken: AccessToken) {
         repo.signInWithCredential(accessToken)
     }
-
 
     /**
      * Disconnect

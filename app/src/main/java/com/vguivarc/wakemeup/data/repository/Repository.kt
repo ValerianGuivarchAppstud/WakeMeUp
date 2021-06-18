@@ -7,29 +7,25 @@ import androidx.lifecycle.MutableLiveData
 import com.facebook.AccessToken
 import com.facebook.GraphRequest
 import com.facebook.HttpMethod
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.LinkFirebaseAndFacebookIds
+import com.vguivarc.wakemeup.domain.entity.Ringing
 import com.vguivarc.wakemeup.domain.entity.UserModel
+import com.vguivarc.wakemeup.notification.NotificationMusicMe
 import com.vguivarc.wakemeup.ui.connect.viewmodel.ConnectResult
 import com.vguivarc.wakemeup.ui.contact.FacebookResult
-import com.vguivarc.wakemeup.notification.NotificationMusicMe
-import com.vguivarc.wakemeup.ui.song.Song
-import com.vguivarc.wakemeup.domain.entity.Favorite
-import com.vguivarc.wakemeup.ui.music.VideoFavoriResult
 import com.vguivarc.wakemeup.ui.search.SearchYouTubeOneSong
 import com.vguivarc.wakemeup.ui.search.VideoSearchResult
-import com.vguivarc.wakemeup.domain.entity.Ringing
+import com.vguivarc.wakemeup.ui.song.Song
 import com.vguivarc.wakemeup.util.AddFireBaseObjectResult
 import org.json.JSONException
 import timber.log.Timber
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 @Suppress("UNCHECKED_CAST")
 class Repository {
@@ -38,12 +34,12 @@ class Repository {
     /*************************************************/
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
 //    private var currentUser: UserModel? = null
-    private var currentUserLiveData= MutableLiveData<UserModel?>()
+    private var currentUserLiveData = MutableLiveData<UserModel?>()
     fun getCurrentUser() = currentUserLiveData.value
     val database: FirebaseDatabase = FirebaseDatabase.getInstance()
 
-    private fun getUserModelAfterConnection(){
-        if(auth.currentUser!=null) {
+    private fun getUserModelAfterConnection() {
+        if (auth.currentUser != null) {
             val reference =
                 database.getReference("Users")
                     .child(auth.currentUser!!.uid)
@@ -72,12 +68,8 @@ class Repository {
         getUserModelAfterConnection()
     }
 
-    fun getCurentUserLiveData() : LiveData<UserModel?> = currentUserLiveData
+    fun getCurentUserLiveData(): LiveData<UserModel?> = currentUserLiveData
     private val _signupResult = MutableLiveData<ConnectResult>()
-
-
-
-
 
     private fun createUserWithFacebook(accessToken: AccessToken) {
         val firebaseUser = auth.currentUser!!
@@ -88,63 +80,59 @@ class Repository {
         hashmap["username"] = firebaseUser.displayName.toString()
         hashmap["facebookId"] = accessToken.userId
 
-
-                reference.setValue(hashmap).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        val rootRef =
-                            database.reference.child("LinkFirebaseAndFacebookIds")
-                        val query: Query =
-                            rootRef.orderByChild("idFirebase").equalTo(auth.currentUser?.uid!!)
-                        query.addValueEventListener(object : ValueEventListener {
-                            override fun onCancelled(p0: DatabaseError) {
-                                _signupResult.value =
-                                    ConnectResult(error = R.string.signup_failed)
-                            }
-
-                            override fun onDataChange(p0: DataSnapshot) {
-                                if (p0.childrenCount.toInt() == 0) {
-                                    val referenceCont =
-                                        database.getReference("LinkFirebaseAndFacebookIds")
-                                    val link = LinkFirebaseAndFacebookIds(
-                                        auth.currentUser!!.uid,
-                                        accessToken.userId
-                                    )
-                                    val refLinkPush = referenceCont.push()
-                                    refLinkPush.setValue(link).addOnCompleteListener { it2 ->
-                                        if (it2.isSuccessful) {
-                                            _signupResult.value =
-                                                ConnectResult(auth.currentUser)
-                                        } else {
-                                            _signupResult.value =
-                                                ConnectResult(error = R.string.signup_failed)
-                                        }
-                                    }
-                                } else {
-                                    //TODO tester si l'id FB est tjr le même, si non, modifier.. A moins que ça soit jamais possible simplement ?
-                                    _signupResult.value =
-                                        ConnectResult(auth.currentUser)
-                                }
-                            }
-                        })
-                    } else {
+        reference.setValue(hashmap).addOnCompleteListener {
+            if (it.isSuccessful) {
+                val rootRef =
+                    database.reference.child("LinkFirebaseAndFacebookIds")
+                val query: Query =
+                    rootRef.orderByChild("idFirebase").equalTo(auth.currentUser?.uid!!)
+                query.addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
                         _signupResult.value =
                             ConnectResult(error = R.string.signup_failed)
+                    }
 
-                }
+                    override fun onDataChange(p0: DataSnapshot) {
+                        if (p0.childrenCount.toInt() == 0) {
+                            val referenceCont =
+                                database.getReference("LinkFirebaseAndFacebookIds")
+                            val link = LinkFirebaseAndFacebookIds(
+                                auth.currentUser!!.uid,
+                                accessToken.userId
+                            )
+                            val refLinkPush = referenceCont.push()
+                            refLinkPush.setValue(link).addOnCompleteListener { it2 ->
+                                if (it2.isSuccessful) {
+                                    _signupResult.value =
+                                        ConnectResult(auth.currentUser)
+                                } else {
+                                    _signupResult.value =
+                                        ConnectResult(error = R.string.signup_failed)
+                                }
+                            }
+                        } else {
+                            // TODO tester si l'id FB est tjr le même, si non, modifier.. A moins que ça soit jamais possible simplement ?
+                            _signupResult.value =
+                                ConnectResult(auth.currentUser)
+                        }
+                    }
+                })
+            } else {
+                _signupResult.value =
+                    ConnectResult(error = R.string.signup_failed)
+            }
         }
     }
-
 
     private val _loginResult = MutableLiveData<ConnectResult>()
     val loginResult: LiveData<ConnectResult> = _loginResult
 
-
     fun signInWithCredential(accessToken: AccessToken) {
         val credential = FacebookAuthProvider.getCredential(accessToken.token)
         auth.signInWithCredential(credential)
-            .addOnCompleteListener{
-                if (it.isSuccessful){
-                    when(credential.provider){
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    when (credential.provider) {
                         "facebook.com" -> {
                             createUserWithFacebook(accessToken)
                             _loginResult.value =
@@ -152,7 +140,7 @@ class Repository {
                         }
                         else -> {
                             _loginResult.value =
-                            ConnectResult(auth.currentUser)
+                                ConnectResult(auth.currentUser)
                         }
                     }
                     getUserModelAfterConnection()
@@ -166,7 +154,7 @@ class Repository {
             }
     }
 
-    //TODO quand disconnect, go activity connexion plutôt que laisser activity réveil pas connecté
+    // TODO quand disconnect, go activity connexion plutôt que laisser activity réveil pas connecté
 
     fun disconnect() {
         auth.signOut()
@@ -175,8 +163,6 @@ class Repository {
         _signupResult.value = null
         getUserModelAfterConnection()
     }
-
-
 
     /**************************************************/
     /******************** CONTACTS ********************/
@@ -239,8 +225,8 @@ class Repository {
                 AccessToken.getCurrentAccessToken()
             ) { _, _ ->
                 GraphRequest(
-                    AccessToken.getCurrentAccessToken(),  // "/me/friends",
-                    //"me/taggable_friends",
+                    AccessToken.getCurrentAccessToken(), // "/me/friends",
+                    // "me/taggable_friends",
                     getCurrentUser()!!.facebookId + "/friends",
                     null,
                     HttpMethod.GET
@@ -324,36 +310,32 @@ class Repository {
                                 contactListLiveData.value =
                                     ContactResult(contactList = contactsList)
                             }*/
-
                     } catch (e: JSONException) {
                         e.printStackTrace()
                     }
                 }.executeAsync()
-
             }
 
             val parameters = Bundle()
             parameters.putString("fields", "id,name,link,email,picture")
             request.parameters = parameters
             request.executeAsync()
-
         }
     }
-
 
     private fun getFacebookFriends(iter: MutableIterator<String>) {
         if (iter.hasNext()) {
             val fbId = iter.next()
 
             val rootRef =
-                database.reference.child("LinkFirebaseAndFacebookIds")//.equalTo(currentUser?.uid!!, "appartientA")
+                database.reference.child("LinkFirebaseAndFacebookIds") // .equalTo(currentUser?.uid!!, "appartientA")
             val query: Query =
                 rootRef.orderByChild("idFacebook").equalTo(fbId)
 
           /*  val referenceFb =
                 database.getReference("LinkFirebaseAndFacebookIds").orderByChild("idFacebook")
                     .equalTo(fbId)*/
-                 //   .child(auth.currentUser!!.uid)
+            //   .child(auth.currentUser!!.uid)
             query.addListenerForSingleValueEvent(
                 object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {}
@@ -381,10 +363,9 @@ class Repository {
                         }
                     }
                 })
-        }
-        else {
-            //getFixedFacebookFriends()
-            facebookListLiveData.value= FacebookResult(facebookFriendsList)
+        } else {
+            // getFixedFacebookFriends()
+            facebookListLiveData.value = FacebookResult(facebookFriendsList)
 /*          for(f in facebookFriendsList){
               Timber.e("FRIEND -> "+f.value.username)
 
@@ -396,8 +377,6 @@ class Repository {
           }*/
         }
     }
-
-
 
                   /*  favorisList.put(fbId.key!!, fav)
 
@@ -453,13 +432,9 @@ class Repository {
     private val historiqueLiveData = MutableLiveData<Map<String, Long>>()
     fun getVideoSearchHistorique(): MutableLiveData<Map<String, Long>> = historiqueLiveData
 
-
-
-
-    //TODO empêcher l'appel en double ici
+    // TODO empêcher l'appel en double ici
     private val _videoOneSearchResult = MutableLiveData<VideoSearchResult>()
     private var searchOneYouTube: SearchYouTubeOneSong? = null
-
 
     /*************************************************/
     /******************** FAVORIS*********************/
@@ -475,7 +450,6 @@ class Repository {
     /**************** SONNERIES RECUES ****************/
     /**************************************************/
 
-
     val listSonneriesEnAttente = mutableMapOf<String, Ringing>()
     val listSonneriesPassee = mutableMapOf<String, Ringing>()
     val listSonneriesEnvoyees = mutableListOf<Ringing>()
@@ -489,7 +463,6 @@ class Repository {
     fun getSonneriesEnvoyees(): LiveData<List<Ringing>> = listSonneriesEnvoyeesLiveData
     fun getListeVue(): LiveData<Boolean> = listeVueLiveData
 
-
     fun listeAffichee() {
         listeVueLiveData.value = false
     }
@@ -497,7 +470,7 @@ class Repository {
     fun updateSonneriesEnvoyees() {
 
         val rootRef =
-            database.reference.child("Sonnerie")//.equalTo(currentUser?.id!!, "appartientA")
+            database.reference.child("Sonnerie") // .equalTo(currentUser?.id!!, "appartientA")
 
         val query: Query =
             rootRef.orderByChild("senderId").equalTo(getCurrentUser()?.id!!)
@@ -517,10 +490,9 @@ class Repository {
         })
     }
 
-
     fun updateSonneriesRecues() {
         val rootRef =
-            database.reference.child("Sonnerie")//.equalTo(currentUser?.id!!, "appartientA")
+            database.reference.child("Sonnerie") // .equalTo(currentUser?.id!!, "appartientA")
         val query: Query =
             rootRef.orderByChild("idReceiver").equalTo(getCurrentUser()?.id!!)
         query.addValueEventListener(object : ValueEventListener {
@@ -553,17 +525,16 @@ class Repository {
                         )
                     } else {
 
-                                if (sonnerie.listened) {
-                                    addSonneriePassees(ds.key!!, sonnerie)
-                                } else {
-                                    addSonnerieEnAttente(ds.key!!, sonnerie)
-                                }
+                        if (sonnerie.listened) {
+                            addSonneriePassees(ds.key!!, sonnerie)
+                        } else {
+                            addSonnerieEnAttente(ds.key!!, sonnerie)
+                        }
                     }
                 }
             }
         })
     }
-
 
     fun addSonnerieEnAttente(
         keySonnerie: String,
@@ -599,7 +570,6 @@ class Repository {
     private val sonnerieStateAddResult = MutableLiveData<AddFireBaseObjectResult>()
     fun getSonnerieStateAddResult(): MutableLiveData<AddFireBaseObjectResult> =
         sonnerieStateAddResult
-
 
     fun addSonnerieToUser(
         song: Song,
@@ -707,21 +677,24 @@ class Repository {
         searchOneYouTube = SearchYouTubeOneSong(_videoOneSearchResult)
         searchOneYouTube!!.execute(favyt)
 
-        _videoOneSearchResult.observe(lco, {
-            if (it.error == null) {
-                val song = Song(
-                    it.searchList[0].id,
-                    it.searchList[0].title,
-                    it.searchList[0].artworkUrl
-                )
-                val rootRef = database.reference.child("Song").child(song.id)
-                rootRef.setValue(song).addOnCompleteListener { it2->
-                    if (it2.isSuccessful) {
-                       //// addFavori(song)
+        _videoOneSearchResult.observe(
+            lco,
+            {
+                if (it.error == null) {
+                    val song = Song(
+                        it.searchList[0].id,
+                        it.searchList[0].title,
+                        it.searchList[0].artworkUrl
+                    )
+                    val rootRef = database.reference.child("Song").child(song.id)
+                    rootRef.setValue(song).addOnCompleteListener { it2 ->
+                        if (it2.isSuccessful) {
+                            // // addFavori(song)
+                        }
                     }
                 }
             }
-        })
+        )
     }
 
     /**************************************************/
@@ -730,16 +703,15 @@ class Repository {
 
     val listNotifications = mutableMapOf<String, NotificationMusicMe>()
     private val listNotificationsLiveData = MutableLiveData<Map<String, NotificationMusicMe>>()
- //   private val notifVueLiveData = MutableLiveData<Boolean>()
+    //   private val notifVueLiveData = MutableLiveData<Boolean>()
 
     fun getNotifications(): LiveData<Map<String, NotificationMusicMe>> = listNotificationsLiveData
-    //fun getNotifVue(): LiveData<Boolean> = notifVueLiveData
-
+    // fun getNotifVue(): LiveData<Boolean> = notifVueLiveData
 
     fun notifAffichee() {
-     //   notifVueLiveData.value = false
+        //   notifVueLiveData.value = false
         val listNotifPasVues = listNotifications.filter { entry -> !entry.value.vue }
-        for(n in listNotifPasVues) {
+        for (n in listNotifPasVues) {
             val hopperRef: DatabaseReference = database.reference.child("Notification").child(n.key)
             val hopperUpdates: MutableMap<String, Any> = HashMap()
             hopperUpdates["vue"] = true
@@ -752,11 +724,9 @@ class Repository {
         val referenceNotif = database.getReference("Notification")
         val refNotifPush = referenceNotif.push()
         val e = refNotifPush.setValue(notification).exception
-        if(e!=null)
-        {
+        if (e != null) {
             Timber.e(e.toString())
         }
-
 
       /*  Timber.e("sendNotificationToUser ${notification.idReceiver}")
         sendNotificationToUser(notification.idReceiver, "Hi there puf!")
@@ -820,6 +790,4 @@ class Repository {
         database.getReference("Notification").child(notifKey).removeValue()
         updateNotification()
     }
-
-
 }

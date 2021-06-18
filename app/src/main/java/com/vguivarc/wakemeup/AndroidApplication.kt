@@ -22,7 +22,6 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
-
 class AndroidApplication : Application() {
 
     // TODO envoie de musique / réveille quelqu'un
@@ -39,30 +38,26 @@ class AndroidApplication : Application() {
     // TODO outil recherche, le "partage", ya pas les nombres d'envoies pour les amis
     // TODO les notifs repassent à rouge quand il y a une musique en moins, et pas que quand il y en a plus
 
-
     companion object {
-    /// var mFirebaseCrashlytics: FirebaseCrashlytics
+        // / var mFirebaseCrashlytics: FirebaseCrashlytics
 
-
-
-    //TODO delete la suite
+        // TODO delete la suite
         lateinit var repository: Repository
         const val NAME_FILE_HISTORIQUE = "historique.file"
 
-
         lateinit var appContext: Context
 
-        lateinit var  alarmAndroidSetterImpl : AlarmAndroidSetter.AlarmAndroidSetterImpl
+        lateinit var alarmAndroidSetterImpl: AlarmAndroidSetter.AlarmAndroidSetterImpl
 
         fun userMessageRegistration() {
-            if(FirebaseAuth.getInstance().currentUser==null){
+            if (FirebaseAuth.getInstance().currentUser == null) {
                 Timber.e("no user !")
             } else {
                 Timber.e("there is a user ! ${FirebaseAuth.getInstance().currentUser!!.uid}")
-                FirebaseMessaging.getInstance().subscribeToTopic("user_"+FirebaseAuth.getInstance().currentUser!!.uid)
+                FirebaseMessaging.getInstance().subscribeToTopic("user_" + FirebaseAuth.getInstance().currentUser!!.uid)
                     .addOnCompleteListener { task ->
                         Timber.e("user registration : ${task.isSuccessful}")
-                        Timber.e("user registration : ${"user_"+FirebaseAuth.getInstance().currentUser!!.uid}")
+                        Timber.e("user registration : ${"user_" + FirebaseAuth.getInstance().currentUser!!.uid}")
                     }
             }
         }
@@ -99,9 +94,9 @@ class AndroidApplication : Application() {
         }
         Paper.init(this)
 
-        //TODO suite
+        // TODO suite
         appContext = applicationContext
-        val notificationManage =  appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManage = appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannelReveil =
                 NotificationChannel(
@@ -115,8 +110,6 @@ class AndroidApplication : Application() {
         repository = Repository()
     }
 
-
-
     private fun initLogging() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -128,11 +121,10 @@ class AndroidApplication : Application() {
     private class CrashReportingTree : Timber.Tree() {
         override fun log(priority: Int, tag: String?, message: String, throwable: Throwable?) {
 //            val crashlytics = FirebaseCrashlytics.getInstance()
-  //          crashlytics.log(message)
+            //          crashlytics.log(message)
             if (throwable != null) {
-    //            crashlytics.recordException(throwable)
+                //            crashlytics.recordException(throwable)
             }
         }
     }
-
 }

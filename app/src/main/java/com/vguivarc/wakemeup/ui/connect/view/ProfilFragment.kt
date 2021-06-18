@@ -16,36 +16,32 @@ import com.facebook.login.widget.LoginButton
 import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.CurrentUserViewModel
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.ui.connect.viewmodel.FbLoginViewModel
 import com.vguivarc.wakemeup.repo.ViewModelFactory
+import com.vguivarc.wakemeup.ui.connect.viewmodel.FbLoginViewModel
 import com.vguivarc.wakemeup.util.Utility
-
 
 class ProfilFragment : Fragment() {
 
-
-    private lateinit var  callbackManager : CallbackManager
+    private lateinit var callbackManager: CallbackManager
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(requestCode, resultCode, data)
-
     }
 
     private lateinit var currentUserViewModel: CurrentUserViewModel
     private lateinit var fbLoginViewModel: FbLoginViewModel
 
-
-
-    private lateinit var currentView : View
+    private lateinit var currentView: View
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        currentView =  inflater.inflate(R.layout.profil_fragment, container, false)
+        currentView = inflater.inflate(R.layout.profil_fragment, container, false)
 
-       object : ProfileTracker() {
+        object : ProfileTracker() {
             override fun onCurrentProfileChanged(
                 oldProfile: Profile?,
                 currentProfile: Profile?
@@ -56,37 +52,39 @@ class ProfilFragment : Fragment() {
             }
         }
 
-      //  callbackManager = CallbackManager.Factory.create();
+        //  callbackManager = CallbackManager.Factory.create();
         val fbLoginButton = currentView.findViewById<LoginButton>(R.id.fb_login_button)
         fbLoginButton.setPermissions("user_friends")
         fbLoginButton.fragment = this
 
         callbackManager = CallbackManager.Factory.create()
 
-        fbLoginButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult?> {
-            override fun onSuccess(loginResult: LoginResult?) {
-                Utility.createSimpleToast("facebook:onSuccess - ${loginResult!!.accessToken.userId}")
-                fbLoginViewModel.login(loginResult.accessToken)
-            }
+        fbLoginButton.registerCallback(
+            callbackManager,
+            object : FacebookCallback<LoginResult?> {
+                override fun onSuccess(loginResult: LoginResult?) {
+                    Utility.createSimpleToast("facebook:onSuccess - ${loginResult!!.accessToken.userId}")
+                    fbLoginViewModel.login(loginResult.accessToken)
+                }
 
-            override fun onCancel() {
-                Utility.createSimpleToast("facebook:onCancel")
-            }
+                override fun onCancel() {
+                    Utility.createSimpleToast("facebook:onCancel")
+                }
 
-            override fun onError(exception: FacebookException) {
-                Utility.createSimpleToast("facebook:onError - ${exception.message!!}")
+                override fun onError(exception: FacebookException) {
+                    Utility.createSimpleToast("facebook:onError - ${exception.message!!}")
+                }
             }
-        })
+        )
 
         val factory = ViewModelFactory(AndroidApplication.repository)
-       fbLoginViewModel =
+        fbLoginViewModel =
             ViewModelProvider(this, factory).get(FbLoginViewModel::class.java)
 
         fbLoginViewModel.getLoginResultLiveData()
 
         currentUserViewModel =
             ViewModelProvider(this, factory).get(CurrentUserViewModel::class.java)
-
 
         currentUserViewModel.getCurrentUserLiveData().observe(
             requireActivity(),
@@ -111,9 +109,8 @@ class ProfilFragment : Fragment() {
                     )
                 }
                 AndroidApplication.userMessageRegistration()
-            })
+            }
+        )
         return currentView
     }
-
-
 }

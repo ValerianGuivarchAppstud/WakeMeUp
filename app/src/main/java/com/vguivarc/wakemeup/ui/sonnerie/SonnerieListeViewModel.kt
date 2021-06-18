@@ -2,8 +2,8 @@ package com.vguivarc.wakemeup.ui.sonnerie
 
 import androidx.lifecycle.*
 import com.vguivarc.wakemeup.data.repository.Repository
-import com.vguivarc.wakemeup.domain.entity.UserModel
 import com.vguivarc.wakemeup.domain.entity.Ringing
+import com.vguivarc.wakemeup.domain.entity.UserModel
 import com.vguivarc.wakemeup.ui.song.Song
 import com.vguivarc.wakemeup.util.AddFireBaseObjectResult
 
@@ -29,7 +29,6 @@ class SonnerieListeViewModel(val repo: Repository) : ViewModel() {
     fun getListeAttenteLiveData(): LiveData<Map<String, Ringing>> = sonneriesAttenteListeState
     fun getListeVueLiveData(): LiveData<Boolean> = listeVueListeState
 
-
     fun utilisationSonnerie(ringing: Ringing) {
         repo.utilisationSonnerie(ringing)
     }
@@ -46,19 +45,18 @@ class SonnerieListeViewModel(val repo: Repository) : ViewModel() {
         repo.deleteSonneriePassee(ringing)
     }
 
-    fun addSonnerieUrlToUser(lco : LifecycleOwner, url: String, contact: UserModel?, senderName : String?) {
+    fun addSonnerieUrlToUser(lco: LifecycleOwner, url: String, contact: UserModel?, senderName: String?) {
         repo.addSonnerieUrlToUser(lco, url, contact, senderName)
     }
 
-    fun addSonnerieToUser(song : Song, contact: UserModel) {
+    fun addSonnerieToUser(song: Song, contact: UserModel) {
         repo.addSonnerieToUser(song, contact)
     }
     fun getSonnerieStateAddResult(): MutableLiveData<AddFireBaseObjectResult> {
         return repo.getSonnerieStateAddResult()
     }
 
-    fun getSonneriesEnvoyees() : LiveData<List<Ringing>> {
+    fun getSonneriesEnvoyees(): LiveData<List<Ringing>> {
         return repo.getSonneriesEnvoyees()
     }
-
 }

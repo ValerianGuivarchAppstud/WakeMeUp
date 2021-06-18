@@ -5,18 +5,17 @@ import com.squareup.moshi.JsonClass
 import com.vguivarc.wakemeup.ui.song.Song
 import kotlinx.android.parcel.Parcelize
 
-
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class Ringing(
     var song: Song?,
     val dateSent: Long,
-    val listened : Boolean,
+    val listened: Boolean,
     val idReceiver: String,
     val senderId: String,
-    val senderName : String
+    val senderName: String
 
-    //var notificationRecu: Boolean = false
+    // var notificationRecu: Boolean = false
 ) : Parcelable {
 
     constructor(sentMusic: Ringing) : this(

@@ -12,13 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.entity.UserModel
-import com.vguivarc.wakemeup.ui.contact.ContactListeViewModel
-import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.domain.entity.Ringing
+import com.vguivarc.wakemeup.domain.entity.UserModel
+import com.vguivarc.wakemeup.repo.ViewModelFactory
+import com.vguivarc.wakemeup.ui.contact.ContactListeViewModel
 import com.vguivarc.wakemeup.ui.sonnerie.SonnerieListeViewModel
 
-class ContactsListeShareFragment : Fragment(),
+class ContactsListeShareFragment :
+    Fragment(),
     ContactListeShareAdapter.ContactListShareAdapterListener {
 
     private lateinit var viewModelContact: ContactListeViewModel
@@ -85,7 +86,8 @@ class ContactsListeShareFragment : Fragment(),
                     }
                 }
                 loading.visibility = View.GONE
-            })
+            }
+        )
 
         viewModelContact.getContacts()
 
@@ -105,7 +107,6 @@ class ContactsListeShareFragment : Fragment(),
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
-
 
        /* val song = ContactsListeShareFragmentArgs.fromBundle(requireArguments()).songToShare
         Picasso.get().load(song.artworkUrl).placeholder(R.drawable.music_placeholder)
@@ -135,5 +136,4 @@ class ContactsListeShareFragment : Fragment(),
         }
         adapter.notifyDataSetChanged()
     }
-
 }

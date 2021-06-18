@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.entity.UserModel
 import com.vguivarc.wakemeup.domain.entity.Ringing
+import com.vguivarc.wakemeup.domain.entity.UserModel
 
 class ContactListeShareAdapter(
     private val context: Context,
@@ -47,7 +47,7 @@ class ContactListeShareAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val contact = contacts.toList()[position].second
         with(holder) {
-            //item_contact_image.setImageDrawable((, null)))
+            // item_contact_image.setImageDrawable((, null)))
             itemContactNom.text = contact.username
 
             if (contact.imageUrl != "") {
@@ -73,7 +73,6 @@ class ContactListeShareAdapter(
             checkBoxContact.visibility = View.VISIBLE
             checkBoxContact.tag = contact
             checkBoxContact.setOnClickListener(this@ContactListeShareAdapter)
-
         }
     }
 
@@ -81,6 +80,5 @@ class ContactListeShareAdapter(
 
     override fun onClick(v: View) {
         listener?.onContactClicked(v.tag as UserModel, v)
-
     }
 }

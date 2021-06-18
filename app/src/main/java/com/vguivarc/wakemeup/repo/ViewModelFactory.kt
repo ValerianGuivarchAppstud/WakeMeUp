@@ -4,10 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.vguivarc.wakemeup.CurrentUserViewModel
 import com.vguivarc.wakemeup.data.repository.Repository
+import com.vguivarc.wakemeup.notification.NotifListeViewModel
 import com.vguivarc.wakemeup.ui.connect.viewmodel.FbLoginViewModel
 import com.vguivarc.wakemeup.ui.contact.ContactListeViewModel
-import com.vguivarc.wakemeup.notification.NotifListeViewModel
-import com.vguivarc.wakemeup.ui.search.SearchSongViewModel
 import com.vguivarc.wakemeup.ui.sonnerie.SonnerieListeViewModel
 
 @Suppress("UNCHECKED_CAST")

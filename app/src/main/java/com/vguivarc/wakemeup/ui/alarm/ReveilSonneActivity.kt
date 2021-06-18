@@ -19,9 +19,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.Alarm
-import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.domain.entity.Ringing
 import com.vguivarc.wakemeup.domain.service.AlarmAndroidSetter.Companion.EXTRA_ID
+import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.ui.sonnerie.SonnerieListeViewModel
 import com.vguivarc.wakemeup.util.Utility
 import kotlinx.android.synthetic.main.activity_reveil_sonne.*
@@ -35,15 +35,14 @@ import java.util.*
  */
 class ReveilSonneActivity : AppCompatActivity() {
 
-    private var mediaPlayer : MediaPlayer? = null
+    private var mediaPlayer: MediaPlayer? = null
     private val loading = MutableLiveData<Boolean>()
 
     private lateinit var audioManager: AudioManager
     private var initialVolume = 0
 
-    private var threadVolumeProgressif : Thread? = null
-    private var threadNoMusic : Thread? = null
-
+    private var threadVolumeProgressif: Thread? = null
+    private var threadNoMusic: Thread? = null
 
     private fun dealWithNoMusic(): Thread {
         class WorkerDealWithNoMusic(private val handler: Handler) : Runnable {
@@ -51,8 +50,7 @@ class ReveilSonneActivity : AppCompatActivity() {
                 try {
                     Thread.sleep(10_000)
                     handler.sendEmptyMessage(0)
-                } catch (e : InterruptedException){
-
+                } catch (e: InterruptedException) {
                 }
             }
         }
@@ -60,19 +58,19 @@ class ReveilSonneActivity : AppCompatActivity() {
         val handler = object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
                 super.handleMessage(msg)
-                threadVolumeProgressif= dealWithVolume()
-                    val resID = AndroidApplication.appContext.resources.getIdentifier("sonnerie_default1", "raw", AndroidApplication.appContext.packageName)
-                    mediaPlayer = MediaPlayer.create(AndroidApplication.appContext, resID)
+                threadVolumeProgressif = dealWithVolume()
+                val resID = AndroidApplication.appContext.resources.getIdentifier("sonnerie_default1", "raw", AndroidApplication.appContext.packageName)
+                mediaPlayer = MediaPlayer.create(AndroidApplication.appContext, resID)
                     /* audioManager.setStreamVolume(
                          AudioManager.STREAM_MUSIC, // Stream type
                          audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), // Volume index
                          AudioManager.FLAG_SHOW_UI// Flags
                      )*/
 
-                    mediaPlayer!!.start()
-                    textPasDeMusiqueAttente.visibility = View.VISIBLE
-                    senderView.visibility = View.INVISIBLE
-                    loading.postValue(false)
+                mediaPlayer!!.start()
+                textPasDeMusiqueAttente.visibility = View.VISIBLE
+                senderView.visibility = View.INVISIBLE
+                loading.postValue(false)
             }
         }
 
@@ -152,14 +150,13 @@ class ReveilSonneActivity : AppCompatActivity() {
 
     private var youTubePlayer: YouTubePlayer? = null
     private lateinit var youTubePlayerView: YouTubePlayerView
-    var currentRinging : Ringing? = null
+    var currentRinging: Ringing? = null
 
-    private lateinit var viewModelSonnerie : SonnerieListeViewModel
-    private lateinit var loadingView : ProgressBar
-    private lateinit var senderView : TextView
-    private lateinit var viewModelReveil : AlarmsViewModel
-    private lateinit var textPasDeMusiqueAttente : TextView
-
+    private lateinit var viewModelSonnerie: SonnerieListeViewModel
+    private lateinit var loadingView: ProgressBar
+    private lateinit var senderView: TextView
+    private lateinit var viewModelReveil: AlarmsViewModel
+    private lateinit var textPasDeMusiqueAttente: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -171,14 +168,17 @@ class ReveilSonneActivity : AppCompatActivity() {
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         initialVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
 
-        loading.observe(this, {
-            if(it){
-                loadingView.visibility = View.VISIBLE
-            } else {
-                loadingView.visibility = View.GONE
+        loading.observe(
+            this,
+            {
+                if (it) {
+                    loadingView.visibility = View.VISIBLE
+                } else {
+                    loadingView.visibility = View.GONE
+                }
             }
-        })
-        loading.value=true
+        )
+        loading.value = true
         youTubePlayerView.visibility = View.INVISIBLE
 
      /*   val request = OneTimeWorkRequest.Builder(SonnerieAlarmWorker::class.java)
@@ -230,21 +230,21 @@ class ReveilSonneActivity : AppCompatActivity() {
         viewModelSonnerie = ViewModelProvider(this, factory).get(SonnerieListeViewModel::class.java)
         viewModelReveil = ViewModelProvider(this, factory).get(AlarmsViewModel::class.java)
 
-      //  viewModelSonnerie.updateSonneries()
-
-
+        //  viewModelSonnerie.updateSonneries()
 
         threadNoMusic = dealWithNoMusic()
 
-        viewModelSonnerie.getListeAttenteLiveData().observe(this, {
-            if (it.isEmpty()) {
-                // pas de musique, ou pas encore chargé donc on fait rien
-            } else {
-                currentRinging = it.values.toMutableList()[0]
-                //Init du youTubePlayerView-----------------------------------------------------------------------
-                lifecycle.addObserver(youTubePlayerView)
-                Timber.e("ytPlayer")
-                senderView.text=this.getString(R.string.envoyee_par, currentRinging!!.senderName)
+        viewModelSonnerie.getListeAttenteLiveData().observe(
+            this,
+            {
+                if (it.isEmpty()) {
+                    // pas de musique, ou pas encore chargé donc on fait rien
+                } else {
+                    currentRinging = it.values.toMutableList()[0]
+                    // Init du youTubePlayerView-----------------------------------------------------------------------
+                    lifecycle.addObserver(youTubePlayerView)
+                    Timber.e("ytPlayer")
+                    senderView.text = this.getString(R.string.envoyee_par, currentRinging!!.senderName)
 
                 /*audioManager.setStreamVolume(
                     AudioManager.STREAM_MUSIC, // Stream type
@@ -252,41 +252,40 @@ class ReveilSonneActivity : AppCompatActivity() {
                     AudioManager.FLAG_SHOW_UI// Flags
                 )*/
 
-                youTubePlayerView.addYouTubePlayerListener(object :
-                    AbstractYouTubePlayerListener() {
-                    override fun onError(
-                        youTubePlayer: YouTubePlayer,
-                        error: PlayerConstants.PlayerError
-                    ) {
-                        super.onError(youTubePlayer, error)
-                        Timber.e("Error YT %s", error.name)
-                        Timber.e("Error YT %s", currentRinging)
-                        Timber.e("Error YT %s", currentRinging!!.song!!.id)
-                        //TODO musique par défaut -> marche pas, error se lance pas si pas internet
+                    youTubePlayerView.addYouTubePlayerListener(object :
+                            AbstractYouTubePlayerListener() {
+                            override fun onError(
+                                youTubePlayer: YouTubePlayer,
+                                error: PlayerConstants.PlayerError
+                            ) {
+                                super.onError(youTubePlayer, error)
+                                Timber.e("Error YT %s", error.name)
+                                Timber.e("Error YT %s", currentRinging)
+                                Timber.e("Error YT %s", currentRinging!!.song!!.id)
+                                // TODO musique par défaut -> marche pas, error se lance pas si pas internet
+                            }
 
-                    }
-
-                    override fun onReady(youTubePlayer: YouTubePlayer) {
-                        this@ReveilSonneActivity.youTubePlayer = youTubePlayer
-                        Timber.e("Ready musique")
-                        prepareSong(currentRinging!!)
-                        youTubePlayerView.visibility=View.VISIBLE
-                        loading.value = false
-                        //WorkManager.getInstance(AppWakeUp.appContext).cancelAllWork()
-                        threadNoMusic?.interrupt()
-                        threadVolumeProgressif= dealWithVolume()
-                    }
-                })
-                //-------------------------------------------------------------------------------------------------
-
+                            override fun onReady(youTubePlayer: YouTubePlayer) {
+                                this@ReveilSonneActivity.youTubePlayer = youTubePlayer
+                                Timber.e("Ready musique")
+                                prepareSong(currentRinging!!)
+                                youTubePlayerView.visibility = View.VISIBLE
+                                loading.value = false
+                                // WorkManager.getInstance(AppWakeUp.appContext).cancelAllWork()
+                                threadNoMusic?.interrupt()
+                                threadVolumeProgressif = dealWithVolume()
+                            }
+                        })
+                    // -------------------------------------------------------------------------------------------------
+                }
             }
-        })
+        )
 
-        //Initialisation des valeures de la date et heure----
-        val calendar : Calendar = Calendar.getInstance()
+        // Initialisation des valeures de la date et heure----
+        val calendar: Calendar = Calendar.getInstance()
 
         val jour = calendar.get(Calendar.DAY_OF_MONTH)
-        val moisTxt = when(calendar.get(Calendar.MONTH) +1){
+        val moisTxt = when (calendar.get(Calendar.MONTH) + 1) {
             1 -> "janvier"
             2 -> "février"
             3 -> "mars"
@@ -306,47 +305,45 @@ class ReveilSonneActivity : AppCompatActivity() {
         val minute = calendar.get(Calendar.MINUTE)
 
         date_sonnerie.text = "$jour / $moisTxt / $annee"
-        if (minute<10)
+        if (minute <10)
             heure_sonnerie.text = "$heure : 0$minute"
         else
             heure_sonnerie.text = "$heure : $minute"
-        //-----------------------------------------------------
+        // -----------------------------------------------------
 
-        //Gestion du bouton stop--------------------------------------
-        bouton_reveil_stop.setOnClickListener{
+        // Gestion du bouton stop--------------------------------------
+        bouton_reveil_stop.setOnClickListener {
             stop()
         }
-        //------------------------------------------------------------
+        // ------------------------------------------------------------
 
-        //Gestion du bouton snooze--------------------------------------------------------------
+        // Gestion du bouton snooze--------------------------------------------------------------
         bouton_reveil_snooze.setOnClickListener {
             snooze()
         }
-        //--------------------------------------------------------------------------------------
+        // --------------------------------------------------------------------------------------
 
-        //TODO pas de texte de snooze car lié à une activité qui s'arrête juste après
-        //--------------------------------------------------------------------------------------
-
+        // TODO pas de texte de snooze car lié à une activité qui s'arrête juste après
+        // --------------------------------------------------------------------------------------
     }
 
     private fun stop() {
         threadVolumeProgressif?.interrupt()
         threadNoMusic?.interrupt()
 
-        //WorkManager.getInstance(this).getWorkInfoById(requestVolume!!.id).cancel(true)
+        // WorkManager.getInstance(this).getWorkInfoById(requestVolume!!.id).cancel(true)
         audioManager.setStreamVolume(
             AudioManager.STREAM_MUSIC, // Stream type
             initialVolume, // Volume index
-            AudioManager.FLAG_SHOW_UI// Flags
+            AudioManager.FLAG_SHOW_UI // Flags
         )
 
-        if(mediaPlayer!=null){
+        if (mediaPlayer != null) {
             mediaPlayer!!.stop()
         }
         val idReveil = intent!!.getIntExtra(EXTRA_ID, -1)
         Timber.e("Stop : %s", idReveil.toString())
-        if(idReveil!=-1)
-        {
+        if (idReveil != -1) {
             Timber.e("Stop : %s", idReveil.toString())
             viewModelReveil.stopAlarm(idReveil)
             this.finish()
@@ -359,27 +356,25 @@ class ReveilSonneActivity : AppCompatActivity() {
         threadNoMusic?.interrupt()
     }
 
-    private fun snooze(){
+    private fun snooze() {
         val idReveil = intent!!.getIntExtra(EXTRA_ID, -1)
-        if(idReveil!=-1)
-        {
+        if (idReveil != -1) {
             viewModelReveil.snoozeAlarm(idReveil)
-            Utility.createSimpleToast(Alarm.getTextNextClock(System.currentTimeMillis() + (Alarm.DUREE_SNOOZE *60*1000)))
+            Utility.createSimpleToast(Alarm.getTextNextClock(System.currentTimeMillis() + (Alarm.DUREE_SNOOZE * 60 * 1000)))
             this.finish()
-            //TODO annuler le snooze via une icone
+            // TODO annuler le snooze via une icone
         }
     }
 
     private fun prepareSong(ringing: Ringing) {
         val song = ringing.song!!
 
-                if (youTubePlayer != null) {
-                    youTubePlayer!!.loadVideo(song.id,0f)//todo ajout lancement décallé ?
-                    youTubePlayerView.getPlayerUiController()
-                        .setVideoTitle(song.title)
-                }
-                viewModelSonnerie.utilisationSonnerie(ringing)
-
+        if (youTubePlayer != null) {
+            youTubePlayer!!.loadVideo(song.id, 0f) // todo ajout lancement décallé ?
+            youTubePlayerView.getPlayerUiController()
+                .setVideoTitle(song.title)
+        }
+        viewModelSonnerie.utilisationSonnerie(ringing)
     }
 
     override fun onBackPressed() {

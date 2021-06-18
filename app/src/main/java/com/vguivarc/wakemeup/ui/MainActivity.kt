@@ -14,7 +14,6 @@ import com.vguivarc.wakemeup.util.navigation.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.core.component.KoinComponent
 
-
 private const val DEEPLINK_TOPIC_KEY = "tochange"
 
 class MainActivity : BaseActivity(), KoinComponent {
@@ -25,16 +24,15 @@ class MainActivity : BaseActivity(), KoinComponent {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
 //        setTheme(R.style.AppTheme)
 
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         } else {
-        // Else, need to wait for onRestoreInstanceState
-           }
-        //showBottomNav(true)
+            // Else, need to wait for onRestoreInstanceState
+        }
+        // showBottomNav(true)
         intent?.extras?.let { extras ->
             handleDeeplink(extras)
         }

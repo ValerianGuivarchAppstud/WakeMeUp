@@ -10,5 +10,4 @@ interface AlarmService {
     fun stopAlarm(idAlarm: Int)
     fun remove(alarm: Alarm)
     fun switchReveil(alarm: Alarm)
-
 }

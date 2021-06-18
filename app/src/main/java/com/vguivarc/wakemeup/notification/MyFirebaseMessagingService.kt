@@ -21,7 +21,6 @@ import com.vguivarc.wakemeup.ui.MainActivity
 import com.vguivarc.wakemeup.util.Utility
 import timber.log.Timber
 
-
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     /**
@@ -44,7 +43,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Timber.e("From: ${remoteMessage.from}")
 
-
         // Check if message contains a data payload.
         remoteMessage.data.isNotEmpty().let {
             /*if (/* Check if data needs to be processed by long running job */ false) {
@@ -56,7 +54,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             Timber.e("Sender: ${remoteMessage.data.get("sender")}")
             Timber.e("Type: ${remoteMessage.data.get("notificationType")}")
             handleNow(remoteMessage.data)
-            //}
+            // }
         }
 
         // Check if message contains a notification payload.
@@ -81,7 +79,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-           sendRegistrationToServer(token)
+        sendRegistrationToServer(token)
     }
 
     /**
@@ -93,11 +91,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * param token The new token.
      */
     private fun sendRegistrationToServer(token: String?) {
-        if(token!=null)
-        FirebaseMessaging.getInstance().subscribeToTopic(token)
-            .addOnCompleteListener { task ->
-                Timber.e("token registration : ${task.isSuccessful}")
-            }
+        if (token != null)
+            FirebaseMessaging.getInstance().subscribeToTopic(token)
+                .addOnCompleteListener { task ->
+                    Timber.e("token registration : ${task.isSuccessful}")
+                }
     }
 
     /**
@@ -105,23 +103,21 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      */
     private fun handleNow(data: MutableMap<String, String>) {
 
-        val sender=data.get("sender")!!
-        val notificationType=data.get("notificationType")!!
+        val sender = data.get("sender")!!
+        val notificationType = data.get("notificationType")!!
         val urlPicture = data.get("urlPicture")!!
         val usernameSender = data.get("usernameSender")!!
-        //val json = JSONObject(data["data"]!!)
-        //val sender = data.values.toList()[0]//sender
-        //val notificationType = data.values.toList()[1] //notificationType
-        //if (AnnonceMessagerieFragment.currentDisplayedDiscussionId != discussionId)
-            notificationAnnonce(sender, notificationType, urlPicture, usernameSender)
+        // val json = JSONObject(data["data"]!!)
+        // val sender = data.values.toList()[0]//sender
+        // val notificationType = data.values.toList()[1] //notificationType
+        // if (AnnonceMessagerieFragment.currentDisplayedDiscussionId != discussionId)
+        notificationAnnonce(sender, notificationType, urlPicture, usernameSender)
     }
 
-    var notificationChannel: NotificationChannel? =null
+    var notificationChannel: NotificationChannel? = null
     lateinit var builder: Notification
     val channelId = "com.vguivarc.wakemeup.notification"
     val description = "Nouveau(s) message(s)"
-
-
 
     private fun notificationAnnonce(
         sender: String,
@@ -131,7 +127,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     ) {
         val mainActivityIntent = Intent(this.application, MainActivity::class.java)
 
-        //mainActivityIntent.putExtra("notificationId", notificationId)
+        // mainActivityIntent.putExtra("notificationId", notificationId)
         mainActivityIntent.putExtra("notificationType", notificationType)
         mainActivityIntent.data = (Uri.parse("foobar://" + SystemClock.elapsedRealtime()))
         val pi = PendingIntent.getActivity(applicationContext, 0, mainActivityIntent, 0)
@@ -139,14 +135,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val notificationManage = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val texte = when(notificationType){
+        val texte = when (notificationType) {
             NotificationMusicMe.NotificationType.ENVOIE_MUSIQUE.name -> AndroidApplication.appContext.resources.getString(R.string.envoie_musique, usernameSender)
             NotificationMusicMe.NotificationType.SONNERIE_UTILISEE.name -> AndroidApplication.appContext.resources.getString(R.string.sonnerie_utilisee, usernameSender)
             else -> ""
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if(notificationChannel==null) {
+            if (notificationChannel == null) {
                 notificationChannel =
                     NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_LOW)
                 notificationChannel!!.enableLights(true)
@@ -169,9 +165,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 .setAutoCancel(true)
                 .build()
             notificationManage.notify(0, builder)
-
-        }
-        else{
+        } else {
             Timber.e("bad")
             @Suppress("DEPRECATION")
             builder = Notification.Builder(applicationContext)

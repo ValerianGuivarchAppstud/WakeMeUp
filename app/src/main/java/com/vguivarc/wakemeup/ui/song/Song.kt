@@ -5,12 +5,11 @@ import com.hsuaxo.rxtube.YTContent
 import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
-
 @Parcelize
 @JsonClass(generateAdapter = true)
 class Song(
-    val id: String= "",
-    val title: String ="",
+    val id: String = "",
+    val title: String = "",
     var artworkUrl: String = ""
 ) : Comparable<Song>, Parcelable {
 

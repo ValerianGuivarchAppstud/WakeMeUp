@@ -41,30 +41,31 @@ class NotifsListeAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val index = notifs.toList().size-position-1
+        val index = notifs.toList().size - position - 1
         val notif = notifs.toList()[index].second
         with(holder) {
             notifCardView.tag = notif
-            if(notif.urlPicture!="") {
+            if (notif.urlPicture != "") {
                 Glide.with(AndroidApplication.appContext)
                     .load(notif.urlPicture)
                     .into(idItemNotifProfil)
             } else {
                 idItemNotifProfil.setImageDrawable(
-                    ContextCompat.getDrawable(AndroidApplication.appContext, R.drawable.empty_picture_profil))
+                    ContextCompat.getDrawable(AndroidApplication.appContext, R.drawable.empty_picture_profil)
+                )
             }
             nomSenderNotifLink.text = "  ${notif.usernameSender}  "
             nomSenderNotifLink.setOnClickListener {
-                if(notif.idSender!=null && contacts.containsKey(notif.idSender)){
-                listener?.onSenderClicked(contacts.get(notif.idSender)!!)
-                    }
+                if (notif.idSender != null && contacts.containsKey(notif.idSender)) {
+                    listener?.onSenderClicked(contacts.get(notif.idSender)!!)
+                }
             }
-            idItemNotifTitreText.text = when(notif.type){
-                NotificationMusicMe.NotificationType.ENVOIE_MUSIQUE ->" t'a envoyé une sonnerie."
-                NotificationMusicMe.NotificationType.SONNERIE_UTILISEE ->" a été réveillé par ta sonnerie : "+(notif.sonnerieName!!)
+            idItemNotifTitreText.text = when (notif.type) {
+                NotificationMusicMe.NotificationType.ENVOIE_MUSIQUE -> " t'a envoyé une sonnerie."
+                NotificationMusicMe.NotificationType.SONNERIE_UTILISEE -> " a été réveillé par ta sonnerie : " + (notif.sonnerieName!!)
             }
             idItemNotifDelete.setOnClickListener {
-                listener?.onNotifDelete( notifs.toList()[index].first)
+                listener?.onNotifDelete(notifs.toList()[index].first)
             }
         }
     }

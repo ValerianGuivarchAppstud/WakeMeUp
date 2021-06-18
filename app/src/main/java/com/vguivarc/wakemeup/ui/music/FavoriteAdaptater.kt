@@ -10,10 +10,9 @@ import com.squareup.picasso.Picasso
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.Favorite
 
-
-//----------------------------------------------------------------//
-//CET ADAPTATER EST POUR LES FAVORIS//
-//----------------------------------------------------------------//
+// ----------------------------------------------------------------//
+// CET ADAPTATER EST POUR LES FAVORIS//
+// ----------------------------------------------------------------//
 
 class FavoriteAdaptater(
     private var favoriteList: List<Favorite>,
@@ -45,11 +44,10 @@ class FavoriteAdaptater(
         val song = favoriteList[position].song!!
         holder.tvTitle.text = song.title
 
-        //TODO remplacer par l'autre, glide ?
+        // TODO remplacer par l'autre, glide ?
         Picasso.get().load(song.artworkUrl).placeholder(R.drawable.music_placeholder).into(holder.ivArtwork)
         holder.bind(favoriteList[position], listener)
     }
-
 
     interface RecyclerItemClickListener {
         fun onPlayListener(recherche: Favorite, position: Int)
@@ -71,6 +69,4 @@ class FavoriteAdaptater(
             ivDelete.setOnClickListener { listener.onDeleteListener(song, layoutPosition) }
         }
     }
-
-
 }

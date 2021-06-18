@@ -11,7 +11,6 @@ import com.vguivarc.wakemeup.ui.alarm.AlertReceiver
 import timber.log.Timber
 import java.util.*
 
-
 /**
  * Created by Yuriy on 24.06.2017.
  */
@@ -49,17 +48,19 @@ interface AlarmAndroidSetter {
 
         override fun setUpRTCAlarm(id: Int, typeName: String, calendar: Calendar) {
             val pendingAlarm = Intent(ACTION_FIRED)
-                    .apply {
-                        setClass(mContext, AlertReceiver::class.java)
-                        putExtra(EXTRA_ID, id)
-                        putExtra(EXTRA_TYPE, typeName)
-                    }
-                    .let { PendingIntent.getBroadcast(
+                .apply {
+                    setClass(mContext, AlertReceiver::class.java)
+                    putExtra(EXTRA_ID, id)
+                    putExtra(EXTRA_TYPE, typeName)
+                }
+                .let {
+                    PendingIntent.getBroadcast(
                         mContext,
                         pendingAlarmRequestCode,
                         it,
                         PendingIntent.FLAG_UPDATE_CURRENT
-                    ) }
+                    )
+                }
 
             setAlarmStrategy.setRTCAlarm(calendar, pendingAlarm)
         }
@@ -74,16 +75,18 @@ interface AlarmAndroidSetter {
 
         override fun setInexactAlarm(id: Int, calendar: Calendar) {
             val pendingAlarm = Intent(ACTION_INEXACT_FIRED)
-                    .apply {
-                        setClass(mContext, AlertReceiver::class.java)
-                        putExtra(EXTRA_ID, id)
-                    }
-                    .let { PendingIntent.getBroadcast(
+                .apply {
+                    setClass(mContext, AlertReceiver::class.java)
+                    putExtra(EXTRA_ID, id)
+                }
+                .let {
+                    PendingIntent.getBroadcast(
                         mContext,
                         id,
                         it,
                         PendingIntent.FLAG_UPDATE_CURRENT
-                    ) }
+                    )
+                }
 
           /*  val icon: Int = R.drawable.main_logo_white
             val tickerText: CharSequence = "Music Me!"
@@ -100,7 +103,6 @@ interface AlarmAndroidSetter {
                 PendingIntent.getActivity(this@MainActivity, 0, notificationIntent, 0)
 
             notification.setLatestEventInfo(this@MainActivity, "Titre", "Texte", contentIntent)*/
-
 
             setAlarmStrategy.setInexactAlarm(calendar, pendingAlarm)
         }
@@ -153,7 +155,7 @@ interface AlarmAndroidSetter {
         @TargetApi(Build.VERSION_CODES.O)
         private inner class OreoSetter : ISetAlarmStrategy {
             override fun setRTCAlarm(calendar: Calendar, pendingIntent: PendingIntent) {
-            //TODO IMPORTANT check Android 8.0  (probablement tout passer en inexact)
+                // TODO IMPORTANT check Android 8.0  (probablement tout passer en inexact)
             /*   val pendingShowList = PendingIntent.getActivity(
                         mContext,
                         100500,

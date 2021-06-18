@@ -18,9 +18,7 @@ class CurrentUserViewModel(val repo: Repository) : ViewModel() {
         }
     }
 
-
     fun addFavoriString(mainActivity: MainActivity, favyt: String) {
         repo.addFavoriString(mainActivity, favyt)
     }
-
 }

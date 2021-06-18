@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.entity.UserModel
 import com.vguivarc.wakemeup.domain.entity.Ringing
+import com.vguivarc.wakemeup.domain.entity.UserModel
 
 class ContactListeAdapter(
     private val context: Context,
@@ -23,7 +23,7 @@ class ContactListeAdapter(
     private var sonneriesPassees: MutableList<Ringing>,
     private val listener: ContactListAdapterListener?
 ) : RecyclerView.Adapter<ContactListeAdapter.ViewHolder>(),
-    View.OnClickListener{
+    View.OnClickListener {
 
     interface ContactListAdapterListener {
         fun onContactClicked(contact: UserModel, itemView: View)
@@ -47,25 +47,26 @@ class ContactListeAdapter(
         with(holder) {
             cardViewContact.tag = contact
             cardViewContact.setOnClickListener(this@ContactListeAdapter)
-            //item_contact_image.setImageDrawable((, null)))
+            // item_contact_image.setImageDrawable((, null)))
             itemContactNom.text = contact.username
 
-            if(contact.imageUrl!="") {
+            if (contact.imageUrl != "") {
                 Glide.with(context)
                     .load(contact.imageUrl)
                     .into(itemContactImage)
             } else {
                 itemContactImage.setImageDrawable(
-                    ContextCompat.getDrawable(context, R.drawable.empty_picture_profil))
+                    ContextCompat.getDrawable(context, R.drawable.empty_picture_profil)
+                )
             }
 
-            val recu = sonneriesAttente.filter { son -> son.senderId==contact.id }.size + sonneriesPassees.filter { son -> son.senderId==contact.id }.size
-            val envoye = sonneriesEnvoyees.filter { son -> son.idReceiver==contact.id }.size
+            val recu = sonneriesAttente.filter { son -> son.senderId == contact.id }.size + sonneriesPassees.filter { son -> son.senderId == contact.id }.size
+            val envoye = sonneriesEnvoyees.filter { son -> son.idReceiver == contact.id }.size
             val txtEnvoye = AndroidApplication.appContext.resources.getQuantityString(R.plurals.musique_envoyée, recu)
             val txtRecu = AndroidApplication.appContext.resources.getQuantityString(R.plurals.musique_recu, envoye)
             val final = "$txtEnvoye $envoye - $txtRecu $recu"
 
-            itemContactMusiqueEnvoyee.text =final
+            itemContactMusiqueEnvoyee.text = final
         }
     }
 
@@ -73,7 +74,5 @@ class ContactListeAdapter(
 
     override fun onClick(v: View) {
         listener?.onContactClicked(v.tag as UserModel, v)
-
-
     }
 }

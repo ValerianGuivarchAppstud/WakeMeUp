@@ -13,15 +13,16 @@ import com.vguivarc.wakemeup.ui.sonnerie.SonnerieListeViewModel
 
 class ContactFragment : Fragment() {
 
-    private lateinit var viewModelContact : ContactListeViewModel
-    private lateinit var favoriButton : Button
-    private lateinit var viewModelSonnerie : SonnerieListeViewModel
+    private lateinit var viewModelContact: ContactListeViewModel
+    private lateinit var favoriButton: Button
+    private lateinit var viewModelSonnerie: SonnerieListeViewModel
 
-    private var  currentUser : UserModel? = null
+    private var currentUser: UserModel? = null
     private lateinit var currentUserViewModel: CurrentUserViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
@@ -105,6 +106,5 @@ class ContactFragment : Fragment() {
 
 */
         return view
-
     }
 }

@@ -17,7 +17,7 @@ class AlarmRepository : AlarmService {
 
     init {
         val alarmList = readAll()
-        Alarm.idCount = alarmList.maxByOrNull { it -> it.idAlarms }?.idAlarms?: 0
+        Alarm.idCount = alarmList.maxByOrNull { it -> it.idAlarms }?.idAlarms ?: 0
         alarms.value = alarmList
     }
 

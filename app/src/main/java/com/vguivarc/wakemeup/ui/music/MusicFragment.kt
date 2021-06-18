@@ -17,17 +17,16 @@ import com.vguivarc.wakemeup.base.Success
 import com.vguivarc.wakemeup.domain.entity.Favorite
 import org.koin.android.ext.android.inject
 
-
-class MusicFragment : BaseLceFragment(R.layout.fragment_favori_list),
+class MusicFragment :
+    BaseLceFragment(R.layout.fragment_favori_list),
     FavoriteAdaptater.RecyclerItemClickListener {
 
     private var favoriteList = mutableListOf<Favorite>()
     private lateinit var favoriteAdapter: FavoriteAdaptater
 
-    //private lateinit var youTubePlayerView: YouTubePlayerView
+    // private lateinit var youTubePlayerView: YouTubePlayerView
     private val viewModelFavorite: FavoriteViewModel by inject()
     private lateinit var recyclerView: RecyclerView
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,9 +59,9 @@ class MusicFragment : BaseLceFragment(R.layout.fragment_favori_list),
         favoriteAdapter.setFavoriteList(favoriteList)
     }
 
-    //--------------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------
 
-    //Initialisation du YoutubePlayer----------------------------------------------------------
+    // Initialisation du YoutubePlayer----------------------------------------------------------
     /*    youTubePlayerView = currentView.findViewById(R.id.youtube_player_view)
         lifecycle.addObserver(youTubePlayerView)
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
@@ -84,9 +83,9 @@ class MusicFragment : BaseLceFragment(R.layout.fragment_favori_list),
             }
         })*/
 
-    //-----------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------
 
-    //Gestion des differents boutons----------------------------------------
+    // Gestion des differents boutons----------------------------------------
     /* ensembleVideo = currentView.findViewById(R.id.EnsembleVideo)
      btSupprimer = currentView.findViewById(R.id.list_video_supprimer_favori)
      btPartage = currentView.findViewById(R.id.list_video_partage)
@@ -97,12 +96,11 @@ class MusicFragment : BaseLceFragment(R.layout.fragment_favori_list),
 
      //Enlever le youyube player et le bouton au debut---
      ensembleVideo.visibility = View.GONE*/
-    //--------------------------------------------------
+    // --------------------------------------------------
 
-    //--------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------
 
-
-    //TODO créer classe abstraite ou créer classe BouttonPartage
+    // TODO créer classe abstraite ou créer classe BouttonPartage
 /*
     //Gestion du clic sur le bouton suprimer
     private fun gestionBoutonSupprimer(){
@@ -144,7 +142,6 @@ class MusicFragment : BaseLceFragment(R.layout.fragment_favori_list),
     }
 */
 
-
     override fun onPlayListener(recherche: Favorite, position: Int) {
         startActivity(
             Intent(
@@ -170,8 +167,4 @@ class MusicFragment : BaseLceFragment(R.layout.fragment_favori_list),
             }
             .setNeutralButton("Annuler") { _, _ -> }.create().show()
     }
-
-
 }
-
-

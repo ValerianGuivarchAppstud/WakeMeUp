@@ -1,13 +1,10 @@
 package com.vguivarc.wakemeup.ui.search
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.hsuaxo.rxtube.YTResult
 import com.vguivarc.wakemeup.base.*
 import com.vguivarc.wakemeup.domain.service.SongService
-import com.vguivarc.wakemeup.ui.song.Song
-import com.vguivarc.wakemeup.util.SortedListType
 import com.vguivarc.wakemeup.util.applySchedulers
 import io.reactivex.rxkotlin.addTo
 import java.util.*
@@ -17,7 +14,6 @@ class SearchSongViewModel(private val songService: SongService) : BaseViewModel(
     private val _songList = MutableLiveData<Resource<YTResult>>()
     val songList: LiveData<Resource<YTResult>>
         get() = _songList
-
 
     fun getFavoriteList(searchText: String) {
         songService.getSong(searchText)

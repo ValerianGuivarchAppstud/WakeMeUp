@@ -12,15 +12,14 @@ import timber.log.Timber
 
 class ReveilSonneService : Service() {
 
-    companion object{
+    companion object {
         const val CHANNEL_ID = "ReveilChannelId"
     }
 
-    private var idReveil : Int = 0
+    private var idReveil: Int = 0
 
-
-    var notificationId : Int = 0
-    lateinit var not : Notification
+    var notificationId: Int = 0
+    lateinit var not: Notification
 
     override fun onCreate() {
         super.onCreate()
@@ -33,7 +32,6 @@ class ReveilSonneService : Service() {
             startForeground(notificationId, not)
         }
         stopSelf()
-
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -47,10 +45,7 @@ class ReveilSonneService : Service() {
         return START_NOT_STICKY
     }
 
-
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
-
-
 }

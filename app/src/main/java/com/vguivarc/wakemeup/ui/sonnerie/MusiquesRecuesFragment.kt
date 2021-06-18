@@ -18,15 +18,13 @@ class MusiquesRecuesFragment : Fragment() {
     private var fragmentMusiquesPassees: MusiquesPasseesFragment? = null
     private var fragmentMusiquesAttente: MusiquesAttenteFragment? = null
 
-
-
-    //Gestion du clic sur le bouton En attente ou Passees
-    private fun gestionSwitchAttentePassees(){
+    // Gestion du clic sur le bouton En attente ou Passees
+    private fun gestionSwitchAttentePassees() {
         val btEnAttente = currentView.bouton_musiques_en_attente
         val btPassees = currentView.bouton_musiques_passees
 
         btEnAttente.setOnClickListener {
-            if (!btEnAttente.isActivated){
+            if (!btEnAttente.isActivated) {
 
                 btEnAttente.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark))
                 btEnAttente.setTextColor(ContextCompat.getColor(requireContext(), R.color.texte))
@@ -42,7 +40,7 @@ class MusiquesRecuesFragment : Fragment() {
         }
 
         btPassees.setOnClickListener {
-            if (!btPassees.isActivated){
+            if (!btPassees.isActivated) {
                 btPassees.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark))
                 btPassees.setTextColor(ContextCompat.getColor(requireContext(), R.color.texte))
 
@@ -57,14 +55,12 @@ class MusiquesRecuesFragment : Fragment() {
         }
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         currentView = inflater.inflate(R.layout.fragment_musiques_recues, container, false)
-
 
         return currentView
     }
@@ -73,7 +69,6 @@ class MusiquesRecuesFragment : Fragment() {
         gestionSwitchAttentePassees()
         showFirstFragment()
     }
-
 
     // ---------------------
     // FRAGMENTS
@@ -97,8 +92,6 @@ class MusiquesRecuesFragment : Fragment() {
             FragmentId.FRAGMENT_ATTENTE -> this.showAttenteFragment()
         }
     }
-
-
 
     // ---
 
@@ -138,12 +131,11 @@ class MusiquesRecuesFragment : Fragment() {
         findNavController().navigate(action)*/
 
 //        val action = MusiquesPasseesFragmentDirections.actionMusiquesPasseesFragmentToContactsListeShareFragment(sonnerie.song!!)
-  //      findNavController().navigate(action)
-
+        //      findNavController().navigate(action)
     }
 
     fun name(user: UserModel?) {
-        if(user!=null){
+        if (user != null) {
 
            /* val action =
                 com.vguivarc.wakemeup.sonnerie.MusiquesRecuesFragmentDirections.actionMusiquesRecuesFragmentToContactFragment(
@@ -153,7 +145,6 @@ class MusiquesRecuesFragment : Fragment() {
         }
     }
 
-
     companion object {
 
         enum class FragmentId {
@@ -162,5 +153,3 @@ class MusiquesRecuesFragment : Fragment() {
         }
     }
 }
-
-

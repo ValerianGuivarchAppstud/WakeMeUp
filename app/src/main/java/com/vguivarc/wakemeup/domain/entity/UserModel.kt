@@ -8,10 +8,8 @@ class UserModel(
     val id: String,
     val imageUrl: String,
     val username: String,
-    val facebookId : String
+    val facebookId: String
 ) : Parcelable {
 
-
     constructor() : this("", "", "", "")
-
 }

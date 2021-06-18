@@ -12,8 +12,6 @@ class YoutubeFavori : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_youtube_favori)
 
-
-
         val extras = intent.extras
 
         val intent = Intent(this, MainActivity::class.java)
@@ -29,6 +27,5 @@ class YoutubeFavori : AppCompatActivity() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
-
     }
 }

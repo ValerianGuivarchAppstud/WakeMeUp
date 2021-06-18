@@ -1,7 +1,6 @@
 package com.vguivarc.wakemeup.ui.search
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -22,15 +21,14 @@ import com.vguivarc.wakemeup.domain.entity.Favorite
 import com.vguivarc.wakemeup.ui.music.FavoriteViewModel
 import com.vguivarc.wakemeup.ui.song.Song
 import com.vguivarc.wakemeup.ui.song.SongAdapter
-import com.vguivarc.wakemeup.util.Utility
 import kotlinx.android.synthetic.main.search_video_fragment.*
 import org.koin.android.ext.android.inject
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-class SearchSongFragment : BaseLceFragment(R.layout.search_video_fragment),
+class SearchSongFragment :
+    BaseLceFragment(R.layout.search_video_fragment),
     SongAdapter.SongItemClickListener {
 
     private lateinit var youTubePlayerView: YouTubePlayerView
@@ -38,13 +36,11 @@ class SearchSongFragment : BaseLceFragment(R.layout.search_video_fragment),
     private var currentIndex: Int = 0
     private var currentSong = MutableLiveData<Song?>()
 
-
-    //validé
+    // validé
     private val searchVideosList = mutableListOf<Song>()
     private lateinit var searchVideoAdapter: SongAdapter
     private val viewModelSearchVideo: SearchSongViewModel by inject()
     private val viewModelFavorite: FavoriteViewModel by inject()
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,7 +50,6 @@ class SearchSongFragment : BaseLceFragment(R.layout.search_video_fragment),
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = searchVideoAdapter
         searchVideoAdapter.notifyDataSetChanged()
-
 
         button_valid_search_song.setOnClickListener {
             viewModelSearchVideo.getFavoriteList(search.text.toString())
@@ -75,8 +70,7 @@ class SearchSongFragment : BaseLceFragment(R.layout.search_video_fragment),
             }
         )
 
-
-        //Si on est a la fin du recycler view---------------------------------------------------
+        // Si on est a la fin du recycler view---------------------------------------------------
         /*  recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
               override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                   super.onScrollStateChanged(recyclerView, newState)
@@ -85,10 +79,9 @@ class SearchSongFragment : BaseLceFragment(R.layout.search_video_fragment),
                   }
               }
           })*/
-        //---------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------
 
-
-        //Initialisation du YoutubePlayer----------------------------------------------------------
+        // Initialisation du YoutubePlayer----------------------------------------------------------
         youTubePlayerView = view.findViewById(R.id.youtube_player_view)
         lifecycle.addObserver(youTubePlayerView)
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
@@ -108,17 +101,16 @@ class SearchSongFragment : BaseLceFragment(R.layout.search_video_fragment),
                         } ?: run {
                             youTubePlayerView.visibility = View.GONE
                         }
-                    })
+                    }
+                )
             }
         }
         )
     }
 
+    // --------------------------------------------------
 
-            //--------------------------------------------------
-
-
-            //Gestion du clic sur le bouton partage
+    // Gestion du clic sur le bouton partage
             /* private fun gestionBoutonPartage(){
                 btPartage.setOnClickListener {
                      if (AndroidApplication.repository.getCurrentUser()==null) {
@@ -143,19 +135,18 @@ class SearchSongFragment : BaseLceFragment(R.layout.search_video_fragment),
                  }
              }*/
 
-//TODO historique marche pas, et inversion alphabétique et date ajout
-            //TODO quand on descend ça marche pas
-            //TODO remettre le dernier truc cherché dans la barre de recherche
-            @SuppressLint("LogNotTimber")
-            override fun onSongPictureClickListener(position: Int) {
-                searchVideoAdapter.notifyItemChanged(searchVideoAdapter.selectedPosition)
-                currentIndex = position
-                searchVideoAdapter.selectedPosition = currentIndex
-                searchVideoAdapter.notifyItemChanged(currentIndex)
-                currentSong.value = searchVideoAdapter.getSongWithPosition(position)
-                ////////viewModelSearchVideo.setCurrentSong(position)
-            }
-
+// TODO historique marche pas, et inversion alphabétique et date ajout
+    // TODO quand on descend ça marche pas
+    // TODO remettre le dernier truc cherché dans la barre de recherche
+    @SuppressLint("LogNotTimber")
+    override fun onSongPictureClickListener(position: Int) {
+        searchVideoAdapter.notifyItemChanged(searchVideoAdapter.selectedPosition)
+        currentIndex = position
+        searchVideoAdapter.selectedPosition = currentIndex
+        searchVideoAdapter.notifyItemChanged(currentIndex)
+        currentSong.value = searchVideoAdapter.getSongWithPosition(position)
+        // //////viewModelSearchVideo.setCurrentSong(position)
+    }
 
     private fun getNowTxt(): String {
         val dateFormat: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
@@ -164,9 +155,11 @@ class SearchSongFragment : BaseLceFragment(R.layout.search_video_fragment),
     }
     override fun onSongFavoriteClickListener(position: Int) {
         viewModelFavorite.addFavorite(
-            Favorite(getNowTxt(),
+            Favorite(
+                getNowTxt(),
                 searchVideoAdapter.getSongWithPosition(position),
-                "bernard")
+                "bernard"
+            )
         )
     }
 
@@ -174,8 +167,7 @@ class SearchSongFragment : BaseLceFragment(R.layout.search_video_fragment),
         TODO("Not yet implemented")
     }
 
-
     private fun refreshUI(ytResult: YTResult) {
-                searchVideoAdapter.setYTResult(ytResult)
-            }
+        searchVideoAdapter.setYTResult(ytResult)
     }
+}

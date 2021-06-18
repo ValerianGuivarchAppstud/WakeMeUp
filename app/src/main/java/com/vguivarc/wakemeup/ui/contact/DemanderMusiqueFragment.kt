@@ -1,16 +1,11 @@
 package com.vguivarc.wakemeup.ui.contact
 
-import android.content.ComponentName
-import android.content.Intent
-import android.content.pm.ResolveInfo
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -20,18 +15,15 @@ import com.google.firebase.database.ValueEventListener
 import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.CurrentUserViewModel
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.entity.LienMusicMe
 import com.vguivarc.wakemeup.domain.entity.UserModel
 import com.vguivarc.wakemeup.repo.ViewModelFactory
-import timber.log.Timber
-import java.sql.Timestamp
 
-//TODO refaire ça : le lien donne sur le site mais peut être ouvert dans l'appli (ça génère un truc partageable en mode Facebook ?)
-//TODO ajouter le fait de demander par notif ?
+// TODO refaire ça : le lien donne sur le site mais peut être ouvert dans l'appli (ça génère un truc partageable en mode Facebook ?)
+// TODO ajouter le fait de demander par notif ?
 class DemanderMusiqueFragment : Fragment() {
     private lateinit var username: String
 
-    private var  currentUser : UserModel? = null
+    private var currentUser: UserModel? = null
     private lateinit var currentUserViewModel: CurrentUserViewModel
 
     override fun onCreateView(
@@ -47,39 +39,41 @@ class DemanderMusiqueFragment : Fragment() {
         currentUserViewModel =
             ViewModelProvider(this, factory).get(CurrentUserViewModel::class.java)
 
-        currentUserViewModel.getCurrentUserLiveData().observe(requireActivity(), {
-            currentUser=it
-            if (currentUser==null) {
-                view.findViewById<TextView>(R.id.id_partage_text_pas_connecte).visibility= View.VISIBLE
-                view.findViewById<ConstraintLayout>(R.id.id_partage_ensemble_connecte).visibility= View.GONE
-            } else {
-                view.findViewById<TextView>(R.id.id_partage_text_pas_connecte).visibility= View.GONE
-                view.findViewById<ConstraintLayout>(R.id.id_partage_ensemble_connecte).visibility= View.VISIBLE
+        currentUserViewModel.getCurrentUserLiveData().observe(
+            requireActivity(),
+            {
+                currentUser = it
+                if (currentUser == null) {
+                    view.findViewById<TextView>(R.id.id_partage_text_pas_connecte).visibility = View.VISIBLE
+                    view.findViewById<ConstraintLayout>(R.id.id_partage_ensemble_connecte).visibility = View.GONE
+                } else {
+                    view.findViewById<TextView>(R.id.id_partage_text_pas_connecte).visibility = View.GONE
+                    view.findViewById<ConstraintLayout>(R.id.id_partage_ensemble_connecte).visibility = View.VISIBLE
+                }
             }
-        })
-        view.findViewById<ImageButton>(R.id.id_partage_bouton).setOnClickListener{
+        )
+        view.findViewById<ImageButton>(R.id.id_partage_bouton).setOnClickListener {
             partager()
         }
 
         return view
     }
 
+// TODO ajouter "partager" avec MusicMe
+    private fun partager() {
 
-//TODO ajouter "partager" avec MusicMe
-       private fun partager() {
+        if (currentUser != null) {
+            // on récupére l'user pour l'username
+            val referenceUsername =
+                AndroidApplication.repository.database.getReference("Users").child(currentUser!!.id)
 
-    if(currentUser!=null) {
-        //on récupére l'user pour l'username
-        val referenceUsername =
-            AndroidApplication.repository.database.getReference("Users").child(currentUser!!.id)
+            referenceUsername.addValueEventListener(
+                object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {}
 
-        referenceUsername.addValueEventListener(
-            object : ValueEventListener {
-                override fun onCancelled(p0: DatabaseError) {}
-
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val user: UserModel = dataSnapshot.getValue(UserModel::class.java)!!
-                    username = user.username
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val user: UserModel = dataSnapshot.getValue(UserModel::class.java)!!
+                        username = user.username
 /*
                     //création de la demande de musique
                     val reference = AndroidApplication.repository.database.getReference("LienMusicMe")
@@ -255,10 +249,8 @@ class DemanderMusiqueFragment : Fragment() {
                             Toast.makeText(context, "Pas d'application", Toast.LENGTH_SHORT).show()
                         }
                     }*/
-                }
-            })
-
-    }
-
+                    }
+                })
+        }
     }
 }

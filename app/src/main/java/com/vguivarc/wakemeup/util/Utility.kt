@@ -14,7 +14,6 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-
 object Utility {
 
     fun getBitmapFromURL(src: String?): Bitmap? {
@@ -31,7 +30,6 @@ object Utility {
         }
     }
 
-
     fun convertDuration(duration: Int): String {
 
         val minutes = duration / 60
@@ -40,14 +38,13 @@ object Utility {
         return String.format("%d:%02d", minutes, seconds)
     }
 
-    fun createSimpleToast(text: String){
+    fun createSimpleToast(text: String) {
         Toast.makeText(
             AndroidApplication.appContext,
             text,
             Toast.LENGTH_SHORT
         ).show()
     }
-
 }
 
 /**
@@ -65,10 +62,6 @@ fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
     })
 }
 
-
 fun Intent.putParcelableExtra(key: String, value: Parcelable) {
     putExtra(key, value)
 }
-
-
-

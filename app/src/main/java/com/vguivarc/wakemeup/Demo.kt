@@ -24,8 +24,8 @@ class Demo : AppIntro() {
                 description = "Connectez-vous pour accéder à toutes les fonctionnalités de l'application",
                 imageDrawable = R.drawable.demo1,
                 backgroundColor = resources.getColor(R.color.colorPrimary, theme)
-                //titleTypefaceFontRes = R.font.opensans_regular,
-                //descriptionTypefaceFontRes = R.font.opensans_regular,
+                // titleTypefaceFontRes = R.font.opensans_regular,
+                // descriptionTypefaceFontRes = R.font.opensans_regular,
             )
         )
         addSlide(
