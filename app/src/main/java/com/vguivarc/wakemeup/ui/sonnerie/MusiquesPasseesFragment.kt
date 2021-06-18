@@ -17,7 +17,7 @@ import com.vguivarc.wakemeup.domain.entity.UserModel
 import com.vguivarc.wakemeup.repo.ViewModelFactory
 import com.vguivarc.wakemeup.domain.entity.Favorite
 import com.vguivarc.wakemeup.domain.entity.Ringing
-import com.vguivarc.wakemeup.ui.favori.FavorisViewModel
+import com.vguivarc.wakemeup.ui.music.FavoriteViewModel
 import kotlinx.android.synthetic.main.fragment_musiques_passees.view.*
 
 class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemClickListener {
@@ -34,7 +34,7 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
 
 
     private lateinit var viewModelSonneries: SonnerieListeViewModel
-    private lateinit var viewModelFavoris: FavorisViewModel
+    private lateinit var viewModelFavorite: FavoriteViewModel
     private val listMusicPass = mutableListOf<Ringing>()
     private val listMusicFav = mutableListOf<Favorite>()
 
@@ -49,12 +49,12 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
             { nouvelleListe ->
                 updateMusiqueListe(nouvelleListe)
             })
-        viewModelFavoris = ViewModelProvider(requireActivity(), factory).get(FavorisViewModel::class.java)
-        viewModelFavoris.getFavoriVideosLiveData().observe(
+        viewModelFavorite = ViewModelProvider(requireActivity(), factory).get(FavoriteViewModel::class.java)
+        /*viewModelFavorite.getFavoriVideosLiveData().observe(
             viewLifecycleOwner,
             { nouvelleListe ->
                 updateFavorisListe(nouvelleListe.favoriList)
-            })
+            })*/
 
     }
 
@@ -132,10 +132,10 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
     }
 
     override fun onFavoriListener(ringing: Ringing, position: Int) {
-        if(listMusicFav.filter { fav -> fav.song!!.id == ringing.song!!.id }.isEmpty())
-            viewModelFavoris.addFavori(ringing.song!!)
+        /*if(listMusicFav.filter { fav -> fav.song!!.id == ringing.song!!.id }.isEmpty())
+            viewModelFavorite.addFavori(ringing.song!!)
         else
-            viewModelFavoris.deleteFavori(ringing.song!!)
+            viewModelFavorite.deleteFavori(ringing.song!!)*/
     }
 
     override fun onShareListener(ringing: Ringing, position: Int) {

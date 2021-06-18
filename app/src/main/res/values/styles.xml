@@ -32,21 +32,27 @@
 
     <style name="snooze">
         <item name="android:background">@drawable/snooze</item>
-        <item name="android:backgroundTint">@color/reveil_snooze</item>
+        <item name="android:backgroundTint">@color/alarm_snooze</item>
     </style>
 
     <style name="stop">
         <item name="android:background">@drawable/alarm_note_off</item>
-        <item name="android:backgroundTint">@color/reveil_stop</item>
-    </style>
-
-    <style name="AppTheme.ItemReveil">
+        <item name="android:backgroundTint">@color/alarm_stop</item>
     </style>
 
     <style name="AppTheme.BoutonItem">
         <item name="android:tint">@color/colorPrimary</item>
     </style>
 
+    <style name="AppTheme.BoutonDay" parent="AppTheme">
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/texte_bouton</item>
+        <item name="android:textSize">@dimen/text_very_small</item>
+        <item name="android:background">@drawable/round_button</item>
+    </style>
     <style name="AppTheme.HeureJours">
         <item name="android:textStyle">italic</item>
         <item name="android:textSize">12sp</item>

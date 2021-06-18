@@ -9,17 +9,22 @@ import com.google.api.client.json.jackson2.JacksonFactory
 
 import com.google.api.services.youtube.YouTube
 import com.google.api.services.youtube.model.SearchResult
+import com.vguivarc.wakemeup.base.Fail
+import com.vguivarc.wakemeup.base.Loading
+import com.vguivarc.wakemeup.base.Resource
+import com.vguivarc.wakemeup.base.Success
 import com.vguivarc.wakemeup.ui.song.Song
 import com.vguivarc.wakemeup.ui.song.YouTubeConfig
 
 import java.io.IOException
 import java.security.GeneralSecurityException
 
+/*
+class SearchYouTube(private val videoSearchResult : MutableLiveData<Resource<List<Song>>>) : AsyncTask<String, Void, String>() {
 
-class SearchYouTube(private val videoSearchResultLiveData : MutableLiveData<VideoSearchResult>) : AsyncTask<String, Void, String>() {
-
-    lateinit var  result: VideoSearchResult
+    lateinit var  result: Resource<List<Song>>
     override fun doInBackground(vararg searchWord: String): String {
+        videoSearchResult.postValue(Loading())
         result = try {
             val reponse =
                 InternalSearchYouTube.search(
@@ -30,16 +35,15 @@ class SearchYouTube(private val videoSearchResultLiveData : MutableLiveData<Vide
             for(sr in reponse){
                 songList.add(Song(sr))
             }
-
-            VideoSearchResult(songList)
+            Success<List<Song>>(songList)
         } catch (e: Exception) {
-            VideoSearchResult(error = e)
+            Fail(e)
         }
         return ""
     }
 
     override fun onPostExecute(r: String?) {
-        videoSearchResultLiveData.postValue(result)
+        videoSearchResult.postValue(result)
     }
 
 
@@ -97,4 +101,4 @@ object InternalSearchYouTube {
         return response.items
     }
 }
-}
+}*/

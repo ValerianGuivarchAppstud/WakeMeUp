@@ -78,4 +78,16 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_connectivity_exception_user_message">pas de connection</string>
     <string name="error_retry">error_retry_todo</string>
+
+
+    <string name="first_letter_monday">L</string>
+    <string name="first_letter_tuesday">M</string>
+    <string name="first_letter_wednesday">M</string>
+    <string name="first_letter_thursday">J</string>
+    <string name="first_letter_friday">V</string>
+    <string name="first_letter_saturday">S</string>
+    <string name="first_letter_sunday">D</string>
+    <string name="musique">Musiques</string>
+    <string name="historique">Historique</string>
+    <string name="settings">Paramètres</string>
 </resources>

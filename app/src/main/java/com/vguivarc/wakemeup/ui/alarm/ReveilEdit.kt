@@ -9,7 +9,7 @@ import com.vguivarc.wakemeup.domain.entity.Alarm
 import com.vguivarc.wakemeup.util.putParcelableExtra
 import kotlinx.android.synthetic.main.activity_reveil_edit.*
 import java.util.*
-
+/*
 class ReveilEdit : AppCompatActivity() {
 
     private lateinit var alarm: Alarm
@@ -47,23 +47,23 @@ class ReveilEdit : AppCompatActivity() {
                     }
                     1 -> {
                         alarm.listActifDays = mutableListOf(
-                            Alarm.DaysWeek.Lundi,
-                            Alarm.DaysWeek.Mardi,
-                            Alarm.DaysWeek.Mercredi,
-                            Alarm.DaysWeek.Jeudi,
-                            Alarm.DaysWeek.Vendredi
+                            Alarm.DaysWeek.Monday,
+                            Alarm.DaysWeek.Tuesday,
+                            Alarm.DaysWeek.Wednesday,
+                            Alarm.DaysWeek.Thursday,
+                            Alarm.DaysWeek.Friday
                         )
                         alarm.repetition = Alarm.ReveilMode.Semaine
                     }
                     2 -> {
                         alarm.listActifDays = mutableListOf(
-                            Alarm.DaysWeek.Lundi,
-                            Alarm.DaysWeek.Mardi,
-                            Alarm.DaysWeek.Mercredi,
-                            Alarm.DaysWeek.Jeudi,
-                            Alarm.DaysWeek.Vendredi,
-                            Alarm.DaysWeek.Samedi,
-                            Alarm.DaysWeek.Dimanche
+                            Alarm.DaysWeek.Monday,
+                            Alarm.DaysWeek.Tuesday,
+                            Alarm.DaysWeek.Wednesday,
+                            Alarm.DaysWeek.Thursday,
+                            Alarm.DaysWeek.Friday,
+                            Alarm.DaysWeek.Saturday,
+                            Alarm.DaysWeek.Sunday
                         )
                         alarm.repetition = Alarm.ReveilMode.TousLesJours
                     }
@@ -73,11 +73,11 @@ class ReveilEdit : AppCompatActivity() {
                         builder2.setTitle("Jours de la semaine")
                         val listDaySelected = mutableListOf<Alarm.DaysWeek>()
                         if (alarm.repetition != Alarm.ReveilMode.Personnalise) {
-                            listDaySelected.add(Alarm.DaysWeek.Lundi)
-                            listDaySelected.add(Alarm.DaysWeek.Mardi)
-                            listDaySelected.add(Alarm.DaysWeek.Mercredi)
-                            listDaySelected.add(Alarm.DaysWeek.Jeudi)
-                            listDaySelected.add(Alarm.DaysWeek.Vendredi)
+                            listDaySelected.add(Alarm.DaysWeek.Monday)
+                            listDaySelected.add(Alarm.DaysWeek.Tuesday)
+                            listDaySelected.add(Alarm.DaysWeek.Wednesday)
+                            listDaySelected.add(Alarm.DaysWeek.Thursday)
+                            listDaySelected.add(Alarm.DaysWeek.Friday)
                         } else {
                             listDaySelected.addAll(alarm.listActifDays)
                         }
@@ -85,13 +85,13 @@ class ReveilEdit : AppCompatActivity() {
 
                         // add a checkbox list
                         val daysWeek = arrayOf(
-                            Alarm.DaysWeek.Lundi.name,
-                            Alarm.DaysWeek.Mardi.name,
-                            Alarm.DaysWeek.Mercredi.name,
-                            Alarm.DaysWeek.Jeudi.name,
-                            Alarm.DaysWeek.Vendredi.name,
-                            Alarm.DaysWeek.Samedi.name,
-                            Alarm.DaysWeek.Dimanche.name
+                            Alarm.DaysWeek.Monday.name,
+                            Alarm.DaysWeek.Tuesday.name,
+                            Alarm.DaysWeek.Wednesday.name,
+                            Alarm.DaysWeek.Thursday.name,
+                            Alarm.DaysWeek.Friday.name,
+                            Alarm.DaysWeek.Saturday.name,
+                            Alarm.DaysWeek.Sunday.name
                         )
 
                         val checkedItems =
@@ -201,3 +201,4 @@ class ReveilEdit : AppCompatActivity() {
 
 
 }
+*/

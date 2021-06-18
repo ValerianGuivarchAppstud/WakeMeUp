@@ -28,7 +28,7 @@ class SearchYouTubeOneSong(private val videoSearchResultLiveData : MutableLiveDa
                 ) ?: mutableListOf()
             val songList = mutableListOf<Song>()
             for(sr in reponse){
-                songList.add(Song(sr))
+               // songList.add(Song(sr))
             }
             VideoSearchResult(songList)
         } catch (e: Exception) {

@@ -1,6 +1,7 @@
 package com.vguivarc.wakemeup.ui.alarm
 
 import android.app.*
+import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -11,15 +12,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.vguivarc.wakemeup.ui.MainActivity
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_reveil_list.view.*
 import com.vguivarc.wakemeup.domain.entity.Alarm
+import com.vguivarc.wakemeup.ui.MainActivity
+import kotlinx.android.synthetic.main.fragment_alarms_list.view.*
 import org.koin.android.ext.android.inject
+import java.util.*
 
 
-class AlarmsFragment : BaseFragment(R.layout.fragment_reveil_list), AlarmsListAdapter.AlarmsListAdapterListener {
+class AlarmsFragment : BaseFragment(R.layout.fragment_alarms_list), AlarmsListAdapter.AlarmsListAdapterListener {
 
     private val viewModel: AlarmsViewModel by inject()
 
@@ -93,7 +95,7 @@ class AlarmsFragment : BaseFragment(R.layout.fragment_reveil_list), AlarmsListAd
         savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
-        val view = inflater.inflate(R.layout.fragment_reveil_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_alarms_list, container, false)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.list_reveil)
         listAdapter = AlarmsListAdapter(alarms, this)
@@ -102,25 +104,39 @@ class AlarmsFragment : BaseFragment(R.layout.fragment_reveil_list), AlarmsListAd
         listAdapter.notifyDataSetChanged()
 
         view.bouton_add_reveil.setOnClickListener {
-
+            viewModel.save(Alarm())
         }
         return view
     }
 
 
-    override fun onAlarmClicked(alarm: Alarm, itemView: View) {
-/*
-        val intent = Intent(activity, ReveilEdit::class.java)
-        intent.putExtra(Alarm.NUM_REVEIL, alarm.idAlarms)
-        intent.putParcelableExtra(
-            Alarm.REVEIL, alarm
+    override fun onAlarmTimeClicked(alarm: Alarm) {
+        var hour =alarm.hour
+        var minute = alarm.minute
+        if (hour == -1) {
+            // Get Current Time
+            val c: Calendar = Calendar.getInstance()
+            alarm.hour = c.get(Calendar.HOUR_OF_DAY)
+            alarm.minute = c.get(Calendar.MINUTE)
+        }
+        // Time Set Listener.
+        val timeSetListener =
+            OnTimeSetListener { view, hourOfDay, minute ->
+                alarm.hour = hourOfDay
+                alarm.minute = minute
+                viewModel.save(alarm)
+            }
+
+        // Create TimePickerDialog:
+        var timePickerDialog: TimePickerDialog = TimePickerDialog(
+            requireContext(),
+            timeSetListener, alarm.hour, alarm.minute, true
         )
-        intent.putExtra("requestCode", Alarm.EDIT_REQUEST_CODE)
-        startActivityForResult(
-            intent,
-            Alarm.EDIT_REQUEST_CODE
-        )*/
+
+        // Show
+        timePickerDialog.show()
     }
+
 
     override fun onAlarmSwitched(alarm: Alarm) {
         viewModel.switchAlarm(alarm)
@@ -136,6 +152,20 @@ class AlarmsFragment : BaseFragment(R.layout.fragment_reveil_list), AlarmsListAd
         builder.setNeutralButton("Annuler") { _, _ -> }
         val dialog: AlertDialog = builder.create()
         dialog.show()
+    }
+
+    override fun onAlarmRepeatCheck(alarm: Alarm, isChecked: Boolean) {
+        alarm.isRepeated = isChecked
+        viewModel.save(alarm)
+    }
+
+    override fun onAlarmDaySelected(alarm: Alarm, day: Alarm.DaysWeek) {
+        if(alarm.listActifDays.contains(day)) {
+            alarm.listActifDays.remove(day)
+            } else {
+                alarm.listActifDays.add(day)
+        }
+        viewModel.save(alarm)
     }
 
     //TODO notif n'est pas le bon truc à faire pour ça

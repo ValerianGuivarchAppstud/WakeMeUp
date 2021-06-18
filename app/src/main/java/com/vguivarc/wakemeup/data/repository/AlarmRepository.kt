@@ -15,6 +15,12 @@ class AlarmRepository : AlarmService {
 
     private val alarms = MutableLiveData<List<Alarm>>()
 
+    init {
+        val alarmList = readAll()
+        Alarm.idCount = alarmList.maxByOrNull { it -> it.idAlarms }?.idAlarms?: 0
+        alarms.value = alarmList
+    }
+
     override fun getAlarms(): LiveData<List<Alarm>> = alarms
 
     override fun save(alarm: Alarm) {
@@ -47,8 +53,9 @@ class AlarmRepository : AlarmService {
         val existingAlarm = alarms.find { it.idAlarms == alarm.idAlarms }
         existingAlarm?.let {
             it.cancelAlarm() // check
-            alarms.remove(alarm)
+            alarms.remove(it)
         }
+        saveAll(alarms)
     }
 
     override fun switchReveil(alarm: Alarm) {
@@ -61,7 +68,8 @@ class AlarmRepository : AlarmService {
     }
 
     @Synchronized
-    fun saveAll(trips: List<Alarm>) {
-        Paper.book().write(KEY_ALARMS, trips)
+    fun saveAll(alarms: List<Alarm>) {
+        Paper.book().write(KEY_ALARMS, alarms)
+        this.alarms.value = readAll()
     }
 }

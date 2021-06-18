@@ -16,11 +16,11 @@ import kotlin.system.exitProcess
 @JsonClass(generateAdapter = true)
 class Alarm(
     var listActifDays: MutableList<DaysWeek> = mutableListOf(
-        DaysWeek.Lundi,
-        DaysWeek.Mardi,
-        DaysWeek.Mercredi,
-        DaysWeek.Jeudi,
-        DaysWeek.Vendredi
+        DaysWeek.Monday,
+        DaysWeek.Tuesday,
+        DaysWeek.Wednesday,
+        DaysWeek.Thursday,
+        DaysWeek.Friday
     ),
     var nextAlarmCalendar: Calendar = Calendar.getInstance().apply {
         set(Calendar.DAY_OF_YEAR, Calendar.getInstance().get(Calendar.DAY_OF_YEAR) + 1)
@@ -29,16 +29,26 @@ class Alarm(
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)
     },
-    private var hour: Int = 9,
-    private var minute: Int = 0,
     var isActif: Boolean = true,
-    var repetition: ReveilMode = ReveilMode.Semaine,
+    var isRepeated: Boolean = true,
     val idAlarms: Int = getUnicId()
 ) : Parcelable {
 
-    enum class ReveilMode {
-        PasDeRepetition, Semaine, TousLesJours, Personnalise
-    }
+    var hour : Int
+        get() {
+            return nextAlarmCalendar.get(Calendar.HOUR_OF_DAY)
+        }
+        set(value) {
+            nextAlarmCalendar.set(Calendar.HOUR_OF_DAY, value)
+        }
+
+    var minute : Int
+        get() {
+            return nextAlarmCalendar.get(Calendar.MINUTE)
+        }
+        set(value) {
+            nextAlarmCalendar.set(Calendar.MINUTE, value)
+        }
 
     fun getHeureTexte(): String {
         var texteHeure = "" + nextAlarmCalendar.get(Calendar.HOUR_OF_DAY) + ":"
@@ -49,21 +59,26 @@ class Alarm(
     }
 
     fun getJoursTexte(): String {
-        return if(repetition == ReveilMode.PasDeRepetition){
+        return if(isRepeated){
+            //TODO déterminer "aujourdhui ou demain"
             "[Pas de répétition]"
-        } else if (listActifDays.size == 7) {
-            "[Tous les jours]"
-        } else  {
-            listActifDays.toString()
+        } else {
+            if (listActifDays.size == 7) {
+                "[Tous les jours]"
+            } else  {
+                listActifDays.toString()
+            }
         }
     }
 
     enum class DaysWeek {
-        Lundi, Mardi, Mercredi, Jeudi, Vendredi, Samedi, Dimanche
+        Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
     }
 
 
     companion object {
+        var idCount = 1
+
         const val CREATE_REQUEST_CODE = 1
         const val EDIT_REQUEST_CODE = 2
         const val NUM_REVEIL: String = "NUM_REVEIL"
@@ -72,26 +87,18 @@ class Alarm(
         const val DUREE_SNOOZE : Int = 5
 
         private val listDaysInWeek = listOf(
-            DaysWeek.Dimanche,
-            DaysWeek.Lundi,
-            DaysWeek.Mardi,
-            DaysWeek.Mercredi,
-            DaysWeek.Jeudi,
-            DaysWeek.Vendredi,
-            DaysWeek.Samedi
+            DaysWeek.Sunday,
+            DaysWeek.Monday,
+            DaysWeek.Tuesday,
+            DaysWeek.Wednesday,
+            DaysWeek.Thursday,
+            DaysWeek.Friday,
+            DaysWeek.Saturday
         )
-
-
-        private var idCount = 1
 
         fun getUnicId(): Int {
             idCount += 1
             return idCount - 1
-        }
-
-        fun chargement(listeReveils: MutableMap<Int, Alarm>) {
-            idCount = listeReveils.keys.maxOrNull() ?: 0
-            idCount++
         }
 
         fun getTextNextClock(time : Long) : String{
@@ -167,7 +174,7 @@ class Alarm(
 
 
     fun stop(){
-        if(this.repetition!= ReveilMode.PasDeRepetition) {
+        if(isRepeated) {
             calculeNextCalendar()
             startAlarm()
         } else {
@@ -217,7 +224,7 @@ class Alarm(
         }
 
 
-        if(repetition== ReveilMode.PasDeRepetition){
+        if(isRepeated){
             while (now > nextAlarmCalendar) {
                 nextAlarmCalendar.set(Calendar.DAY_OF_YEAR, nextAlarmCalendar.get(Calendar.DAY_OF_YEAR) + 1)
             }

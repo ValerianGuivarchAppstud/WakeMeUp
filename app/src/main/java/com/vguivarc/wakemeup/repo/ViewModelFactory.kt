@@ -7,9 +7,7 @@ import com.vguivarc.wakemeup.data.repository.Repository
 import com.vguivarc.wakemeup.ui.connect.viewmodel.FbLoginViewModel
 import com.vguivarc.wakemeup.ui.contact.ContactListeViewModel
 import com.vguivarc.wakemeup.notification.NotifListeViewModel
-import com.vguivarc.wakemeup.ui.alarm.AlarmsViewModel
-import com.vguivarc.wakemeup.ui.favori.FavorisViewModel
-import com.vguivarc.wakemeup.ui.search.RechercheVideoViewModel
+import com.vguivarc.wakemeup.ui.search.SearchSongViewModel
 import com.vguivarc.wakemeup.ui.sonnerie.SonnerieListeViewModel
 
 @Suppress("UNCHECKED_CAST")
@@ -18,12 +16,7 @@ class ViewModelFactory(private val repository: Repository) :
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return when {
 
-            modelClass.isAssignableFrom(RechercheVideoViewModel::class.java) -> RechercheVideoViewModel(repository
-            )
             modelClass.isAssignableFrom(ContactListeViewModel::class.java) -> ContactListeViewModel(
-                repository
-            )
-                    modelClass.isAssignableFrom(FavorisViewModel::class.java) -> FavorisViewModel(
                 repository
             )
             modelClass.isAssignableFrom(SonnerieListeViewModel::class.java) -> SonnerieListeViewModel(

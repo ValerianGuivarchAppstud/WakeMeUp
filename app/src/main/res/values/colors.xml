@@ -14,8 +14,8 @@
        <color name="texte_bouton">#FFFFFF</color>
        <color name="texte_sonnerie">#EEEEEE</color>
        <color name="texte_desactive">#EEEEEE</color>
-       <color name="reveil_snooze">#00CC00</color>
-       <color name="reveil_stop">#CC0000</color>
+       <color name="alarm_snooze">#00CC00</color>
+       <color name="alarm_stop">#CC0000</color>
        <color name="transparent">#00FFFFFF</color>
 
 

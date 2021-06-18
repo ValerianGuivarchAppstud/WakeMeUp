@@ -2,7 +2,6 @@ package com.vguivarc.wakemeup.ui
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.LiveData
@@ -81,9 +80,9 @@ class MainActivity : BaseActivity(), KoinComponent {
 
         val navGraphIds = listOf(
             R.navigation.home_clock,
+            R.navigation.music,
             R.navigation.friends,
-            R.navigation.other,
-            R.navigation.share,
+            R.navigation.history,
             R.navigation.settings
         )
 

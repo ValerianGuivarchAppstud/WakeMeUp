@@ -7,21 +7,21 @@
             android:icon="@drawable/icon_main_menu_alarms"
             android:title="@string/reveils" />
         <item
-            android:id="@+id/friends_navigation"
-            android:icon="@drawable/icon_main_menu_friends"
-            android:title="@string/profil" />
-        <item
-            android:id="@+id/other_navigation"
-            android:icon="@drawable/icon_main_menu_favoris"
-            android:title="@string/favori" />
-        <item
-            android:id="@+id/share_navigation"
+            android:id="@+id/music_navigation"
             android:icon="@drawable/icon_main_menu_musiques"
-            android:title="@string/musiques_recues" />
+            android:title="@string/musique" />
         <item
             android:id="@+id/settings_navigation"
             android:icon="@drawable/ic_baseline_supervisor_account_24"
             android:title="@string/amis" />
+        <item
+            android:id="@+id/other_navigation"
+            android:icon="@drawable/ic_baseline_history_24"
+            android:title="@string/historique" />
+        <item
+            android:id="@+id/share_navigation"
+            android:icon="@drawable/ic_baseline_settings_24"
+            android:title="@string/settings" />
 
 
 </menu>

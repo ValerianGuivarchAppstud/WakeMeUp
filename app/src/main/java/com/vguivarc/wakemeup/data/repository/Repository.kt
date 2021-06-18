@@ -1,6 +1,5 @@
 package com.vguivarc.wakemeup.data.repository
 
-import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -12,27 +11,21 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.LinkFirebaseAndFacebookIds
 import com.vguivarc.wakemeup.domain.entity.UserModel
 import com.vguivarc.wakemeup.ui.connect.viewmodel.ConnectResult
 import com.vguivarc.wakemeup.ui.contact.FacebookResult
 import com.vguivarc.wakemeup.notification.NotificationMusicMe
-import com.vguivarc.wakemeup.domain.entity.Alarm
 import com.vguivarc.wakemeup.ui.song.Song
 import com.vguivarc.wakemeup.domain.entity.Favorite
-import com.vguivarc.wakemeup.ui.favori.VideoFavoriResult
-import com.vguivarc.wakemeup.ui.search.SearchYouTube
+import com.vguivarc.wakemeup.ui.music.VideoFavoriResult
 import com.vguivarc.wakemeup.ui.search.SearchYouTubeOneSong
 import com.vguivarc.wakemeup.ui.search.VideoSearchResult
 import com.vguivarc.wakemeup.domain.entity.Ringing
 import com.vguivarc.wakemeup.util.AddFireBaseObjectResult
 import org.json.JSONException
 import timber.log.Timber
-import java.io.FileNotFoundException
-import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -63,7 +56,7 @@ class Repository {
                         updateSonneriesEnvoyees()
                         updateSonneriesRecues()
                         updateNotification()
-                        getFavoris()
+
                         requestFacebookFriendData()
                     }
 
@@ -458,14 +451,9 @@ class Repository {
 
     private val historiqueList = mutableMapOf<String, Long>()
     private val historiqueLiveData = MutableLiveData<Map<String, Long>>()
-    private var lastSearch: String = ""
     fun getVideoSearchHistorique(): MutableLiveData<Map<String, Long>> = historiqueLiveData
 
 
-    private val _videoSearchResult = MutableLiveData<VideoSearchResult>()
-    private val videoSearchResult: LiveData<VideoSearchResult> = _videoSearchResult
-    fun getVideoSearchResult(): LiveData<VideoSearchResult> = videoSearchResult
-    private var searchYouTube: SearchYouTube? = null
 
 
     //TODO empêcher l'appel en double ici
@@ -473,129 +461,14 @@ class Repository {
     private var searchOneYouTube: SearchYouTubeOneSong? = null
 
 
-
-    fun searchVideos(query: String, nbRecherche: Int) {
-        lastSearch = query
-        searchYouTube = SearchYouTube(_videoSearchResult)
-        searchYouTube!!.execute(query, "" + nbRecherche)
-    }
-
-
     /*************************************************/
     /******************** FAVORIS*********************/
     /*************************************************/
-
-
-
-    private val favorisList = mutableMapOf<String, Favorite>()
-
-    private val favorisListLiveData = MutableLiveData<VideoFavoriResult>()
-    fun getFavorisListLiveData(): LiveData<VideoFavoriResult> = favorisListLiveData
-
-    private val favoriStateAddResult = MutableLiveData<AddFireBaseObjectResult>()
-    fun getFavoriStateAddResult(): MutableLiveData<AddFireBaseObjectResult> = favoriStateAddResult
-
-    //todo marche pas, le test de si le favori existe déjà
-    fun addFavori(song: Song) {
-        val rootRef =
-            database.reference.child("Favoris")//.equalTo(currentUser?.id!!, "appartientA")
-            val query: Query =
-                rootRef.orderByChild("appartientA").equalTo(getCurrentUser()?.id!!)
-            query.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onCancelled(p0: DatabaseError) {
-                }
-
-                override fun onDataChange(p0: DataSnapshot) {
-                    val list = p0.children.toList()
-                    if ((list.filter { fav -> fav.getValue(Favorite::class.java)!!.song!!.id == song.id }).isNotEmpty()) {
-                        favoriStateAddResult.value =
-                            AddFireBaseObjectResult(error = Exception("AlreadyExistingFavori"))
-                    } else {
-                        val referenceFav = database.getReference("Favoris")
-                        val favori = Favorite(getNowTxt(), song, getCurrentUser()!!.id)
-                        val rootRef2 = database.reference.child("Song").child(song.id)
-                        rootRef2.setValue(song).addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                val refFavPush = referenceFav.push()
-                                val keyFav = refFavPush.key!!
-                                refFavPush.setValue(favori).addOnCompleteListener { it2 ->
-                                    if (it2.isSuccessful) {
-                                        favoriStateAddResult.value =
-                                            AddFireBaseObjectResult(keyFav)
-                                    } else {
-                                        favoriStateAddResult.value =
-                                            AddFireBaseObjectResult(error = it2.exception)
-                                    }
-                                }
-                            } else {
-                                favoriStateAddResult.value =
-                                    AddFireBaseObjectResult(error = it.exception)
-                            }
-                        }
-                    }
-                }
-            })
-
-    }
-
-    fun deleteFavori(song: Song) {
-        val keyFavToDelete = favorisList.filterValues { it.song!!.id == song.id }.keys.toList()[0]
-        database.getReference("Favoris").child(keyFavToDelete).removeValue()
-    }
-
 
     private fun getNowTxt(): String {
         val dateFormat: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
         val date = Date()
         return dateFormat.format(date).toString()
-    }
-
-    fun getFavoris() {
-        val rootRef =
-            database.reference.child("Favoris")//.equalTo(currentUser?.id!!, "appartientA")
-
-        if (getCurrentUser() == null) {
-            favorisListLiveData.value = VideoFavoriResult()
-        } else {
-            val query: Query =
-                rootRef.orderByChild("appartientA").equalTo(getCurrentUser()?.id!!)
-
-            query.addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(p0: DatabaseError) {
-                    favorisListLiveData.value = VideoFavoriResult(error = p0.toException())
-                }
-
-                override fun onDataChange(p0: DataSnapshot) {
-                    favorisList.clear()
-                    if (p0.childrenCount.toInt() == 0) {
-                        favorisListLiveData.value =
-                            VideoFavoriResult(favoriList = favorisList)
-                    } else {
-                        val dataIterator = p0.children.iterator()
-                        //                    while (dataIterator.hasNext()) {
-                        getSongForFavori(dataIterator)
-//                        }
-                        //                      for (ds in p0.getChildren()) {
-
-                    }
-                }
-                //}
-            })
-        }
-    }
-
-    fun getSongForFavori(dataIterator: MutableIterator<DataSnapshot>) {
-        val ds = dataIterator.next()
-        val fav: Favorite = ds.getValue(Favorite::class.java)!!
-                    favorisList[ds.key!!] = fav
-
-                    if (dataIterator.hasNext()) {
-                        getSongForFavori(dataIterator)
-                    } else {
-                        favorisListLiveData.value =
-                            VideoFavoriResult(favoriList = favorisList)
-                    }
-
     }
 
     /**************************************************/
@@ -733,7 +606,7 @@ class Repository {
         contact: UserModel
     ) {
 
-        val sonnerie = Ringing(
+       /* val sonnerie = Ringing(
             song,
             Timestamp.now().seconds,
             false,
@@ -755,7 +628,7 @@ class Repository {
                 favoriStateAddResult.value =
                     AddFireBaseObjectResult(error = it.exception)
             }
-        }
+        }*/
     }
 
     fun addSonnerieUrlToUser(
@@ -764,6 +637,7 @@ class Repository {
         contact: UserModel?,
         senderName: String?
     ) {
+        /*
         //TODO pas possible d'ajouter pkus de X chansons en X temps ?
         val referenceSon = database.getReference("Sonnerie")
         val extractId = if (url.contains("youtu.be")) {
@@ -826,7 +700,7 @@ class Repository {
                 }
             }
             )
-        }
+        }*/
     }
 
     fun addFavoriString(lco: LifecycleOwner, favyt: String) {
@@ -843,7 +717,7 @@ class Repository {
                 val rootRef = database.reference.child("Song").child(song.id)
                 rootRef.setValue(song).addOnCompleteListener { it2->
                     if (it2.isSuccessful) {
-                        addFavori(song)
+                       //// addFavori(song)
                     }
                 }
             }
