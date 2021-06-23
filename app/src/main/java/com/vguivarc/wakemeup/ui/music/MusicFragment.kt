@@ -163,7 +163,7 @@ class MusicFragment :
         AlertDialog.Builder(requireContext()).setTitle("Supprimer favori")
             .setMessage("Voulez-vous supprimer \"" + recherche.song!!.title + "\" de vos favoris ?")
             .setPositiveButton("Supprimer") { _, _ ->
-                viewModelFavorite.deleteFavori(recherche)
+                viewModelFavorite.saveFavoriteStatus(recherche, false)
             }
             .setNeutralButton("Annuler") { _, _ -> }.create().show()
     }

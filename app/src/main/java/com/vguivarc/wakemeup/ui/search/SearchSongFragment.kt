@@ -3,7 +3,6 @@ package com.vguivarc.wakemeup.ui.search
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import android.widget.*
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,7 +38,7 @@ class SearchSongFragment :
     // validé
     private val searchVideosList = mutableListOf<Song>()
     private lateinit var searchVideoAdapter: SongAdapter
-    private val viewModelSearchVideo: SearchSongViewModel by inject()
+    private val viewModelVideo: SongViewModel by inject()
     private val viewModelFavorite: FavoriteViewModel by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,10 +51,10 @@ class SearchSongFragment :
         searchVideoAdapter.notifyDataSetChanged()
 
         button_valid_search_song.setOnClickListener {
-            viewModelSearchVideo.getFavoriteList(search.text.toString())
+            viewModelVideo.getFavoriteList(search.text.toString())
         }
 
-        viewModelSearchVideo.songList.observe(
+        viewModelVideo.songList.observe(
             viewLifecycleOwner,
             Observer {
                 when (it) {
@@ -154,12 +153,14 @@ class SearchSongFragment :
         return dateFormat.format(date).toString()
     }
     override fun onSongFavoriteClickListener(position: Int) {
-        viewModelFavorite.addFavorite(
+        viewModelFavorite.saveFavoriteStatus(
             Favorite(
+                searchVideoAdapter.getSongWithPosition(position).id,
                 getNowTxt(),
                 searchVideoAdapter.getSongWithPosition(position),
                 "bernard"
-            )
+            ),
+            true
         )
     }
 

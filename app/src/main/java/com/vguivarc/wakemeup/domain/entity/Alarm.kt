@@ -76,11 +76,6 @@ class Alarm(
     companion object {
         var idCount = 1
 
-        const val CREATE_REQUEST_CODE = 1
-        const val EDIT_REQUEST_CODE = 2
-        const val NUM_REVEIL: String = "NUM_REVEIL"
-        const val REVEIL: String = "REVEIL"
-        const val DELETE: String = "DELETE"
         const val DUREE_SNOOZE: Int = 5
 
         private val listDaysInWeek = listOf(

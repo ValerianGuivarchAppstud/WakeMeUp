@@ -12,17 +12,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.entity.UserModel
+import com.vguivarc.wakemeup.domain.entity.Notif
+import com.vguivarc.wakemeup.domain.entity.UserProfile
 
 class NotifsListeAdapter(
-    private val notifs: MutableMap<String, NotificationMusicMe>,
-    private val contacts: MutableMap<String, UserModel>,
+    private val notifs: MutableMap<String, Notif>,
+    private val contacts: MutableMap<String, UserProfile>,
     private val listener: NotifListAdapterListener?
 ) : RecyclerView.Adapter<NotifsListeAdapter.ViewHolder>(),
     View.OnClickListener {
 
     interface NotifListAdapterListener {
-        fun onSenderClicked(sender: UserModel)
+        fun onSenderClicked(sender: UserProfile)
         fun onNotifDelete(notifKey: String)
     }
 
@@ -61,8 +62,8 @@ class NotifsListeAdapter(
                 }
             }
             idItemNotifTitreText.text = when (notif.type) {
-                NotificationMusicMe.NotificationType.ENVOIE_MUSIQUE -> " t'a envoyé une sonnerie."
-                NotificationMusicMe.NotificationType.SONNERIE_UTILISEE -> " a été réveillé par ta sonnerie : " + (notif.sonnerieName!!)
+                Notif.NotificationType.ENVOIE_MUSIQUE -> " t'a envoyé une sonnerie."
+                Notif.NotificationType.SONNERIE_UTILISEE -> " a été réveillé par ta sonnerie : " + (notif.sonnerieName!!)
             }
             idItemNotifDelete.setOnClickListener {
                 listener?.onNotifDelete(notifs.toList()[index].first)

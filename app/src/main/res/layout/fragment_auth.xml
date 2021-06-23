@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.login.AuthActivity">
+
+    <ImageView
+        android:id="@+id/loginClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/login_close_content_description"
+        android:padding="32dp"
+        app:srcCompat="@drawable/close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/loginTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:autoSizeMinTextSize="20sp"
+        app:autoSizeTextType="uniform"
+        android:textAlignment="center"
+        android:text="@string/login_title"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/loginIllu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginClose"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <ImageView
+        android:id="@+id/loginIllu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:layout_marginBottom="76dp"
+        android:contentDescription="@string/login_illu_content_description"
+        android:src="@drawable/ic_play_circle_outline_white"
+        app:layout_constraintBottom_toTopOf="@+id/contentView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginTitle"
+
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/contentView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/loginLegals"
+        app:layout_constraintTop_toBottomOf="@id/loginIllu">
+
+        <Button
+            android:id="@+id/loginFacebook"
+            style="@style/AppTheme.CTAFacebook"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/facebook"
+            android:text="@string/login_facebook_cta"
+            app:layout_constraintBottom_toTopOf="@+id/loginSeparatorLabel"
+            app:layout_constraintEnd_toEndOf="@+id/loginSeparatorEnd"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/loginSeparatorStart"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <View
+            android:id="@+id/loginSeparatorEnd"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="32dp"
+            android:background="@color/separator_transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/loginSeparatorLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/loginSeparatorLabel"
+            app:layout_constraintTop_toTopOf="@+id/loginSeparatorLabel" />
+
+        <TextView
+            android:id="@+id/loginSeparatorLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/OR"
+            app:layout_constraintBottom_toTopOf="@+id/loginEmail"
+            app:layout_constraintEnd_toStartOf="@id/loginSeparatorEnd"
+            app:layout_constraintStart_toEndOf="@id/loginSeparatorStart"
+            app:layout_constraintTop_toBottomOf="@+id/loginFacebook"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <View
+            android:id="@+id/loginSeparatorStart"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="0dp"
+            android:background="@color/separator_transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/loginSeparatorLabel"
+            app:layout_constraintEnd_toStartOf="@+id/loginSeparatorLabel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/loginSeparatorLabel" />
+
+        <Button
+            android:id="@+id/loginEmail"
+            style="@style/bouton_arrondi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/email"
+            android:text="@string/login_email_cta"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/loginSeparatorEnd"
+            app:layout_constraintStart_toStartOf="@+id/loginSeparatorStart"
+            app:layout_constraintTop_toBottomOf="@+id/loginSeparatorLabel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        layout="@layout/loader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/loginLegals"
+        app:layout_constraintTop_toBottomOf="@id/loginIllu" />
+
+    <TextView
+        android:id="@+id/loginLegals"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:text="@string/login_legals"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contentView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,16 +7,14 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.base.BaseFragment
 import com.vguivarc.wakemeup.domain.entity.Alarm
 import com.vguivarc.wakemeup.ui.MainActivity
-import kotlinx.android.synthetic.main.fragment_alarms_list.view.*
+import com.vguivarc.wakemeup.viewmodel.AlarmsViewModel
 import org.koin.android.ext.android.inject
 import java.util.*
 
@@ -28,8 +26,16 @@ class AlarmsFragment : BaseFragment(R.layout.fragment_alarms_list), AlarmsListAd
 
     private val alarms = mutableListOf<Alarm>()
 
+    private lateinit var recyclerView: RecyclerView
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recyclerView = view.findViewById(R.id.list_alarms)
+
+        listAdapter = AlarmsListAdapter(alarms, this)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = listAdapter
+        listAdapter.notifyDataSetChanged()
 
         viewModel.alarmsList.observe(
             viewLifecycleOwner,
@@ -56,55 +62,6 @@ class AlarmsFragment : BaseFragment(R.layout.fragment_alarms_list), AlarmsListAd
         } else {
             deleteNotification()
         }
-    }
-
-/*
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-
-        if (resultCode == Activity.RESULT_OK && data != null) {
-            val newClock = data.extras!![Alarm.REVEIL] as Alarm
-            Utility.createSimpleToast(Alarm.getTextNextClock(newClock.nextAlarmCalendar.timeInMillis))
-            when (requestCode) {
-                Alarm.CREATE_REQUEST_CODE -> {
-                    if (resultCode == Activity.RESULT_OK) {
-                        viewModel.save(newClock, newClock.idAlarms)
-                    }
-                }
-                Alarm.EDIT_REQUEST_CODE -> {
-                    if (data.hasExtra(Alarm.DELETE) && data.getBooleanExtra(
-                            Alarm.DELETE,
-                            true
-                        )
-                    ) {
-                        viewModel.remove(data.extras!![Alarm.NUM_REVEIL] as Int)
-                    } else {
-                        viewModel.editReveil(newClock, data.extras!![Alarm.NUM_REVEIL] as Int)
-                    }
-                }
-            }
-        }
-    }*/
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreate(savedInstanceState)
-        val view = inflater.inflate(R.layout.fragment_alarms_list, container, false)
-
-        val recyclerView = view.findViewById<RecyclerView>(R.id.list_reveil)
-        listAdapter = AlarmsListAdapter(alarms, this)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = listAdapter
-        listAdapter.notifyDataSetChanged()
-
-        view.bouton_add_reveil.setOnClickListener {
-            viewModel.save(Alarm())
-        }
-        return view
     }
 
     override fun onAlarmTimeClicked(alarm: Alarm) {

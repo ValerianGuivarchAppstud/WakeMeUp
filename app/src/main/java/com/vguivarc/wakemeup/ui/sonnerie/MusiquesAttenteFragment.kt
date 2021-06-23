@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.Ringing
-import com.vguivarc.wakemeup.repo.ViewModelFactory
 import kotlinx.android.synthetic.main.fragment_musiques_attente.view.*
 
 class MusiquesAttenteFragment : Fragment(), SonnerieAttenteAdapter.RecyclerItemClickListener {
@@ -32,8 +31,6 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAttenteAdapter.RecyclerItemC
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = mAdapter
 
-        val factory = ViewModelFactory(AndroidApplication.repository)
-        viewModel = ViewModelProvider(requireActivity(), factory).get(SonnerieListeViewModel::class.java)
         viewModel.getListeAttenteLiveData().observe(
             viewLifecycleOwner,
             { list ->

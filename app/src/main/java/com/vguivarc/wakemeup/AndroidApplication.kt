@@ -13,7 +13,7 @@ import com.vguivarc.wakemeup.di.networkModule
 import com.vguivarc.wakemeup.di.servicesModule
 import com.vguivarc.wakemeup.di.viewModelModule
 import com.vguivarc.wakemeup.domain.service.AlarmAndroidSetter
-import com.vguivarc.wakemeup.ui.alarm.ReveilSonneService.Companion.CHANNEL_ID
+import com.vguivarc.wakemeup.ui.ringingalarm.RingingAlarmService.Companion.CHANNEL_ID
 import io.paperdb.Paper
 import io.reactivex.internal.functions.Functions
 import io.reactivex.plugins.RxJavaPlugins

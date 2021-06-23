@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.entity.UserModel
+import com.vguivarc.wakemeup.domain.entity.UserProfile
 import com.vguivarc.wakemeup.ui.song.Song
 import kotlinx.android.synthetic.main.fragment_musiques_recues.view.*
 
@@ -134,7 +134,7 @@ class MusiquesRecuesFragment : Fragment() {
         //      findNavController().navigate(action)
     }
 
-    fun name(user: UserModel?) {
+    fun name(user: UserProfile?) {
         if (user != null) {
 
            /* val action =

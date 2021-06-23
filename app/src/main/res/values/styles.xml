@@ -18,6 +18,11 @@
     </style>
 
 
+    <style name="ToolbarFont" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+       <!-- <item name="fontFamily">@font/dmsans_bold</item>
+        <item name="android:fontFamily">@font/dmsans_bold</item>!-->
+    </style>
+
     <style name="AppTheme.BoutonReveil">
         <item name="android:textStyle">bold|italic</item>
         <item name="android:textSize">28sp</item>
@@ -61,6 +66,10 @@
 
     <style name="my_time_picker_style">
         <item name="android:textSize">34sp</item>
+    </style>
+
+    <style name="AppTheme.CTAFacebook" parent="bouton_arrondi">
+        <item name="android:background">@drawable/round_facebook</item>
     </style>
 
 

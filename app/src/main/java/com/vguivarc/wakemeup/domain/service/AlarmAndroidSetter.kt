@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import com.vguivarc.wakemeup.BuildConfig
-import com.vguivarc.wakemeup.ui.alarm.AlertReceiver
+import com.vguivarc.wakemeup.ui.ringingalarm.RingingAlarmReceiver
 import timber.log.Timber
 import java.util.*
 
@@ -39,7 +39,7 @@ interface AlarmAndroidSetter {
                 pendingAlarmRequestCode,
                 Intent(ACTION_FIRED).apply {
                     // must be here, otherwise replace does not work
-                    setClass(mContext, AlertReceiver::class.java)
+                    setClass(mContext, RingingAlarmReceiver::class.java)
                 },
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
@@ -49,7 +49,7 @@ interface AlarmAndroidSetter {
         override fun setUpRTCAlarm(id: Int, typeName: String, calendar: Calendar) {
             val pendingAlarm = Intent(ACTION_FIRED)
                 .apply {
-                    setClass(mContext, AlertReceiver::class.java)
+                    setClass(mContext, RingingAlarmReceiver::class.java)
                     putExtra(EXTRA_ID, id)
                     putExtra(EXTRA_TYPE, typeName)
                 }
@@ -76,7 +76,7 @@ interface AlarmAndroidSetter {
         override fun setInexactAlarm(id: Int, calendar: Calendar) {
             val pendingAlarm = Intent(ACTION_INEXACT_FIRED)
                 .apply {
-                    setClass(mContext, AlertReceiver::class.java)
+                    setClass(mContext, RingingAlarmReceiver::class.java)
                     putExtra(EXTRA_ID, id)
                 }
                 .let {
@@ -114,7 +114,7 @@ interface AlarmAndroidSetter {
                 id,
                 Intent(ACTION_INEXACT_FIRED).apply {
                     // must be here, otherwise replace does not work
-                    setClass(mContext, AlertReceiver::class.java)
+                    setClass(mContext, RingingAlarmReceiver::class.java)
                 },
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
@@ -122,7 +122,7 @@ interface AlarmAndroidSetter {
         }
 
         private fun initSetStrategyForVersion(): ISetAlarmStrategy {
-            Timber.e("SDK is %s", Build.VERSION.SDK_INT)
+            Timber.i("SDK is %s", Build.VERSION.SDK_INT)
             return when {
                 Build.VERSION.SDK_INT >= 26 -> OreoSetter()
                 Build.VERSION.SDK_INT >= 23 -> MarshmallowSetter()

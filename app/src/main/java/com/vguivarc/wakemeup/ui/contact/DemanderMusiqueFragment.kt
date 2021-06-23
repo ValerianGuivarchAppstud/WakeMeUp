@@ -5,26 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.vguivarc.wakemeup.AndroidApplication
-import com.vguivarc.wakemeup.CurrentUserViewModel
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.entity.UserModel
-import com.vguivarc.wakemeup.repo.ViewModelFactory
+import com.vguivarc.wakemeup.domain.entity.UserProfile
+import com.vguivarc.wakemeup.viewmodel.AuthViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 // TODO refaire ça : le lien donne sur le site mais peut être ouvert dans l'appli (ça génère un truc partageable en mode Facebook ?)
 // TODO ajouter le fait de demander par notif ?
 class DemanderMusiqueFragment : Fragment() {
     private lateinit var username: String
 
-    private var currentUser: UserModel? = null
-    private lateinit var currentUserViewModel: CurrentUserViewModel
+    private var currentUser: UserProfile? = null
+    private val authViewModel: AuthViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,11 +28,8 @@ class DemanderMusiqueFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_partage, container, false)
         setHasOptionsMenu(false)
 
-        val factory = ViewModelFactory(AndroidApplication.repository)
-        currentUserViewModel =
-            ViewModelProvider(this, factory).get(CurrentUserViewModel::class.java)
-
-        currentUserViewModel.getCurrentUserLiveData().observe(
+/*
+        authViewModel.getCurrentUserLiveData().observe(
             requireActivity(),
             {
                 currentUser = it
@@ -51,14 +41,14 @@ class DemanderMusiqueFragment : Fragment() {
                     view.findViewById<ConstraintLayout>(R.id.id_partage_ensemble_connecte).visibility = View.VISIBLE
                 }
             }
-        )
+        )*/
         view.findViewById<ImageButton>(R.id.id_partage_bouton).setOnClickListener {
-            partager()
+            //partager()
         }
 
         return view
     }
-
+/*
 // TODO ajouter "partager" avec MusicMe
     private fun partager() {
 
@@ -72,7 +62,7 @@ class DemanderMusiqueFragment : Fragment() {
                     override fun onCancelled(p0: DatabaseError) {}
 
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        val user: UserModel = dataSnapshot.getValue(UserModel::class.java)!!
+                        val user: UserProfile = dataSnapshot.getValue(UserProfile::class.java)!!
                         username = user.username
 /*
                     //création de la demande de musique
@@ -253,4 +243,6 @@ class DemanderMusiqueFragment : Fragment() {
                 })
         }
     }
+*/
 }
+

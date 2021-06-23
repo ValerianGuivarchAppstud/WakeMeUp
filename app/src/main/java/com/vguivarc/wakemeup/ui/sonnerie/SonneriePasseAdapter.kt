@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.Favorite
 import com.vguivarc.wakemeup.domain.entity.Ringing
-import com.vguivarc.wakemeup.domain.entity.UserModel
+import com.vguivarc.wakemeup.domain.entity.UserProfile
 
 class SonneriePasseAdapter(
     private val context: Context,
@@ -69,7 +69,7 @@ class SonneriePasseAdapter(
         val ivFavori: ImageView = itemView.findViewById<View>(R.id.pas_tv_fav) as ImageView
         val link: TextView = itemView.findViewById(R.id.nom_ami_sonnerie_passe_link)
 
-        fun bind(song: Ringing, user: UserModel?, listener: RecyclerItemClickListener) {
+        fun bind(song: Ringing, user: UserProfile?, listener: RecyclerItemClickListener) {
             ivPlayActive.setOnClickListener { listener.onPlayListener(song, layoutPosition) }
             ivShare.setOnClickListener { listener.onShareListener(song, layoutPosition) }
             ivDelete.setOnClickListener { listener.onDeleteListener(song, layoutPosition) }
@@ -83,6 +83,6 @@ class SonneriePasseAdapter(
         fun onShareListener(ringing: Ringing, position: Int)
         fun onDeleteListener(ringing: Ringing, position: Int)
         fun onFavoriListener(ringing: Ringing, position: Int)
-        fun onNameListener(user: UserModel?, position: Int)
+        fun onNameListener(user: UserProfile?, position: Int)
     }
 }

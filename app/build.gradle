@@ -9,6 +9,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs"
 
 
+apply plugin: 'kotlin-kapt'
+//apply plugin: 'org.jetbrains.dokka-android'
+//apply plugin: 'com.google.firebase.crashlytics'
+
 android {
     aaptOptions { cruncherEnabled = false }
     compileSdkVersion 30
@@ -31,19 +35,15 @@ android {
         dev {
             dimension "server"
 
-            def API_BASEURL = "http"
-            def SHARE_BASEURL = "http"
+            def API_BASEURL = "https://webtoonfactory-dev.herokuapp.com"
             buildConfigField "String", "API_BASEURL", "\"${API_BASEURL}/api/\""
-            buildConfigField "String", "SHARE_BASEURL", "\"${SHARE_BASEURL}/\""
         }
 
         prod {
             dimension "server"
 
             def API_BASEURL = "http"
-            def SHARE_BASEURL = "http"
             buildConfigField "String", "API_BASEURL", "\"${API_BASEURL}/api/\""
-            buildConfigField "String", "SHARE_BASEURL", "\"${SHARE_BASEURL}/\""
         }
     }
 
@@ -117,6 +117,7 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
     implementation "com.squareup.moshi:moshi-adapters:1.11.0"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.11.0"
 
     // RxJava
     implementation "io.reactivex.rxjava2:rxjava:2.2.20"
@@ -124,7 +125,7 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
     
     // RxTube
-    compile 'com.hsuaxo:rxtube:1.0.3'
+    implementation 'com.hsuaxo:rxtube:1.0.3'
 
 
 

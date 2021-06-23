@@ -29,11 +29,8 @@ class FavoriteViewModel(private val favoriteService: FavoriteService) : BaseView
             .addTo(disposables)
     }
 
-    fun addFavorite(favorite: Favorite) {
-        favoriteService.addFavorite(favorite)
+    fun saveFavoriteStatus(favorite: Favorite, isFavorite: Boolean) {
+        favoriteService.saveFavoriteStatus(favorite, isFavorite)
     }
 
-    fun deleteFavori(favorite: Favorite) {
-        favoriteService.removeFavorite(favorite)
-    }
 }

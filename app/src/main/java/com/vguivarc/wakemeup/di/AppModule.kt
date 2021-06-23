@@ -24,18 +24,18 @@
 
 package com.vguivarc.wakemeup.di
 
-import com.vguivarc.wakemeup.data.repository.AlarmRepository
-import com.vguivarc.wakemeup.data.repository.FavoriteRepository
-import com.vguivarc.wakemeup.data.repository.SongRepository
-import com.vguivarc.wakemeup.domain.service.AlarmService
-import com.vguivarc.wakemeup.domain.service.FavoriteService
-import com.vguivarc.wakemeup.domain.service.SongService
+import com.vguivarc.wakemeup.data.repository.*
+import com.vguivarc.wakemeup.domain.service.*
 import org.koin.dsl.module
 
 val servicesModule = module {
+    single<AuthService> { AuthRepository(get(), get()) }
     single<AlarmService> { AlarmRepository() }
-    single<FavoriteService> { FavoriteRepository() }
+    single<ContactService> { ContactRepository(get()) }
+    single<FavoriteService> { FavoriteRepository(get()) }
+    single<SessionService> { SessionRepository(get(), get()) }
     single<SongService> { SongRepository() }
+
 
     /*single<EpisodeService> { EpisodeRepository(get(), get()) }
     single<CatalogService> { CatalogRepository(get(), get()) }

@@ -77,7 +77,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_connectivity_exception_user_message">pas de connection</string>
-    <string name="error_retry">error_retry_todo</string>
 
 
     <string name="first_letter_monday">L</string>
@@ -90,4 +89,60 @@
     <string name="musique">Musiques</string>
     <string name="historique">Historique</string>
     <string name="settings">Paramètres</string>
+
+
+    <string name="settings_login">Se connecter</string>
+    <string name="settings_account">Ton compte</string>
+    <string name="settings_contact">Nous contacter</string>
+    <string name="settings_rate">Noter l\'app</string>
+    <string name="settings_about">A propos</string>
+    <string name="account_logout">Se déconnecter</string>
+    <string name="account_edit_success">Ton compte est mis à jour</string>
+    <string name="contact_email_address" translatable="false">valerian.guivarch@gmail.com</string>
+    <string name="contact_email_subject">Contact</string>
+    <string name="error_facebook_missing_mail">Email is missing on your Facebook account. Please add an email address to your Facebook account or login with an email instead</string>
+    <string name="error_facebook_missing_mail_title">Can\'t login with Facebook</string>
+    <string name="error_no_email_app">Aucun client mail détecté</string>
+    <string name="forgot_password_description">Un email te sera envoyé sur cette adresse pour
+        réinitialiser ton mot de passe.</string>
+
+    <string name="error_default_message">Une erreur est survenue</string>
+    <string name="signup_account_already_exists_error_dialog">Un compte avec l\'adresse %s ou
+        le pseudo %s existe
+        déjà. Essaie avec une autre adresse ou un autre pseudo ou réinitialise ton mot de passe.</string>
+    <string name="legals_link">https://www.error/</string>
+    <string name="forgot_password_success">Un email contenant les instructions pour réinitialiser ton mot de passe a été envoyé à %s.</string>
+
+
+    <string name="error_retry">Une erreur est survenue\nCliquez pour réessayer</string>
+    <string name="login_title">Hello toi, on se connaît ?</string>
+    <string name="login_close_content_description">Fermer la page</string>
+    <string name="login_legals">En continuant, tu acceptes nos <a href="">conditions d’utilisation</a>.</string>
+    <string name="login_email_cta">Continuer avec l\'email</string>
+    <string name="login_facebook_cta">Continuer avec Facebook</string>
+    <string name="OR">OU</string>
+    <string name="login_illu_content_description">Chat confus</string>
+    <string name="login_email_title">Continuer avec l\'email</string>
+    <string name="login_email_tab_signin">Connexion</string>
+    <string name="login_email_tab_signup">Inscription</string>
+    <string name="login_form_email_hint">Email</string>
+    <string name="login_form_password_hint">Mot de passe</string>
+    <string name="login_submit">C\'est parti !</string>
+    <string name="login_form_forgot_password">Mot de passe oublié ?</string>
+    <string name="signup_form_nickname_hint">Pseudo</string>
+    <string name="login_forgot_password_submit">Envoyer</string>
+    <string name="forgot_password_title">Mot de passe oublié ?</string>
+    <string name="form_email_format_error">Adresse email invalide</string>
+    <string name="form_password_format_error">Mot de passe trop court</string>
+    <string name="form_nickname_format_error">Pseudo trop court</string>
+    <string name="login_error">Email ou mot de passe invalide</string>
+    <string name="login_successful">Connexion réussie</string>
+    <string name="login_facebook_cancelled">Connexion avec Facebook annulée</string>
+    <string name="login_facebook_error">Erreur lors de la connexion avec Facebook</string>
+    <string name="comment_answer_cta">Répondre</string>
+
+    <string name="legals">End-User License Agreement</string>
+    <string name="version_label">App version</string>
+    <string name="version" translatable="false">%1$s (%2$d)</string>
+    <string name="account_submit">Valider</string>
 </resources>

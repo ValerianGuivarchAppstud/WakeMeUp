@@ -21,6 +21,14 @@
 
 
 
+      <color name="separator_transparent">#69323237</color>
+
+      <color name="white_transparent_30">#4CFFFFFF</color>
+      <color name="white_transparent_50">#7AFFFFFF</color>
+      <color name="white_transparent_70">#CCFFFFFF</color>
+
+      <color name="red">#FF0000</color>
+
        <!--       <color name="colorPrimary">#F44336</color>
         <color name="colorPrimaryDark">#AC2F26</color>
         <color name="colorAccent">#FA1C0C</color>

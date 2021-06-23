@@ -32,5 +32,5 @@ data class Ringing(
     )
 
     lateinit var idSonnerie: String
-    var sender: UserModel? = null
+    var sender: UserProfile? = null
 }

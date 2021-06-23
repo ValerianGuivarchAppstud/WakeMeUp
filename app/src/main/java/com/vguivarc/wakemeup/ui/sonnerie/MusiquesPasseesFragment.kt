@@ -15,8 +15,7 @@ import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.Favorite
 import com.vguivarc.wakemeup.domain.entity.Ringing
-import com.vguivarc.wakemeup.domain.entity.UserModel
-import com.vguivarc.wakemeup.repo.ViewModelFactory
+import com.vguivarc.wakemeup.domain.entity.UserProfile
 import com.vguivarc.wakemeup.ui.music.FavoriteViewModel
 import kotlinx.android.synthetic.main.fragment_musiques_passees.view.*
 
@@ -40,17 +39,12 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val factory = ViewModelFactory(AndroidApplication.repository)
-        viewModelSonneries = ViewModelProvider(requireActivity(), factory).get(
-            SonnerieListeViewModel::class.java
-        )
         viewModelSonneries.getListePasseesLiveData().observe(
             viewLifecycleOwner,
             { nouvelleListe ->
                 updateMusiqueListe(nouvelleListe)
             }
         )
-        viewModelFavorite = ViewModelProvider(requireActivity(), factory).get(FavoriteViewModel::class.java)
         /*viewModelFavorite.getFavoriVideosLiveData().observe(
             viewLifecycleOwner,
             { nouvelleListe ->
@@ -139,7 +133,7 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
         fragFather.share(ringing.song!!)
     }
 
-    override fun onNameListener(user: UserModel?, position: Int) {
+    override fun onNameListener(user: UserProfile?, position: Int) {
         fragFather.name(user)
     }
 }
