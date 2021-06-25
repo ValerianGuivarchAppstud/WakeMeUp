@@ -8,7 +8,7 @@ import io.reactivex.Single
 import retrofit2.http.*
 
 interface AuthApi {
-    @POST("v1/auth/login/email")
+    @POST("v1/auth/email/login")
     fun login(@Body credentials: AuthRequest): Single<UserToken>
 
     @POST("v1/auth/login/social")
@@ -23,10 +23,10 @@ interface AuthApi {
         @Body credentials: ResetPasswordRequest
     ): Completable
 
-    @POST("v1/auth/register/email")
+    @POST("v1/auth/email/register")
     fun signup(@Body credentials: AuthSignupRequest): Completable
 
-    @PUT("v1/auth/me")
+    @PUT("v1/account/me")
     fun editAccount(@Body accountInfo: AuthEditAccountRequest): Single<UserProfile>
 
     @PUT("v1/auth/me/firebaseToken")
@@ -35,7 +35,7 @@ interface AuthApi {
         @Body firebaseToken: FirebaseTokenRequest
     ): Completable
 
-    @GET("v1/auth/me")
+    @GET("v1/account/me")
     fun getAccountInfo(
         @Header(value = "Content-Type")
         contentType: String = "application/x-www-form-urlencoded"

@@ -1,8 +1,7 @@
-package com.dupuis.webtoonfactory.util.adapters
+package com.vguivarc.wakemeup.util.adapters
 
 import android.view.View
 import android.view.ViewGroup
-import com.vguivarc.wakemeup.util.adapters.CustomBaseAdapter
 
 private const val TYPE_HEADER = 0
 private const val TYPE_ITEM = 1

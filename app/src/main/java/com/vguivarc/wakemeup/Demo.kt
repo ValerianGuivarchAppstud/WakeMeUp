@@ -9,6 +9,7 @@ import com.github.appintro.AppIntroPageTransformerType
 class Demo : AppIntro() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
         // Make sure you don't call setContentView!
 
         setImmersiveMode()

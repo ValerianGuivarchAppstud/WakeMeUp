@@ -19,6 +19,7 @@
     <uses-permission android:name="com.vguivarc.wakemeup.permission.C2D_MESSAGE" />
 
     <application
+        android:usesCleartextTraffic="true"
         android:name=".AndroidApplication"
         android:allowBackup="false"
         android:fullBackupContent="false"
@@ -40,6 +41,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.login.AuthActivity" />
 
         <service
             android:name=".notification.MyFirebaseMessagingService"

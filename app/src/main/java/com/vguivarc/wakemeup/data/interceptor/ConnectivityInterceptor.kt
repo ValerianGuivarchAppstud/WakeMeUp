@@ -1,7 +1,7 @@
 package com.vguivarc.wakemeup.data.interceptor
 
 import android.content.Context
-import com.dupuis.webtoonfactory.util.adapters.isNetworkAvailable
+import com.vguivarc.wakemeup.util.adapters.isNetworkAvailable
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.util.adapters.NoConnectivityException
 import okhttp3.Interceptor

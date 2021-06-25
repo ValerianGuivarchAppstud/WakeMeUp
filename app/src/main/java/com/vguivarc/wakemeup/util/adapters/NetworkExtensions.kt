@@ -1,4 +1,4 @@
-package com.dupuis.webtoonfactory.util.adapters
+package com.vguivarc.wakemeup.util.adapters
 
 import android.content.Context
 import android.net.ConnectivityManager

@@ -43,7 +43,6 @@ class AndroidApplication : Application() {
 
         // TODO delete la suite
         lateinit var repository: Repository
-        const val NAME_FILE_HISTORIQUE = "historique.file"
 
         lateinit var appContext: Context
 
@@ -64,8 +63,6 @@ class AndroidApplication : Application() {
     }
 
     override fun onCreate() {
-        super.onCreate()
-
         super.onCreate()
         initLogging()
 
