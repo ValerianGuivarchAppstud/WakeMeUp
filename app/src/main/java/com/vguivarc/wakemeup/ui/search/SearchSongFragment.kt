@@ -18,7 +18,7 @@ import com.vguivarc.wakemeup.base.Loading
 import com.vguivarc.wakemeup.base.Success
 import com.vguivarc.wakemeup.domain.entity.Favorite
 import com.vguivarc.wakemeup.ui.music.FavoriteViewModel
-import com.vguivarc.wakemeup.ui.song.Song
+import com.vguivarc.wakemeup.domain.entity.Song
 import com.vguivarc.wakemeup.ui.song.SongAdapter
 import kotlinx.android.synthetic.main.search_video_fragment.*
 import org.koin.android.ext.android.inject
@@ -157,8 +157,7 @@ class SearchSongFragment :
             Favorite(
                 searchVideoAdapter.getSongWithPosition(position).id,
                 getNowTxt(),
-                searchVideoAdapter.getSongWithPosition(position),
-                "bernard"
+                searchVideoAdapter.getSongWithPosition(position)
             ),
             true
         )

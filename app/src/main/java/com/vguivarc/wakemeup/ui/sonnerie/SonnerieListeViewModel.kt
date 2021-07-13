@@ -4,8 +4,7 @@ import androidx.lifecycle.*
 import com.vguivarc.wakemeup.data.repository.Repository
 import com.vguivarc.wakemeup.domain.entity.Ringing
 import com.vguivarc.wakemeup.domain.entity.UserProfile
-import com.vguivarc.wakemeup.ui.song.Song
-import com.vguivarc.wakemeup.util.AddFireBaseObjectResult
+import com.vguivarc.wakemeup.domain.entity.Song
 
 class SonnerieListeViewModel(val repo: Repository) : ViewModel() {
 

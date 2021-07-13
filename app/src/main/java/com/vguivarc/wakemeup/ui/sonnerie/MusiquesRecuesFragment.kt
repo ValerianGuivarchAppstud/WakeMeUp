@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.UserProfile
-import com.vguivarc.wakemeup.ui.song.Song
+import com.vguivarc.wakemeup.domain.entity.Song
 import kotlinx.android.synthetic.main.fragment_musiques_recues.view.*
 
 class MusiquesRecuesFragment : Fragment() {

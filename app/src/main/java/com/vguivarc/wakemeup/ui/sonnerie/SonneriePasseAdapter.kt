@@ -35,7 +35,7 @@ class SonneriePasseAdapter(
         if (sonnerie.sender != null) {
             holder.sender.text = "Envoyé par : "
             holder.link.visibility = View.VISIBLE
-            holder.link.text = "    " + sonnerie.sender!!.username + "    "
+            holder.link.text = "    " + sonnerie.sender!!.nickname + "    "
         } else {
             holder.sender.text = "Envoyé par : ${sonnerie.senderName}"
             holder.link.visibility = View.GONE

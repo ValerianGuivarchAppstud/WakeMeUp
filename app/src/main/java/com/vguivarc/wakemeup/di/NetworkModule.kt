@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.vguivarc.wakemeup.BuildConfig
 import com.vguivarc.wakemeup.data.interceptor.ConnectivityInterceptor
+import com.vguivarc.wakemeup.data.interceptor.TokenInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -37,7 +38,7 @@ val networkModule = module {
                 addInterceptor(ConnectivityInterceptor(get()))
 
                 // Access token
-                // addInterceptor(TokenInterceptor(get(), BuildConfig.API_BASEURL, get()))
+                 addInterceptor(TokenInterceptor(get(), BuildConfig.API_BASEURL, get()))
 
                 // Logger
                 if (BuildConfig.DEBUG) {

@@ -7,7 +7,7 @@ import com.google.api.client.http.apache.ApacheHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.youtube.YouTube
 import com.google.api.services.youtube.model.SearchResult
-import com.vguivarc.wakemeup.ui.song.Song
+import com.vguivarc.wakemeup.domain.entity.Song
 import com.vguivarc.wakemeup.ui.song.YouTubeConfig
 import java.io.IOException
 import java.security.GeneralSecurityException

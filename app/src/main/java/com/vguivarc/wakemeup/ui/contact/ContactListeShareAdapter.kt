@@ -48,7 +48,7 @@ class ContactListeShareAdapter(
         val contact = contacts.toList()[position].second
         with(holder) {
             // item_contact_image.setImageDrawable((, null)))
-            itemContactNom.text = contact.username
+            itemContactNom.text = contact.nickname
 
             if (contact.imageUrl != "") {
                 Glide.with(context)

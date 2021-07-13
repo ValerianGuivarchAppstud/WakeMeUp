@@ -23,13 +23,13 @@ open class Notif(
 
     companion object {
         fun newInstanceEnvoieMusique(ringing: Ringing, sender: UserProfile): Notif {
-            return Notif(ringing.idReceiver, sender.id, sender.username, sender.imageUrl, false, NotificationType.ENVOIE_MUSIQUE)
+            return Notif(ringing.idReceiver, sender.id, sender.nickname, sender.imageUrl, false, NotificationType.ENVOIE_MUSIQUE)
         }
         fun newInstanceSonnerieUtilisee(ringing: Ringing, sender: UserProfile): Notif {
             val not = Notif(
                 ringing.senderId,
                 sender.id,
-                sender.username,
+                sender.nickname,
                 sender.imageUrl,
                 false,
                 NotificationType.SONNERIE_UTILISEE

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hsuaxo.rxtube.YTResult
 import com.squareup.picasso.Picasso
 import com.vguivarc.wakemeup.R
+import com.vguivarc.wakemeup.domain.entity.Song
 
 class SongAdapter(
     private val context: Context,

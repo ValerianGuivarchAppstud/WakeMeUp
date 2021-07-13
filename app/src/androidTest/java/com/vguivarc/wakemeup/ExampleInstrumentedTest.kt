@@ -1,10 +1,12 @@
 package com.vguivarc.wakemeup
 
+import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.File
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -16,7 +18,6 @@ class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
         // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.vguivarc.wakemeup", appContext.packageName)
+
     }
 }

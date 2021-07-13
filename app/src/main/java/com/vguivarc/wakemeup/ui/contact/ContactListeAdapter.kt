@@ -48,7 +48,7 @@ class ContactListeAdapter(
             cardViewContact.tag = contact
             cardViewContact.setOnClickListener(this@ContactListeAdapter)
             // item_contact_image.setImageDrawable((, null)))
-            itemContactNom.text = contact.username
+            itemContactNom.text = contact.nickname
 
             if (contact.imageUrl != "") {
                 Glide.with(context)

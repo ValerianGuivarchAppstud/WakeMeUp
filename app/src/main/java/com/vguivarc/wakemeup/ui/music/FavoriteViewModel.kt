@@ -14,6 +14,10 @@ class FavoriteViewModel(private val favoriteService: FavoriteService) : BaseView
     val favoriteList: LiveData<Resource<List<Favorite>>>
         get() = _favoriteList
 
+    private val _favoriteStatus = MutableLiveData<Resource<Boolean>>()
+    val favoriteStatus: LiveData<Resource<Boolean>>
+        get() = _favoriteStatus
+
     fun getFavoriteList() {
         favoriteService.getFavoriteList()
             .applySchedulers()
@@ -31,6 +35,17 @@ class FavoriteViewModel(private val favoriteService: FavoriteService) : BaseView
 
     fun saveFavoriteStatus(favorite: Favorite, isFavorite: Boolean) {
         favoriteService.saveFavoriteStatus(favorite, isFavorite)
+            .applySchedulers()
+            .doOnSubscribe { _favoriteStatus.postValue(Loading()) }
+            .subscribe(
+                {
+                    _favoriteStatus.postValue(Success(isFavorite))
+                },
+                {
+                    _favoriteStatus.postValue(Fail(it))
+                }
+            )
+            .addTo(disposables)
     }
 
 }

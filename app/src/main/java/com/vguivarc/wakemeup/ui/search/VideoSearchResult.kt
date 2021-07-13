@@ -1,6 +1,6 @@
 package com.vguivarc.wakemeup.ui.search
 
-import com.vguivarc.wakemeup.ui.song.Song
+import com.vguivarc.wakemeup.domain.entity.Song
 
 data class VideoSearchResult(
     val searchList: MutableList<Song> = mutableListOf(),

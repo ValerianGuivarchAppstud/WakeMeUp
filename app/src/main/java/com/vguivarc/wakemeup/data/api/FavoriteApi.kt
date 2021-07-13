@@ -16,9 +16,8 @@ interface FavoriteApi {
     @GET("v1/favorites")
     fun getFavorites(): Single<FavoritesListResponse>
 
-    @POST("v1/favorite/{favoriteId}")
+    @POST("v1/favorite/status")
     fun setFavorite(
-        @Path("favoriteId") favoriteId: String,
         @Body favoriteRequest: FavoriteRequest
     ): Completable
 

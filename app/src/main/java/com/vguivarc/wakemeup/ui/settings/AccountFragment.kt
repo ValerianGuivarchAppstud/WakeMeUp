@@ -53,7 +53,7 @@ class AccountFragment : BaseLceFragment() {
         }
 
         userInfo = accountViewModel.getUserInfo()
-        fillFields(userInfo?.email, userInfo?.username)
+        fillFields(userInfo?.email, userInfo?.nickname)
     }
 
     private fun fillFields(email: String?, nickname: String?) {
