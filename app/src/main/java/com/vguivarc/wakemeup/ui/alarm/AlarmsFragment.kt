@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.base.BaseFragment
 import com.vguivarc.wakemeup.domain.entity.Alarm
@@ -28,6 +29,8 @@ class AlarmsFragment : BaseFragment(R.layout.fragment_alarms_list), AlarmsListAd
 
     private lateinit var recyclerView: RecyclerView
 
+    private lateinit var boutonAddReveil : FloatingActionButton
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.list_alarms)
@@ -45,6 +48,12 @@ class AlarmsFragment : BaseFragment(R.layout.fragment_alarms_list), AlarmsListAd
                 )
             }
         )
+
+        boutonAddReveil = view.findViewById(R.id.bouton_add_reveil)
+        boutonAddReveil.setOnClickListener {
+            viewModel.save(Alarm())
+        }
+
     }
 
     private fun updateAlarms(newAlarmsList: List<Alarm>) {
@@ -65,9 +74,7 @@ class AlarmsFragment : BaseFragment(R.layout.fragment_alarms_list), AlarmsListAd
     }
 
     override fun onAlarmTimeClicked(alarm: Alarm) {
-        var hour = alarm.hour
-        var minute = alarm.minute
-        if (hour == -1) {
+        if (alarm.hour == -1) {
             // Get Current Time
             val c: Calendar = Calendar.getInstance()
             alarm.hour = c.get(Calendar.HOUR_OF_DAY)
@@ -82,7 +89,7 @@ class AlarmsFragment : BaseFragment(R.layout.fragment_alarms_list), AlarmsListAd
             }
 
         // Create TimePickerDialog:
-        var timePickerDialog: TimePickerDialog = TimePickerDialog(
+        val timePickerDialog = TimePickerDialog(
             requireContext(),
             timeSetListener, alarm.hour, alarm.minute, true
         )
@@ -101,6 +108,7 @@ class AlarmsFragment : BaseFragment(R.layout.fragment_alarms_list), AlarmsListAd
         builder.setMessage("Voulez-vous supprimer ce réveil ?")
         builder.setPositiveButton("Supprimer") { _, _ ->
             viewModel.remove(alarm)
+            listAdapter.closeAlarmEdit()
         }
         builder.setNeutralButton("Annuler") { _, _ -> }
         val dialog: AlertDialog = builder.create()

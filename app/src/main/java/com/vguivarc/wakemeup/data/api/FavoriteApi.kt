@@ -21,5 +21,4 @@ interface FavoriteApi {
         @Path("favoriteId") favoriteId: String,
         @Body favoriteRequest: FavoriteRequest
     ): Completable
-
 }

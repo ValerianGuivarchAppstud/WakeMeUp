@@ -6,7 +6,6 @@ import com.vguivarc.wakemeup.BuildConfig
 import com.vguivarc.wakemeup.data.entity.UserToken
 import com.vguivarc.wakemeup.domain.entity.UserProfile
 import com.vguivarc.wakemeup.domain.service.SessionService
-import org.jetbrains.anko.collections.forEachWithIndex
 
 private const val SHARED_PREFERENCES = BuildConfig.APPLICATION_ID
 private const val SHARED_PREFERENCES_TOKEN = "session:token"

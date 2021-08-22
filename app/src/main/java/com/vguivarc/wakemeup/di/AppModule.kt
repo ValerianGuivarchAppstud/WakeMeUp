@@ -36,7 +36,6 @@ val servicesModule = module {
     single<SessionService> { SessionRepository(get(), get()) }
     single<SongService> { SongRepository() }
 
-
     /*single<EpisodeService> { EpisodeRepository(get(), get()) }
     single<CatalogService> { CatalogRepository(get(), get()) }
     single<MagazinesService> { MagazinesRepository(get(), get()) }

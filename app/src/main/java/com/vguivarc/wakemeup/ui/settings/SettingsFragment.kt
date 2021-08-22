@@ -4,9 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -22,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 import org.jetbrains.anko.support.v4.intentFor
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class SettingsFragment : BaseFragment( R.layout.fragment_settings) {
+class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
 
     private val accountViewModel: AccountViewModel by sharedViewModel()
 

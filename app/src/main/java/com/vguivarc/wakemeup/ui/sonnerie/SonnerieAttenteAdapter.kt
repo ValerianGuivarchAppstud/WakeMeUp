@@ -31,7 +31,7 @@ class SonnerieAttenteAdapter(
         val sonnerie = ringingList[position]
         // todo translate
         if (sonnerie.sender != null) {
-            holder.sender.text = "Envoyé par : ${sonnerie.sender!!.username}"
+            holder.sender.text = "Envoyé par : ${sonnerie.sender!!.nickname}"
         } else {
             holder.sender.text = "Envoyé par : ${sonnerie.senderName}"
         }

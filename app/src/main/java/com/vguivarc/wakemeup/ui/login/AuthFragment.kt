@@ -23,7 +23,6 @@ import com.vguivarc.wakemeup.base.Fail
 import com.vguivarc.wakemeup.base.Loading
 import com.vguivarc.wakemeup.base.Success
 import com.vguivarc.wakemeup.domain.entity.FacebookMissingMailError
-import com.vguivarc.wakemeup.ui.login.AuthActivity
 import com.vguivarc.wakemeup.viewmodel.AccountViewModel
 import com.vguivarc.wakemeup.viewmodel.AuthViewModel
 import kotlinx.android.synthetic.main.fragment_auth.*

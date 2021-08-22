@@ -1,14 +1,11 @@
 package com.vguivarc.wakemeup.ui.login
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.facebook.*
-import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
 import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
@@ -16,7 +13,6 @@ import com.vguivarc.wakemeup.base.BaseLceFragment
 import com.vguivarc.wakemeup.base.Fail
 import com.vguivarc.wakemeup.base.Loading
 import com.vguivarc.wakemeup.base.Success
-import com.vguivarc.wakemeup.util.Utility
 import com.vguivarc.wakemeup.viewmodel.AccountViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -41,7 +37,7 @@ class ProfilFragment : BaseLceFragment(R.layout.profil_fragment) {
                 currentProfile: Profile?
             ) {
                 if (currentProfile == null) {
-                   // fbLoginViewModel.disconnect()
+                    // fbLoginViewModel.disconnect()
                 }
             }
         }
@@ -79,7 +75,7 @@ class ProfilFragment : BaseLceFragment(R.layout.profil_fragment) {
                     is Loading -> showLoading()
                     is Success -> {
                         it.data?.let { profil ->
-                            view.findViewById<TextView>(R.id.profil_fragment_nom).text = profil.username
+                            view.findViewById<TextView>(R.id.profil_fragment_nom).text = profil.nickname
                             Glide.with(AndroidApplication.appContext).load(profil.imageUrl)
                                 .placeholder(R.drawable.main_logo)
                                 .error(R.drawable.main_logo)

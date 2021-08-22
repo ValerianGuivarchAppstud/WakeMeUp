@@ -1,7 +1,6 @@
 package com.vguivarc.wakemeup.domain.entity
 
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.JsonClass
 import com.vguivarc.wakemeup.ui.song.Song
 import kotlinx.android.parcel.Parcelize

@@ -48,7 +48,7 @@ class ContactListeShareAdapter(
         val contact = contacts.toList()[position].second
         with(holder) {
             // item_contact_image.setImageDrawable((, null)))
-            itemContactNom.text = contact.username
+            itemContactNom.text = contact.nickname
 
             if (contact.imageUrl != "") {
                 Glide.with(context)
@@ -61,9 +61,9 @@ class ContactListeShareAdapter(
             }
 
             val recu =
-                sonneriesAttente.filter { son -> son.senderId == contact.id }.size + sonneriesPassees.filter { son -> son.senderId == contact.id }.size
+                sonneriesAttente.filter { son -> son.senderId == contact.profileId }.size + sonneriesPassees.filter { son -> son.senderId == contact.profileId }.size
             val envoye =
-                sonneriesEnvoyees.filter { son -> son.idReceiver == contact.id }.size
+                sonneriesEnvoyees.filter { son -> son.idReceiver == contact.profileId }.size
             itemContactMusiqueEnvoyee.text = AndroidApplication.appContext.resources.getString(
                 R.string.txt_trait_txt,
                 AndroidApplication.appContext.resources.getQuantityString(R.plurals.musique_envoyée, recu),

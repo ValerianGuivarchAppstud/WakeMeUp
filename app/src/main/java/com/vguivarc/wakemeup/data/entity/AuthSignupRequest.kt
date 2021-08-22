@@ -7,6 +7,6 @@ import com.squareup.moshi.JsonClass
 data class AuthSignupRequest(
     val email: String,
     val password: String,
-    @Json(name = "pseudo")
+    @Json(name = "nickname")
     val nickname: String
 )

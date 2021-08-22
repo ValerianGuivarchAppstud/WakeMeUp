@@ -36,14 +36,14 @@ android {
         dev {
             dimension "server"
 
-            def API_BASEURL = "http://135.125.100.212:8080"
+            def API_BASEURL = "http://192.168.0.24:8080"
             buildConfigField "String", "API_BASEURL", "\"${API_BASEURL}/api/\""
         }
 
         prod {
             dimension "server"
 
-            def API_BASEURL = "http"
+            def API_BASEURL = "http://135.125.100.212:8080"
             buildConfigField "String", "API_BASEURL", "\"${API_BASEURL}/api/\""
         }
     }

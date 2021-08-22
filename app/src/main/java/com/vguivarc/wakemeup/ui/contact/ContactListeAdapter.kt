@@ -48,7 +48,7 @@ class ContactListeAdapter(
             cardViewContact.tag = contact
             cardViewContact.setOnClickListener(this@ContactListeAdapter)
             // item_contact_image.setImageDrawable((, null)))
-            itemContactNom.text = contact.username
+            itemContactNom.text = contact.nickname
 
             if (contact.imageUrl != "") {
                 Glide.with(context)
@@ -60,8 +60,8 @@ class ContactListeAdapter(
                 )
             }
 
-            val recu = sonneriesAttente.filter { son -> son.senderId == contact.id }.size + sonneriesPassees.filter { son -> son.senderId == contact.id }.size
-            val envoye = sonneriesEnvoyees.filter { son -> son.idReceiver == contact.id }.size
+            val recu = sonneriesAttente.filter { son -> son.senderId == contact.profileId }.size + sonneriesPassees.filter { son -> son.senderId == contact.profileId }.size
+            val envoye = sonneriesEnvoyees.filter { son -> son.idReceiver == contact.profileId }.size
             val txtEnvoye = AndroidApplication.appContext.resources.getQuantityString(R.plurals.musique_envoyée, recu)
             val txtRecu = AndroidApplication.appContext.resources.getQuantityString(R.plurals.musique_recu, envoye)
             val final = "$txtEnvoye $envoye - $txtRecu $recu"

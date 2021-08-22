@@ -60,6 +60,7 @@ class AlarmRepository : AlarmService {
 
     override fun switchReveil(alarm: Alarm) {
         readAll().find { it.idAlarms == alarm.idAlarms }?.switch()
+        save(alarm)
     }
 
     @Synchronized

@@ -13,7 +13,6 @@ import com.vguivarc.wakemeup.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_about.*
 import kotlinx.android.synthetic.main.fragment_account.toolbar
 
-
 class AboutFragment : BaseFragment() {
 
     private var finger = 0

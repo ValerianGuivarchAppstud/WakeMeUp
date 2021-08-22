@@ -1,8 +1,8 @@
 package com.vguivarc.wakemeup.ui.settings
 
 import android.view.View
-import com.vguivarc.wakemeup.util.adapters.CustomBaseAdapter
 import com.vguivarc.wakemeup.R
+import com.vguivarc.wakemeup.util.adapters.CustomBaseAdapter
 import kotlinx.android.synthetic.main.item_settings.view.*
 
 class SettingsAdapter(

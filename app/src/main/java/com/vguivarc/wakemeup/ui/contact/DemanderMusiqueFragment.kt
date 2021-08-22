@@ -43,7 +43,7 @@ class DemanderMusiqueFragment : Fragment() {
             }
         )*/
         view.findViewById<ImageButton>(R.id.id_partage_bouton).setOnClickListener {
-            //partager()
+            // partager()
         }
 
         return view
@@ -245,4 +245,3 @@ class DemanderMusiqueFragment : Fragment() {
     }
 */
 }
-

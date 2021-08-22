@@ -53,6 +53,11 @@ class AlarmsListAdapter(
         return ViewHolder(viewItem)
     }
 
+    fun closeAlarmEdit() {
+        closeEditingAlarm(currentEditingAlarm)
+        currentEditingAlarm = null
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val alarm = alarmsList.toList()[position]
         with(holder) {

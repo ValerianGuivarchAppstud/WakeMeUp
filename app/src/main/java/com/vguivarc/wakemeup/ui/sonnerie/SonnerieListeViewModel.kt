@@ -5,14 +5,12 @@ import com.vguivarc.wakemeup.data.repository.Repository
 import com.vguivarc.wakemeup.domain.entity.Ringing
 import com.vguivarc.wakemeup.domain.entity.UserProfile
 import com.vguivarc.wakemeup.ui.song.Song
-import com.vguivarc.wakemeup.util.AddFireBaseObjectResult
 
 class SonnerieListeViewModel(val repo: Repository) : ViewModel() {
 
     private val sonneriesPasseesListeState = MediatorLiveData<Map<String, Ringing>>()
     private val sonneriesAttenteListeState = MediatorLiveData<Map<String, Ringing>>()
     private val listeVueListeState = MediatorLiveData<Boolean>()
-
 
     fun getListePasseesLiveData(): LiveData<Map<String, Ringing>> = sonneriesPasseesListeState
     fun getListeAttenteLiveData(): LiveData<Map<String, Ringing>> = sonneriesAttenteListeState

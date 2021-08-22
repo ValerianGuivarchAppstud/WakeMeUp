@@ -29,7 +29,6 @@ class ContactsListeShareFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         viewModelSonnerie.getListeAttenteLiveData().observe(
             viewLifecycleOwner,
             {
@@ -78,7 +77,6 @@ class ContactsListeShareFragment :
                 Utility.createSimpleToast("Veuillez sélectionner les contacts à qui envoyer la sonnerie")
             }
         }*/
-
     }
 
     override fun onContactClicked(contact: UserProfile, itemView: View) {

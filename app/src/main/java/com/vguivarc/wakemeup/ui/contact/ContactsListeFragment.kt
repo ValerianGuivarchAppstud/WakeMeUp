@@ -12,7 +12,8 @@ import com.vguivarc.wakemeup.domain.entity.Ringing
 import com.vguivarc.wakemeup.domain.entity.UserProfile
 import com.vguivarc.wakemeup.ui.sonnerie.SonnerieListeViewModel
 
-class ContactsListeFragment : BaseLceFragment(R.layout.fragment_contact_list),
+class ContactsListeFragment :
+    BaseLceFragment(R.layout.fragment_contact_list),
     ContactListeAdapter.ContactListAdapterListener {
 
     private lateinit var viewModelSonnerie: SonnerieListeViewModel
@@ -33,7 +34,6 @@ class ContactsListeFragment : BaseLceFragment(R.layout.fragment_contact_list),
                      viewModel.addContact(user)
          }*/
 
-
         viewModelSonnerie.getListeAttenteLiveData().observe(
             viewLifecycleOwner,
             {
@@ -50,7 +50,6 @@ class ContactsListeFragment : BaseLceFragment(R.layout.fragment_contact_list),
                 adapter.notifyDataSetChanged()
             }
         )
-
 
         textePasDeContact = view.findViewById(R.id.textPasContact)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_list_contact)

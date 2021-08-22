@@ -32,5 +32,4 @@ class FavoriteViewModel(private val favoriteService: FavoriteService) : BaseView
     fun saveFavoriteStatus(favorite: Favorite, isFavorite: Boolean) {
         favoriteService.saveFavoriteStatus(favorite, isFavorite)
     }
-
 }

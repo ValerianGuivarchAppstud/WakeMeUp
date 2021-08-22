@@ -8,10 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.Favorite
 import com.vguivarc.wakemeup.domain.entity.Ringing

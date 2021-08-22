@@ -49,6 +49,6 @@ class NotifsListeFragment : BaseLceFragment(R.layout.fragment_notif_list), Notif
     }
 
     override fun onNotifDelete(notifKey: String) {
-      //  notifViewModel.deleteNotif(notifKey)
+        //  notifViewModel.deleteNotif(notifKey)
     }
 }

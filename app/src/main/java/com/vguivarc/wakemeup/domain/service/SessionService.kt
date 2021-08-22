@@ -16,5 +16,4 @@ interface SessionService {
     fun clearUserProfile(): Boolean
     fun saveFirebaseToken(firebaseToken: String): Boolean
     fun getFirebaseToken(): String?
-
 }

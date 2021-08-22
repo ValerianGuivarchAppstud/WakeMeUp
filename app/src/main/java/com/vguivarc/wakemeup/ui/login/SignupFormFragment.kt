@@ -149,8 +149,8 @@ class SignupFormFragment : BaseLceFragment(R.layout.fragment_auth_signup_form) {
             }.show()
         } else {
             throwable?.let {
-             //   AndroidApplication.mFirebaseCrashlytics.log("Signup fail email = $email nickname = $nickname")
-               // AndroidApplication.mFirebaseCrashlytics.recordException(it)
+                //   AndroidApplication.mFirebaseCrashlytics.log("Signup fail email = $email nickname = $nickname")
+                // AndroidApplication.mFirebaseCrashlytics.recordException(it)
             }
             toast(R.string.error_default_message)
         }

@@ -1,9 +1,9 @@
 package com.vguivarc.wakemeup.data.interceptor
 
 import android.content.Context
-import com.vguivarc.wakemeup.util.adapters.isNetworkAvailable
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.util.adapters.NoConnectivityException
+import com.vguivarc.wakemeup.util.adapters.isNetworkAvailable
 import okhttp3.Interceptor
 import okhttp3.Response
 import timber.log.Timber
