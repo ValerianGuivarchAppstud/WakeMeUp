@@ -38,13 +38,13 @@ class AuthRepository(retrofit: Retrofit, private val sessionService: SessionServ
         var userTokenStorage: UserToken? = null
         return authApi.login(AuthRequest(email, password)).map { userToken ->
             userTokenStorage = userToken
-        }.flatMap {
+/*        }.flatMap {
             val firebaseToken = sessionService.getFirebaseToken()
             authApi.sendFirebaseToken(
                 authorizationToken = HEADER_AUTHORIZATION_PREFIX + userTokenStorage?.accessToken,
                 FirebaseTokenRequest(firebaseToken ?: "")
             )
-                .toSingleDefault(true)
+                .toSingleDefault(true)*/
         }.map {
             userTokenStorage?.let { sessionService.setUserToken(it) }
         }.ignoreElement()
