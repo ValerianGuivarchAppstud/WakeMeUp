@@ -3,8 +3,8 @@ package com.vguivarc.wakemeup.ui.sonnerie
 import androidx.lifecycle.*
 import com.vguivarc.wakemeup.data.repository.Repository
 import com.vguivarc.wakemeup.domain.entity.Ringing
+import com.vguivarc.wakemeup.domain.entity.Song
 import com.vguivarc.wakemeup.domain.entity.UserProfile
-import com.vguivarc.wakemeup.ui.song.Song
 
 class SonnerieListeViewModel(val repo: Repository) : ViewModel() {
 

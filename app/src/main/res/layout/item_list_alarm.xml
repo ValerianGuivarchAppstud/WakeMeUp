@@ -57,6 +57,7 @@
                 android:id="@+id/edit_alarm_layout"
                 android:animateLayoutChanges="true"
                 android:visibility="gone"
+                tools:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/item_alarm_time">
@@ -80,96 +81,151 @@
                     android:paddingBottom="8dp"
                     app:layout_constraintTop_toBottomOf="@id/edit_alarm_repeat_check">
 
-                    <Button
+                    <RelativeLayout
                         android:id="@+id/alarm_day_button_monday"
-                        style="@style/AppTheme.BoutonDay"
-                        android:layout_height="32dp"
                         android:layout_width="32dp"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:text="@string/first_letter_monday"
+                        android:layout_height="32dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/alarm_day_button_tuesday"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        >
+                        <Button
+                            android:id="@+id/alarm_day_button_monday_btn"
+                            style="@style/AppTheme.BoutonDay"
+                            android:layout_centerInParent="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:gravity="center"
+                            android:text="@string/first_letter_monday"
+                            android:padding="2sp"/>
+                    </RelativeLayout>
 
-                    <Button
+                    <RelativeLayout
                         android:id="@+id/alarm_day_button_tuesday"
-                        android:layout_height="32dp"
                         android:layout_width="32dp"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:text="@string/first_letter_tuesday"
+                        android:layout_height="32dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@id/alarm_day_button_monday"
                         app:layout_constraintEnd_toStartOf="@id/alarm_day_button_wednesday"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        style="@style/AppTheme.BoutonDay"/>
+                        >
+                        <Button
+                            android:id="@+id/alarm_day_button_tuesday_btn"
+                            style="@style/AppTheme.BoutonDay"
+                            android:layout_centerInParent="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:gravity="center"
+                            android:text="@string/first_letter_tuesday"
+                            android:padding="2sp"/>
+                    </RelativeLayout>
 
-                    <Button
+                    <RelativeLayout
                         android:id="@+id/alarm_day_button_wednesday"
-                        android:layout_height="32dp"
                         android:layout_width="32dp"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:text="@string/first_letter_wednesday"
+                        android:layout_height="32dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@id/alarm_day_button_tuesday"
                         app:layout_constraintEnd_toStartOf="@id/alarm_day_button_thursday"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        style="@style/AppTheme.BoutonDay"/>
+                        >
+                        <Button
+                            android:id="@+id/alarm_day_button_wednesday_btn"
+                            style="@style/AppTheme.BoutonDay"
+                            android:layout_centerInParent="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:gravity="center"
+                            android:text="@string/first_letter_wednesday"
+                            android:padding="2sp"/>
+                    </RelativeLayout>
 
-                    <Button
+                    <RelativeLayout
                         android:id="@+id/alarm_day_button_thursday"
-                        android:layout_height="32dp"
                         android:layout_width="32dp"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:text="@string/first_letter_thursday"
+                        android:layout_height="32dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@id/alarm_day_button_wednesday"
                         app:layout_constraintEnd_toStartOf="@id/alarm_day_button_friday"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        style="@style/AppTheme.BoutonDay"/>
+                        >
+                        <Button
+                            android:id="@+id/alarm_day_button_thursday_btn"
+                            style="@style/AppTheme.BoutonDay"
+                            android:layout_centerInParent="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:gravity="center"
+                            android:text="@string/first_letter_thursday"
+                            android:padding="2sp"/>
+                    </RelativeLayout>
 
-                    <Button
+                    <RelativeLayout
                         android:id="@+id/alarm_day_button_friday"
-                        android:layout_height="32dp"
                         android:layout_width="32dp"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:text="@string/first_letter_friday"
+                        android:layout_height="32dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@id/alarm_day_button_thursday"
                         app:layout_constraintEnd_toStartOf="@id/alarm_day_button_saturday"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        style="@style/AppTheme.BoutonDay"/>
+                        >
+                        <Button
+                            android:id="@+id/alarm_day_button_friday_btn"
+                            style="@style/AppTheme.BoutonDay"
+                            android:layout_centerInParent="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:gravity="center"
+                            android:text="@string/first_letter_friday"
+                            android:padding="2sp"/>
+                    </RelativeLayout>
 
-                    <Button
+                    <RelativeLayout
                         android:id="@+id/alarm_day_button_saturday"
-                        android:layout_height="32dp"
                         android:layout_width="32dp"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:text="@string/first_letter_saturday"
+                        android:layout_height="32dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@id/alarm_day_button_friday"
                         app:layout_constraintEnd_toStartOf="@id/alarm_day_button_sunday"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        style="@style/AppTheme.BoutonDay"/>
+                        >
+                        <Button
+                            android:id="@+id/alarm_day_button_saturday_btn"
+                            style="@style/AppTheme.BoutonDay"
+                            android:layout_centerInParent="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:gravity="center"
+                            android:text="@string/first_letter_saturday"
+                            android:padding="2sp"/>
+                    </RelativeLayout>
 
-                    <Button
+                    <RelativeLayout
                         android:id="@+id/alarm_day_button_sunday"
-                        style="@style/AppTheme.BoutonDay"
-                        android:layout_height="32dp"
                         android:layout_width="32dp"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:text="@string/first_letter_sunday"
+                        android:layout_height="32dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/alarm_day_button_saturday"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"                        >
+                        <Button
+                            android:id="@+id/alarm_day_button_sunday_btn"
+                            style="@style/AppTheme.BoutonDay"
+                            android:layout_centerInParent="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:gravity="center"
+                            android:text="@string/first_letter_sunday"
+                            android:padding="2sp"/>
+                    </RelativeLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -202,6 +258,7 @@
             <TextView
                 android:id="@+id/fav_tv_delete"
                 android:visibility="gone"
+                tools:visibility="visible"
                 style="@style/AppTheme.BoutonItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

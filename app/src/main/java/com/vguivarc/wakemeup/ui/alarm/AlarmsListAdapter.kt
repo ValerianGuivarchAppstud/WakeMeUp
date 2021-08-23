@@ -3,12 +3,10 @@ package com.vguivarc.wakemeup.ui.alarm
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.Alarm
@@ -31,13 +29,20 @@ class AlarmsListAdapter(
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemAlarmDaysList = itemView.findViewById<ConstraintLayout>(R.id.item_alarm_days_list)
-        val itemAlarmMonday = itemView.findViewById<Button>(R.id.alarm_day_button_monday)!!
-        val itemAlarmTuesday = itemView.findViewById<Button>(R.id.alarm_day_button_tuesday)!!
-        val itemAlarmWednesday = itemView.findViewById<Button>(R.id.alarm_day_button_wednesday)!!
-        val itemAlarmThursday = itemView.findViewById<Button>(R.id.alarm_day_button_thursday)!!
-        val itemAlarmFriday = itemView.findViewById<Button>(R.id.alarm_day_button_friday)!!
-        val itemAlarmSaturday = itemView.findViewById<Button>(R.id.alarm_day_button_saturday)!!
-        val itemAlarmSunday = itemView.findViewById<Button>(R.id.alarm_day_button_sunday)!!
+        val itemAlarmMonday = itemView.findViewById<RelativeLayout>(R.id.alarm_day_button_monday)
+        val itemAlarmMondayBtn = itemView.findViewById<Button>(R.id.alarm_day_button_monday_btn)
+        val itemAlarmTuesday = itemView.findViewById<RelativeLayout>(R.id.alarm_day_button_tuesday)
+        val itemAlarmTuesdayBtn = itemView.findViewById<Button>(R.id.alarm_day_button_tuesday_btn)
+        val itemAlarmWednesday = itemView.findViewById<RelativeLayout>(R.id.alarm_day_button_wednesday)
+        val itemAlarmWednesdayBtn = itemView.findViewById<Button>(R.id.alarm_day_button_wednesday_btn)
+        val itemAlarmThursday = itemView.findViewById<RelativeLayout>(R.id.alarm_day_button_thursday)
+        val itemAlarmThursdayBtn = itemView.findViewById<Button>(R.id.alarm_day_button_thursday_btn)
+        val itemAlarmFriday = itemView.findViewById<RelativeLayout>(R.id.alarm_day_button_friday)
+        val itemAlarmFridayBtn = itemView.findViewById<Button>(R.id.alarm_day_button_friday_btn)
+        val itemAlarmSaturday = itemView.findViewById<RelativeLayout>(R.id.alarm_day_button_saturday)
+        val itemAlarmSaturdayBtn = itemView.findViewById<Button>(R.id.alarm_day_button_saturday_btn)
+        val itemAlarmSunday = itemView.findViewById<RelativeLayout>(R.id.alarm_day_button_sunday)
+        val itemAlarmSundayBtn = itemView.findViewById<Button>(R.id.alarm_day_button_sunday_btn)
         var itemAlarmTime = itemView.findViewById<TextView>(R.id.item_alarm_time)!!
         var itemAlarmRepeatCheck = itemView.findViewById<CheckBox>(R.id.edit_alarm_repeat_check)!!
         var itemAlarmDays = itemView.findViewById<TextView>(R.id.item_alarm_days)!!
@@ -82,9 +87,15 @@ class AlarmsListAdapter(
             itemAlarmDelete.setOnClickListener {
                 listener?.onAlarmDelete(alarm)
             }
-            dealWithDaysButton(alarm, itemAlarmMonday, Alarm.DaysWeek.Monday)
+            dealWithDaysButton(alarm, itemAlarmMonday, itemAlarmMondayBtn, Alarm.DaysWeek.Monday)
+            dealWithDaysButton(alarm, itemAlarmTuesday, itemAlarmTuesdayBtn, Alarm.DaysWeek.Tuesday)
+            dealWithDaysButton(alarm, itemAlarmWednesday, itemAlarmWednesdayBtn, Alarm.DaysWeek.Wednesday)
+            dealWithDaysButton(alarm, itemAlarmThursday, itemAlarmThursdayBtn, Alarm.DaysWeek.Thursday)
+            dealWithDaysButton(alarm, itemAlarmFriday, itemAlarmFridayBtn, Alarm.DaysWeek.Friday)
+            dealWithDaysButton(alarm, itemAlarmSaturday, itemAlarmSaturdayBtn, Alarm.DaysWeek.Saturday)
+            dealWithDaysButton(alarm, itemAlarmSunday, itemAlarmSundayBtn, Alarm.DaysWeek.Sunday)
 
-            itemAlarmTuesday.setOnClickListener {
+/*            itemAlarmTuesday.setOnClickListener {
                 listener?.onAlarmDaySelected(alarm, Alarm.DaysWeek.Tuesday)
             }
             itemAlarmWednesday.setOnClickListener {
@@ -101,7 +112,7 @@ class AlarmsListAdapter(
             }
             itemAlarmSunday.setOnClickListener {
                 listener?.onAlarmDaySelected(alarm, Alarm.DaysWeek.Sunday)
-            }
+            }*/
             itemAlarmRepeatCheck.setOnCheckedChangeListener { _, isChecked ->
                 listener?.onAlarmRepeatCheck(alarm, isChecked)
                 if (isChecked) {
@@ -113,16 +124,19 @@ class AlarmsListAdapter(
         }
     }
 
-    private fun dealWithDaysButton(alarm: Alarm, itemAlarmDay: Button, day: Alarm.DaysWeek) {
+    private fun dealWithDaysButton(alarm: Alarm, itemAlarmDay: RelativeLayout, itemAlarmDayBtn: Button, day: Alarm.DaysWeek) {
         itemAlarmDay.setOnClickListener {
             listener?.onAlarmDaySelected(alarm, day)
         }
+        itemAlarmDayBtn.setOnClickListener {
+            listener?.onAlarmDaySelected(alarm, day)
+        }
         if (alarm.listActifDays.contains(day)) {
-            itemAlarmDay.textColor = R.color.texte_bouton
-            //          itemAlarmDay.background = itemAlarmDay.resources.getColor(R.color.transparent, null)
+            itemAlarmDayBtn.textColor = R.color.white_transparent_70
+            itemAlarmDayBtn.background = ContextCompat.getDrawable(itemAlarmDay.context, R.drawable.rounded_button)
         } else {
-            itemAlarmDay.textColor = R.color.colorPrimary
-//            itemAlarmDay.background = itemAlarmDay.resources.getColor(R.color.transparent, null)
+            itemAlarmDayBtn.textColor = R.color.colorPrimary
+            itemAlarmDayBtn.background = null
         }
     }
 

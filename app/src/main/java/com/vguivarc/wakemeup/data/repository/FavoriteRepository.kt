@@ -17,7 +17,7 @@ class FavoriteRepository(retrofit: Retrofit) : FavoriteService {
     }
 
     override fun saveFavoriteStatus(favorite: Favorite, isFavorite: Boolean): Completable {
-        val favoriteRequest = FavoriteRequest(isFavorite)
-        return favoriteApi.setFavorite(favorite.id, favoriteRequest)
+        val favoriteRequest = FavoriteRequest(favorite, isFavorite)
+        return favoriteApi.setFavorite(favoriteRequest)
     }
 }
