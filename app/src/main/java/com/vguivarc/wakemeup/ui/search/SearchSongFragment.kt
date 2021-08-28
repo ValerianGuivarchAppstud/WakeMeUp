@@ -16,8 +16,6 @@ import com.vguivarc.wakemeup.base.BaseLceFragment
 import com.vguivarc.wakemeup.base.Fail
 import com.vguivarc.wakemeup.base.Loading
 import com.vguivarc.wakemeup.base.Success
-import com.vguivarc.wakemeup.domain.entity.Favorite
-import com.vguivarc.wakemeup.ui.music.FavoriteViewModel
 import com.vguivarc.wakemeup.domain.entity.Song
 import com.vguivarc.wakemeup.ui.song.SongAdapter
 import kotlinx.android.synthetic.main.search_video_fragment.*
@@ -38,8 +36,8 @@ class SearchSongFragment :
     // validé
     private val searchVideosList = mutableListOf<Song>()
     private lateinit var searchVideoAdapter: SongAdapter
-    private val viewModelVideo: SongViewModel by inject()
-    private val viewModelFavorite: FavoriteViewModel by inject()
+    private val viewModelVideoSearch: SearchSongViewModel by inject()
+//    private val viewModelFavorite: FavoriteViewModel by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,10 +49,10 @@ class SearchSongFragment :
         searchVideoAdapter.notifyDataSetChanged()
 
         button_valid_search_song.setOnClickListener {
-            viewModelVideo.getFavoriteList(search.text.toString())
+            viewModelVideoSearch.getSearchedSongList(search.text.toString())
         }
 
-        viewModelVideo.songList.observe(
+        viewModelVideoSearch.songList.observe(
             viewLifecycleOwner,
             Observer {
                 when (it) {
@@ -153,7 +151,7 @@ class SearchSongFragment :
         return dateFormat.format(date).toString()
     }
     override fun onSongFavoriteClickListener(position: Int) {
-        viewModelFavorite.saveFavoriteStatus(
+        viewModelVideoSearch.saveFavoriteStatus(
             Favorite(
                 searchVideoAdapter.getSongWithPosition(position).id,
                 getNowTxt(),

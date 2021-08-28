@@ -8,7 +8,7 @@
     <fragment
         tools:layout="@layout/fragment_favori_list"
         android:id="@+id/favoriteListFragment"
-        android:name="com.vguivarc.wakemeup.ui.music.MusicFragment"
+        android:name="com.vguivarc.wakemeup.ui.favoritelist.FavoriteListFragment"
         android:label="@string/musique" >
         <action
             android:id="@+id/action_favoriteListFragment_to_searchVideoFragment"

@@ -1,4 +1,4 @@
-package com.vguivarc.wakemeup.ui.music
+package com.vguivarc.wakemeup.ui.favoritelist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,7 +24,7 @@ class FavoriteViewModel(private val favoriteService: FavoriteService) : BaseView
             .doOnSubscribe { _favoriteList.postValue(Loading()) }
             .subscribe(
                 {
-                    _favoriteList.postValue(Success(it))
+                    _favoriteList.postValue(Success(it.content))
                 },
                 {
                     _favoriteList.postValue(Fail(it))

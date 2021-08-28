@@ -1,7 +1,7 @@
 package com.vguivarc.wakemeup.di
 
-import com.vguivarc.wakemeup.ui.music.FavoriteViewModel
-import com.vguivarc.wakemeup.ui.search.SongViewModel
+import com.vguivarc.wakemeup.ui.favoritelist.FavoriteViewModel
+import com.vguivarc.wakemeup.ui.search.SearchSongViewModel
 import com.vguivarc.wakemeup.viewmodel.AccountViewModel
 import com.vguivarc.wakemeup.viewmodel.AlarmsViewModel
 import com.vguivarc.wakemeup.viewmodel.AuthViewModel
@@ -15,5 +15,5 @@ val viewModelModule = module {
     viewModel { AuthViewModel(get()) }
     viewModel { ContactsViewModel(get()) }
     viewModel { FavoriteViewModel(get()) }
-    viewModel { SongViewModel(get()) }
+    viewModel { SearchSongViewModel(get(), get()) }
 }

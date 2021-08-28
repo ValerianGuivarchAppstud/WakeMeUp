@@ -14,7 +14,7 @@ import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.Favorite
 import com.vguivarc.wakemeup.domain.entity.Ringing
 import com.vguivarc.wakemeup.domain.entity.UserProfile
-import com.vguivarc.wakemeup.ui.music.FavoriteViewModel
+import com.vguivarc.wakemeup.ui.favoritelist.FavoriteViewModel
 import kotlinx.android.synthetic.main.fragment_musiques_passees.view.*
 
 class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemClickListener {

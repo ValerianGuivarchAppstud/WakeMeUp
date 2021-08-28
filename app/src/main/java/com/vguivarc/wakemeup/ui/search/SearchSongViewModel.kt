@@ -2,29 +2,76 @@ package com.vguivarc.wakemeup.ui.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.hsuaxo.rxtube.YTResult
 import com.vguivarc.wakemeup.base.*
+import com.vguivarc.wakemeup.domain.entity.Song
+import com.vguivarc.wakemeup.domain.service.FavoriteService
 import com.vguivarc.wakemeup.domain.service.SongService
 import com.vguivarc.wakemeup.util.applySchedulers
 import io.reactivex.rxkotlin.addTo
 import java.util.*
 
-class SongViewModel(private val songService: SongService) : BaseViewModel() {
+class SearchSongViewModel(private val songService: SongService, private val favoriteService: FavoriteService) : BaseViewModel() {
 
-    private val _songList = MutableLiveData<Resource<YTResult>>()
-    val songList: LiveData<Resource<YTResult>>
-        get() = _songList
+    private val _searchSongList = MutableLiveData<Resource<List<SearchSong>>>()
+    val searchSongList: LiveData<Resource<List<SearchSong>>>
+        get() = _searchSongList
 
-    fun getFavoriteList(searchText: String) {
-        songService.getSong(searchText)
+
+    fun getSearchedSongList(searchText: String, isConnected: Boolean) {
+        if(isConnected) {
+            favoriteService.getFavoriteList()
+                .applySchedulers()
+                .subscribe(
+                    {
+                        _favoriteList.postValue(Success(it))
+                    },
+                    {
+                        _searchSongList.postValue(Fail(it))
+                    }
+                )
+                .addTo(disposables)
+        } else {
+            songService.getSong(searchText)
+                .applySchedulers()
+                .doOnSubscribe { _searchSongList.postValue(Loading()) }
+                .subscribe(
+                    {
+                        _searchSongList.postValue(Success(
+                            it.items.map { song -> SearchSong(song, false) }
+                        ))
+                    },
+                    {
+                        _searchSongList.postValue(Fail(it))
+                    }
+                )
+                .addTo(disposables)
+        }
+    }
+
+    fun getFavoriteList() {
+        favoriteService.getFavoriteList()
             .applySchedulers()
-            .doOnSubscribe { _songList.postValue(Loading()) }
+            .doOnSubscribe { _favoriteList.postValue(Loading()) }
             .subscribe(
                 {
-                    _songList.postValue(Success(it))
+                    _favoriteList.postValue(Success(it))
                 },
                 {
-                    _songList.postValue(Fail(it))
+                    _favoriteList.postValue(Fail(it))
+                }
+            )
+            .addTo(disposables)
+    }
+
+    fun addFavorite(song: Song) {
+        favoriteService.saveFavoriteStatus(song, true)
+            .applySchedulers()
+            .subscribe(
+                {
+                    _favoriteList.postValue(Success(it))
+                },
+                {
+                    _favoriteList.postValue(Fail(it))
                 }
             )
             .addTo(disposables)

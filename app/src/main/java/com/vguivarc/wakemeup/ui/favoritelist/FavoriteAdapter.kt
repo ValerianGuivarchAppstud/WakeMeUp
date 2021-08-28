@@ -1,4 +1,4 @@
-package com.vguivarc.wakemeup.ui.music
+package com.vguivarc.wakemeup.ui.favoritelist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +10,10 @@ import com.squareup.picasso.Picasso
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.Favorite
 
-// ----------------------------------------------------------------//
-// CET ADAPTATER EST POUR LES FAVORIS//
-// ----------------------------------------------------------------//
-
-class FavoriteAdaptater(
+class FavoriteAdapter(
     private var favoriteList: List<Favorite>,
     private val listener: RecyclerItemClickListener
-) : RecyclerView.Adapter<FavoriteAdaptater.FavorisViewHolder>() {
+) : RecyclerView.Adapter<FavoriteAdapter.FavorisViewHolder>() {
 
     fun setFavoriteList(favoriteList: List<Favorite>) {
         this.favoriteList = favoriteList

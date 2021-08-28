@@ -43,7 +43,7 @@ class SongAdapter(
             holder.itemView.setBackgroundColor(
                 ContextCompat.getColor(
                     context,
-                    R.color.colorPrimary
+                    R.color.colorPrimaryLight
                 )
             )
         } else {

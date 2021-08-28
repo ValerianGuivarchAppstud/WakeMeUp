@@ -1,4 +1,4 @@
-package com.vguivarc.wakemeup.ui.music
+package com.vguivarc.wakemeup.ui.favoritelist
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -17,12 +17,12 @@ import com.vguivarc.wakemeup.base.Success
 import com.vguivarc.wakemeup.domain.entity.Favorite
 import org.koin.android.ext.android.inject
 
-class MusicFragment :
+class FavoriteListFragment :
     BaseLceFragment(R.layout.fragment_favori_list),
-    FavoriteAdaptater.RecyclerItemClickListener {
+    FavoriteAdapter.RecyclerItemClickListener {
 
     private var favoriteList = mutableListOf<Favorite>()
-    private lateinit var favoriteAdapter: FavoriteAdaptater
+    private lateinit var favoriteAdapter: FavoriteAdapter
 
     // private lateinit var youTubePlayerView: YouTubePlayerView
     private val viewModelFavorite: FavoriteViewModel by inject()
@@ -31,7 +31,7 @@ class MusicFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        favoriteAdapter = FavoriteAdaptater(favoriteList, this)
+        favoriteAdapter = FavoriteAdapter(favoriteList, this)
 
         viewModelFavorite.getFavoriteList()
         viewModelFavorite.favoriteList.observe(
