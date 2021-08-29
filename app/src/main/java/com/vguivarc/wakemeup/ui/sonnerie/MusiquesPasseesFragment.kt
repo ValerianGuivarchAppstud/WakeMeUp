@@ -14,7 +14,7 @@ import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.entity.Favorite
 import com.vguivarc.wakemeup.domain.entity.Ringing
 import com.vguivarc.wakemeup.domain.entity.UserProfile
-import com.vguivarc.wakemeup.ui.favoritelist.FavoriteViewModel
+import com.vguivarc.wakemeup.ui.favoritelist.FavoriteListViewModel
 import kotlinx.android.synthetic.main.fragment_musiques_passees.view.*
 
 class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemClickListener {
@@ -30,7 +30,7 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
     //  private var youTubePlayer: YouTubePlayer? = null
 
     private lateinit var viewModelSonneries: SonnerieListeViewModel
-    private lateinit var viewModelFavorite: FavoriteViewModel
+    private lateinit var viewModelFavorite: FavoriteListViewModel
     private val listMusicPass = mutableListOf<Ringing>()
     private val listMusicFav = mutableListOf<Favorite>()
 

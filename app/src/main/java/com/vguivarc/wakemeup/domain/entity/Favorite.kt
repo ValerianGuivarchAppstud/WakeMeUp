@@ -9,5 +9,5 @@ import kotlinx.android.parcel.Parcelize
 data class Favorite(
     val id: String,
     val createdAt: String,
-    val song: Song?
+    val song: Song
 ) : Parcelable

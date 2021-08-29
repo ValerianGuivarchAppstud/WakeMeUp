@@ -3,7 +3,6 @@ package com.vguivarc.wakemeup.ui
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -14,7 +13,6 @@ import com.vguivarc.wakemeup.base.BaseActivity
 import com.vguivarc.wakemeup.util.navigation.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.core.component.KoinComponent
-import java.io.File
 
 private const val DEEPLINK_TOPIC_KEY = "tochange"
 
@@ -81,7 +79,7 @@ class MainActivity : BaseActivity(), KoinComponent {
         val navGraphIds = listOf(
             R.navigation.home_clock,
             R.navigation.music,
-            R.navigation.friends,
+            R.navigation.contacts,
             R.navigation.history,
             R.navigation.settings
         )

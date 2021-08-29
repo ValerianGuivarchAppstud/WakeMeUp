@@ -23,17 +23,17 @@ val networkModule = module {
     // single(named(DI_MOCK_ENABLED)) { BuildConfig.MOCK_ENABLED }
 
     // Initialise the network
-    single<Retrofit> {
+    single<Retrofit>(named("RetrofitServer")) {
         Retrofit.Builder()
             .baseUrl(BuildConfig.API_BASEURL)
-            .client(get<OkHttpClient>())
+            .client(get(named("OkHttpClientServer")))
             .addConverterFactory(MoshiConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
     }
 
     // Initialize OK HTTP Client
-    single<OkHttpClient> {
+    single<OkHttpClient> (named("OkHttpClientServer")) {
         OkHttpClient.Builder()
             .apply {
                 readTimeout(READ_TIMEOUT_IN_MINUTES, TimeUnit.MINUTES)

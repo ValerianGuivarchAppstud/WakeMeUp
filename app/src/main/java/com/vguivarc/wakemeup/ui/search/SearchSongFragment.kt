@@ -7,17 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hsuaxo.rxtube.YTResult
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.base.BaseLceFragment
-import com.vguivarc.wakemeup.base.Fail
-import com.vguivarc.wakemeup.base.Loading
-import com.vguivarc.wakemeup.base.Success
-import com.vguivarc.wakemeup.domain.entity.Song
-import com.vguivarc.wakemeup.ui.song.SongAdapter
+import com.vguivarc.wakemeup.base.*
+import kotlinx.android.synthetic.main.fragment_auth_email.*
 import kotlinx.android.synthetic.main.search_video_fragment.*
 import org.koin.android.ext.android.inject
 import java.text.DateFormat
@@ -26,41 +21,44 @@ import java.util.*
 
 class SearchSongFragment :
     BaseLceFragment(R.layout.search_video_fragment),
-    SongAdapter.SongItemClickListener {
+    SearchSongAdapter.SongItemClickListener {
 
     private lateinit var youTubePlayerView: YouTubePlayerView
 
     private var currentIndex: Int = 0
-    private var currentSong = MutableLiveData<Song?>()
+    private var currentSong = MutableLiveData<SearchSong?>()
 
-    // validé
-    private val searchVideosList = mutableListOf<Song>()
-    private lateinit var searchVideoAdapter: SongAdapter
+    private val searchVideosList = mutableListOf<SearchSong>()
+    private lateinit var searchVideoAdapterSearch: SearchSongAdapter
     private val viewModelVideoSearch: SearchSongViewModel by inject()
-//    private val viewModelFavorite: FavoriteViewModel by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchVideoAdapter = SongAdapter(requireContext(), searchVideosList, this)
+        (activity as BaseActivity).setSupportActionBar(loginEmailToolbar)
+        (activity as BaseActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        searchVideoAdapterSearch = SearchSongAdapter(requireContext(), searchVideosList, this)
         val recyclerView = view.findViewById<RecyclerView>(R.id.contentView)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = searchVideoAdapter
-        searchVideoAdapter.notifyDataSetChanged()
+        recyclerView.adapter = searchVideoAdapterSearch
+        searchVideoAdapterSearch.notifyDataSetChanged()
 
         button_valid_search_song.setOnClickListener {
             viewModelVideoSearch.getSearchedSongList(search.text.toString())
         }
 
-        viewModelVideoSearch.songList.observe(
+        viewModelVideoSearch.searchSongList.observe(
             viewLifecycleOwner,
             Observer {
                 when (it) {
                     is Loading -> showLoading()
                     is Success -> {
-                        val ytResult: YTResult = it.data ?: YTResult()
-                        refreshUI(ytResult)
-                        if (ytResult.items.isEmpty()) showEmptyView() else showContent()
+                        refreshUI(it.data ?: listOf())
+                        if (it.data.isNullOrEmpty())
+                            showEmptyView()
+                        else
+                            showContent()
                     }
                     is Fail -> showError()
                 }
@@ -89,12 +87,12 @@ class SearchSongFragment :
                         it?.let {
                             youTubePlayerView.visibility = View.VISIBLE
                             youTubePlayer.loadVideo(
-                                it.id,
+                                it.song.id,
                                 0f
                             )
                             youTubePlayer.setVolume(100)
                             youTubePlayerView.getPlayerUiController()
-                                .setVideoTitle(it.title)
+                                .setVideoTitle(it.song.title)
                         } ?: run {
                             youTubePlayerView.visibility = View.GONE
                         }
@@ -137,11 +135,11 @@ class SearchSongFragment :
     // TODO remettre le dernier truc cherché dans la barre de recherche
     @SuppressLint("LogNotTimber")
     override fun onSongPictureClickListener(position: Int) {
-        searchVideoAdapter.notifyItemChanged(searchVideoAdapter.selectedPosition)
+        searchVideoAdapterSearch.notifyItemChanged(searchVideoAdapterSearch.selectedPosition)
         currentIndex = position
-        searchVideoAdapter.selectedPosition = currentIndex
-        searchVideoAdapter.notifyItemChanged(currentIndex)
-        currentSong.value = searchVideoAdapter.getSongWithPosition(position)
+        searchVideoAdapterSearch.selectedPosition = currentIndex
+        searchVideoAdapterSearch.notifyItemChanged(currentIndex)
+        currentSong.value = searchVideoAdapterSearch.getSongWithPosition(position)
         // //////viewModelSearchVideo.setCurrentSong(position)
     }
 
@@ -151,21 +149,17 @@ class SearchSongFragment :
         return dateFormat.format(date).toString()
     }
     override fun onSongFavoriteClickListener(position: Int) {
-        viewModelVideoSearch.saveFavoriteStatus(
-            Favorite(
-                searchVideoAdapter.getSongWithPosition(position).id,
-                getNowTxt(),
-                searchVideoAdapter.getSongWithPosition(position)
-            ),
-            true
-        )
+            viewModelVideoSearch.updateFavorite(
+                searchVideoAdapterSearch.getSongWithPosition(position).song,
+                searchVideoAdapterSearch.getSongWithPosition(position).isFavorite.not()
+            )
     }
 
     override fun onSongShareClickListener(position: Int) {
         TODO("Not yet implemented")
     }
 
-    private fun refreshUI(ytResult: YTResult) {
-        searchVideoAdapter.setYTResult(ytResult)
+    private fun refreshUI(listSearchSong: List<SearchSong>) {
+        searchVideoAdapterSearch.setListSearchSong(listSearchSong)
     }
 }

@@ -5,25 +5,41 @@ import androidx.lifecycle.MutableLiveData
 import com.vguivarc.wakemeup.base.*
 import com.vguivarc.wakemeup.domain.entity.Song
 import com.vguivarc.wakemeup.domain.service.FavoriteService
+import com.vguivarc.wakemeup.domain.service.SessionService
 import com.vguivarc.wakemeup.domain.service.SongService
 import com.vguivarc.wakemeup.util.applySchedulers
+import com.vguivarc.wakemeup.util.toSong
 import io.reactivex.rxkotlin.addTo
 import java.util.*
 
-class SearchSongViewModel(private val songService: SongService, private val favoriteService: FavoriteService) : BaseViewModel() {
+class SearchSongViewModel(private val songService: SongService, private val favoriteService: FavoriteService, private val sessionService : SessionService) : BaseViewModel() {
 
     private val _searchSongList = MutableLiveData<Resource<List<SearchSong>>>()
     val searchSongList: LiveData<Resource<List<SearchSong>>>
         get() = _searchSongList
 
 
-    fun getSearchedSongList(searchText: String, isConnected: Boolean) {
-        if(isConnected) {
+    fun getSearchedSongList(searchText: String) {
+        if(sessionService.isConnected()) {
             favoriteService.getFavoriteList()
                 .applySchedulers()
                 .subscribe(
-                    {
-                        _favoriteList.postValue(Success(it))
+                    { favoriteList ->
+                        songService.getSong(searchText)
+                            .applySchedulers()
+                            .doOnSubscribe { _searchSongList.postValue(Loading()) }
+                            .subscribe(
+                                { ytResult ->
+                                    _searchSongList.postValue(Success(
+                                        ytResult.items.map { song -> SearchSong(song.toSong(),
+                                            favoriteList.any { it.id == song.id() }) }
+                                    ))
+                                },
+                                {
+                                    _searchSongList.postValue(Fail(it))
+                                }
+                            )
+                            .addTo(disposables)
                     },
                     {
                         _searchSongList.postValue(Fail(it))
@@ -37,7 +53,7 @@ class SearchSongViewModel(private val songService: SongService, private val favo
                 .subscribe(
                     {
                         _searchSongList.postValue(Success(
-                            it.items.map { song -> SearchSong(song, false) }
+                            it.items.map { ytContent -> SearchSong(ytContent.toSong(), false) }
                         ))
                     },
                     {
@@ -48,30 +64,16 @@ class SearchSongViewModel(private val songService: SongService, private val favo
         }
     }
 
-    fun getFavoriteList() {
-        favoriteService.getFavoriteList()
-            .applySchedulers()
-            .doOnSubscribe { _favoriteList.postValue(Loading()) }
-            .subscribe(
-                {
-                    _favoriteList.postValue(Success(it))
-                },
-                {
-                    _favoriteList.postValue(Fail(it))
-                }
-            )
-            .addTo(disposables)
-    }
-
-    fun addFavorite(song: Song) {
-        favoriteService.saveFavoriteStatus(song, true)
+    fun updateFavorite(song: Song, isFavorite: Boolean) {
+        favoriteService.saveFavoriteStatus(song, isFavorite)
             .applySchedulers()
             .subscribe(
                 {
-                    _favoriteList.postValue(Success(it))
+                    _searchSongList.value?.data?.filter { it.song.id == song.id }?.get(0)?.isFavorite = isFavorite
+                    _searchSongList.postValue(Success(_searchSongList.value?.data))
                 },
                 {
-                    _favoriteList.postValue(Fail(it))
+                    _searchSongList.postValue(Fail(it))
                 }
             )
             .addTo(disposables)

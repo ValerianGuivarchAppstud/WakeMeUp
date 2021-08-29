@@ -26,13 +26,16 @@ package com.vguivarc.wakemeup.di
 
 import com.vguivarc.wakemeup.data.repository.*
 import com.vguivarc.wakemeup.domain.service.*
+import com.vguivarc.wakemeup.ui.contactlistfacebook.ContactFacebook
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val servicesModule = module {
-    single<AuthService> { AuthRepository(get(), get()) }
+    single<AuthService> { AuthRepository(get(named("RetrofitServer")), get()) }
     single<AlarmService> { AlarmRepository() }
-    single<ContactService> { ContactRepository(get()) }
-    single<FavoriteService> { FavoriteRepository(get()) }
+    single<ContactService> { ContactRepository(get(named("RetrofitServer"))) }
+    single<ContactFacebookService> { ContactFacebookRepository(get(named("RetrofitFacebook"))) }
+    single<FavoriteService> { FavoriteRepository(get(named("RetrofitServer"))) }
     single<SessionService> { SessionRepository(get(), get()) }
     single<SongService> { SongRepository() }
 

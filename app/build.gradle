@@ -199,6 +199,6 @@ dependencies {
 
     implementation 'com.github.AppIntro:AppIntro:6.0.0'
 
-    implementation 'com.facebook.android:facebook-android-sdk:7.1.0'
+    implementation 'com.facebook.android:facebook-android-sdk:9.0.0'
 
 }

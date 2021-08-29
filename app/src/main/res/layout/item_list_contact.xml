@@ -27,7 +27,7 @@
                 android:background="@color/colorPrimaryDark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/item_contact_image" />
+                app:layout_constraintTop_toBottomOf="@+id/item_contact_picture" />
 
 
             <CheckBox
@@ -40,7 +40,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/item_contact_image"
+                android:id="@+id/item_contact_picture"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:contentDescription="@string/image_ami"
@@ -51,7 +51,7 @@
 
 
             <TextView
-                android:id="@+id/item_contact_nom"
+                android:id="@+id/item_contact_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
@@ -62,11 +62,11 @@
                 android:text="@string/snooze"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toStartOf="@+id/checkBoxContact"
-                app:layout_constraintStart_toEndOf="@+id/item_contact_image"
+                app:layout_constraintStart_toEndOf="@+id/item_contact_picture"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/item_contact_musique_envoyee"
+                android:id="@+id/item_contact_infos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
@@ -75,9 +75,9 @@
                 android:gravity="center"
                 android:text="@string/snooze"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="@+id/item_contact_nom"
-                app:layout_constraintStart_toStartOf="@+id/item_contact_nom"
-                app:layout_constraintTop_toBottomOf="@+id/item_contact_nom" />
+                app:layout_constraintEnd_toEndOf="@+id/item_contact_name"
+                app:layout_constraintStart_toStartOf="@+id/item_contact_name"
+                app:layout_constraintTop_toBottomOf="@+id/item_contact_name" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

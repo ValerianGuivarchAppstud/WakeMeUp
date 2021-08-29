@@ -8,7 +8,7 @@ import com.vguivarc.wakemeup.domain.service.FavoriteService
 import com.vguivarc.wakemeup.util.applySchedulers
 import io.reactivex.rxkotlin.addTo
 
-class FavoriteViewModel(private val favoriteService: FavoriteService) : BaseViewModel() {
+class FavoriteListViewModel(private val favoriteService: FavoriteService) : BaseViewModel() {
 
     private val _favoriteList = MutableLiveData<Resource<List<Favorite>>>()
     val favoriteList: LiveData<Resource<List<Favorite>>>
@@ -24,7 +24,7 @@ class FavoriteViewModel(private val favoriteService: FavoriteService) : BaseView
             .doOnSubscribe { _favoriteList.postValue(Loading()) }
             .subscribe(
                 {
-                    _favoriteList.postValue(Success(it.content))
+                    _favoriteList.postValue(Success(it))
                 },
                 {
                     _favoriteList.postValue(Fail(it))
@@ -34,7 +34,7 @@ class FavoriteViewModel(private val favoriteService: FavoriteService) : BaseView
     }
 
     fun saveFavoriteStatus(favorite: Favorite, isFavorite: Boolean) {
-        favoriteService.saveFavoriteStatus(favorite, isFavorite)
+        favoriteService.saveFavoriteStatus(favorite.song, isFavorite)
             .applySchedulers()
             .doOnSubscribe { _favoriteStatus.postValue(Loading()) }
             .subscribe(

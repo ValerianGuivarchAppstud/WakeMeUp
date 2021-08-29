@@ -10,6 +10,7 @@ import com.vguivarc.wakemeup.domain.entity.UserProfile
 import com.vguivarc.wakemeup.viewmodel.AuthViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
+/*
 class ContactFragment : BaseLceFragment() {
 
     private val authViewModel: AuthViewModel by sharedViewModel()
@@ -105,3 +106,4 @@ class ContactFragment : BaseLceFragment() {
         return view
     }
 }
+*/

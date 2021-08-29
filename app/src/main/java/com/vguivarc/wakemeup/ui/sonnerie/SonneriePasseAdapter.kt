@@ -44,7 +44,7 @@ class SonneriePasseAdapter(
         holder.tvTitle.text = song.title
         // holder.tvArtist.text = song.artist
         if (favoriList.filter { fav -> fav.song!!.id == sonnerie.song!!.id }.isEmpty()) {
-            holder.ivFavori.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_fav_not_yet))
+            holder.ivFavori.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_favorite_yes))
         } else {
             holder.ivFavori.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_main_menu_favoris))
         }

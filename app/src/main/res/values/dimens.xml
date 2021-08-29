@@ -12,4 +12,7 @@
     <dimen name="text_huge">26sp</dimen>
     <dimen name="bottom_nav_height">60dp</dimen>
 
+    <dimen name="fab_level_1">65dp</dimen>
+    <dimen name="fab_level_2">120dp</dimen>
+
 </resources>

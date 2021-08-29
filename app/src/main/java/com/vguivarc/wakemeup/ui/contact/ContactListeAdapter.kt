@@ -31,9 +31,9 @@ class ContactListeAdapter(
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val cardViewContact = itemView.findViewById<CardView>(R.id.card_view_contact)!!
-        var itemContactImage = itemView.findViewById<ImageView>(R.id.item_contact_image)!!
-        var itemContactNom = itemView.findViewById<TextView>(R.id.item_contact_nom)!!
-        var itemContactMusiqueEnvoyee = itemView.findViewById<TextView>(R.id.item_contact_musique_envoyee)!!
+        var itemContactImage = itemView.findViewById<ImageView>(R.id.item_contact_picture)!!
+        var itemContactNom = itemView.findViewById<TextView>(R.id.item_contact_name)!!
+        var itemContactMusiqueEnvoyee = itemView.findViewById<TextView>(R.id.item_contact_infos)!!
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

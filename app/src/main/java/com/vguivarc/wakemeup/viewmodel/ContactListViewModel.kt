@@ -10,21 +10,21 @@ import com.vguivarc.wakemeup.domain.service.ContactService
 import com.vguivarc.wakemeup.util.SingleLiveEvent
 import com.vguivarc.wakemeup.util.applySchedulers
 import io.reactivex.rxkotlin.addTo
-
-class ContactsViewModel(
+/*
+class ContactListViewModel(
     private val contactsService: ContactService
 ) : BaseViewModel() {
 
     private val _contactsList = MutableLiveData<Resource<List<Contact>>>()
-    val contactsList: LiveData<Resource<List<Contact>>>
+    val contactList: LiveData<Resource<List<Contact>>>
         get() = _contactsList
 
     private val _ringingHasBeenShared = SingleLiveEvent<Resource<Ringing>>()
     val ringingHasBeenShared: LiveData<Resource<Ringing>>
         get() = _ringingHasBeenShared
 
-    fun getContacts() {
-        contactsService.getContact()
+    fun getContactList() {
+        contactsService.getContactList()
             .applySchedulers()
             .doOnSubscribe { _contactsList.postValue(Loading()) }
             .subscribe(
@@ -55,3 +55,4 @@ class ContactsViewModel(
             .addTo(disposables)
     }
 }
+*/

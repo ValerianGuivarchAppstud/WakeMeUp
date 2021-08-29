@@ -1,4 +1,4 @@
-package com.vguivarc.wakemeup.ui.alarm
+package com.vguivarc.wakemeup.util.old
 
 import kotlinx.android.synthetic.main.activity_reveil_edit.*
 import java.util.*

@@ -31,10 +31,10 @@ class ContactListeShareAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var itemContactImage = itemView.findViewById<ImageView>(R.id.item_contact_image)!!
-        var itemContactNom = itemView.findViewById<TextView>(R.id.item_contact_nom)!!
+        var itemContactImage = itemView.findViewById<ImageView>(R.id.item_contact_picture)!!
+        var itemContactNom = itemView.findViewById<TextView>(R.id.item_contact_name)!!
         var itemContactMusiqueEnvoyee =
-            itemView.findViewById<TextView>(R.id.item_contact_musique_envoyee)!!
+            itemView.findViewById<TextView>(R.id.item_contact_infos)!!
         var checkBoxContact = itemView.findViewById<CheckBox>(R.id.checkBoxContact)!!
     }
 

@@ -14,10 +14,10 @@ interface AuthApi {
     @POST("v1/user/auth/refresh")
     fun refresh(@Body credentials: AuthRefreshRequest): Single<UserToken>
 
-    @POST("v1/user/auth/login/password")
+    @POST("v1/user/auth/login/mail")
     fun login(@Body credentials: AuthRequest): Single<UserToken>
 
-    @POST("v1/auth/login/social")
+    @POST("v1/user/auth/login/facebook")
     fun loginWithSocialNetwork(@Body credentials: FacebookAuthRequest): Single<UserToken>
 
     @POST("v1/auth/resetPassword")

@@ -42,6 +42,9 @@ class SessionRepository(private val context: Context, private val moshi: Moshi) 
         set(SHARED_PREFERENCES_FIREBASE_TOKEN, firebaseToken)
 
     override fun getFirebaseToken(): String? = get(SHARED_PREFERENCES_FIREBASE_TOKEN)
+    override fun isConnected(): Boolean {
+        return getUserProfile() != null
+    }
 
     private inline fun <reified T> get(nameInDB: String): T? {
         val adapter = moshi.adapter(T::class.java).nullSafe()

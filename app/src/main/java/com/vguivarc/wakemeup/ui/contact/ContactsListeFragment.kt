@@ -11,7 +11,7 @@ import com.vguivarc.wakemeup.base.BaseLceFragment
 import com.vguivarc.wakemeup.domain.entity.Ringing
 import com.vguivarc.wakemeup.domain.entity.UserProfile
 import com.vguivarc.wakemeup.ui.sonnerie.SonnerieListeViewModel
-
+/*
 class ContactsListeFragment :
     BaseLceFragment(R.layout.fragment_contact_list),
     ContactListeAdapter.ContactListAdapterListener {
@@ -179,4 +179,4 @@ class ContactsListeFragment :
         return listeContactInApp
     }
 */
-}
+}*/

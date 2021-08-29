@@ -112,7 +112,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/ic_fav_not_yet" />
+                app:srcCompat="@drawable/ic_favorite_yes" />
 
             <ImageButton
                 android:id="@+id/pas_tv_share"

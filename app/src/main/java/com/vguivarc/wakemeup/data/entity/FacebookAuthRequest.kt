@@ -5,7 +5,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class FacebookAuthRequest(
-    val type: String = "FACEBOOK",
-    @Json(name = "socialToken")
+    @Json(name = "facebookToken")
     val token: String
 )

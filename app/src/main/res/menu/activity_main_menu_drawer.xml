@@ -11,11 +11,11 @@
             android:icon="@drawable/icon_main_menu_musiques"
             android:title="@string/musique" />
         <item
-            android:id="@+id/share_navigation"
+            android:id="@+id/contact_navigation"
             android:icon="@drawable/ic_baseline_supervisor_account_24"
-            android:title="@string/amis" />
+            android:title="@string/contacts" />
         <item
-            android:id="@+id/other_navigation"
+            android:id="@+id/history_navigation"
             android:icon="@drawable/ic_baseline_history_24"
             android:title="@string/historique" />
         <item

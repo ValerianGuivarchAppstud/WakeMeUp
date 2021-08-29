@@ -1,8 +1,9 @@
 package com.vguivarc.wakemeup.ui.search
 
 import com.hsuaxo.rxtube.YTContent
+import com.vguivarc.wakemeup.domain.entity.Song
 
 data class SearchSong(
-    val ytContent: YTContent,
-    val isFavorite: Boolean = false
+    val song: Song,
+    var isFavorite: Boolean = false
 )

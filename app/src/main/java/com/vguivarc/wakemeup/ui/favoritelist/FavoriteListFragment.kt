@@ -25,7 +25,7 @@ class FavoriteListFragment :
     private lateinit var favoriteAdapter: FavoriteAdapter
 
     // private lateinit var youTubePlayerView: YouTubePlayerView
-    private val viewModelFavorite: FavoriteViewModel by inject()
+    private val viewModelFavoriteList: FavoriteListViewModel by inject()
     private lateinit var recyclerView: RecyclerView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,8 +33,8 @@ class FavoriteListFragment :
 
         favoriteAdapter = FavoriteAdapter(favoriteList, this)
 
-        viewModelFavorite.getFavoriteList()
-        viewModelFavorite.favoriteList.observe(
+        viewModelFavoriteList.getFavoriteList()
+        viewModelFavoriteList.favoriteList.observe(
             viewLifecycleOwner,
             Observer {
                 when (it) {
@@ -163,7 +163,7 @@ class FavoriteListFragment :
         AlertDialog.Builder(requireContext()).setTitle("Supprimer favori")
             .setMessage("Voulez-vous supprimer \"" + recherche.song!!.title + "\" de vos favoris ?")
             .setPositiveButton("Supprimer") { _, _ ->
-                viewModelFavorite.saveFavoriteStatus(recherche, false)
+                viewModelFavoriteList.saveFavoriteStatus(recherche, false)
             }
             .setNeutralButton("Annuler") { _, _ -> }.create().show()
     }

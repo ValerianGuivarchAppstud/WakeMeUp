@@ -9,6 +9,7 @@ import android.os.Build
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import com.vguivarc.wakemeup.data.repository.Repository
+import com.vguivarc.wakemeup.di.facebookNetworkModule
 import com.vguivarc.wakemeup.di.networkModule
 import com.vguivarc.wakemeup.di.servicesModule
 import com.vguivarc.wakemeup.di.viewModelModule
@@ -85,7 +86,8 @@ class AndroidApplication : Application() {
                 listOf(
                     servicesModule,
                     viewModelModule,
-                    networkModule
+                    networkModule,
+                    facebookNetworkModule
                 )
             )
         }

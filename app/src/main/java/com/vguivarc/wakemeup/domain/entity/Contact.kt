@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class Contact(
-    val contact: UserProfile,
+    val userProfile: UserProfile,
     val nbSongSent: Int,
     val nbSongReceived: Int
 ) : Parcelable
