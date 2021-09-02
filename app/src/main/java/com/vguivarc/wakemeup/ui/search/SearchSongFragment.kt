@@ -1,10 +1,9 @@
 package com.vguivarc.wakemeup.ui.search
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -12,12 +11,8 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.base.*
-import kotlinx.android.synthetic.main.fragment_auth_email.*
 import kotlinx.android.synthetic.main.search_video_fragment.*
 import org.koin.android.ext.android.inject
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 
 class SearchSongFragment :
     BaseLceFragment(R.layout.search_video_fragment),
@@ -25,32 +20,30 @@ class SearchSongFragment :
 
     private lateinit var youTubePlayerView: YouTubePlayerView
 
-    private var currentIndex: Int = 0
-    private var currentSong = MutableLiveData<SearchSong?>()
-
-    private val searchVideosList = mutableListOf<SearchSong>()
     private lateinit var searchVideoAdapterSearch: SearchSongAdapter
     private val viewModelVideoSearch: SearchSongViewModel by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as BaseActivity).setSupportActionBar(loginEmailToolbar)
+        (activity as BaseActivity).setSupportActionBar(toolbar)
         (activity as BaseActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        searchVideoAdapterSearch = SearchSongAdapter(requireContext(), searchVideosList, this)
+        searchVideoAdapterSearch = SearchSongAdapter(requireContext(), this)
         val recyclerView = view.findViewById<RecyclerView>(R.id.contentView)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = searchVideoAdapterSearch
         searchVideoAdapterSearch.notifyDataSetChanged()
 
         button_valid_search_song.setOnClickListener {
+            val imm = button_valid_search_song.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
             viewModelVideoSearch.getSearchedSongList(search.text.toString())
         }
 
         viewModelVideoSearch.searchSongList.observe(
             viewLifecycleOwner,
-            Observer {
+            {
                 when (it) {
                     is Loading -> showLoading()
                     is Success -> {
@@ -81,10 +74,12 @@ class SearchSongFragment :
         lifecycle.addObserver(youTubePlayerView)
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
-                currentSong.observe(
+                viewModelVideoSearch.currentSong.observe(
                     viewLifecycleOwner,
-                    Observer {
+                    {
                         it?.let {
+                            searchVideoAdapterSearch.selectedSong = it
+                            searchVideoAdapterSearch.notifyDataSetChanged()
                             youTubePlayerView.visibility = View.VISIBLE
                             youTubePlayer.loadVideo(
                                 it.song.id,
@@ -103,51 +98,11 @@ class SearchSongFragment :
         )
     }
 
-    // --------------------------------------------------
-
-    // Gestion du clic sur le bouton partage
-            /* private fun gestionBoutonPartage(){
-                btPartage.setOnClickListener {
-                     if (AndroidApplication.repository.getCurrentUser()==null) {
-                     //TODO remplacer par alertdialog (en commentaire) pour envoyer vers le fragment de connection
-                         Utility.createSimpleToast(AndroidApplication.appContext.resources.getString(R.string.vous_netes_pas_connecte))
-                     } else {
-                         if (currentSong != null) {
-         /*                    val action =
-                                 com.vguivarc.wakemeup.song.search.RechercheVideoFragmentDirections.actionRechercheVideoFragmentToContactsListeShareFragment(
-                                     currentSong!!
-                                 )
-                             findNavController().navigate(action)*/
-                         }
-                         else{
-                             Toast.makeText(
-                                 requireActivity().application,
-                                 "Veuillez sélectionner une vidéo",
-                                 Toast.LENGTH_SHORT
-                             ).show()
-                         }
-                     }
-                 }
-             }*/
-
-// TODO historique marche pas, et inversion alphabétique et date ajout
-    // TODO quand on descend ça marche pas
-    // TODO remettre le dernier truc cherché dans la barre de recherche
-    @SuppressLint("LogNotTimber")
     override fun onSongPictureClickListener(position: Int) {
-        searchVideoAdapterSearch.notifyItemChanged(searchVideoAdapterSearch.selectedPosition)
-        currentIndex = position
-        searchVideoAdapterSearch.selectedPosition = currentIndex
-        searchVideoAdapterSearch.notifyItemChanged(currentIndex)
-        currentSong.value = searchVideoAdapterSearch.getSongWithPosition(position)
-        // //////viewModelSearchVideo.setCurrentSong(position)
+        searchVideoAdapterSearch.notifyItemChanged(position)
+        viewModelVideoSearch.setCurrentSong(position)
     }
 
-    private fun getNowTxt(): String {
-        val dateFormat: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
-        val date = Date()
-        return dateFormat.format(date).toString()
-    }
     override fun onSongFavoriteClickListener(position: Int) {
             viewModelVideoSearch.updateFavorite(
                 searchVideoAdapterSearch.getSongWithPosition(position).song,

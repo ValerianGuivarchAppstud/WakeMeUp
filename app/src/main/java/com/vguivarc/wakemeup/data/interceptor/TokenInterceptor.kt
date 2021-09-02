@@ -90,6 +90,7 @@ class TokenInterceptor(
         val newToken: UserToken? = try {
             this.authApi?.refresh(
                 AuthRefreshRequest(
+                    currentToken.accessToken,
                     currentToken.refreshToken
                 )
             )

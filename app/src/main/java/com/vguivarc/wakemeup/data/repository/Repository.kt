@@ -70,7 +70,7 @@ class Repository {
             ) { _, _ ->
                 GraphRequest(
                     AccessToken.getCurrentAccessToken(), // "/me/friends",
-                    // "me/taggable_friends",
+                    // "me/taggable_friends",F
                     getCurrentUser()!!.facebookId + "/friends",
                     null,
                     HttpMethod.GET

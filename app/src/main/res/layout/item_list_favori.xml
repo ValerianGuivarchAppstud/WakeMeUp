@@ -50,6 +50,8 @@
         android:layout_marginEnd="8dp"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:maxLines="4"
+        android:ellipsize="end"
         app:layout_constraintEnd_toStartOf="@+id/checkBoxFavori"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/fav_iv_artwork"

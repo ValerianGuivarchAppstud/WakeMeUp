@@ -13,11 +13,25 @@ class FavoriteRepository(retrofit: Retrofit) : FavoriteService {
     private val favoriteApi = retrofit.create(FavoriteApi::class.java)
 
     override fun getFavoriteList(): Single<List<Favorite>> {
-        return favoriteApi.getFavorites()
+        return favoriteApi.getFavorites().map {
+                favoritesListResponse -> favoritesListResponse.map { favoriteResponse ->
+                    Favorite(
+                        favoriteResponse.createdAt,
+                        Song(favoriteResponse.id,favoriteResponse.title, favoriteResponse.artworkUrl)
+                    )
+                }
+        }
     }
 
     override fun saveFavoriteStatus(song: Song, isFavorite: Boolean): Single<List<Favorite>> {
         val favoriteRequest = FavoriteRequest(song, isFavorite)
-        return favoriteApi.setFavorite(favoriteRequest)
+        return favoriteApi.setFavorite(favoriteRequest).map {
+                favoritesListResponse -> favoritesListResponse.map { favoriteResponse ->
+            Favorite(
+                favoriteResponse.createdAt,
+                Song(favoriteResponse.id,favoriteResponse.title, favoriteResponse.artworkUrl)
+            )
+        }
+        }
     }
 }

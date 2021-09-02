@@ -35,6 +35,7 @@
         android:hint="Tape ta recherche de musiques"
         android:inputType="text"
         android:maxLines="1"
+        android:ellipsize="end"
         android:paddingVertical="16dp"
         android:paddingStart="20dp"
         android:paddingEnd="18dp"
@@ -97,10 +98,8 @@
         app:layout_constraintTop_toBottomOf="@+id/search"
         tools:listitem="@layout/item_list_video" />
 
-
     <include
         android:id="@+id/include"
         layout="@layout/loader" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

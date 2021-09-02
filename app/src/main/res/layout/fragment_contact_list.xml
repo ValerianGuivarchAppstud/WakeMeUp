@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textPasContact"
+        android:id="@+id/emptyView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -21,19 +21,8 @@
         app:layout_constraintStart_toStartOf="@+id/recycler_list_contact"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/pb_main_loader"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerInParent="true"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/recycler_list_contact"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_list_contact"
+        android:id="@+id/contentView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_alignParentTop="true"
@@ -95,7 +84,12 @@
         android:focusable="true"
         android:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/recycler_list_contact"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/add_24"
         android:contentDescription="@string/ajouter_un_contact" />
+
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/loader" />
 </androidx.constraintlayout.widget.ConstraintLayout>

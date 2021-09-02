@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.vguivarc.wakemeup.R
@@ -30,8 +31,11 @@ class FavoriteListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recyclerView = view.findViewById(R.id.contentView)
 
         favoriteAdapter = FavoriteAdapter(favoriteList, this)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = favoriteAdapter
 
         viewModelFavoriteList.getFavoriteList()
         viewModelFavoriteList.favoriteList.observe(
@@ -57,6 +61,7 @@ class FavoriteListFragment :
 
     private fun refreshUI(favoriteList: List<Favorite>) {
         favoriteAdapter.setFavoriteList(favoriteList)
+        favoriteAdapter.notifyDataSetChanged()
     }
 
     // --------------------------------------------------------------------------------------------------------

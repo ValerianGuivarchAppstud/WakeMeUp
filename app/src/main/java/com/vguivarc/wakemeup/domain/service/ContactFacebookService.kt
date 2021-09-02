@@ -1,13 +1,16 @@
 package com.vguivarc.wakemeup.domain.service
 
-import com.vguivarc.wakemeup.data.entity.ShareRingingRequest
-import com.vguivarc.wakemeup.domain.entity.Contact
-import com.vguivarc.wakemeup.domain.entity.Favorite
-import com.vguivarc.wakemeup.domain.entity.Ringing
-import com.vguivarc.wakemeup.domain.entity.Song
-import com.vguivarc.wakemeup.ui.contactlistfacebook.ContactFacebook
-import io.reactivex.Single
+import androidx.lifecycle.LiveData
+import com.vguivarc.wakemeup.domain.entity.ContactFacebook
 
+/*
 interface ContactFacebookService {
-    fun getContactFacebookList(facebookId: String): Single<List<ContactFacebook>>
+
+    data class ContactFacebookListState(
+        val list : List<ContactFacebook>? = null,
+        val error : Exception? = null
+    )
+
+    fun getContactFacebookList(facebookId: String): LiveData<ContactFacebookListState>
 }
+*/

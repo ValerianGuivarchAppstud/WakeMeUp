@@ -1,36 +1,52 @@
 package com.vguivarc.wakemeup.data.repository
 
 import android.os.Bundle
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.facebook.AccessToken
 import com.facebook.GraphRequest
 import com.facebook.HttpMethod
 import com.vguivarc.wakemeup.data.api.ContactApi
-import com.vguivarc.wakemeup.data.api.FacebookApi
-import com.vguivarc.wakemeup.data.entity.ContactRequest
-import com.vguivarc.wakemeup.data.entity.FavoriteRequest
-import com.vguivarc.wakemeup.data.entity.ShareRingingRequest
-import com.vguivarc.wakemeup.domain.entity.Contact
-import com.vguivarc.wakemeup.domain.entity.Favorite
-import com.vguivarc.wakemeup.domain.entity.Ringing
-import com.vguivarc.wakemeup.domain.service.ContactFacebookService
-import com.vguivarc.wakemeup.domain.service.ContactService
-import com.vguivarc.wakemeup.ui.contactlistfacebook.ContactFacebook
-import io.reactivex.Single
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Retrofit
-import timber.log.Timber
+/*
 
 class ContactFacebookRepository(retrofit: Retrofit) : ContactFacebookService {
 
-    private val contactApi = retrofit.create(FacebookApi::class.java)
+    private val _contactFacebookList = MutableLiveData<ContactFacebookService.ContactFacebookListState>()
 
+    private val contactApi = retrofit.create(ContactApi::class.java)
 
-    override fun getContactFacebookList(facebookId: String): Single<List<ContactFacebook>> {
-        return contactApi.getContacts().map {
-            null
-//            it.contacts
+    override fun getContactFacebookList(facebookId: String): LiveData<ContactFacebookService.ContactFacebookListState> {
+        val request = GraphRequest.newMeRequest(
+            AccessToken.getCurrentAccessToken()
+        ) { _, _ ->
+            GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/$facebookId/friends",
+                null,
+                HttpMethod.GET
+            ) { response2 ->
+                try {
+                    val rawName = response2.jsonObject.getJSONArray("data")
+                    val listIdFacebook = mutableListOf<String>()
+                    for (i in 0 until rawName.length()) {
+                        val jsonFacebook =  rawName.getJSONObject(i)
+                        listIdFacebook.add(jsonFacebook.getString("id"))
+                    }
+                    _contactFacebookList.value = ContactFacebookService.ContactFacebookListState(list = contactApi.getContactFacebookList(listIdFacebook).blockingGet())
+                    } catch (e: Exception) {
+                    e.printStackTrace()
+                    _contactFacebookList.value = ContactFacebookService.ContactFacebookListState(error = e)
+                }
+            }.executeAsync()
         }
+
+        val parameters = Bundle()
+        parameters.putString("fields", "id,name,link,email,picture")
+        request.parameters = parameters
+        request.executeAsync()
+
+        return _contactFacebookList
     }
      /*   val request = GraphRequest.newMeRequest(
             AccessToken.getCurrentAccessToken()
@@ -63,3 +79,4 @@ class ContactFacebookRepository(retrofit: Retrofit) : ContactFacebookService {
         return ServerResponse.ok().bodyAndAwait(eob);*/
 
 }
+*/

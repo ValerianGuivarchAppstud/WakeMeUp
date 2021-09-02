@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.core.view.ViewCompat
-import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.vguivarc.wakemeup.R
@@ -34,13 +35,16 @@ class ContactListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recyclerView = view.findViewById(R.id.contentView)
 
         contactAdapter = ContactListAdapter(contactList, this)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = contactAdapter
 
         viewModelContactList.getContactList()
         viewModelContactList.contactList.observe(
             viewLifecycleOwner,
-            Observer {
+            {
                 when (it) {
                     is Loading -> showLoading()
                     is Success -> {
@@ -61,9 +65,9 @@ class ContactListFragment :
         fabAddContactExt=view.findViewById(R.id.add_contact_externe)
 
         fabAddContactFb.setOnClickListener {
-/*            val action =
-                ContactsListFragmentDirections.actionContactsListeFragmentToContactsFacebookFragment()
-            findNavController().navigate(action)*/
+            findNavController().navigate(
+                R.id.contactFacebookListFragment
+            )
         }
 
         fabAddContactExt.setOnClickListener {

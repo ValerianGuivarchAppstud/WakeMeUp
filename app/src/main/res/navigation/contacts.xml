@@ -18,13 +18,12 @@
             app:exitAnim="@anim/slide_out_left"
             app:launchSingleTop="false"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:popUpTo="@+id/settingsFragment" />
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/contactFacebookListFragment"
-        android:name="com.vguivarc.wakemeup.ui.settings.AccountFragment"
-        android:label="AccountFragment"
+        android:name="com.vguivarc.wakemeup.ui.contactlistfacebook.ContactFacebookFragment"
+        android:label="ContactFacebookFragment"
         tools:layout="@layout/fragment_account" />
 </navigation>

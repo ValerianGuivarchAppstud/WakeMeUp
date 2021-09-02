@@ -7,7 +7,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class Favorite(
-    val id: String,
     val createdAt: String,
     val song: Song
 ) : Parcelable

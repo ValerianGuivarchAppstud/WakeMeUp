@@ -13,10 +13,10 @@ import com.vguivarc.wakemeup.R
 
 class SearchSongAdapter(
     private val context: Context,
-    private var songList: List<SearchSong>,
     private val listener: SongItemClickListener
 ) : RecyclerView.Adapter<SearchSongAdapter.SongViewHolder>() {
-    var selectedPosition: Int = 0
+    var selectedSong: SearchSong? = null
+    private var songList: List<SearchSong> = listOf()
 
     fun setListSearchSong(listSearchSong: List<SearchSong>) {
         this.songList = listSearchSong
@@ -37,7 +37,7 @@ class SearchSongAdapter(
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
 
         val searchSong = songList[position]
-        if (selectedPosition == position) {
+        if (selectedSong?.song?.id == searchSong.song.id) {
             holder.itemView.setBackgroundColor(
                 ContextCompat.getColor(
                     context,
@@ -59,8 +59,8 @@ class SearchSongAdapter(
             Picasso.get().load(R.drawable.ic_favorite_yes)
                 .into(holder.itemAddFavorite)
         } else {
-            Picasso.get().load(R.drawable.ic_favorite_no)
-                .into(holder.itemAddFavorite)
+//            Picasso.get().load(R.drawable.ic_favorite_no)
+//                .into(holder.itemAddFavorite)
         }
 
         Picasso.get().load(searchSong.song.artworkUrl).placeholder(R.drawable.music_placeholder)

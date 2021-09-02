@@ -23,7 +23,7 @@ val networkModule = module {
     // single(named(DI_MOCK_ENABLED)) { BuildConfig.MOCK_ENABLED }
 
     // Initialise the network
-    single<Retrofit>(named("RetrofitServer")) {
+    single<Retrofit>() {
         Retrofit.Builder()
             .baseUrl(BuildConfig.API_BASEURL)
             .client(get(named("OkHttpClientServer")))

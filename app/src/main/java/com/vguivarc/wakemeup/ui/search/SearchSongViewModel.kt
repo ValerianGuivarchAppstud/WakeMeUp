@@ -18,6 +18,9 @@ class SearchSongViewModel(private val songService: SongService, private val favo
     val searchSongList: LiveData<Resource<List<SearchSong>>>
         get() = _searchSongList
 
+    private val _currentSong = MutableLiveData<SearchSong?>()
+    val currentSong: LiveData<SearchSong?>
+        get() = _currentSong
 
     fun getSearchedSongList(searchText: String) {
         if(sessionService.isConnected()) {
@@ -30,10 +33,10 @@ class SearchSongViewModel(private val songService: SongService, private val favo
                             .doOnSubscribe { _searchSongList.postValue(Loading()) }
                             .subscribe(
                                 { ytResult ->
-                                    _searchSongList.postValue(Success(
-                                        ytResult.items.map { song -> SearchSong(song.toSong(),
-                                            favoriteList.any { it.id == song.id() }) }
-                                    ))
+                                        val list= ytResult.items.map { song ->
+                                            SearchSong(song.toSong(),favoriteList.any { it.song.id == song.id() })
+                                        }
+                                    _searchSongList.postValue(Success(list))
                                 },
                                 {
                                     _searchSongList.postValue(Fail(it))
@@ -77,6 +80,10 @@ class SearchSongViewModel(private val songService: SongService, private val favo
                 }
             )
             .addTo(disposables)
+    }
+
+    fun setCurrentSong(position: Int) {
+        _currentSong.value = _searchSongList.value?.data?.get(position)
     }
     /*
 
