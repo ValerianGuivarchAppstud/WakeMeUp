@@ -15,5 +15,5 @@ interface ContactService {
         val error : Exception? = null
     )
 
-    fun getContactFacebookList(facebookId: String): LiveData<ContactFacebookListState>
+    fun getContactFacebookList(socialAuthToken: String): Single<List<ContactFacebook>>
 }

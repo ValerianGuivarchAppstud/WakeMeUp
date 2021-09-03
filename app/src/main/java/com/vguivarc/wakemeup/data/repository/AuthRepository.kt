@@ -52,7 +52,7 @@ class AuthRepository(retrofit: Retrofit, private val sessionService: SessionServ
 
     override fun loginWithFacebook(token: String): Completable {
         var userTokenStorage: UserToken? = null
-        return authApi.loginWithSocialNetwork(FacebookAuthRequest(token = token)).map { userToken ->
+        return authApi.loginWithSocialNetwork(FacebookAuthRequest(facebookToken = token)).map { userToken ->
             userTokenStorage = userToken
         }.flatMap {
             val firebaseToken = sessionService.getFirebaseToken()

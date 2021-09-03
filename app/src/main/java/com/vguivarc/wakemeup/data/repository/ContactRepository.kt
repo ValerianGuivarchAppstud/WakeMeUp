@@ -10,6 +10,7 @@ import com.vguivarc.wakemeup.data.api.ContactApi
 import com.vguivarc.wakemeup.data.entity.ContactRequest
 import com.vguivarc.wakemeup.data.entity.ShareRingingRequest
 import com.vguivarc.wakemeup.domain.entity.Contact
+import com.vguivarc.wakemeup.domain.entity.ContactFacebook
 import com.vguivarc.wakemeup.domain.entity.Ringing
 import com.vguivarc.wakemeup.domain.service.ContactService
 import io.reactivex.Single
@@ -26,7 +27,11 @@ class ContactRepository(retrofit: Retrofit) : ContactService {
             it.contacts
         }
     }
+    override fun getContactFacebookList(socialAuthToken: String): Single<List<ContactFacebook>> {
+        return contactApi.getContactFacebook(socialAuthToken)
+    }
 
+/*
     override fun getContactFacebookList(facebookId : String): LiveData<ContactService.ContactFacebookListState> {
         val request = GraphRequest.newMeRequest(
             AccessToken.getCurrentAccessToken()
@@ -62,7 +67,7 @@ class ContactRepository(retrofit: Retrofit) : ContactService {
         request.executeAsync()
 
         return _contactFacebookList
-    }
+    }*/
 
     override fun saveContactStatus(
         profileContactId: String,

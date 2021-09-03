@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.AccessToken
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.base.*
 import com.vguivarc.wakemeup.domain.entity.ContactFacebook
@@ -31,7 +32,8 @@ class ContactFacebookFragment :
         recyclerView.adapter = contactFacebookAdapterSearch
         contactFacebookAdapterSearch.notifyDataSetChanged()
 
-        contactFacebookViewModel.getContactFacebookList()
+        val accessToken = AccessToken.getCurrentAccessToken()
+        contactFacebookViewModel.getContactFacebookList(accessToken.token)
         contactFacebookViewModel.contactFacebookList.observe(
             viewLifecycleOwner,
             Observer {

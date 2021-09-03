@@ -2,6 +2,7 @@ package com.vguivarc.wakemeup.data.api
 
 import com.vguivarc.wakemeup.data.entity.*
 import com.vguivarc.wakemeup.domain.entity.Contact
+import com.vguivarc.wakemeup.domain.entity.ContactFacebook
 import com.vguivarc.wakemeup.domain.entity.Ringing
 import io.reactivex.Single
 import retrofit2.http.*
@@ -15,8 +16,8 @@ interface ContactApi {
 
     @GET("v1/contacts/facebook")
     fun getContactFacebook(
-        @Query("contact_facebook_id_list") contactFacebookIdList: MutableList<String>
-    ): Single<ContactFacebookListResponse>
+        @Query("social_auth_token") socialAuthToken: String
+    ): Single<List<ContactFacebook>>
 
 
     @PUT("v1/contact/status")

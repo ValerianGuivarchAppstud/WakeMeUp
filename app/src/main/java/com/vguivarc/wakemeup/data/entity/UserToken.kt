@@ -6,15 +6,15 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class UserToken(
 
-    @Json(name="access_token")
+    @Json(name="accessToken")
     val accessToken: String,
 
-    @Json(name="refresh_token")
+    @Json(name="refreshToken")
     val refreshToken: String,
 
-    @Json(name="access_token_expiration")
+    @Json(name="accessTokenExpiration")
     val accessTokenExpiration: Long, // timestamp
 
-    @Json(name="refresh_token_expiration")
+    @Json(name="refreshTokenExpiration")
     val refreshTokenExpiration: Long // timestamp
 )
