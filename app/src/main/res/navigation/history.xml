@@ -6,8 +6,8 @@
     app:startDestination="@id/reveilsListeFragment">
 
     <fragment
-        tools:layout="@layout/fragment_alarms_list"
+        tools:layout="@layout/fragment_alarm_list"
         android:id="@+id/reveilsListeFragment"
-        android:name="com.vguivarc.wakemeup.ui.alarm.AlarmsFragment"
+        android:name="com.vguivarc.wakemeup.transport.alarmlist.AlarmListFragment"
         android:label="@string/reveils" />
 </navigation>

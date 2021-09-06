@@ -1,15 +1,5 @@
 package com.vguivarc.wakemeup.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.vguivarc.wakemeup.base.*
-import com.vguivarc.wakemeup.data.entity.ShareRingingRequest
-import com.vguivarc.wakemeup.domain.entity.Contact
-import com.vguivarc.wakemeup.domain.entity.Ringing
-import com.vguivarc.wakemeup.domain.service.ContactService
-import com.vguivarc.wakemeup.util.SingleLiveEvent
-import com.vguivarc.wakemeup.util.applySchedulers
-import io.reactivex.rxkotlin.addTo
 /*
 class ContactListViewModel(
     private val contactsService: ContactService

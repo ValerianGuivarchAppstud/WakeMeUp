@@ -1,40 +1,54 @@
 package com.vguivarc.wakemeup.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import com.vguivarc.wakemeup.base.BaseViewModel
-import com.vguivarc.wakemeup.domain.entity.Alarm
-import com.vguivarc.wakemeup.domain.service.AlarmService
+import androidx.lifecycle.ViewModel
+import com.vguivarc.wakemeup.domain.external.AlarmInteractor
+import com.vguivarc.wakemeup.transport.ringingalarm.RingingAlarmSideEffect
+import com.vguivarc.wakemeup.transport.ringingalarm.RingingAlarmState
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.reduce
+import org.orbitmvi.orbit.viewmodel.container
+import timber.log.Timber
 
-class AlarmsViewModel(private val alarmService: AlarmService) : BaseViewModel() {
 
-    private var _alarmsList = MediatorLiveData<List<Alarm>>()
+class RingingAlarmViewModel(private val alarmInteractor: AlarmInteractor) :
+    ContainerHost<RingingAlarmState, RingingAlarmSideEffect>, ViewModel() {
 
-    val alarmsList: LiveData<List<Alarm>> = _alarmsList
+    override val container =
+        container<RingingAlarmState, RingingAlarmSideEffect>(
+            RingingAlarmState(),
+            onCreate = ::onCreate
+        )
 
-    init {
-        _alarmsList.addSource(alarmService.getAlarms()) { alarms ->
-            _alarmsList.value = alarms
+    private fun onCreate(initialState: RingingAlarmState) {
+        getRingingAlarm()
+    }
+
+    fun getRingingAlarm() = intent {
+
+        try {
+            val ringingAlarm = alarmInteractor.getAlarms().get(0)//TODO fix
+
+            reduce {
+                state.copy(ringingAlarm = ringingAlarm)
+            }
+
+        } catch (exception: Exception) {
+            Timber.e(exception)
+
+            reduce {
+                state.copy(ringingAlarm = null)
+            }
+
+            // postSideEffect(RingingAlarmSideEffect.Toast(R.string.general_error))
         }
     }
 
-    fun save(alarm: Alarm) {
-        alarmService.save(alarm)
+    fun stopAlarm(idReveil: Int) {
+
     }
 
-    fun remove(alarm: Alarm) {
-        alarmService.remove(alarm)
-    }
+    fun snoozeAlarm(idReveil: Int) {
 
-    fun switchAlarm(alarm: Alarm) {
-        alarmService.switchReveil(alarm)
-    }
-
-    fun snoozeAlarm(idAlarm: Int) {
-        alarmService.snoozeAlarm(idAlarm)
-    }
-
-    fun stopAlarm(idAlarm: Int) {
-        alarmService.stopAlarm(idAlarm)
     }
 }

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.vguivarc.wakemeup.R
 import org.jetbrains.anko.findOptional
-
+/*
 abstract class BaseLceFragment(layoutId: Int = 0) : BaseFragment(layoutId) {
     private var loadingView: View? = null
     private var contentView: View? = null
@@ -54,3 +54,4 @@ abstract class BaseLceFragment(layoutId: Int = 0) : BaseFragment(layoutId) {
 
     
 }
+*/

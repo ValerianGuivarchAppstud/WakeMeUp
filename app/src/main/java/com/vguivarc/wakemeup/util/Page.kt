@@ -1,7 +1,7 @@
 package com.vguivarc.wakemeup.util
 
 import com.squareup.moshi.JsonClass
-import com.vguivarc.wakemeup.domain.entity.Favorite
+import com.vguivarc.wakemeup.domain.external.entity.Favorite
 import kotlinx.android.parcel.Parcelize
 
 /*

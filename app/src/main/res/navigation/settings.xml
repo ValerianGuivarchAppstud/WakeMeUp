@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.vguivarc.wakemeup.ui.settings.SettingsFragment"
+        android:name="com.vguivarc.wakemeup.transport.settings.SettingsFragment"
         tools:layout="@layout/fragment_settings">
         <action
             android:id="@+id/action_settings_account"
@@ -30,12 +30,12 @@
     </fragment>
     <fragment
         android:id="@+id/accountFragment"
-        android:name="com.vguivarc.wakemeup.ui.settings.AccountFragment"
+        android:name="com.vguivarc.wakemeup.transport.account.AccountFragment"
         android:label="AccountFragment"
         tools:layout="@layout/fragment_account" />
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="com.vguivarc.wakemeup.ui.settings.AboutFragment"
+        android:name="com.vguivarc.wakemeup.transport.settings.AboutFragment"
         android:label="AboutFragment"
         tools:layout="@layout/fragment_about">
     </fragment>

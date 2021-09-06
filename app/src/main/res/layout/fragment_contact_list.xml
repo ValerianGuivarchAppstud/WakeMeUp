@@ -16,13 +16,29 @@
         android:textAlignment="center"
         android:textSize="30sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/recycler_list_contact"
+        app:layout_constraintBottom_toBottomOf="@+id/contactListSwipeRefreshLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/recycler_list_contact"
+        app:layout_constraintStart_toStartOf="@+id/contactListSwipeRefreshLayout"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/contactListSwipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/contactList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_list_contact" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+<!--
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/contentView"
+        android:id="@+id/contactListSwipeRefreshLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_alignParentTop="true"
@@ -35,7 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_list_contact" />
+        tools:listitem="@layout/item_list_contact" />!-->
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -53,7 +69,7 @@
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/add_contact_externe"
+        android:id="@+id/fabAddContactExt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:name="Partager un code d'ajout de contact"
@@ -64,7 +80,7 @@
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/add_contact_fb"
+        android:id="@+id/fabAddContactFb"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:name="Importer des contacts depuis Facebook"
@@ -89,7 +105,14 @@
         android:contentDescription="@string/ajouter_un_contact" />
 
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/loader" />
+
+    <ProgressBar
+        android:id="@+id/loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

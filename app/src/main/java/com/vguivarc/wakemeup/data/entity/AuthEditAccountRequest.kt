@@ -6,6 +6,6 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class AuthEditAccountRequest(
     @Json(name = "pseudo")
-    val nickname: String,
+    val username: String,
     val email: String
 )

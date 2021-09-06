@@ -28,6 +28,6 @@
         android:clipToPadding="false"
         android:paddingBottom="48dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        tools:context=".ui.MainActivity" />
+        tools:context=".transport.MainActivity" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

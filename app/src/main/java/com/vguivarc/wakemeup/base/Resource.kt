@@ -23,9 +23,10 @@
  */
 
 package com.vguivarc.wakemeup.base
-
+/*
 sealed class Resource<out T> constructor(val data: T?, val refresh: Boolean, val error: Throwable?)
 
 class Success<out T>(data: T?, refresh: Boolean = false) : Resource<T>(data, refresh, null)
 class Loading(refresh: Boolean = false) : Resource<Nothing>(null, refresh, null)
 class Fail(error: Throwable?) : Resource<Nothing>(null, false, error)
+*/

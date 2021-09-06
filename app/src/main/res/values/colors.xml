@@ -24,6 +24,7 @@
 
       <color name="separator_transparent">#69323237</color>
 
+    <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="white_transparent_30">#4CFFFFFF</color>
       <color name="white_transparent_50">#7AFFFFFF</color>

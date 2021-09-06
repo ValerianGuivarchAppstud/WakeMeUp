@@ -2,10 +2,10 @@ package com.vguivarc.wakemeup.data.interceptor
 
 import android.content.Context
 import com.vguivarc.wakemeup.BuildConfig
-import com.vguivarc.wakemeup.data.api.AuthApi
+import com.vguivarc.wakemeup.data.network.AuthApi
 import com.vguivarc.wakemeup.data.entity.AuthRefreshRequest
 import com.vguivarc.wakemeup.data.entity.UserToken
-import com.vguivarc.wakemeup.domain.service.SessionService
+import com.vguivarc.wakemeup.domain.internal.ISessionProvider
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,7 +20,7 @@ const val HEADER_AUTHORIZATION = "Authorization"
 const val HEADER_AUTHORIZATION_PREFIX = "Bearer "
 
 class TokenInterceptor(
-    private val sessionService: SessionService,
+    private val sessionService: ISessionProvider,
     private val apiBaseURL: String,
     val context: Context
 ) :

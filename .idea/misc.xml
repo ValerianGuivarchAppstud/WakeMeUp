@@ -3,13 +3,25 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_baseline_mail_outline_24.xml" value="0.2171875" />
+        <entry key="app/src/main/res/layout/fragment_account.xml" value="0.1203125" />
+        <entry key="app/src/main/res/layout/fragment_alarm_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_auth.xml" value="0.125" />
         <entry key="app/src/main/res/layout/fragment_auth_email.xml" value="0.1203125" />
-        <entry key="app/src/main/res/layout/fragment_contact_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_auth_signup_form.xml" value="0.1203125" />
+        <entry key="app/src/main/res/layout/fragment_contact_facebook_list.xml" value="0.1203125" />
+        <entry key="app/src/main/res/layout/fragment_contact_list.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_favori_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_favorite_list.xml" value="0.1203125" />
+        <entry key="app/src/main/res/layout/fragment_search_song_list.xml" value="0.1203125" />
         <entry key="app/src/main/res/layout/item_list_contact_facebook.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_list_favori.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_list_video.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/profil_fragment.xml" value="0.1203125" />
+        <entry key="app/src/main/res/layout/profil_fragment_connected.xml" value="0.20104166666666667" />
+        <entry key="app/src/main/res/layout/profil_fragment_not_connected.xml" value="0.20104166666666667" />
         <entry key="app/src/main/res/layout/search_video_fragment.xml" value="0.1203125" />
+        <entry key="app/src/main/res/layout/signup_activity.xml" value="0.335" />
       </map>
     </option>
   </component>

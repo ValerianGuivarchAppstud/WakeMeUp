@@ -8,7 +8,7 @@
     <fragment
         tools:layout="@layout/fragment_contact"
         android:id="@+id/reveilsListeFragment"
-        android:name="com.vguivarc.wakemeup.ui.contactlist.ContactListFragment"
+        android:name="com.vguivarc.wakemeup.transport.contactlist.ContactListFragment"
         android:label="@string/contacts">
 
         <action
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/contactFacebookListFragment"
-        android:name="com.vguivarc.wakemeup.ui.contactlistfacebook.ContactFacebookFragment"
+        android:name="com.vguivarc.wakemeup.transport.contactlistfacebook.ContactFacebookListFragment"
         android:label="ContactFacebookFragment"
         tools:layout="@layout/fragment_account" />
 </navigation>

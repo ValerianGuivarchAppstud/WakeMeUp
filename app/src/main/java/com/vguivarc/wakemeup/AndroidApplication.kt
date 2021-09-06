@@ -8,12 +8,13 @@ import android.content.Context
 import android.os.Build
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
-import com.vguivarc.wakemeup.data.repository.Repository
+import com.vguivarc.wakemeup.data.provider.Repository
+import com.vguivarc.wakemeup.di.interactorsModule
 import com.vguivarc.wakemeup.di.networkModule
-import com.vguivarc.wakemeup.di.servicesModule
+import com.vguivarc.wakemeup.di.providersModule
 import com.vguivarc.wakemeup.di.viewModelModule
-import com.vguivarc.wakemeup.domain.service.AlarmAndroidSetter
-import com.vguivarc.wakemeup.ui.ringingalarm.RingingAlarmService.Companion.CHANNEL_ID
+import com.vguivarc.wakemeup.domain.internal.AlarmAndroidProvider
+import com.vguivarc.wakemeup.transport.ringingalarm.RingingAlarmService.Companion.CHANNEL_ID
 import io.paperdb.Paper
 import io.reactivex.internal.functions.Functions
 import io.reactivex.plugins.RxJavaPlugins
@@ -46,7 +47,7 @@ class AndroidApplication : Application() {
 
         lateinit var appContext: Context
 
-        lateinit var alarmAndroidSetterImpl: AlarmAndroidSetter.AlarmAndroidSetterImpl
+        lateinit var alarmAndroidProviderImpl: AlarmAndroidProvider.AlarmAndroidProviderImpl
 
         fun userMessageRegistration() {
             if (FirebaseAuth.getInstance().currentUser == null) {
@@ -83,9 +84,10 @@ class AndroidApplication : Application() {
             androidContext(this@AndroidApplication)
             koin.loadModules(
                 listOf(
-                    servicesModule,
-                    viewModelModule,
-                    networkModule
+                    interactorsModule,
+                    networkModule,
+                    providersModule,
+                    viewModelModule
                 )
             )
         }
@@ -103,7 +105,7 @@ class AndroidApplication : Application() {
                 )
             notificationManage.createNotificationChannel(notificationChannelReveil)
         }
-        alarmAndroidSetterImpl = AlarmAndroidSetter.AlarmAndroidSetterImpl(appContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager, appContext)
+        alarmAndroidProviderImpl = AlarmAndroidProvider.AlarmAndroidProviderImpl(appContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager, appContext)
         repository = Repository()
     }
 

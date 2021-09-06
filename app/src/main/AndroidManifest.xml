@@ -41,10 +41,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.login.AuthActivity" />
+        <activity android:name=".transport.auth.AuthActivity" />
 
         <service
-            android:name=".notification.MyFirebaseMessagingService"
+            android:name="com.vguivarc.wakemeup.util.notification.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -57,21 +57,21 @@
         <activity
             android:name="com.vguivarc.wakemeup.Demo"
             android:label="My Custom AppIntro" />
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".transport.MainActivity">
             <intent-filter android:label="Music Me !">
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.ringingalarm.RingingAlarmActivity" />
+        <activity android:name=".transport.ringingalarm.RingingAlarmActivity" />
 
         <service
-            android:name=".ui.ringingalarm.RingingAlarmService"
+            android:name=".transport.ringingalarm.RingingAlarmService"
             android:enabled="true" />
 
         <receiver
-            android:name=".ui.ringingalarm.RingingAlarmReceiver"
+            android:name=".transport.ringingalarm.RingingAlarmReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

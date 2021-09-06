@@ -6,9 +6,9 @@
     app:startDestination="@id/favoriteListFragment">
 
     <fragment
-        tools:layout="@layout/fragment_favori_list"
+        tools:layout="@layout/fragment_favorite_list"
         android:id="@+id/favoriteListFragment"
-        android:name="com.vguivarc.wakemeup.ui.favoritelist.FavoriteListFragment"
+        android:name="com.vguivarc.wakemeup.transport.favoritelist.FavoriteListFragment"
         android:label="@string/musique" >
         <action
             android:id="@+id/action_favoriteListFragment_to_searchVideoFragment"
@@ -16,6 +16,6 @@
     </fragment>
     <fragment
         android:id="@+id/searchVideoFragment"
-        android:name="com.vguivarc.wakemeup.ui.search.SearchSongFragment"
+        android:name="com.vguivarc.wakemeup.transport.search.SearchSongListFragment"
         android:label="RechercheVideoFragment" />
 </navigation>

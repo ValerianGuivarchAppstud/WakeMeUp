@@ -29,11 +29,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="@string/signup_form_nickname_hint"
+                android:hint="@string/signup_form_username_hint"
                 android:nextFocusDown="@id/loginPasswordLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/signupNicknameInput"
+                    android:id="@+id/signupUsernameInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress" />

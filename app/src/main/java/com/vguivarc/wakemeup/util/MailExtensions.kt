@@ -27,7 +27,7 @@ fun String.isValidPassword(): Boolean {
  * Checks email address against Patterns.EMAIL_ADDRESS pattern
  */
 @Suppress("MagicNumber")
-fun String.isValidNickname(): Boolean {
+fun String.isValidUsername(): Boolean {
 
     return this.count() > 3
 }

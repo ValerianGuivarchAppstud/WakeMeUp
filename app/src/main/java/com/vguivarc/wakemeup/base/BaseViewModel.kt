@@ -31,6 +31,7 @@ import org.koin.core.component.KoinComponent
 /**
  * The base class for all view models
  */
+/*
 open class BaseViewModel : ViewModel(), KoinComponent {
 
     /**
@@ -46,3 +47,4 @@ open class BaseViewModel : ViewModel(), KoinComponent {
         disposables.clear()
     }
 }
+*/

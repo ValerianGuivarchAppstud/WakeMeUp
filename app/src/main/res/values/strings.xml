@@ -114,10 +114,11 @@
 
 
     <string name="error_retry">Une erreur est survenue\nCliquez pour réessayer</string>
-    <string name="login_title">Hello toi, on se connaît ?</string>
+    <string name="login_title">Connexion</string>
     <string name="login_close_content_description">Fermer la page</string>
     <string name="login_legals">En continuant, tu acceptes nos <a href="">conditions d’utilisation</a>.</string>
-    <string name="login_email_cta">Continuer avec l\'email</string>
+    <string name="signup_email_cta">S\'inscrire</string>
+    <string name="login_email_cta">Se connecter</string>
     <string name="login_facebook_cta">Continuer avec Facebook</string>
     <string name="OR">OU</string>
     <string name="login_illu_content_description">Chat confus</string>
@@ -128,12 +129,12 @@
     <string name="login_form_password_hint">Mot de passe</string>
     <string name="login_submit">C\'est parti !</string>
     <string name="login_form_forgot_password">Mot de passe oublié ?</string>
-    <string name="signup_form_nickname_hint">Pseudo</string>
+    <string name="signup_form_username_hint">Pseudo</string>
     <string name="login_forgot_password_submit">Envoyer</string>
     <string name="forgot_password_title">Mot de passe oublié ?</string>
     <string name="form_email_format_error">Adresse email invalide</string>
     <string name="form_password_format_error">Mot de passe trop court</string>
-    <string name="form_nickname_format_error">Pseudo trop court</string>
+    <string name="form_username_format_error">Pseudo trop court</string>
     <string name="login_error">Email ou mot de passe invalide</string>
     <string name="login_successful">Connexion réussie</string>
     <string name="login_facebook_cancelled">Connexion avec Facebook annulée</string>
@@ -146,4 +147,10 @@
     <string name="account_submit">Valider</string>
     <string name="ajouter_un_contact">Ajouter un contact</string>
     <string name="menu">Menu</string>
+    <string name="u_mot_de_passe_oubli_u">Mot de passe oublié</string>
+    <string name="ou_connectez_vous_avec">ou connecte-toi avec</string>
+    <string name="se_connecter_avec_facebook">Se connecter avec Facebook</string>
+    <string name="adresse_email">Adresse mail</string>
+    <string name="password">Mot de passe</string>
+    <string name="general_error">Erreur</string>
 </resources>
