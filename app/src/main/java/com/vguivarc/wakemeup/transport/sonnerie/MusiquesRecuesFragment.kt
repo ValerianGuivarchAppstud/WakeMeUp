@@ -10,7 +10,7 @@ import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.external.entity.UserProfile
 import com.vguivarc.wakemeup.domain.external.entity.Song
 import kotlinx.android.synthetic.main.fragment_musiques_recues.view.*
-
+/*
 class MusiquesRecuesFragment : Fragment() {
 
     private lateinit var currentView: View
@@ -153,3 +153,4 @@ class MusiquesRecuesFragment : Fragment() {
         }
     }
 }
+*/

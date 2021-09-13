@@ -1,7 +1,7 @@
 package com.vguivarc.wakemeup.domain.external.entity
 
 open class Notif(
-    val idReceiver: String,
+    val idReceiver: String?,
     val idSender: String?,
     val usernameSender: String?,
     val urlPicture: String?,
@@ -23,12 +23,12 @@ open class Notif(
 
     companion object {
         fun newInstanceEnvoieMusique(ringing: Ringing, sender: UserProfile): Notif {
-            return Notif(ringing.idReceiver, sender.profileId, sender.username, sender.imageUrl, false, NotificationType.ENVOIE_MUSIQUE)
+            return Notif(ringing.receiverId, sender.idProfile, sender.username, sender.imageUrl, false, NotificationType.ENVOIE_MUSIQUE)
         }
         fun newInstanceSonnerieUtilisee(ringing: Ringing, sender: UserProfile): Notif {
             val not = Notif(
                 ringing.senderId,
-                sender.profileId,
+                sender.idProfile,
                 sender.username,
                 sender.imageUrl,
                 false,

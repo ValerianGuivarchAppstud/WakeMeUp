@@ -16,7 +16,7 @@ import com.vguivarc.wakemeup.domain.external.entity.Ringing
 import com.vguivarc.wakemeup.domain.external.entity.UserProfile
 import com.vguivarc.wakemeup.transport.favoritelist.FavoriteListViewModel
 import kotlinx.android.synthetic.main.fragment_musiques_passees.view.*
-
+/*
 class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemClickListener {
 
     private lateinit var fragFather: MusiquesRecuesFragment
@@ -135,3 +135,4 @@ class MusiquesPasseesFragment : Fragment(), SonneriePasseAdapter.RecyclerItemCli
         fragFather.name(user)
     }
 }
+*/

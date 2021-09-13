@@ -25,6 +25,8 @@ interface AlarmAndroidProvider {
 
     fun setInexactAlarm(id: Int, calendar: Calendar)
 
+
+
     class AlarmAndroidProviderImpl(private val am: AlarmManager, private val mContext: Context) : AlarmAndroidProvider {
         private val setAlarmStrategy: ISetAlarmStrategy
 
@@ -41,7 +43,7 @@ interface AlarmAndroidProvider {
                     // must be here, otherwise replace does not work
                     setClass(mContext, RingingAlarmReceiver::class.java)
                 },
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE
             )
             am.cancel(pendingAlarm)
         }
@@ -58,7 +60,7 @@ interface AlarmAndroidProvider {
                         mContext,
                         pendingAlarmRequestCode,
                         it,
-                        PendingIntent.FLAG_UPDATE_CURRENT
+                        PendingIntent.FLAG_IMMUTABLE
                     )
                 }
 
@@ -84,7 +86,8 @@ interface AlarmAndroidProvider {
                         mContext,
                         id,
                         it,
-                        PendingIntent.FLAG_UPDATE_CURRENT
+
+                        PendingIntent.FLAG_IMMUTABLE
                     )
                 }
 
@@ -116,7 +119,8 @@ interface AlarmAndroidProvider {
                     // must be here, otherwise replace does not work
                     setClass(mContext, RingingAlarmReceiver::class.java)
                 },
-                PendingIntent.FLAG_UPDATE_CURRENT
+
+                PendingIntent.FLAG_IMMUTABLE
             )
             am.cancel(pendingAlarm)
         }
@@ -125,12 +129,13 @@ interface AlarmAndroidProvider {
             Timber.i("SDK is %s", Build.VERSION.SDK_INT)
             return when {
                 Build.VERSION.SDK_INT >= 26 -> OreoSetter()
-                Build.VERSION.SDK_INT >= 23 -> MarshmallowSetter()
-                else -> IceCreamSetter()
+                else -> MarshmallowSetter()
+                //Build.VERSION.SDK_INT >= 23 -> MarshmallowSetter()
+                //else -> IceCreamSetter()
             }
         }
 
-        private inner class IceCreamSetter : ISetAlarmStrategy {
+        /*private inner class IceCreamSetter : ISetAlarmStrategy {
             override fun setRTCAlarm(calendar: Calendar, pendingIntent: PendingIntent) {
                 am.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
             }
@@ -138,7 +143,7 @@ interface AlarmAndroidProvider {
             override fun setInexactAlarm(calendar: Calendar, pendingIntent: PendingIntent) {
                 am.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
             }
-        }
+        }*/
 
         @TargetApi(23)
         private inner class MarshmallowSetter : ISetAlarmStrategy {

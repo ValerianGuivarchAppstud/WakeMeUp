@@ -54,16 +54,27 @@
         tools:listitem="@layout/item_list_contact" />!-->
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/button_add_contact"
+    <com.vguivarc.wakemeup.util.widget.FabSmall
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        app:srcCompat="@drawable/ic_baseline_person_add_24"
-        app:backgroundTint="@color/colorAccent"
+        android:id="@+id/fabAddContactPhone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:name="Ajouter avec un numéro de téléphone"
+        app:offset_y="@dimen/fab_level_1"
+        app:iconSrc="@drawable/common_full_open_on_phone"/>
+
+    <com.vguivarc.wakemeup.util.widget.FabSmall
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fabAddContactMail"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:name="Ajouter avec une adresse mail"
+        app:offset_y="@dimen/fab_level_4"
+        app:iconSrc="@drawable/ic_baseline_mail_outline_24"/>
 
     <com.vguivarc.wakemeup.util.widget.FabSmall
         android:visibility="gone"
@@ -73,7 +84,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:name="Partager un code d'ajout de contact"
-        app:offset_y="@dimen/fab_level_1"
+        app:offset_y="@dimen/fab_level_3"
         app:iconSrc="@drawable/share"/>
 
     <com.vguivarc.wakemeup.util.widget.FabSmall

@@ -7,25 +7,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.facebook.AccessToken
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.base.*
 import com.vguivarc.wakemeup.databinding.FragmentContactFacebookListBinding
-import com.vguivarc.wakemeup.databinding.FragmentContactListBinding
-import com.vguivarc.wakemeup.domain.external.entity.Contact
-import com.vguivarc.wakemeup.domain.external.entity.ContactFacebook
-import com.vguivarc.wakemeup.transport.contactlist.ContactListAdapter
-import com.vguivarc.wakemeup.transport.contactlist.ContactListSideEffect
-import com.vguivarc.wakemeup.transport.contactlist.ContactListState
-import com.vguivarc.wakemeup.transport.contactlist.ContactListViewModel
-import kotlinx.android.synthetic.main.fragment_auth_email.*
-import org.koin.android.ext.android.inject
+import com.vguivarc.wakemeup.transport.favoritelist.FavoriteListAdapter
+import com.vguivarc.wakemeup.transport.search.SearchSongListAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.orbitmvi.orbit.viewmodel.observe
 import timber.log.Timber
+
 class ContactFacebookListFragment : Fragment(R.layout.fragment_contact_facebook_list),
     ContactFacebookListAdapter.ContactFacebookItemClickListener {
 
@@ -71,11 +61,11 @@ class ContactFacebookListFragment : Fragment(R.layout.fragment_contact_facebook_
         Timber.d("render $state")
         binding.loader.isVisible = state.isLoading
         binding.contactFacebookListSwipeRefreshLayout.isVisible = !state.isLoading
-        val list = view?.findViewById<RecyclerView>(R.id.contactList) ?: return
-        if (list.adapter == null) {
-            list.adapter = ContactFacebookListAdapter(state.contactFacebookList, this)
+        if ( binding.contactFacebookList.adapter == null) {
+            binding.contactFacebookList.adapter = ContactFacebookListAdapter(state.contactFacebookList, this)
+            binding.contactFacebookList.layoutManager = LinearLayoutManager(context)
         } else {
-            (list.adapter as? ContactFacebookListAdapter)?.updateData(state.contactFacebookList)
+            (binding.contactFacebookList.adapter as? ContactFacebookListAdapter)?.updateData(state.contactFacebookList)
         }
     }
 
@@ -86,6 +76,13 @@ class ContactFacebookListFragment : Fragment(R.layout.fragment_contact_facebook_
                 sideEffect.textResource,
                 Toast.LENGTH_SHORT
             ).show()
+        }
+    }
+
+    override fun onAddContactClickListener(position: Int) {
+        val contactFacebook = (binding.contactFacebookList.adapter as? ContactFacebookListAdapter)?.getContactFacebookWithPosition(position)
+        contactFacebook?.let {
+            viewModel.actionAddFacebookContact(it.idProfile, contactFacebook.contact.not())
         }
     }
 }

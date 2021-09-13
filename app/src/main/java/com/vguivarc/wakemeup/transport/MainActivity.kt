@@ -3,30 +3,61 @@ package com.vguivarc.wakemeup.transport
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.base.BaseActivity
+import com.vguivarc.wakemeup.databinding.ActivityMainBinding
 import com.vguivarc.wakemeup.util.navigation.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.core.component.KoinComponent
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.orbitmvi.orbit.viewmodel.observe
+import timber.log.Timber
 
 private const val DEEPLINK_TOPIC_KEY = "tochange"
 
-class MainActivity : BaseActivity(), KoinComponent {
+
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    private val viewModel by viewModel<MainActivityViewModel>()
+
+    private var _binding: ActivityMainBinding? = null
+
+    // This property is only valid between onCreateView and onDestroyView.
+    private val binding get() = _binding!!
+
+
+    private lateinit var viewNbMusiquesEnAttente: TextView
+    private lateinit var viewIconeMusiquesEnAttente: ImageView
+    private lateinit var viewNbNotifEnAttente: TextView
+    private lateinit var viewIconeNotifEnAttente: ImageView
+
+
 
     // live data to make sure it gets restored with activity configuration change (rotation...)
     private var currentNavController: LiveData<NavController>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-//        setTheme(R.style.AppTheme)
 
-        setContentView(R.layout.activity_main)
+        val toolbar: Toolbar = findViewById(R.id.toolbar_main)
+        setSupportActionBar(toolbar)
+
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         } else {
@@ -35,6 +66,34 @@ class MainActivity : BaseActivity(), KoinComponent {
         // showBottomNav(true)
         intent?.extras?.let { extras ->
             handleDeeplink(extras)
+        }
+    }
+
+
+
+    private fun render(state: MainActivityState) {
+        Timber.d("render $state")
+        if(state.isConnected) {
+            viewIconeMusiquesEnAttente.visibility = View.VISIBLE
+            viewIconeNotifEnAttente.visibility = View.VISIBLE
+            updateSonnerieHotCountNumber(state.nbNewRinging)
+            updateHotCountSonnerieActivated(state.newNotification)
+            updateNotifHotCountNumber(state.nbNewNotification)
+        } else {
+            viewNbMusiquesEnAttente.visibility = View.INVISIBLE
+            viewIconeMusiquesEnAttente.visibility = View.INVISIBLE
+            viewNbNotifEnAttente.visibility = View.INVISIBLE
+            viewIconeNotifEnAttente.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun handleSideEffect(sideEffect: MainActivitySideEffect) {
+        when (sideEffect) {
+            is MainActivitySideEffect.Toast -> Toast.makeText(
+                this,
+                sideEffect.textResource,
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -123,6 +182,93 @@ class MainActivity : BaseActivity(), KoinComponent {
                     bottom_nav.visibility = if (enableNav) View.VISIBLE else View.GONE
                 }
             })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.toolbar_reveils, menu)
+        val alertMenuItem = menu.findItem(R.id.id_menu_bar_message)
+        val notifMenuItem = menu.findItem(R.id.id_menu_bar_notif)
+
+        val rootViewReveil = alertMenuItem.actionView as RelativeLayout
+
+        viewNbMusiquesEnAttente = rootViewReveil.findViewById(R.id.text_message_reveil)
+        viewIconeMusiquesEnAttente = rootViewReveil.findViewById(R.id.icone_musique_attente)
+
+        val rootViewNotif = notifMenuItem.actionView as RelativeLayout
+        viewNbNotifEnAttente = rootViewNotif.findViewById(R.id.text_message_notification)
+        viewIconeNotifEnAttente = rootViewNotif.findViewById(R.id.icone_notif_attente)
+
+        viewModel.observe(this, state = ::render, sideEffect = ::handleSideEffect)
+        rootViewReveil.setOnClickListener {
+            findNavController(R.id.navHostFragment).navigate(
+                R.id.ringingListFragment
+            )
+        }
+
+
+        rootViewNotif.setOnClickListener {
+            /*navController.navigate(
+                R.id.notifsListeFragment
+            )*/
+        }
+
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+
+
+    private fun updateHotCountSonnerieActivated(newNotif: Boolean) {
+        if (!newNotif) {
+            viewNbMusiquesEnAttente.background =
+                ContextCompat.getDrawable(this, R.drawable.rounded_square_blue)
+        } else {
+            viewNbMusiquesEnAttente.background =
+                ContextCompat.getDrawable(this, R.drawable.rounded_square)
+        }
+    }
+
+
+    private fun updateRingingHotCountNumber(nbRinging : Int, newRinging : Boolean) {
+        if (nbRinging == 0) {
+            viewNbMusiquesEnAttente.visibility = View.INVISIBLE
+            viewIconeMusiquesEnAttente.setImageResource(R.drawable.icon_music_no)
+            viewNbMusiquesEnAttente.text = null
+        } else if (newRinging) {
+            viewIconeMusiquesEnAttente.setImageResource(R.drawable.icon_music_yes)
+            viewNbMusiquesEnAttente.visibility = View.VISIBLE
+            viewNbMusiquesEnAttente.text = nbRinging.toString()
+        } else {
+            viewIconeMusiquesEnAttente.setImageResource(R.drawable.icon_music_no)
+            viewNbMusiquesEnAttente.visibility = View.VISIBLE
+            viewNbMusiquesEnAttente.text = nbRinging.toString()
+        }
+    }
+
+    private fun updateSonnerieHotCountNumber(hotCountNumber : Int) {
+        if (hotCountNumber == 0) {
+            viewNbMusiquesEnAttente.visibility = View.INVISIBLE
+            viewIconeMusiquesEnAttente.setImageResource(R.drawable.icon_music_no)
+            viewNbMusiquesEnAttente.text = null
+        } else {
+            viewIconeMusiquesEnAttente.setImageResource(R.drawable.icon_music_yes)
+            viewNbMusiquesEnAttente.visibility = View.VISIBLE
+            viewNbMusiquesEnAttente.text = hotCountNumber.toString()
+        }
+    }
+
+    private fun updateNotifHotCountNumber(hotCountNumber : Int) {
+        if (hotCountNumber == 0) {
+            viewNbNotifEnAttente.visibility = View.INVISIBLE
+            viewIconeNotifEnAttente.setImageResource(R.drawable.icon_notif_no)
+            viewNbNotifEnAttente.text = null
+        } else {
+            viewIconeNotifEnAttente.setImageResource(R.drawable.icon_notif_yes)
+            viewNbNotifEnAttente.visibility = View.VISIBLE
+            viewNbNotifEnAttente.text = hotCountNumber.toString()
+            viewNbNotifEnAttente.background =
+                ContextCompat.getDrawable(this, R.drawable.rounded_square)
+        }
     }
 }
 

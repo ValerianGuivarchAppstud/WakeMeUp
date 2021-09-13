@@ -1,13 +1,15 @@
 package com.vguivarc.wakemeup.transport.search
 
 import androidx.lifecycle.ViewModel
+import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.external.FavoriteInteractor
-import com.vguivarc.wakemeup.domain.external.SessionInteractor
 import com.vguivarc.wakemeup.domain.external.SongInteractor
 import com.vguivarc.wakemeup.domain.external.entity.SearchSong
+import com.vguivarc.wakemeup.domain.external.entity.Song
 import com.vguivarc.wakemeup.util.toSong
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import timber.log.Timber
@@ -15,8 +17,7 @@ import timber.log.Timber
 
 class SearchSongListViewModel(
     private val songInteractor: SongInteractor,
-    private val favoriteInteractor: FavoriteInteractor,
-    private val sessionInteractor: SessionInteractor
+    private val favoriteInteractor: FavoriteInteractor
 ) :
     ContainerHost<SearchSongListState, SearchSongListSideEffect>, ViewModel() {
 
@@ -29,11 +30,15 @@ class SearchSongListViewModel(
     private fun onCreate(initialState: SearchSongListState) {
     }
 
-
+    fun selectSong(searchSong: SearchSong)  = intent {
+        reduce {
+            state.copy(isLoading = false, showBeforeSearch = false, showEmptyResult = false, currentSong = searchSong)
+        }
+    }
 
     fun getSearchedSongList(searchText: String) = intent {
         reduce {
-            state.copy(isLoading = true)
+            state.copy(isLoading = true, showBeforeSearch = false, showEmptyResult = false, currentSong = null)
         }
 
         try {
@@ -44,7 +49,11 @@ class SearchSongListViewModel(
             }
 
             reduce {
-                state.copy(searchSongList = list, isLoading = false)
+                if(list.isEmpty()) {
+                    state.copy(searchSongList = list.toList(), isLoading = false, showBeforeSearch = false, showEmptyResult = true, currentSong = null)
+                } else {
+                    state.copy(searchSongList = list.toList(), isLoading = false, showBeforeSearch = false, showEmptyResult = false, currentSong = null)
+                }
             }
 
         } catch (exception: Exception) {
@@ -54,8 +63,32 @@ class SearchSongListViewModel(
                 state.copy(searchSongList = emptyList(), isLoading = false)
             }
 
-//            postSideEffect(ContactFacebookListSideEffect.Toast(R.string.general_error))
+            postSideEffect(SearchSongListSideEffect.Toast(R.string.general_error))
         }
+    }
+
+    fun updateFavorite(song: Song, isFavorite: Boolean) = intent {
+        state.copy(isLoading = true)
+        try {
+            favoriteInteractor.saveFavoriteStatus(song, isFavorite)
+
+            val updatedList = state.searchSongList
+            updatedList.filter { it.song.id == song.id }.firstOrNull()?.isFavorite =
+                isFavorite
+
+            reduce {
+                state.copy(searchSongList = mutableListOf(), isLoading = false)
+            }
+
+            reduce {
+                state.copy(searchSongList = updatedList.toMutableList(), isLoading = false)
+            }
+    } catch (exception: Exception) {
+        Timber.e(exception)
+
+
+        postSideEffect(SearchSongListSideEffect.Toast(R.string.general_error))
+    }
     }
     /*
     fun getSearchedSongList(searchText: String) {

@@ -1,14 +1,12 @@
 package com.vguivarc.wakemeup.data.provider
 
-import androidx.lifecycle.MutableLiveData
 import com.vguivarc.wakemeup.data.network.ContactApi
 import com.vguivarc.wakemeup.data.entity.ContactRequest
-import com.vguivarc.wakemeup.data.entity.ShareRingingRequest
+import com.vguivarc.wakemeup.data.entity.SendRingingRequest
 import com.vguivarc.wakemeup.domain.external.entity.Contact
 import com.vguivarc.wakemeup.domain.external.entity.ContactFacebook
 import com.vguivarc.wakemeup.domain.external.entity.Ringing
 import com.vguivarc.wakemeup.domain.internal.IContactProvider
-import io.reactivex.Single
 import retrofit2.Retrofit
 
 class ContactProvider(retrofit: Retrofit) : IContactProvider {
@@ -63,12 +61,12 @@ class ContactProvider(retrofit: Retrofit) : IContactProvider {
     override suspend fun saveContactStatus(
         profileContactId: String,
         isContact: Boolean
-    ): List<Contact> {
+    ) {
         val contactRequest = ContactRequest(profileContactId, isContact)
         return contactApi.setContact(contactRequest)
     }
 
-    override suspend fun shareRinging(shareRingingRequest: ShareRingingRequest): Ringing {
+    override suspend fun shareRinging(shareRingingRequest: SendRingingRequest): Ringing {
         return contactApi.shareRinging(shareRingingRequest)
     }
 }

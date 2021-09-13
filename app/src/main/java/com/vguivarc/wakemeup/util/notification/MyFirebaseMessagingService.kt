@@ -131,7 +131,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // mainActivityIntent.putExtra("notificationId", notificationId)
         mainActivityIntent.putExtra("notificationType", notificationType)
         mainActivityIntent.data = (Uri.parse("foobar://" + SystemClock.elapsedRealtime()))
-        val pi = PendingIntent.getActivity(applicationContext, 0, mainActivityIntent, 0)
+        val pi = PendingIntent.getActivity(applicationContext, 0, mainActivityIntent, PendingIntent.FLAG_IMMUTABLE)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         val notificationManage = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

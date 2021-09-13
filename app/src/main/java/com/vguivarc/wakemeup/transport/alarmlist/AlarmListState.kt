@@ -7,6 +7,7 @@ data class AlarmListState(
     val currentEditingAlarm: Alarm? = null
 )
 
+
 sealed class AlarmListSideEffect {
     data class Toast(val textResource: Int) : AlarmListSideEffect()
 }

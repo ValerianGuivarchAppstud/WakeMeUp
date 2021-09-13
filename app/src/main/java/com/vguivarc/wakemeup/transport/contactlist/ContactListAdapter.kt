@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.external.entity.Contact
 
@@ -39,10 +38,10 @@ class ContactListAdapter(
         position: Int
     ) {
         val contact = contactList[position]
-        holder.itemContactName.text = contact.userProfile.username
-        Picasso.get().load(contact.userProfile.imageUrl)
+        holder.itemContactName.text = contact.username
+       /* Picasso.get().load(contact.pictureUrl)
             .placeholder(R.drawable.empty_picture_profil)
-            .into(holder.itemContactPicture)
+            .into(holder.itemContactPicture)*/
         holder.bind(contactList[position], listener)
     }
 

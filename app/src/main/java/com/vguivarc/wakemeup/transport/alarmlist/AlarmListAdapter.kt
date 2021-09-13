@@ -20,12 +20,13 @@ class AlarmListAdapter(
 
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(alarmsList: List<Alarm>) {
+    fun updateData(alarmsList: List<Alarm>, currentEditingAlarm: Alarm?) {
+        this.currentEditingAlarm = currentEditingAlarm
         this.alarmsList = alarmsList
         notifyDataSetChanged()
     }
 
-    private var currentEditingAlarm: ViewHolder? = null
+    private var currentEditingAlarm: Alarm? = null
 
     interface AlarmsListAdapterListener {
         fun onAlarmTimeClicked(alarm: Alarm)
@@ -33,6 +34,7 @@ class AlarmListAdapter(
         fun onAlarmDelete(alarm: Alarm)
         fun onAlarmRepeatCheck(alarm: Alarm, isChecked: Boolean)
         fun onAlarmDaySelected(alarm: Alarm, day: Alarm.DaysWeek)
+        fun onAlarmEditSelected(alarm: Alarm?)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -70,14 +72,14 @@ class AlarmListAdapter(
         val alarm = alarmsList.toList()[position]
         with(holder) {
             itemAlarmEditArrow.setOnClickListener {
-                closeEditingAlarm(currentEditingAlarm)
-                if (currentEditingAlarm != holder) {
-                    currentEditingAlarm = holder
-                    openEditingAlarm(holder)
-                } else {
-                    currentEditingAlarm = null
-                }
+                listener?.onAlarmEditSelected(alarm)
             }
+            if(alarm.idAlarm==currentEditingAlarm?.idAlarm){
+                openEditingAlarm(holder)
+            } else {
+                closeEditingAlarm(holder)
+            }
+
             itemAlarmTime.text = alarm.getHeureTexte()
             itemAlarmDays.text = alarm.getJoursTexte()
             itemAlarmTime.setOnClickListener {

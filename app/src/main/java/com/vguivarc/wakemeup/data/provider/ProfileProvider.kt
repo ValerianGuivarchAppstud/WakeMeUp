@@ -16,6 +16,10 @@ class ProfileProvider(retrofit: Retrofit, private val sessionService: ISessionPr
         return profileApi.getAccountInfo()
     }
 
+    override suspend fun getFacebookAuthToken(): String? {
+       return sessionService.getFacebookAuthToken()
+    }
+
     override suspend fun editAccount(username: String, email: String): UserProfile {
         return profileApi.editAccount(AuthEditAccountRequest(username, email))
     }

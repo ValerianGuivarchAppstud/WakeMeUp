@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 class Song(
     val id: String = "",
     val title: String = "",
-    var artworkUrl: String = ""
+    var pictureUrl: String = ""
 ) : Comparable<Song>, Parcelable {
 
     override fun toString(): String {

@@ -14,7 +14,7 @@ import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.external.entity.Ringing
 import java.text.SimpleDateFormat
 import java.util.*
-
+/*
 class SonnerieAttenteAdapter(
     private val ringingList: MutableList<Ringing>,
     private val listener: RecyclerItemClickListener
@@ -30,8 +30,8 @@ class SonnerieAttenteAdapter(
 
         val sonnerie = ringingList[position]
         // todo translate
-        if (sonnerie.sender != null) {
-            holder.sender.text = "Envoyé par : ${sonnerie.sender!!.username}"
+        if (sonnerie.senderId != null) {
+            holder.sender.text = "Envoyé par : ${sonnerie.senderName}"
         } else {
             holder.sender.text = "Envoyé par : ${sonnerie.senderName}"
         }
@@ -42,10 +42,10 @@ class SonnerieAttenteAdapter(
         calendar.timeInMillis = sonnerie.dateSent * 1000
 
         holder.date.text = "Reçue le ${formatterDay.format(calendar.time)} à ${formatterHour.format(calendar.time)}"
-        if (sonnerie.sender == null || sonnerie.sender!!.imageUrl == "") {
+        if (sonnerie.senderId == null || sonnerie.senderId!! == "") {
             holder.image.setImageDrawable(ContextCompat.getDrawable(AndroidApplication.appContext, R.drawable.empty_picture_profil))
         } else {
-            Picasso.get().load(sonnerie.sender!!.imageUrl).placeholder(R.drawable.music_placeholder)
+            Picasso.get().load(sonnerie.senderId/*!!.imageUrl*/).placeholder(R.drawable.music_placeholder)
                 .into(holder.image)
         }
         holder.bind(sonnerie, listener)
@@ -70,3 +70,4 @@ class SonnerieAttenteAdapter(
         fun onClickSonnerieListener(ringing: Ringing, position: Int)
     }
 }
+*/

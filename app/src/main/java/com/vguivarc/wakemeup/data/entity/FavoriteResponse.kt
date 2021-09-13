@@ -9,8 +9,8 @@ data class FavoriteResponse(
     val id: String,
     @Json(name = "title")
     val title: String,
-    @Json(name = "artworkUrl")
-    val artworkUrl: String,
+    @Json(name = "pictureUrl")
+    val pictureUrl: String,
     @Json(name = "createdAt")
     val createdAt: String
 )

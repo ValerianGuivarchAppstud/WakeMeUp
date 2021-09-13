@@ -11,4 +11,9 @@ class ProfileInteractor(private val profileProvider: IProfileProvider) {
     suspend fun getAndUpdateUserInfo(): UserProfile {
         return profileProvider.getAndUpdateUserInfo()
     }
+
+    suspend fun getFacebookAuthToken(): String? {
+        return profileProvider.getFacebookAuthToken()
+
+    }
 }

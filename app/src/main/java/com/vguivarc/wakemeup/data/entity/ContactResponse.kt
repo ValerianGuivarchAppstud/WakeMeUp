@@ -4,6 +4,6 @@ import com.squareup.moshi.JsonClass
 import com.vguivarc.wakemeup.domain.external.entity.Contact
 
 @JsonClass(generateAdapter = true)
-data class ContactsListResponse(
+data class ContactResponse(
     val contacts: List<Contact>
 )

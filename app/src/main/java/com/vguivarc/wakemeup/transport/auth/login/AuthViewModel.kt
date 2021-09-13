@@ -5,7 +5,6 @@ import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.base.*
 import com.vguivarc.wakemeup.domain.external.AuthInteractor
 import com.vguivarc.wakemeup.domain.external.ProfileInteractor
-import com.vguivarc.wakemeup.domain.external.SessionInteractor
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -21,8 +20,7 @@ import timber.log.Timber
 
 
 class AuthViewModel(private val authInteractor: AuthInteractor,
-                    private val profileInteractor: ProfileInteractor,
-                    private val sessionInteractor: SessionInteractor
+                    private val profileInteractor: ProfileInteractor
 ) :
     ContainerHost<AuthState, AuthSideEffect>, ViewModel() {
 

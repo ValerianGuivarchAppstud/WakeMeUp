@@ -1,7 +1,7 @@
 package com.vguivarc.wakemeup.transport.sonnerie
 
 import androidx.lifecycle.*
-import com.vguivarc.wakemeup.data.provider.Repository
+import com.vguivarc.wakemeup.util.old.Repository
 import com.vguivarc.wakemeup.domain.external.entity.Ringing
 import com.vguivarc.wakemeup.domain.external.entity.Song
 import com.vguivarc.wakemeup.domain.external.entity.UserProfile

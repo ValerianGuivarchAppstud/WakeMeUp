@@ -1,4 +1,4 @@
-package com.vguivarc.wakemeup.transport.contact
+package com.vguivarc.wakemeup.util.old
 
 /*
 // TODO refaire ça : le lien donne sur le site mais peut être ouvert dans l'appli (ça génère un truc partageable en mode Facebook ?)

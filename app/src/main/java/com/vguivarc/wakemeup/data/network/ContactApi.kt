@@ -4,29 +4,28 @@ import com.vguivarc.wakemeup.data.entity.*
 import com.vguivarc.wakemeup.domain.external.entity.Contact
 import com.vguivarc.wakemeup.domain.external.entity.ContactFacebook
 import com.vguivarc.wakemeup.domain.external.entity.Ringing
-import io.reactivex.Single
 import retrofit2.http.*
 
 /**
  * Api to retrieve series information
  */
 interface ContactApi {
-    @GET("v1/contacts/list")
+    @GET("v1/contact/list")
     suspend fun getContacts(): List<Contact>
 
-    @GET("v1/contacts/facebook")
+    @GET("v1/contact/facebook")
     suspend fun getContactFacebook(
-        @Query("social_auth_token") socialAuthToken: String?
+        @Query("socialAuthToken") socialAuthToken: String?
     ): List<ContactFacebook>
 
 
     @PUT("v1/contact/status")
     suspend fun setContact(
         @Body contactRequest: ContactRequest
-    ): List<Contact>
+    )
 
     @POST("v1/shareringing")
     suspend fun shareRinging(
-        @Body commentRequest: ShareRingingRequest
+        @Body commentRequest: SendRingingRequest
     ): Ringing
 }

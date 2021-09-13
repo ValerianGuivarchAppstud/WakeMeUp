@@ -3,33 +3,23 @@ package com.vguivarc.wakemeup.domain.external.entity
 import android.os.Parcelable
 import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
+import java.time.ZonedDateTime
 
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class Ringing(
+    val id: String,
     var song: Song?,
-    val dateSent: Long,
+    //TODO add (mais là ça marche pas) val dateSent: ZonedDateTime,
     val listened: Boolean,
-    val idReceiver: String,
-    val senderId: String,
+    val seen: Boolean,
+    val receiverId: String,
+    val senderId: String?,
     val senderName: String
 
     // var notificationRecu: Boolean = false
 ) : Parcelable {
-
-    constructor(sentMusic: Ringing) : this(
-        sentMusic.song,
-        sentMusic.dateSent,
-        sentMusic.listened,
-        sentMusic.idReceiver,
-        sentMusic.senderId,
-        sentMusic.senderName
-    )
-
-    constructor() : this(
-        null, 0, false, "", "", ""
-    )
-
-    lateinit var idSonnerie: String
-    var sender: UserProfile? = null
+    //TODO delete ?
+//    lateinit var idSonnerie: String
+  //  var sender: UserProfile? = null
 }

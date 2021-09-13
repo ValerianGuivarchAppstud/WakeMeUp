@@ -32,10 +32,10 @@ class SonneriePasseAdapter(
     override fun onBindViewHolder(holder: SonnerieViewHolder, position: Int) {
 
         val sonnerie = ringingList[position]
-        if (sonnerie.sender != null) {
+        if (sonnerie.senderId != null) {
             holder.sender.text = "Envoyé par : "
             holder.link.visibility = View.VISIBLE
-            holder.link.text = "    " + sonnerie.sender!!.username + "    "
+            holder.link.text = "    " + sonnerie.senderId//!!.username + "    "
         } else {
             holder.sender.text = "Envoyé par : ${sonnerie.senderName}"
             holder.link.visibility = View.GONE
@@ -48,8 +48,8 @@ class SonneriePasseAdapter(
         } else {
             holder.ivFavori.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_main_menu_favoris))
         }
-        Picasso.get().load(song.artworkUrl).placeholder(R.drawable.music_placeholder).into(holder.ivArtwork)
-        holder.bind(sonnerie, sonnerie.sender, listener)
+        Picasso.get().load(song.pictureUrl).placeholder(R.drawable.music_placeholder).into(holder.ivArtwork)
+       // holder.bind(sonnerie, sonnerie.sender, listener)
     }
 
     override fun getItemCount(): Int {

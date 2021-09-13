@@ -8,4 +8,5 @@ import io.reactivex.Single
 interface IProfileProvider {
     suspend fun editAccount(userFname: String, email: String) : UserProfile
     suspend fun getAndUpdateUserInfo(): UserProfile
-}
+    suspend fun getFacebookAuthToken(): String?
+    }

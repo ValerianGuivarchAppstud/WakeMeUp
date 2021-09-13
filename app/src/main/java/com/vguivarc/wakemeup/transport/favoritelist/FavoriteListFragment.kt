@@ -7,14 +7,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.databinding.FragmentFavoriteListBinding
 import com.vguivarc.wakemeup.domain.external.entity.Favorite
+import com.vguivarc.wakemeup.transport.search.SearchSongListAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.orbitmvi.orbit.viewmodel.observe
 import timber.log.Timber
-
 
 class FavoriteListFragment : Fragment(R.layout.fragment_favorite_list),
     FavoriteListAdapter.RecyclerItemClickListener {
@@ -22,6 +25,8 @@ class FavoriteListFragment : Fragment(R.layout.fragment_favorite_list),
     private val viewModel by viewModel<FavoriteListViewModel>()
 
     private var _binding: FragmentFavoriteListBinding? = null
+
+    private var youtubePlayer: YouTubePlayer? = null
 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
@@ -45,6 +50,18 @@ class FavoriteListFragment : Fragment(R.layout.fragment_favorite_list),
         binding.favoriteListSwipeRefreshLayout.setOnRefreshListener {
             refreshData()
         }
+        binding.buttonAddFavorite.setOnClickListener {
+            findNavController().navigate(
+                R.id.searchVideoFragment
+            )
+        }
+
+        lifecycle.addObserver(binding.youtubePlayerView)
+        binding.youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onReady(yt: YouTubePlayer) {
+                youtubePlayer = yt
+            }
+        })
     }
 
     private fun refreshData() {
@@ -57,15 +74,35 @@ class FavoriteListFragment : Fragment(R.layout.fragment_favorite_list),
         viewModel.observe(this, state = ::render, sideEffect = ::handleSideEffect)
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getFavoriteList()
+    }
+
     private fun render(state: FavoriteListState) {
         Timber.d("render $state")
         binding.loader.isVisible = state.isLoading
         binding.favoriteListSwipeRefreshLayout.isVisible = !state.isLoading
-        val list = view?.findViewById<RecyclerView>(R.id.contactList) ?: return
-        if (list.adapter == null) {
-            list.adapter = FavoriteListAdapter(state.favoriteList, this)
+        if ( binding.favoriteList.adapter == null) {
+            binding.favoriteList.adapter = FavoriteListAdapter(state.favoriteList, this)
+            binding.favoriteList.layoutManager = LinearLayoutManager(context)
         } else {
-            (list.adapter as? FavoriteListAdapter)?.updateData(state.favoriteList)
+            (binding.favoriteList.adapter as? FavoriteListAdapter)?.updateData(state.favoriteList)
+        }
+        state.currentSong?.let {
+            (binding.favoriteList.adapter as? FavoriteListAdapter)?.selectedSong(it)
+            youtubePlayer?.let { youtubePlayer ->
+                binding.youtubePlayerView.visibility = View.VISIBLE
+                youtubePlayer.loadVideo(
+                    it.song.id,
+                    0f
+                )
+                youtubePlayer.setVolume(100)
+                binding.youtubePlayerView.getPlayerUiController()
+                    .setVideoTitle(it.song.title)
+            }
+        } ?: run {
+            binding.youtubePlayerView.visibility = View.GONE
         }
     }
 
@@ -80,7 +117,7 @@ class FavoriteListFragment : Fragment(R.layout.fragment_favorite_list),
     }
 
     override fun onPlayListener(recherche: Favorite, position: Int) {
-        TODO("Not yet implemented")
+        viewModel.selectSong(recherche)
     }
 
     override fun onShareListener(recherche: Favorite, position: Int) {
@@ -88,7 +125,7 @@ class FavoriteListFragment : Fragment(R.layout.fragment_favorite_list),
     }
 
     override fun onDeleteListener(recherche: Favorite, position: Int) {
-        TODO("Not yet implemented")
+        viewModel.saveFavoriteStatus(recherche, false)
     }
 }
 /*

@@ -1,4 +1,4 @@
-package com.vguivarc.wakemeup.transport.contact
+package com.vguivarc.wakemeup.util.old
 
 /*
 class ContactFragment : BaseLceFragment() {

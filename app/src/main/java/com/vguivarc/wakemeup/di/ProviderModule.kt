@@ -34,6 +34,7 @@ val providersModule = module {
     single<IContactProvider> { ContactProvider(get()) }
     single<IFavoriteProvider> { FavoriteProvider(get()) }
     single<IProfileProvider> { ProfileProvider(get(), get()) }
+    single<IRingingProvider> { RingingProvider(get()) }
     single<ISessionProvider> { SessionProvider(get(), get()) }
     single<ISongProvider> { SongProvider() }
 

@@ -1,13 +1,17 @@
 package com.vguivarc.wakemeup.transport.search
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.databinding.FragmentSearchSongListBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -20,6 +24,8 @@ class SearchSongListFragment : Fragment(R.layout.fragment_search_song_list),
     private val viewModel by viewModel<SearchSongListViewModel>()
 
     private var _binding: FragmentSearchSongListBinding? = null
+
+    private var youtubePlayer: YouTubePlayer? = null
 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
@@ -40,7 +46,18 @@ class SearchSongListFragment : Fragment(R.layout.fragment_search_song_list),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.buttonValidSearchSong.setOnClickListener {
+            val imm = binding.buttonValidSearchSong.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+            viewModel.getSearchedSongList(binding.search.text.toString())
+        }
 
+        lifecycle.addObserver(binding.youtubePlayerView)
+        binding.youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onReady(yt: YouTubePlayer) {
+                youtubePlayer = yt
+            }
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,12 +68,29 @@ class SearchSongListFragment : Fragment(R.layout.fragment_search_song_list),
     private fun render(state: SearchSongListState) {
         Timber.d("render $state")
         binding.loader.isVisible = state.isLoading
+        binding.beforeSearchView.isVisible = state.showBeforeSearch
+        binding.emptyView.isVisible = state.showEmptyResult
         binding.searchSongList.isVisible = !state.isLoading
-        val list = view?.findViewById<RecyclerView>(R.id.contactList) ?: return
-        if (list.adapter == null) {
-            list.adapter = SearchSongListAdapter(state.searchSongList, this)
+        if (binding.searchSongList.adapter == null) {
+            binding.searchSongList.adapter = SearchSongListAdapter(state.searchSongList, this)
+            binding.searchSongList.layoutManager = LinearLayoutManager(context)
         } else {
-            (list.adapter as? SearchSongListAdapter)?.updateData(state.searchSongList)
+            (binding.searchSongList.adapter as? SearchSongListAdapter)?.updateData(state.searchSongList)
+        }
+        state.currentSong?.let {
+            (binding.searchSongList.adapter as? SearchSongListAdapter)?.selectedSong(it)
+            youtubePlayer?.let { youtubePlayer ->
+                binding.youtubePlayerView.visibility = View.VISIBLE
+                youtubePlayer.loadVideo(
+                    it.song.id,
+                    0f
+                )
+                youtubePlayer.setVolume(100)
+                binding.youtubePlayerView.getPlayerUiController()
+                    .setVideoTitle(it.song.title)
+            }
+        } ?: run {
+            binding.youtubePlayerView.visibility = View.GONE
         }
     }
 
@@ -72,11 +106,17 @@ class SearchSongListFragment : Fragment(R.layout.fragment_search_song_list),
 
 
     override fun onSongPictureClickListener(position: Int) {
-        TODO("Not yet implemented")
+        val searchedSong = (binding.searchSongList.adapter as? SearchSongListAdapter)?.getSongWithPosition(position)
+        searchedSong?.let { searchedSong ->
+            viewModel.selectSong(searchedSong)
+        }
     }
 
     override fun onSongFavoriteClickListener(position: Int) {
-        TODO("Not yet implemented")
+        val searchedSong = (binding.searchSongList.adapter as? SearchSongListAdapter)?.getSongWithPosition(position)
+        searchedSong?.let { searchedSong ->
+            viewModel.updateFavorite(searchedSong.song, searchedSong.isFavorite.not())
+        }
     }
 
     override fun onSongShareClickListener(position: Int) {

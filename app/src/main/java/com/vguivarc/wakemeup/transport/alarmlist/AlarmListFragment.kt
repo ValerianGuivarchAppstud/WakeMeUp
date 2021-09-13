@@ -61,7 +61,7 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) , AlarmListAdap
             list.adapter = AlarmListAdapter(state.alarmList, this)
             list.layoutManager = LinearLayoutManager(context)
         } else {
-            (list.adapter as? AlarmListAdapter)?.updateData(state.alarmList)
+            (list.adapter as? AlarmListAdapter)?.updateData(state.alarmList, state.currentEditingAlarm)
         }
     }
 
@@ -125,6 +125,10 @@ class AlarmListFragment : Fragment(R.layout.fragment_alarm_list) , AlarmListAdap
 
     override fun onAlarmDaySelected(alarm: Alarm, day: Alarm.DaysWeek) {
         viewModel.actionDaySelected(alarm, day)
+    }
+
+    override fun onAlarmEditSelected(alarm: Alarm?) {
+        viewModel.actionEditAlarm(alarm)
     }
 
 }

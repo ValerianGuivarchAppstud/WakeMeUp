@@ -4,13 +4,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
 
     <permission
         android:name="com.vguivarc.wakemeup.permission.C2D_MESSAGE"
@@ -19,7 +19,6 @@
     <uses-permission android:name="com.vguivarc.wakemeup.permission.C2D_MESSAGE" />
 
     <application
-        android:usesCleartextTraffic="true"
         android:name=".AndroidApplication"
         android:allowBackup="false"
         android:fullBackupContent="false"
@@ -28,8 +27,15 @@
         android:roundIcon="@drawable/main_logo_white"
         android:screenOrientation="landscape"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name="com.vguivarc.wakemeup.YoutubeFavori">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"><!-- TODO delete !-->
+        <activity
+            android:name=".transport.ContactDetailsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_contactdetails"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".YoutubeFavori"
+            android:exported="true">
             <intent-filter android:label="Music Me !">
                 <action android:name="android.intent.action.SEND" />
 
@@ -40,24 +46,25 @@
                     android:mimeType="text/*" />
             </intent-filter>
         </activity>
-
         <activity android:name=".transport.auth.AuthActivity" />
 
         <service
-            android:name="com.vguivarc.wakemeup.util.notification.MyFirebaseMessagingService"
+            android:name=".util.notification.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <activity
-            android:name="com.vguivarc.wakemeup.Demo"
+            android:name=".Demo"
             android:label="My Custom AppIntro" />
-        <activity android:name=".transport.MainActivity">
+        <activity android:name=".transport.MainActivity"
+            android:exported="true">
             <intent-filter android:label="Music Me !">
                 <action android:name="android.intent.action.MAIN" />
 
@@ -83,17 +90,22 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-        <activity android:name="com.facebook.CustomTabActivity" android:exported="true">
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
     </application>
+
 </manifest>

@@ -3,17 +3,19 @@ package com.vguivarc.wakemeup.domain.external.entity
 import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.vguivarc.wakemeup.domain.external.entity.UserProfile
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class ContactFacebook(
-    val id: String,
-    @Json(name = "id_facebook")
+    @Json(name = "idProfile")
+    val idProfile: String,
+    @Json(name = "idFacebook")
     val idFacebook: String,
-    val name: String,
-    var picture: String? = null,
-    @Json(name = "is_contact")
-    val isContact: Boolean
+    @Json(name = "username")
+    val username: String,
+    @Json(name = "pictureUrl")
+    var pictureUrl: String? = null,
+    @Json(name = "contact")
+    val contact: Boolean
 ) : Parcelable

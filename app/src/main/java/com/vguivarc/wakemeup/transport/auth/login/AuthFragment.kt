@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -53,8 +54,13 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
             activity?.onBackPressed()
         }
 
+        binding.buttonSeConnecter.setOnClickListener {
+            findNavController().navigate(R.id.action_login_email)
+        }
+
         setupFacebookLogic()
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

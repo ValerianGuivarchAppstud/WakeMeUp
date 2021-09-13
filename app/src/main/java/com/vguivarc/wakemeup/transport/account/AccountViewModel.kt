@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.external.AuthInteractor
 import com.vguivarc.wakemeup.domain.external.ProfileInteractor
-import com.vguivarc.wakemeup.domain.external.SessionInteractor
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -16,8 +15,8 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 
 
 class AccountViewModel(private val authInteractor: AuthInteractor,
-                       private val profileInteractor: ProfileInteractor,
-                       private val sessionInteractor: SessionInteractor) :
+                       private val profileInteractor: ProfileInteractor
+) :
     ContainerHost<AccountState, AccountSideEffect>, ViewModel() {
 
     override val container =
@@ -36,7 +35,7 @@ class AccountViewModel(private val authInteractor: AuthInteractor,
         }
 
         try {
-            val userProfile = sessionInteractor.getUserProfileSession()
+            val userProfile = profileInteractor.getAndUpdateUserInfo()
 
             reduce {
                 state.copy(userProfile = userProfile, isLoading = false, isConnected = true)

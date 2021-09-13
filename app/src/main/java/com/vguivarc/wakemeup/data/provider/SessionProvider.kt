@@ -13,12 +13,14 @@ private const val SHARED_PREFERENCES_TOKEN = "session:token"
 private const val SHARED_PREFERENCES_USER_PROFILE = "session:user"
 private const val SHARED_PREFERENCES_FIREBASE_TOKEN = "session:firebase-token"
 
+
 class SessionProvider(private val context: Context, private val moshi: Moshi) : ISessionProvider {
 
     private val sharedPreferences =
         context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
 
-    override fun getUserProfileSession(): UserProfile? = get(SHARED_PREFERENCES_USER_PROFILE)
+    override fun getUserProfileSession(): UserProfile?  = get(SHARED_PREFERENCES_USER_PROFILE)
+
     override fun getFacebookAuthToken(): String? {
         return AccessToken.getCurrentAccessToken().token
     }
@@ -47,7 +49,7 @@ class SessionProvider(private val context: Context, private val moshi: Moshi) : 
 
     override fun getFirebaseToken(): String? = get(SHARED_PREFERENCES_FIREBASE_TOKEN)
     override fun isConnected(): Boolean {
-        return getUserProfileSession() != null
+        return getUserToken() != null
     }
 
     private inline fun <reified T> get(nameInDB: String): T? {

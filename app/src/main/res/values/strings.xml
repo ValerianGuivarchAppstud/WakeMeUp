@@ -61,6 +61,7 @@
     <string name="pour_demander_des_musiques_d_autres_utilisateurs_il_faut_d_abord_se_connecter">Pour demander des musiques à d\'autres utilisateurs, il faut d\'abord se connecter !</string>
     <string name="vous_n_avez_aucun_contact_pour_le_moment">Vous n\'avez aucun contact pour le moment</string>
     <string name="saisissez_votre_recherche_pour_afficher_les_r_sultats">Saisissez votre recherche pour afficher les résultats</string>
+    <string name="aucun_resultat">Aucun résultat ne correspond à ta recherche.</string>
     <string name="ok">OK</string>
     <string name="Apropos">A propos</string>
     <plurals name="musique_recu">
@@ -153,4 +154,5 @@
     <string name="adresse_email">Adresse mail</string>
     <string name="password">Mot de passe</string>
     <string name="general_error">Erreur</string>
+    <string name="title_activity_contactdetails">contactdetails</string>
 </resources>

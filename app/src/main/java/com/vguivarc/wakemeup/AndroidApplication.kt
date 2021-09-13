@@ -8,7 +8,7 @@ import android.content.Context
 import android.os.Build
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
-import com.vguivarc.wakemeup.data.provider.Repository
+import com.vguivarc.wakemeup.util.old.Repository
 import com.vguivarc.wakemeup.di.interactorsModule
 import com.vguivarc.wakemeup.di.networkModule
 import com.vguivarc.wakemeup.di.providersModule

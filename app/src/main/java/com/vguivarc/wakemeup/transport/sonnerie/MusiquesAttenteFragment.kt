@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.external.entity.Ringing
 import kotlinx.android.synthetic.main.fragment_musiques_attente.view.*
-
+/*
 class MusiquesAttenteFragment : Fragment(), SonnerieAttenteAdapter.RecyclerItemClickListener {
 
     private val sonnerieAttenteList = mutableListOf<Ringing>()
@@ -75,3 +75,4 @@ class MusiquesAttenteFragment : Fragment(), SonnerieAttenteAdapter.RecyclerItemC
         // todo ouverture d'une fenetre d'options ?
     }
 }
+*/

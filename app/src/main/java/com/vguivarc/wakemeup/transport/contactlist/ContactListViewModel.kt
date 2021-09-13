@@ -2,8 +2,10 @@ package com.vguivarc.wakemeup.transport.contactlist
 
 import androidx.lifecycle.ViewModel
 import com.vguivarc.wakemeup.domain.external.ContactInteractor
+import com.vguivarc.wakemeup.domain.external.entity.Contact
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import timber.log.Timber
@@ -33,10 +35,10 @@ class ContactListViewModel(private val contactService: IContactProvider) : BaseV
 */
 
 class ContactListViewModel(private val contactInteractor: ContactInteractor) :
-    ContainerHost<ContactListState, ContactListSideEffect>, ViewModel() {
+    ContainerHost<ContactListState, ContactListScreenSideEffect>, ViewModel() {
 
     override val container =
-        container<ContactListState, ContactListSideEffect>(
+        container<ContactListState, ContactListScreenSideEffect>(
             ContactListState(),
             onCreate = ::onCreate
         )
@@ -54,7 +56,7 @@ class ContactListViewModel(private val contactInteractor: ContactInteractor) :
             val list = contactInteractor.getContactList()
 
             reduce {
-                state.copy(contactList = list, isLoading = false, isFabOpen = false)
+                state.copy(contactList = list.toList(), isLoading = false, isFabOpen = false)
             }
 
         } catch (exception: Exception) {
@@ -64,14 +66,26 @@ class ContactListViewModel(private val contactInteractor: ContactInteractor) :
                 state.copy(contactList = emptyList(), isLoading = false, isFabOpen = false)
             }
 
-//            postSideEffect(ContactListSideEffect.Toast(R.string.general_error))
+//            postSideEffect(ContactListScreenSideEffect.Toast(R.string.general_error))
         }
     }
 
-    fun addContactButton()  = intent {
+    fun addContactButton(open : Boolean? = null)  = intent {
         reduce {
             Timber.e("change")
-            state.copy(isFabOpen = !(state.isFabOpen))
+            open?.let {
+                state.copy(isFabOpen = open)
+            } ?: run {
+                state.copy(isFabOpen = !(state.isFabOpen))
+            }
         }
+    }
+
+    fun onContactSelected(contact: Contact) = intent {
+        postSideEffect(ContactListScreenSideEffect.NavigateToContactDetail(contact))
+    }
+
+    fun addFacebookSelected() = intent {
+        postSideEffect(ContactListScreenSideEffect.NavigateToAddFacebookContact)
     }
 }

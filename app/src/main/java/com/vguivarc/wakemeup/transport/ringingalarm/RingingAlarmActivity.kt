@@ -7,43 +7,40 @@ import android.os.*
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
+import androidx.core.view.isVisible
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.external.entity.Alarm
-import com.vguivarc.wakemeup.domain.external.entity.Ringing
+import com.vguivarc.wakemeup.databinding.ActivityReveilSonneBinding
 import com.vguivarc.wakemeup.domain.internal.AlarmAndroidProvider.Companion.EXTRA_ID
-import com.vguivarc.wakemeup.transport.sonnerie.SonnerieListeViewModel
-import com.vguivarc.wakemeup.util.Utility
-import com.vguivarc.wakemeup.viewmodel.RingingAlarmViewModel
 import kotlinx.android.synthetic.main.activity_reveil_sonne.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.orbitmvi.orbit.viewmodel.observe
 import timber.log.Timber
 import java.util.*
 
-/**
- * Reveil sonne activity
- *
- * @constructor Create empty Reveil sonne activity
- */
-class RingingAlarmActivity : AppCompatActivity() {
+
+class RingingAlarmActivity : AppCompatActivity(R.layout.activity_reveil_sonne) {
+
+    private val viewModel by viewModel<RingingAlarmViewModel>()
+
+    private var _binding: ActivityReveilSonneBinding? = null
+
+    // This property is only valid between onCreateView and onDestroyView.
+    private val binding get() = _binding!!
 
     private var mediaPlayer: MediaPlayer? = null
-    private val loading = MutableLiveData<Boolean>()
+    private var youtubePlayer: YouTubePlayer? = null
 
     private lateinit var audioManager: AudioManager
-    private var initialVolume = 0
 
     private var threadVolumeProgressif: Thread? = null
     private var threadNoMusic: Thread? = null
 
-    private fun dealWithNoMusic(): Thread {
+/*    private fun dealWithNoMusic(): Thread {
         class WorkerDealWithNoMusic(private val handler: Handler) : Runnable {
             override fun run() {
                 try {
@@ -67,9 +64,6 @@ class RingingAlarmActivity : AppCompatActivity() {
                      )*/
 
                 mediaPlayer!!.start()
-                textPasDeMusiqueAttente.visibility = View.VISIBLE
-                senderView.visibility = View.INVISIBLE
-                loading.postValue(false)
             }
         }
 
@@ -78,8 +72,8 @@ class RingingAlarmActivity : AppCompatActivity() {
         thread.start()
         return thread
     }
-
-    private fun dealWithVolume(): Thread {
+*/
+/*    private fun dealWithVolume(): Thread {
         class WorkerDealWithVolume(private val handler: Handler) : Runnable {
             override fun run() {
                 try {
@@ -109,7 +103,7 @@ class RingingAlarmActivity : AppCompatActivity() {
                         msg.arg1, // Volume index
                         AudioManager.FLAG_SHOW_UI// Flags
                     )*/
-                youTubePlayer!!.setVolume(msg.arg1)
+                //youTubePlayer!!.setVolume(msg.arg1)
             }
         }
 
@@ -118,69 +112,46 @@ class RingingAlarmActivity : AppCompatActivity() {
         thread.start()
         return thread
     }
+*/
+//    private var youTubePlayer: YouTubePlayer? = null
 
-/*    class SonnerieAlarmWorker(val context: Context, params: WorkerParameters) : Worker(context, params) {
-        override fun doWork(): Result {
-           /* val audioManager = context.getSystemService(AUDIO_SERVICE) as AudioManager
-            for(progressionVolume in 0..10){
-                val newVol = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    (audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) - audioManager.getStreamMinVolume(AudioManager.STREAM_MUSIC) / 10) * progressionVolume
-                } else {
-                    (audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 10) * progressionVolume
-                }
-                Timber.e("volume="+newVol)
-                audioManager.setStreamVolume(
-                    AudioManager.STREAM_MUSIC, // Stream type
-                    newVol, // Volume index
-                    AudioManager.FLAG_SHOW_UI// Flags
-                )
-                Thread.sleep(3_000)
-            }*/
-            return Result.success()
-        }
-    }*/
-/*
-    class SonnerieVolumeAlarmWorker(val context: Context, params: WorkerParameters) : Worker(context, params) {
-        override fun doWork(): Result {
-            Timber.e("lol")
-            return Result.success()
-        }
-    }*/
-
-    private var youTubePlayer: YouTubePlayer? = null
-    private lateinit var youTubePlayerView: YouTubePlayerView
-    var currentRinging: Ringing? = null
-
-    private lateinit var viewModelSonnerie: SonnerieListeViewModel
-    private lateinit var loadingView: ProgressBar
-    private lateinit var senderView: TextView
-    private lateinit var viewModelReveil: RingingAlarmViewModel
-    private lateinit var textPasDeMusiqueAttente: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_reveil_sonne)
-        youTubePlayerView = findViewById(R.id.youtubePlayReveil)
-        loadingView = findViewById(R.id.id_loading_sonnerie)
-        senderView = findViewById(R.id.sender_sonnerie)
-        textPasDeMusiqueAttente = findViewById(R.id.text_pas_de_musique_attente)
+        _binding = ActivityReveilSonneBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+
+
+//        super.onCreate(savedInstanceState)
+//        setContentView(R.layout.activity_reveil_sonne)
+
+        viewModel.observe(this, state = ::render, sideEffect = ::handleSideEffect)
+
+
+        val idReveil = intent!!.getIntExtra(EXTRA_ID, -1)
+        viewModel.getAlarm(idReveil)
+
+//        _binding = ActivityReveilSonneBinding.inflate(layoutInflater)
+
+        lifecycle.addObserver(binding.youtubePlayerView)
+
+
+
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        initialVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+//        initialVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
 
-        loading.observe(
-            this,
-            {
-                if (it) {
-                    loadingView.visibility = View.VISIBLE
-                } else {
-                    loadingView.visibility = View.GONE
-                }
-            }
-        )
-        loading.value = true
-        youTubePlayerView.visibility = View.INVISIBLE
+        binding.youtubePlayerView.visibility = View.INVISIBLE
+        binding.boutonReveilStop.setOnClickListener {
+            viewModel.stopAlarm()
+        }
+        binding.boutonReveilSnooze.setOnClickListener {
+            viewModel.snoozeAlarm()
+        }
 
-     /*   val request = OneTimeWorkRequest.Builder(SonnerieAlarmWorker::class.java)
+
+     /*   (old)val request = OneTimeWorkRequest.Builder(SonnerieAlarmWorker::class.java)
             .setInitialDelay(10000, TimeUnit.MILLISECONDS)
             .build()
         WorkManager.getInstance(AppWakeUp.appContext)
@@ -227,9 +198,9 @@ class RingingAlarmActivity : AppCompatActivity() {
 
         //  viewModelSonnerie.updateSonneries()
 
-        threadNoMusic = dealWithNoMusic()
+        ///////threadNoMusic = dealWithNoMusic()
 
-        viewModelSonnerie.getListeAttenteLiveData().observe(
+   /*     viewModelSonnerie.getListeAttenteLiveData().observe(
             this,
             {
                 if (it.isEmpty()) {
@@ -268,13 +239,13 @@ class RingingAlarmActivity : AppCompatActivity() {
                                 loading.value = false
                                 // WorkManager.getInstance(AppWakeUp.appContext).cancelAllWork()
                                 threadNoMusic?.interrupt()
-                                threadVolumeProgressif = dealWithVolume()
+//////                                threadVolumeProgressif = dealWithVolume()
                             }
                         })
                     // -------------------------------------------------------------------------------------------------
                 }
             }
-        )
+        )*/
 
         // Initialisation des valeures de la date et heure----
         val calendar: Calendar = Calendar.getInstance()
@@ -299,29 +270,100 @@ class RingingAlarmActivity : AppCompatActivity() {
         val heure = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
 
-        date_sonnerie.text = "$jour / $moisTxt / $annee"
+        date_sonnerie.text = "$jour $moisTxt $annee"
         if (minute <10)
             heure_sonnerie.text = "$heure : 0$minute"
         else
             heure_sonnerie.text = "$heure : $minute"
         // -----------------------------------------------------
 
-        // Gestion du bouton stop--------------------------------------
-        bouton_reveil_stop.setOnClickListener {
-            stop()
-        }
-        // ------------------------------------------------------------
-
-        // Gestion du bouton snooze--------------------------------------------------------------
-        bouton_reveil_snooze.setOnClickListener {
-            snooze()
-        }
-        // --------------------------------------------------------------------------------------
-
         // TODO pas de texte de snooze car lié à une activité qui s'arrête juste après
         // --------------------------------------------------------------------------------------
     }
 
+
+
+    private fun render(state: RingingAlarmState) {
+        Timber.d("render $state")
+        when(state.step){
+            RingingAlarmStep.WaitingForNextRinging -> {
+                binding.loader.isVisible = true
+            }
+            RingingAlarmStep.WaitingForYoutubeReader -> {
+                state.ringing?.let {
+                    binding.senderSonnerie.text = "Musique envoyée par ${it.senderName}"
+                    binding.youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                        override fun onReady(yt: YouTubePlayer) {
+                            youtubePlayer = yt
+                            viewModel.youtubePlayerReady()
+                        }
+                    })
+                }?:run {
+                    viewModel.errorPlayYoutubeSong()
+                }
+            }
+            RingingAlarmStep.ReadyToPlay -> {
+                youtubePlayer?.let { youtubePlayer ->
+                    state.ringing?.let { ringing ->
+                        youtubePlayer.loadVideo(ringing.song!!.id, 0f)
+                    }
+                }?:run {
+                    viewModel.errorPlayYoutubeSong()
+                }
+                binding.youtubePlayerView.isVisible = true
+                binding.loader.isVisible = false
+                viewModel.isPlaying()
+            }
+            RingingAlarmStep.Playing -> {
+                youtubePlayer?.let {
+                    it.setVolume(state.volume)
+                }?:run {
+                    viewModel.errorPlayYoutubeSong()
+                }
+            }
+            RingingAlarmStep.NoNextRinging -> {
+                binding.senderSonnerie.text = "Pas de sonnerie en attente"
+                binding.loader.isVisible = false
+                playLocalMusic()
+            }
+        }
+/*        state.ringing?.let {
+            if(!state.isPlaying){
+                viewModel.play()
+                youTubePlayer?.loadVideo(state.ringing.song!!.id, 0f)
+                binding.youtubePlayerView.getPlayerUiController()
+                    .setVideoTitle(state.ringing.song!!.title)
+
+            }
+        }*/
+    }
+
+    private fun playLocalMusic() {
+        val resID = AndroidApplication.appContext.resources.getIdentifier("sonnerie_default", "raw", AndroidApplication.appContext.packageName)
+        mediaPlayer = MediaPlayer.create(AndroidApplication.appContext, resID)
+         audioManager.setStreamVolume(
+             AudioManager.STREAM_MUSIC, // Stream type
+             audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), // Volume index
+             AudioManager.FLAG_SHOW_UI// Flags
+         )
+        mediaPlayer!!.start()
+    }
+
+    private fun handleSideEffect(sideEffect: RingingAlarmSideEffect) {
+        when (sideEffect) {
+            is RingingAlarmSideEffect.Toast -> Toast.makeText(
+                this,
+                sideEffect.textResource,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+/*
     private fun stop() {
         threadVolumeProgressif?.interrupt()
         threadNoMusic?.interrupt()
@@ -371,8 +413,8 @@ class RingingAlarmActivity : AppCompatActivity() {
         }
         viewModelSonnerie.utilisationSonnerie(ringing)
     }
-
+*/
     override fun onBackPressed() {
-        stop()
+        viewModel.stopAlarm()
     }
 }

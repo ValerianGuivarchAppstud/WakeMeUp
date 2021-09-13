@@ -1,12 +1,12 @@
-package com.vguivarc.wakemeup.transport.contact
+package com.vguivarc.wakemeup.util.old
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -15,25 +15,28 @@ import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.external.entity.Ringing
 import com.vguivarc.wakemeup.domain.external.entity.UserProfile
 
-class ContactListeAdapter(
+/*
+class ContactListeShareAdapter(
     private val context: Context,
     private var contacts: Map<String, UserProfile>,
+    private var selection: List<UserProfile>,
     private var sonneriesEnvoyees: MutableList<Ringing>,
     private var sonneriesAttente: MutableList<Ringing>,
     private var sonneriesPassees: MutableList<Ringing>,
-    private val listener: ContactListAdapterListener?
-) : RecyclerView.Adapter<ContactListeAdapter.ViewHolder>(),
+    private val listener: ContactListShareAdapterListener?
+) : RecyclerView.Adapter<ContactListeShareAdapter.ViewHolder>(),
     View.OnClickListener {
 
-    interface ContactListAdapterListener {
+    interface ContactListShareAdapterListener {
         fun onContactClicked(contact: UserProfile, itemView: View)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val cardViewContact = itemView.findViewById<CardView>(R.id.card_view_contact)!!
         var itemContactImage = itemView.findViewById<ImageView>(R.id.item_contact_picture)!!
         var itemContactNom = itemView.findViewById<TextView>(R.id.item_contact_name)!!
-        var itemContactMusiqueEnvoyee = itemView.findViewById<TextView>(R.id.item_contact_infos)!!
+        var itemContactMusiqueEnvoyee =
+            itemView.findViewById<TextView>(R.id.item_contact_infos)!!
+        var checkBoxContact = itemView.findViewById<CheckBox>(R.id.checkBoxContact)!!
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,8 +48,6 @@ class ContactListeAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val contact = contacts.toList()[position].second
         with(holder) {
-            cardViewContact.tag = contact
-            cardViewContact.setOnClickListener(this@ContactListeAdapter)
             // item_contact_image.setImageDrawable((, null)))
             itemContactNom.text = contact.username
 
@@ -60,13 +61,19 @@ class ContactListeAdapter(
                 )
             }
 
-            val recu = sonneriesAttente.filter { son -> son.senderId == contact.profileId }.size + sonneriesPassees.filter { son -> son.senderId == contact.profileId }.size
-            val envoye = sonneriesEnvoyees.filter { son -> son.idReceiver == contact.profileId }.size
-            val txtEnvoye = AndroidApplication.appContext.resources.getQuantityString(R.plurals.musique_envoyée, recu)
-            val txtRecu = AndroidApplication.appContext.resources.getQuantityString(R.plurals.musique_recu, envoye)
-            val final = "$txtEnvoye $envoye - $txtRecu $recu"
-
-            itemContactMusiqueEnvoyee.text = final
+            val recu =
+                sonneriesAttente.filter { son -> son.senderId == contact.idProfile }.size + sonneriesPassees.filter { son -> son.senderId == contact.idProfile }.size
+            val envoye =
+                sonneriesEnvoyees.filter { son -> son.receiverId == contact.idProfile }.size
+            itemContactMusiqueEnvoyee.text = AndroidApplication.appContext.resources.getString(
+                R.string.txt_trait_txt,
+                AndroidApplication.appContext.resources.getQuantityString(R.plurals.musique_envoyée, recu),
+                AndroidApplication.appContext.resources.getQuantityString(R.plurals.musique_recu, envoye)
+            )
+            checkBoxContact.isSelected = selection.contains(contact)
+            checkBoxContact.visibility = View.VISIBLE
+            checkBoxContact.tag = contact
+            checkBoxContact.setOnClickListener(this@ContactListeShareAdapter)
         }
     }
 
@@ -76,3 +83,4 @@ class ContactListeAdapter(
         listener?.onContactClicked(v.tag as UserProfile, v)
     }
 }
+*/

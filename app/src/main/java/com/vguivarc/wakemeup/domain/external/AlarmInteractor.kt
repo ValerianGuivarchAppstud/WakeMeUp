@@ -14,6 +14,10 @@ class AlarmInteractor(private val alarmProvider: IAlarmProvider) {
         return alarmProvider.save(alarm)
     }
 
+    fun add(): List<Alarm> {
+        return alarmProvider.addAlarm()
+    }
+
     fun remove(alarm: Alarm): List<Alarm> {
         return alarmProvider.remove(alarm)
     }

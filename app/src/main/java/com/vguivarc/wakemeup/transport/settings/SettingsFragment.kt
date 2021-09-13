@@ -9,21 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.vguivarc.wakemeup.BuildConfig
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.databinding.FragmentContactListBinding
 import com.vguivarc.wakemeup.databinding.FragmentSettingsBinding
 import com.vguivarc.wakemeup.transport.auth.AuthActivity
-import com.vguivarc.wakemeup.transport.auth.LOGIN_REQUEST_CODE
-import com.vguivarc.wakemeup.transport.contactlist.ContactListAdapter
-import com.vguivarc.wakemeup.transport.contactlist.ContactListSideEffect
-import com.vguivarc.wakemeup.transport.contactlist.ContactListState
-import com.vguivarc.wakemeup.transport.contactlist.ContactListViewModel
 import com.vguivarc.wakemeup.util.contactUs
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.jetbrains.anko.support.v4.intentFor
@@ -149,16 +141,20 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun goToLogin() {
-        startActivityForResult(
-            intentFor<AuthActivity>(),
-            LOGIN_REQUEST_CODE
+        startActivity(
+            intentFor<AuthActivity>()
         )
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+ /*   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == LOGIN_REQUEST_CODE) {
+
             viewModel.getSettings()
-        }
+
+    }*/
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getSettings()
     }
 }

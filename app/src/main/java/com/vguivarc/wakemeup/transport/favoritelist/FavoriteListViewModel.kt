@@ -1,18 +1,8 @@
 package com.vguivarc.wakemeup.transport.favoritelist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.vguivarc.wakemeup.base.*
-import com.vguivarc.wakemeup.domain.external.ContactInteractor
 import com.vguivarc.wakemeup.domain.external.FavoriteInteractor
-import com.vguivarc.wakemeup.domain.external.SessionInteractor
 import com.vguivarc.wakemeup.domain.external.entity.Favorite
-import com.vguivarc.wakemeup.domain.internal.IFavoriteProvider
-import com.vguivarc.wakemeup.transport.contactlistfacebook.ContactFacebookListSideEffect
-import com.vguivarc.wakemeup.transport.contactlistfacebook.ContactFacebookListState
-import com.vguivarc.wakemeup.util.applySchedulers
-import io.reactivex.rxkotlin.addTo
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -41,19 +31,25 @@ class FavoriteListViewModel(
 
         try {
             val list = favoriteInteractor.getFavoriteList()
-
             reduce {
-                state.copy(favoriteList = list, isLoading = false)
+                state.copy(favoriteList = list.toList(), isLoading = false, currentSong = null)
             }
 
         } catch (exception: Exception) {
             Timber.e(exception)
 
             reduce {
-                state.copy(favoriteList = emptyList(), isLoading = false)
+                state.copy(favoriteList = emptyList(), isLoading = false, currentSong = null)
             }
 
 //            postSideEffect(ContactFacebookListSideEffect.Toast(R.string.general_error))
+        }
+    }
+
+
+    fun selectSong(searchSong: Favorite)  = intent {
+        reduce {
+            state.copy(isLoading = false, currentSong = searchSong)
         }
     }
 
@@ -65,7 +61,7 @@ class FavoriteListViewModel(
             val list = favoriteInteractor.saveFavoriteStatus(favorite.song, isFavorite)
 
             reduce {
-                state.copy(favoriteList = list, isLoading = false)
+                state.copy(favoriteList = list.toList(), isLoading = false)
             }
 
         } catch (exception: Exception) {

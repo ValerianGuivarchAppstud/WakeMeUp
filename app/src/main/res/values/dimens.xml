@@ -14,5 +14,7 @@
 
     <dimen name="fab_level_1">65dp</dimen>
     <dimen name="fab_level_2">120dp</dimen>
+    <dimen name="fab_level_3">175dp</dimen>
+    <dimen name="fab_level_4">230dp</dimen>
 
 </resources>

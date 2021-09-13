@@ -63,9 +63,21 @@
                 android:text="@string/snooze"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/checkBoxContact"
+                app:layout_constraintEnd_toStartOf="@+id/item_add_contact_facebook_picture"
                 app:layout_constraintStart_toEndOf="@+id/item_contact_facebook_picture"
                 app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/item_add_contact_facebook_picture"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="16dp"
+                android:contentDescription="@string/image_ami"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_person_remove_24" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

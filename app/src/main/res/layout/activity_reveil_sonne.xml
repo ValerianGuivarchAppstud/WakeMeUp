@@ -19,23 +19,23 @@
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/youtubePlayReveil"
-        app:layout_constraintEnd_toEndOf="@+id/youtubePlayReveil"
-        app:layout_constraintStart_toStartOf="@+id/youtubePlayReveil"
-        app:layout_constraintTop_toTopOf="@+id/youtubePlayReveil" />
+        app:layout_constraintBottom_toBottomOf="@+id/youtube_player_view"
+        app:layout_constraintEnd_toEndOf="@+id/youtube_player_view"
+        app:layout_constraintStart_toStartOf="@+id/youtube_player_view"
+        app:layout_constraintTop_toTopOf="@+id/youtube_player_view" />
 
     <ProgressBar
-        android:id="@+id/id_loading_sonnerie"
-        style="?android:attr/progressBarStyle"
+        android:id="@+id/loader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/youtubePlayReveil"
-        app:layout_constraintEnd_toEndOf="@+id/youtubePlayReveil"
-        app:layout_constraintStart_toStartOf="@+id/youtubePlayReveil"
-        app:layout_constraintTop_toTopOf="@+id/youtubePlayReveil" />
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-        android:id="@+id/youtubePlayReveil"
+        android:id="@+id/youtube_player_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -112,7 +112,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bouton_reveil_stop"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/youtubePlayReveil"
+        app:layout_constraintTop_toBottomOf="@+id/youtube_player_view"
         app:layout_constraintVertical_bias="0.3" />
 
     <TextView
@@ -148,7 +148,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/bouton_reveil_snooze"
-        app:layout_constraintTop_toBottomOf="@+id/youtubePlayReveil"
+        app:layout_constraintTop_toBottomOf="@+id/youtube_player_view"
         app:layout_constraintVertical_bias="0.3" />
 
 

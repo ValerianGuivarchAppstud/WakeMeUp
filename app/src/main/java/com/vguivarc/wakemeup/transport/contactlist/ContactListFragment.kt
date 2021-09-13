@@ -4,131 +4,155 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.OvershootInterpolator
 import android.widget.Toast
-import androidx.core.view.ViewCompat
-import androidx.core.view.isVisible
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.databinding.FragmentContactListBinding
 import com.vguivarc.wakemeup.domain.external.entity.Contact
-import com.vguivarc.wakemeup.util.widget.FabSmall
+import com.vguivarc.wakemeup.transport.ui.theme.WakeMeUpTheme
+import com.vguivarc.wakemeup.util.multifab.MultiFabItem
+import com.vguivarc.wakemeup.util.multifab.MultiFabState
+import com.vguivarc.wakemeup.util.multifab.MultiFloatingActionButton
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.orbitmvi.orbit.viewmodel.observe
 import timber.log.Timber
 
 
-class ContactListFragment : Fragment(R.layout.fragment_contact_list),
-    ContactListAdapter.RecyclerItemClickListener {
+class ContactListFragment : Fragment() {
 
     private val viewModel by viewModel<ContactListViewModel>()
-
-    private var _binding: FragmentContactListBinding? = null
-
-    // This property is only valid between onCreateView and onDestroyView.
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentContactListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.contactListSwipeRefreshLayout.setOnRefreshListener {
-            refreshData()
-        }
-        binding.buttonAddContact.setOnClickListener {
-            Timber.e("lol")
-            viewModel.addContactButton()
+        return ComposeView(requireContext()).apply {
+            setContent {
+                WakeMeUpTheme {
+                    ContactListScreen(findNavController(), viewModel)
+                }
+            }
         }
     }
 
-    private fun refreshData() {
-        viewModel.getContactList()
-        binding.contactListSwipeRefreshLayout.isRefreshing = false
-    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.observe(this, state = ::render, sideEffect = ::handleSideEffect)
-    }
 
-    private fun render(state: ContactListState) {
-        Timber.d("render $state")
-        binding.loader.isVisible = state.isLoading
-        binding.contactListSwipeRefreshLayout.isVisible = !state.isLoading
-        toggleFabMenu(state.isFabOpen)
-        val list = view?.findViewById<RecyclerView>(R.id.contactList) ?: return
-        if (list.adapter == null) {
-            list.adapter = ContactListAdapter(state.contactList, this)
-        } else {
-            (list.adapter as? ContactListAdapter)?.updateData(state.contactList)
-        }
-    }
-
-    private fun handleSideEffect(sideEffect: ContactListSideEffect) {
+    private fun handleSideEffect(navController: NavController, sideEffect: ContactListScreenSideEffect) {
         when (sideEffect) {
-            is ContactListSideEffect.Toast -> Toast.makeText(
+            is ContactListScreenSideEffect.Toast -> Toast.makeText(
                 context,
                 sideEffect.textResource,
                 Toast.LENGTH_SHORT
             ).show()
+            is ContactListScreenSideEffect.NavigateToContactDetail -> {
+                /*navController.navigate(
+                    ContactListFragmentDirections.displayContactDetail(sideEffect.contact)
+                )*/
+            }
+            ContactListScreenSideEffect.NavigateToAddFacebookContact -> {
+                navController.navigate(
+                    ContactListFragmentDirections.actionAddContactFacebook()
+                )
+            }
         }
     }
 
-    override fun onContactListener(contact: Contact) {
-        TODO("Not yet implemented")
-    }
+    @Composable
+    fun ContactListScreen(navController: NavController, contactListViewModel: ContactListViewModel) {
+        val state by contactListViewModel.container.stateFlow.collectAsState()
 
+        val side by contactListViewModel.container.sideEffectFlow.collectAsState(initial = null)
 
-    private fun toggleFabMenu(isFabOpen: Boolean) {
-        if(isFabOpen){
-            ViewCompat.animate(binding.fabAddContact)
-                .rotation(45f)
-                .setDuration(300)
-                .setInterpolator(OvershootInterpolator(3f))
-                .start()
-            openFabMenu(binding.fabAddContactExt)
-            openFabMenu(binding.fabAddContactFb)
-        } else {
-            ViewCompat.animate(binding.fabAddContact)
-                .rotation(0f)
-                .setDuration(300)
-                .setInterpolator(OvershootInterpolator(3f))
-                .start()
-            closeFabMenu(binding.fabAddContactExt)
-            closeFabMenu(binding.fabAddContactFb)
+        ContactListContent(
+            contacts = state.contactList,
+            onContactSelected = { contact: Contact ->
+                contactListViewModel.onContactSelected(contact)
+            }
+        )
+        side?.let {
+            handleSideEffect(navController, it)
         }
     }
 
-    private fun openFabMenu(fabSmall: FabSmall) {
-        ViewCompat.animate(fabSmall)
-            .translationY(-fabSmall.offsetYAnimation)
-            .withStartAction { fabSmall.visibility = View.VISIBLE }
-            .withEndAction { fabSmall.fabText.animate()
-                .alpha(1.0f)
-                .duration=200}
-            .start()
+    @Composable
+    fun ContactListContent(
+        contacts: List<Contact>,
+        onContactSelected: (contact: Contact) -> Unit
+    ) {
+        var toState by remember { mutableStateOf(MultiFabState.COLLAPSED) }
+        Scaffold(
+            floatingActionButton = {
+                MultiFloatingActionButton(
+                    painterResource(id = R.drawable.add_24),
+                    listOf(
+                        MultiFabItem(
+                            "add_facebook",
+                            painterResource(id = R.drawable.add_24),
+                            "Facebook"
+                        ),
+                        MultiFabItem(
+                            "add_phone",
+                            painterResource(id = R.drawable.add_24), "Phone"
+                        )
+                    ), toState, true, { state ->
+                        toState = state
+                    }
+                ) {
+                    when(it.identifier){
+                        "add_facebook" -> {
+                            viewModel.addFacebookSelected()
+                        }
+                    }
+                }
+            },
+            content = {
+                Column {
+                    LazyColumn {
+                        items(contacts) { contact ->
+                            ContactCard(contact, onContactSelected)
+                        }
+                    }
+                }
+            }
+        )
+    }
+
+    @Preview
+    @Composable
+    fun ContactListContentPreview() {
+        ContactListContent(contacts = mutableListOf(
+            Contact("id1", "pierre",null,1,2),
+            Contact("id2", "paul",null,3,4),
+            Contact("id3", "jack",null,5,6),
+            Contact("id4", "pierre",null,1,2),
+            Contact("id5", "paul",null,3,4),
+            Contact("id6", "jack",null,5,6),
+            Contact("id7", "pierre",null,1,2),
+            Contact("id8", "paul",null,3,4),
+            Contact("id9", "jack",null,5,6),
+            Contact("id10", "pierre",null,1,2),
+            Contact("id11", "paul",null,3,4),
+            Contact("id31", "jack",null,5,6),
+            Contact("id12", "pierre",null,1,2),
+            Contact("id21", "paul",null,3,4),
+            Contact("id33", "jack",null,5,6),
+            Contact("id13", "pierre",null,1,2),
+            Contact("id24", "paul",null,3,4),
+            Contact("id34", "jack",null,5,6)
+            ), onContactSelected = {
+            Timber.d("Je clique sur ${it.username}")
+        })
     }
 
 
-    private fun closeFabMenu(fabSmall: FabSmall) {
-        ViewCompat.animate(fabSmall)
-            .translationY(0f)
-            .withStartAction { fabSmall.fabText.animate().alpha(0f) }
-            .withEndAction { fabSmall.visibility=View.GONE }
-            .start()
-    }
 }
 

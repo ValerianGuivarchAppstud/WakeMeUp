@@ -1,4 +1,4 @@
-package com.vguivarc.wakemeup.transport.contact
+package com.vguivarc.wakemeup.util.old
 
 import android.os.Bundle
 import android.view.View
@@ -11,7 +11,7 @@ import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.domain.external.entity.Ringing
 import com.vguivarc.wakemeup.domain.external.entity.UserProfile
 import com.vguivarc.wakemeup.transport.sonnerie.SonnerieListeViewModel
-
+/*
 class ContactsListeShareFragment :
     Fragment(),
     ContactListeShareAdapter.ContactListShareAdapterListener {
@@ -62,7 +62,7 @@ class ContactsListeShareFragment :
         adapter.notifyDataSetChanged()
 
        /* val song = ContactsListeShareFragmentArgs.fromBundle(requireArguments()).songToShare
-        Picasso.get().load(song.artworkUrl).placeholder(R.drawable.music_placeholder)
+        Picasso.get().load(song.pictureUrl).placeholder(R.drawable.music_placeholder)
             .into(view.findViewById<ImageView>(R.id.share_music_image))
         view.findViewById<TextView>(R.id.share_music_titre).text = song.title
 
@@ -88,3 +88,4 @@ class ContactsListeShareFragment :
         adapter.notifyDataSetChanged()
     }
 }
+*/

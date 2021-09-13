@@ -5,16 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.external.entity.ContactFacebook
 import com.vguivarc.wakemeup.domain.external.entity.Favorite
 
 class FavoriteListAdapter(
     private var favoriteList: List<Favorite>,
     private val listener: RecyclerItemClickListener
 ) : RecyclerView.Adapter<FavoriteListAdapter.FavorisViewHolder>() {
+    var selectedSong: Favorite? = null
 
 
     fun updateData(favoriteList: List<Favorite>) {
@@ -41,9 +42,27 @@ class FavoriteListAdapter(
     ) {
         val song = favoriteList[position].song
         holder.tvTitle.text = song.title
+        val favoriteSong = favoriteList[position]
+        if (selectedSong?.song?.id == favoriteSong.song.id) {
+            holder.itemView.setBackgroundColor(
+                ContextCompat.getColor(
+                    holder.itemView.context,
+                    R.color.colorPrimaryLight
+                )
+            )
+        } else {
+            holder.itemView.setBackgroundColor(
+                ContextCompat.getColor(
+                    holder.itemView.context,
+                    android.R.color.transparent
+                )
+            )
+        }
 
-        // TODO remplacer par l'autre, glide ?
-        Picasso.get().load(song.artworkUrl).placeholder(R.drawable.music_placeholder).into(holder.ivArtwork)
+        Glide.with(holder.ivArtwork)
+            .load(song.pictureUrl)
+            .into(holder.ivArtwork)
+//        Picasso.get().load().placeholder(R.drawable.music_placeholder).into(holder.ivArtwork)
         holder.bind(favoriteList[position], listener)
     }
 
@@ -55,16 +74,21 @@ class FavoriteListAdapter(
 
     class FavorisViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val tvTitle: TextView = itemView.findViewById<View>(R.id.fav_tv_title) as TextView
-        val ivArtwork: ImageView = itemView.findViewById<View>(R.id.fav_iv_artwork) as ImageView
-        private val ivPlayActive: ImageView = itemView.findViewById<View>(R.id.fav_iv_play_active) as ImageView
-        private val ivShare: ImageView = itemView.findViewById<View>(R.id.fav_tv_share) as ImageView
-        private val ivDelete: ImageView = itemView.findViewById<View>(R.id.fav_tv_delete) as ImageView
+        val tvTitle: TextView = itemView.findViewById(R.id.tv_title)
+        val ivArtwork: ImageView = itemView.findViewById(R.id.iv_artwork)
+        private val ivPlayActive: ImageView = itemView.findViewById(R.id.iv_play_active)
+        private val ivShare: ImageView = itemView.findViewById(R.id.song_item_share)
+        private val ivDelete: ImageView = itemView.findViewById(R.id.song_item_remove_favorite)
 
         fun bind(song: Favorite, listener: RecyclerItemClickListener) {
             ivPlayActive.setOnClickListener { listener.onPlayListener(song, layoutPosition) }
             ivShare.setOnClickListener { listener.onShareListener(song, layoutPosition) }
             ivDelete.setOnClickListener { listener.onDeleteListener(song, layoutPosition) }
         }
+    }
+
+    fun selectedSong(s: Favorite) {
+        selectedSong = s
+        notifyDataSetChanged()
     }
 }

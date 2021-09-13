@@ -1,16 +1,15 @@
 package com.vguivarc.wakemeup.transport.search
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.external.entity.Favorite
 import com.vguivarc.wakemeup.domain.external.entity.SearchSong
 
 class SearchSongListAdapter(
@@ -21,11 +20,6 @@ class SearchSongListAdapter(
 
     fun updateData(songList: List<SearchSong>) {
         this.songList = songList
-        notifyDataSetChanged()
-    }
-
-    fun setListSearchSong(listSearchSong: List<SearchSong>) {
-        this.songList = listSearchSong
         notifyDataSetChanged()
     }
 
@@ -62,14 +56,24 @@ class SearchSongListAdapter(
         holder.tvTitle.text = searchSong.song.title
 
         if(searchSong.isFavorite) {
-            Picasso.get().load(R.drawable.ic_favorite_yes)
-                .into(holder.itemAddFavorite)
+            holder.itemAddFavorite.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    holder.itemAddFavorite.resources,
+                    R.drawable.ic_favorite_yes,
+                    null
+                )
+            )
         } else {
-//            Picasso.get().load(R.drawable.ic_favorite_no)
-//                .into(holder.itemAddFavorite)
+            holder.itemAddFavorite.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    holder.itemAddFavorite.resources,
+                    R.drawable.ic_favorite_no,
+                    null
+                )
+            )
         }
 
-        Picasso.get().load(searchSong.song.artworkUrl).placeholder(R.drawable.music_placeholder)
+        Picasso.get().load(searchSong.song.pictureUrl).placeholder(R.drawable.music_placeholder)
             .into(holder.ivArtwork)
         holder.bind(listener)
     }
@@ -94,5 +98,10 @@ class SearchSongListAdapter(
 
     fun getSongWithPosition(position: Int): SearchSong {
         return songList[position]
+    }
+
+    fun selectedSong(s: SearchSong) {
+        selectedSong = s
+        notifyDataSetChanged()
     }
 }

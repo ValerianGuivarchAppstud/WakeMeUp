@@ -30,8 +30,6 @@ import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
-const val LOGIN_REQUEST_CODE = 100
-
 class AuthActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

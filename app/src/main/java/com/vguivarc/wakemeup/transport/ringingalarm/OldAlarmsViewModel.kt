@@ -1,4 +1,4 @@
-package com.vguivarc.wakemeup.viewmodel
+package com.vguivarc.wakemeup.transport.ringingalarm
 
 import androidx.lifecycle.ViewModel
 import com.vguivarc.wakemeup.domain.external.AlarmInteractor
@@ -9,7 +9,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import timber.log.Timber
-
+/*
 
 class RingingAlarmViewModel(private val alarmInteractor: AlarmInteractor) :
     ContainerHost<RingingAlarmState, RingingAlarmSideEffect>, ViewModel() {
@@ -44,11 +44,11 @@ class RingingAlarmViewModel(private val alarmInteractor: AlarmInteractor) :
         }
     }
 
-    fun stopAlarm(idReveil: Int) {
+    fun stopAlarm() {
 
     }
 
-    fun snoozeAlarm(idReveil: Int) {
+    fun snoozeAlarm(){
 
     }
-}
+}*/

@@ -1,6 +1,6 @@
 package com.vguivarc.wakemeup.domain.external
 
-import com.vguivarc.wakemeup.data.entity.ShareRingingRequest
+import com.vguivarc.wakemeup.data.entity.SendRingingRequest
 import com.vguivarc.wakemeup.domain.external.entity.Contact
 import com.vguivarc.wakemeup.domain.external.entity.ContactFacebook
 import com.vguivarc.wakemeup.domain.external.entity.Ringing
@@ -15,10 +15,10 @@ class ContactInteractor(private val contactProvider: IContactProvider) {
         return contactProvider.getContactFacebookList(socialAuthToken)
     }
 
-    suspend fun saveContactStatus(profileContactId: String, isContact: Boolean): List<Contact> {
+    suspend fun saveContactStatus(profileContactId: String, isContact: Boolean) {
         return contactProvider.saveContactStatus(profileContactId, isContact)
     }
-    suspend fun shareRinging(shareRingingRequest: ShareRingingRequest): Ringing {
+    suspend fun shareRinging(shareRingingRequest: SendRingingRequest): Ringing {
         return contactProvider.shareRinging(shareRingingRequest)
     }
 }

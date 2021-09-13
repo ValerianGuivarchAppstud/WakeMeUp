@@ -8,7 +8,8 @@
     <color name="colorPrimary">#00BCD4</color>
     <color name="colorPrimaryLight">#5500BCD4</color>
        <color name="colorPrimaryDark">#01A2B6</color>
-       <color name="colorAccent">#0FD4ED</color>
+
+    <color name="colorAccent">#0FD4ED</color>
        <color name="background">#FFFFFF</color>
        <color name="background_sonnerie">#000000</color>
        <color name="texte">#000000</color>

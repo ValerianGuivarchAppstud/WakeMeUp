@@ -26,14 +26,14 @@ val networkModule = module {
     single<Retrofit>() {
         Retrofit.Builder()
             .baseUrl(BuildConfig.API_BASEURL)
-            .client(get(named("OkHttpClientServer")))
+            .client(get())
             .addConverterFactory(MoshiConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
     }
 
     // Initialize OK HTTP Client
-    single<OkHttpClient> (named("OkHttpClientServer")) {
+    single() {
         OkHttpClient.Builder()
             .apply {
                 readTimeout(READ_TIMEOUT_IN_MINUTES, TimeUnit.MINUTES)

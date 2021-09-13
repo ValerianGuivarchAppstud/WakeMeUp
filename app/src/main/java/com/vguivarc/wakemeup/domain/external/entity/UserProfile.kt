@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @JsonClass(generateAdapter = true)
 class UserProfile(
-    val profileId: String,
+    val idProfile: String,
     val username: String,
     val email: String? = null,
     val facebookId: String? =null,

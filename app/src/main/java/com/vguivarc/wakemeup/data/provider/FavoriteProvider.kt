@@ -5,7 +5,6 @@ import com.vguivarc.wakemeup.data.entity.FavoriteRequest
 import com.vguivarc.wakemeup.domain.external.entity.Favorite
 import com.vguivarc.wakemeup.domain.external.entity.Song
 import com.vguivarc.wakemeup.domain.internal.IFavoriteProvider
-import io.reactivex.Single
 import retrofit2.Retrofit
 
 class FavoriteProvider(retrofit: Retrofit) : IFavoriteProvider {
@@ -17,7 +16,7 @@ class FavoriteProvider(retrofit: Retrofit) : IFavoriteProvider {
                 favoriteResponse ->
                     Favorite(
                         favoriteResponse.createdAt,
-                        Song(favoriteResponse.id,favoriteResponse.title, favoriteResponse.artworkUrl)
+                        Song(favoriteResponse.id,favoriteResponse.title, favoriteResponse.pictureUrl)
                     )
                 }
     }
@@ -28,7 +27,7 @@ class FavoriteProvider(retrofit: Retrofit) : IFavoriteProvider {
                 favoriteResponse ->
             Favorite(
                 favoriteResponse.createdAt,
-                Song(favoriteResponse.id,favoriteResponse.title, favoriteResponse.artworkUrl)
+                Song(favoriteResponse.id,favoriteResponse.title, favoriteResponse.pictureUrl)
             )
         }
     }

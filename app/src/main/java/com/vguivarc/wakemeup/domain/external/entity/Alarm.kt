@@ -13,6 +13,7 @@ import kotlin.system.exitProcess
 @Parcelize
 @JsonClass(generateAdapter = true)
 class Alarm(
+    val idAlarm: Int,
     var listActifDays: MutableList<DaysWeek> = mutableListOf(
         DaysWeek.Monday,
         DaysWeek.Tuesday,
@@ -28,8 +29,7 @@ class Alarm(
         set(Calendar.MILLISECOND, 0)
     },
     var isActif: Boolean = true,
-    var isRepeated: Boolean = true,
-    val idAlarms: Int = getUnicId()
+    var isRepeated: Boolean = true
 ) : Parcelable {
 
     var hour: Int
@@ -74,7 +74,6 @@ class Alarm(
     }
 
     companion object {
-        var idCount = 1
 
         const val DUREE_SNOOZE: Int = 5
 
@@ -87,11 +86,6 @@ class Alarm(
             DaysWeek.Friday,
             DaysWeek.Saturday
         )
-
-        fun getUnicId(): Int {
-            idCount += 1
-            return idCount - 1
-        }
 
         fun getTextNextClock(time: Long): String {
             var textClock = "Réveil prévu dans"
@@ -129,7 +123,7 @@ class Alarm(
         calculeNextCalendar()
 
         val data = Data.Builder()
-        data.putString(EXTRA_ID, idAlarms.toString())
+        data.putString(EXTRA_ID, idAlarm.toString())
         val nextAlarmCalendarToUse = nextAlarmCalendar
         if (snoozing) {
             nextAlarmCalendarToUse.add(Calendar.MINUTE, DUREE_SNOOZE)
@@ -140,6 +134,9 @@ class Alarm(
 
         val nextAlarmCalendarToUseBis = Calendar.getInstance()
         nextAlarmCalendarToUseBis.add(Calendar.SECOND, 3)
+
+
+        AndroidApplication.alarmAndroidProviderImpl.setInexactAlarm(idAlarm, nextAlarmCalendarToUseBis)
 
 /*        val t = nextAlarmCalendarToUse.timeInMillis/1000
 
@@ -152,8 +149,6 @@ class Alarm(
         WorkManager.getInstance(AppWakeUp.appContext).beginUniqueWork(idReveil.toString(), ExistingWorkPolicy.REPLACE, request).enqueue()
 
 */
-
-        AndroidApplication.alarmAndroidProviderImpl.setInexactAlarm(idAlarms, nextAlarmCalendarToUse)
     }
 
     fun snooze() {
@@ -186,7 +181,7 @@ class Alarm(
             PendingIntent.getBroadcast(AppWakeUp.appContext, this.idReveil, intent, 0)
         //pendingIntent doit être le même qu'avant
         alarmManager.cancel(pendingIntent)*/
-        AndroidApplication.alarmAndroidProviderImpl.removeInexactAlarm(idAlarms)
+        AndroidApplication.alarmAndroidProviderImpl.removeInexactAlarm(idAlarm)
         // TODO urgent, volume pas bon
     }
 

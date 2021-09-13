@@ -26,12 +26,12 @@ class AlarmListViewModel(private val alarmInteractor: AlarmInteractor) :
     }
 
     private fun getAlarmList() = intent {
-
         try {
             val list = alarmInteractor.getAlarms()
 
             reduce {
-                state.copy(alarmList = list)
+                Timber.e("state2")
+                state.copy(alarmList = list.toList())
             }
 
         } catch (exception: Exception) {
@@ -40,47 +40,48 @@ class AlarmListViewModel(private val alarmInteractor: AlarmInteractor) :
             reduce {
                 state.copy(alarmList = emptyList(), currentEditingAlarm = null)
             }
-
             postSideEffect(AlarmListSideEffect.Toast(R.string.general_error))
         }
     }
 
-    fun actionAddAlarm() = intent {
-        try {
-            val list = alarmInteractor.save(Alarm())
-            reduce {
-                Timber.d("add")
-                state.copy(alarmList = list)
-            }
-        } catch (exception: Exception) {
-            Timber.e(exception)
-
-            reduce {
-                state.copy(alarmList = emptyList(), currentEditingAlarm = null)
-            }
-
-            postSideEffect(AlarmListSideEffect.Toast(R.string.general_error))
-        }
+    fun actionAddAlarm() {
+        alarmInteractor.add()
+        getAlarmList()
     }
 
     fun actionRemoveAlarm(alarm: Alarm) {
         alarmInteractor.remove(alarm)
+        getAlarmList()
     }
 
     fun actionSwitchAlarm(alarm: Alarm) {
         alarmInteractor.switchReveil(alarm)
+        getAlarmList()
     }
 
     fun actionSaveAlarm(alarm: Alarm) {
         alarmInteractor.save(alarm)
+        getAlarmList()
     }
 
     fun actionDaySelected(alarm: Alarm, day: Alarm.DaysWeek) {
         alarmInteractor.actionDaySelected(alarm, day)
+        getAlarmList()
     }
 
     fun actionRepeatSelected(alarm: Alarm, checked: Boolean) {
         alarmInteractor.actionRepeatSelected(alarm, checked)
+        getAlarmList()
+    }
+
+    fun actionEditAlarm(alarm: Alarm?) = intent {
+        reduce {
+            if (state.currentEditingAlarm == alarm) {
+                state.copy(currentEditingAlarm = null)
+            } else {
+                state.copy(currentEditingAlarm = alarm)
+            }
+        }
     }
 }
 /*

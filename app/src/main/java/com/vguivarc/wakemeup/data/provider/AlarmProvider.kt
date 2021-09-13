@@ -9,14 +9,19 @@ class AlarmProvider : IAlarmProvider {
 
     companion object {
         private const val KEY_ALARMS = "alarms_v0_2"
+        private const val ID_ALARMS = "id_alarms"
     }
 
     private val alarms = mutableListOf<Alarm>()
 
     init {
         val alarmList = readAll()
-        Alarm.idCount = alarmList.maxByOrNull { it.idAlarms }?.idAlarms ?: 0
         alarms.addAll(alarmList)
+    }
+
+    override fun addAlarm(): List<Alarm> {
+        val newAlarm = Alarm(getNewId())
+        return save(newAlarm)
     }
 
     override fun getAlarms(): List<Alarm> = alarms
@@ -24,17 +29,16 @@ class AlarmProvider : IAlarmProvider {
     override fun save(alarm: Alarm): List<Alarm> {
         val alarms = readAll()
 
-        val existingAlarm = alarms.find { it.idAlarms == alarm.idAlarms }
+        val existingAlarm = alarms.find { it.idAlarm == alarm.idAlarm }
         existingAlarm?.let {
             it.cancelAlarm() // check
             val existingIndex = alarms.indexOf(existingAlarm)
             alarms.set(existingIndex, alarm)
         } ?: run {
-            alarms.add(alarm)
-        }
+        alarms.add(alarm)
+    }
         saveAll(alarms)
-        alarm.calculeNextCalendar()
-        alarm.startAlarm()
+       alarm.startAlarm()
         return getAlarms()
     }
 
@@ -51,7 +55,7 @@ class AlarmProvider : IAlarmProvider {
     override fun remove(alarm: Alarm): List<Alarm> {
         val alarms = readAll()
 
-        val existingAlarm = alarms.find { it.idAlarms == alarm.idAlarms }
+        val existingAlarm = alarms.find { it.idAlarm == alarm.idAlarm }
         existingAlarm?.let {
             it.cancelAlarm() // check
             alarms.remove(it)
@@ -61,7 +65,7 @@ class AlarmProvider : IAlarmProvider {
     }
 
     override fun switchReveil(alarm: Alarm): List<Alarm> {
-        readAll().find { it.idAlarms == alarm.idAlarms }?.switch()
+        readAll().find { it.idAlarm == alarm.idAlarm }?.switch()
         save(alarm)
         return getAlarms()
     }
@@ -76,5 +80,12 @@ class AlarmProvider : IAlarmProvider {
         Paper.book().write(KEY_ALARMS, alarms)
         this.alarms.clear()
         this.alarms.addAll(readAll())
+    }
+
+    @Synchronized
+    private fun getNewId(): Int {
+        val id = Paper.book().read(ID_ALARMS, 1)
+        Paper.book().write(ID_ALARMS, id + 1)
+        return id
     }
 }

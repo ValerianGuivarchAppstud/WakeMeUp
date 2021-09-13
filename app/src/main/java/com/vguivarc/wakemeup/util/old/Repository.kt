@@ -1,9 +1,4 @@
-package com.vguivarc.wakemeup.data.provider
-
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.vguivarc.wakemeup.domain.external.entity.UserProfile
-import com.vguivarc.wakemeup.transport.contact.FacebookResult
+package com.vguivarc.wakemeup.util.old
 
 @Suppress("UNCHECKED_CAST")
 class Repository {
@@ -50,7 +45,7 @@ class Repository {
             contactsList.filterValues { it.idContact == contact.id }.keys.toList()[0]
         database.getReference("Contact").child(keyContToDelete).removeValue()
     }
-*/
+
 
     private val facebookFriendsList = mutableMapOf<String, UserProfile>()
     private val facebookListLiveData = MutableLiveData<FacebookResult>()
@@ -58,7 +53,7 @@ class Repository {
 
     val listeFriendStatic = mutableListOf<String>()
 
-/*    fun requestFacebookFriendData() {
+    fun requestFacebookFriendData() {
         if (getCurrentUser() == null) {
             facebookFriendsList.clear()
             facebookListLiveData.value =
