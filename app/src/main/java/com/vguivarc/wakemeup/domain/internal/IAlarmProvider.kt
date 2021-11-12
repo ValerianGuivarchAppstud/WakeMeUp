@@ -10,5 +10,4 @@ interface IAlarmProvider {
     fun snoozeAlarm(idAlarm: Int): List<Alarm>
     fun stopAlarm(idAlarm: Int): List<Alarm>
     fun remove(alarm: Alarm): List<Alarm>
-    fun switchReveil(alarm: Alarm): List<Alarm>
 }

@@ -43,7 +43,7 @@ import com.vguivarc.wakemeup.transport.ui.theme.WakeMeUpTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class AuthFragment : Fragment(R.layout.fragment_auth) {
+class AuthFragment : Fragment() {
 
     private val viewModel by viewModel<AuthViewModel>()
 
@@ -116,7 +116,6 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         passwordVisibility: Boolean,
         loading: Boolean
     ) {
-
             Column(
                 modifier = Modifier
                     .padding(16.dp)
@@ -272,7 +271,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                     CircularProgressIndicator()
                 }
             }
-            }
+        }
     }
 
 

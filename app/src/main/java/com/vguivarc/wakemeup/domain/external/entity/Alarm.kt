@@ -167,10 +167,6 @@ class Alarm(
 
     fun switch() {
         isActif = !isActif
-        if (isActif)
-            startAlarm()
-        else
-            cancelAlarm()
     }
     fun cancelAlarm() {
         /*

@@ -26,6 +26,16 @@
         <entry key="../../../../layout/compose-model-1636673175994.xml" value="0.165" />
         <entry key="../../../../layout/compose-model-1636704683781.xml" value="0.25" />
         <entry key="../../../../layout/compose-model-1636709405738.xml" value="0.25" />
+        <entry key="../../../../layout/compose-model-1636711082722.xml" value="0.11866554054054054" />
+        <entry key="../../../../layout/compose-model-1636711236487.xml" value="0.11866554054054054" />
+        <entry key="../../../../layout/compose-model-1636711518240.xml" value="0.11866554054054054" />
+        <entry key="../../../../layout/compose-model-1636711893172.xml" value="0.1" />
+        <entry key="../../../../layout/compose-model-1636715028747.xml" value="0.21494932432432431" />
+        <entry key="../../../../layout/compose-model-1636715234808.xml" value="0.4603960396039604" />
+        <entry key="../../../../layout/compose-model-1636715249942.xml" value="0.21494932432432431" />
+        <entry key="../../../../layout/compose-model-1636715615844.xml" value="0.34444444444444444" />
+        <entry key="../../../../layout/compose-model-1636716933783.xml" value="0.21494932432432431" />
+        <entry key="../../../../layout/compose-model-1636716990460.xml" value="0.4603960396039604" />
         <entry key="app/src/main/res/drawable-v24/ic_baseline_mail_outline_24.xml" value="0.2171875" />
         <entry key="app/src/main/res/drawable/facebook.xml" value="0.13854166666666667" />
         <entry key="app/src/main/res/drawable/ic_favorite_no.xml" value="0.14635416666666667" />
@@ -47,6 +57,7 @@
         <entry key="app/src/main/res/layout/fragment_favori_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_favorite_list.xml" value="0.1203125" />
         <entry key="app/src/main/res/layout/fragment_search_song_list.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_list_alarm.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_list_contact.xml" value="0.1203125" />
         <entry key="app/src/main/res/layout/item_list_contact_facebook.xml" value="0.165" />
         <entry key="app/src/main/res/layout/item_list_favori.xml" value="0.25" />

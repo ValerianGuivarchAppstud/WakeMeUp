@@ -4,10 +4,10 @@ import com.vguivarc.wakemeup.domain.external.entity.UserProfile
 
 data class AccountState(
     val userProfile: UserProfile? = null,
-    val isConnected : Boolean = true,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = true
 )
 
 sealed class AccountSideEffect {
     data class Toast(val textResource: Int) : AccountSideEffect()
+    object Close : AccountSideEffect()
 }

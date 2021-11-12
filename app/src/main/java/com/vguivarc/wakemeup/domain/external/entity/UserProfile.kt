@@ -7,9 +7,9 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @JsonClass(generateAdapter = true)
 class UserProfile(
-    val idProfile: String,
-    val username: String,
+    val profileId: String,
     val email: String? = null,
+    val username: String,
     val facebookId: String? =null,
     val imageUrl: String? = null
 ) : Parcelable

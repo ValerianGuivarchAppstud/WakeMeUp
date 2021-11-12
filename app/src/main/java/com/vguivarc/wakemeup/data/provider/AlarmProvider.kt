@@ -38,7 +38,11 @@ class AlarmProvider : IAlarmProvider {
         alarms.add(alarm)
     }
         saveAll(alarms)
-       alarm.startAlarm()
+        if(alarm.isActif) {
+            alarm.startAlarm()
+        } else {
+            alarm.cancelAlarm()
+        }
         return getAlarms()
     }
 
@@ -61,12 +65,6 @@ class AlarmProvider : IAlarmProvider {
             alarms.remove(it)
         }
         saveAll(alarms)
-        return getAlarms()
-    }
-
-    override fun switchReveil(alarm: Alarm): List<Alarm> {
-        readAll().find { it.idAlarm == alarm.idAlarm }?.switch()
-        save(alarm)
         return getAlarms()
     }
 

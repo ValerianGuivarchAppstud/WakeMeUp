@@ -23,7 +23,8 @@ class AlarmInteractor(private val alarmProvider: IAlarmProvider) {
     }
 
     fun switchReveil(alarm: Alarm): List<Alarm> {
-        return alarmProvider.switchReveil(alarm)
+        alarm.isActif = !alarm.isActif
+        return alarmProvider.save(alarm)
     }
 
     fun actionDaySelected(alarm: Alarm, day: Alarm.DaysWeek): List<Alarm> {

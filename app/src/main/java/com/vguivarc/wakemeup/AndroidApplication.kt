@@ -107,6 +107,7 @@ class AndroidApplication : Application() {
         }
         alarmAndroidProviderImpl = AlarmAndroidProvider.AlarmAndroidProviderImpl(appContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager, appContext)
         repository = Repository()
+
     }
 
     private fun initLogging() {

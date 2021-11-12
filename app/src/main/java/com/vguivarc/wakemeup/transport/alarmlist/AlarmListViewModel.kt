@@ -83,6 +83,11 @@ class AlarmListViewModel(private val alarmInteractor: AlarmInteractor) :
             }
         }
     }
+
+    fun actionChangeAlarmTime(alarm: Alarm) = intent {
+        postSideEffect(AlarmListSideEffect.OpenTimeEditor(alarm))
+
+    }
 }
 /*
 class AlarmListViewModel(private val alarmService: IAlarmProvider) : BaseViewModel() {

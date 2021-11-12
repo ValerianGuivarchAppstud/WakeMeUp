@@ -59,9 +59,9 @@ class ContactListFragment : Fragment() {
                 )*/
             }
             ContactListScreenSideEffect.NavigateToAddFacebookContact -> {
-                navController.navigate(
+                /*navController.navigate(
                     ContactListFragmentDirections.actionAddContactFacebook()
-                )
+                )*/
             }
         }
     }

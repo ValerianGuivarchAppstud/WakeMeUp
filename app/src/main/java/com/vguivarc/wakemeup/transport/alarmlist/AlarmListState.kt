@@ -10,4 +10,5 @@ data class AlarmListState(
 
 sealed class AlarmListSideEffect {
     data class Toast(val textResource: Int) : AlarmListSideEffect()
+    data class OpenTimeEditor(val alarm: Alarm) : AlarmListSideEffect()
 }

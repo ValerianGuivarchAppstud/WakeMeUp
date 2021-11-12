@@ -38,7 +38,7 @@ class AccountViewModel(private val authInteractor: AuthInteractor,
             val userProfile = profileInteractor.getAndUpdateUserInfo()
 
             reduce {
-                state.copy(userProfile = userProfile, isLoading = false, isConnected = true)
+                state.copy(userProfile = userProfile, isLoading = false)
             }
 
         } catch (exception: Exception) {
@@ -59,8 +59,9 @@ class AccountViewModel(private val authInteractor: AuthInteractor,
             authInteractor.logout()
 
             reduce {
-                state.copy(userProfile = null, isLoading = false, isConnected = false)
+                state.copy(userProfile = null, isLoading = false)
             }
+            postSideEffect(AccountSideEffect.Close)
 
         } catch (exception: Exception) {
             Timber.e(exception)
@@ -69,7 +70,7 @@ class AccountViewModel(private val authInteractor: AuthInteractor,
                 state.copy(userProfile = null, isLoading = false)
             }
 
-            // postSideEffect(AlarmListSideEffect.Toast(R.string.general_error))
+            postSideEffect(AccountSideEffect.Toast(R.string.general_error))
         }
     }
 
