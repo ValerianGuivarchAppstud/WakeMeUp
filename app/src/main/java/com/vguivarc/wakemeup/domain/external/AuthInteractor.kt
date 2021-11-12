@@ -3,7 +3,7 @@ package com.vguivarc.wakemeup.domain.external
 import com.vguivarc.wakemeup.domain.internal.IAuthProvider
 
 class AuthInteractor(private val authProvider: IAuthProvider) {
-    suspend fun login(email: String, password: String){
+    suspend fun loginByEmail(email: String, password: String){
         authProvider.login(email, password)
     }
     suspend fun signup(email: String, password: String, username: String) {

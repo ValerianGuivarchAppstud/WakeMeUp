@@ -6,63 +6,284 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.databinding.FragmentAuthBinding
-import org.jetbrains.anko.support.v4.longToast
+import com.vguivarc.wakemeup.transport.ui.theme.WakeMeUpTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.orbitmvi.orbit.viewmodel.observe
-import timber.log.Timber
 
 
 class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     private val viewModel by viewModel<AuthViewModel>()
 
-    private var _binding: FragmentAuthBinding? = null
-
     private val callbackManager = CallbackManager.Factory.create()
 
-    // This property is only valid between onCreateView and onDestroyView.
-    private val binding get() = _binding!!
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupFacebookLogic()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAuthBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if (!FacebookSdk.isInitialized()) {
-            FacebookSdk.fullyInitialize()
+        return ComposeView(requireContext()).apply {
+            setContent {
+                WakeMeUpTheme {
+                    AuthScreen(findNavController(), viewModel)
+                }
+            }
         }
-        binding.loginClose.setOnClickListener {
-            activity?.onBackPressed()
-        }
-
-        binding.buttonSeConnecter.setOnClickListener {
-            findNavController().navigate(R.id.action_login_email)
-        }
-
-        setupFacebookLogic()
     }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    private fun handleSideEffect(navController: NavController, sideEffect: AuthSideEffect) {
+        when (sideEffect) {
+            is AuthSideEffect.Toast -> Toast.makeText(
+                context,
+                sideEffect.textResource,
+                Toast.LENGTH_SHORT
+            ).show()
+            is AuthSideEffect.LoginFacebook -> {
+                if (AccessToken.getCurrentAccessToken() != null) {
+                    LoginManager.getInstance().logOut()
+                }
+
+                LoginManager.getInstance().logInWithReadPermissions(
+                    this,
+                    listOf("email")
+                )
+            }
+            is AuthSideEffect.NavigationToRegister -> {
+            } // TODO
+            is AuthSideEffect.Close -> {
+                activity?.onBackPressed()
+            }
+        }
+    }
+
+
+    @Composable
+    fun AuthScreen(navController: NavController, authViewModel: AuthViewModel) {
+        val state by authViewModel.container.stateFlow.collectAsState()
+
+        val side by authViewModel.container.sideEffectFlow.collectAsState(initial = null)
+
+        AuthContent(state.mail, state.password, state.passwordVisibility, state.isLoading)
+
+        side?.let {
+            handleSideEffect(navController, it)
+        }
+    }
+
+
+    @Composable
+    fun AuthContent(
+        mail: String,
+        password: String,
+        passwordVisibility: Boolean,
+        loading: Boolean
+    ) {
+
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .background(Color.White),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.close),
+                        contentDescription = "Close",
+                        modifier = Modifier
+                            .size(40.dp)
+                            .padding(all = 8.dp)
+                            .clickable { viewModel.close() },
+                        colorFilter = ColorFilter.tint(
+                            Color.Black
+                        )
+                    )
+                }
+                Text(
+                    "Connexion", textAlign = TextAlign.Center,
+                    fontSize = 30.sp
+                )
+                Spacer(Modifier.size(32.dp))
+                Image(
+                    painter = painterResource(R.drawable.main_logo),
+                    contentDescription = "Connexion",
+                    modifier = Modifier
+                        .size(80.dp)
+                )
+                Spacer(Modifier.size(32.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(32.dp, 0.dp)
+                        .fillMaxWidth(),
+                    value = mail,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    onValueChange = { viewModel.editMail(it) },
+                    //label = { Text(text = "Mail") },
+                    shape = RoundedCornerShape(8.dp),
+                    leadingIcon = {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_baseline_mail_outline_24),
+                            contentDescription = "Mail",
+                            colorFilter = ColorFilter.tint(
+                                Color.Black
+                            )
+                        )
+                    },
+                    placeholder = { Text("Enter Email") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        focusedIndicatorColor = Color.LightGray,
+                        disabledIndicatorColor = Color.LightGray,
+                        unfocusedIndicatorColor = Color.LightGray,
+                        backgroundColor = Color.Transparent,
+                    )
+                )
+                Spacer(Modifier.size(20.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(32.dp, 0.dp)
+                        .fillMaxWidth(),
+                    value = password,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                    onValueChange = { viewModel.editPassword(it) },
+                    //label = { Text(text = "Password") },
+                    shape = RoundedCornerShape(8.dp),
+                    leadingIcon = {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_baseline_lock_open_24),
+                            contentDescription = "Password",
+                            colorFilter = ColorFilter.tint(
+                                Color.Black
+                            )
+                        )
+                    },
+                    placeholder = { Text("Enter password") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        focusedIndicatorColor = Color.LightGray,
+                        disabledIndicatorColor = Color.LightGray,
+                        unfocusedIndicatorColor = Color.LightGray,
+                        backgroundColor = Color.Transparent,
+                    ),
+                    trailingIcon = {
+                        val image = if (passwordVisibility)
+                            Icons.Filled.Visibility
+                        else Icons.Filled.VisibilityOff
+
+                        IconButton(onClick = {
+                            viewModel.setPasswordVisibility(!passwordVisibility)
+                        }) {
+                            Icon(imageVector = image, "Password Visibility")
+                        }
+                    }
+                )
+                Spacer(Modifier.size(32.dp))
+                ExtendedFloatingActionButton(
+                    onClick = { viewModel.clickOnLogin() },
+                    backgroundColor = MaterialTheme.colors.primary,
+                    text = {
+                        Text("Se connecter")
+                    },
+                    modifier = Modifier
+                        .padding(32.dp, 0.dp)
+                        .fillMaxWidth(),
+                )
+                Spacer(Modifier.size(20.dp))
+                ExtendedFloatingActionButton(
+                    onClick = { viewModel.clickOnRegister() },
+                    backgroundColor = MaterialTheme.colors.primary,
+                    text = {
+                        Text("Créer un compte")
+                    },
+                    modifier = Modifier
+                        .padding(32.dp, 0.dp)
+                        .fillMaxWidth(),
+                )
+                Spacer(Modifier.size(20.dp))
+                TextButton(onClick = { viewModel.forgotPassword() }) {
+                    Text("Mot de passe oublié")
+                }
+                Spacer(Modifier.size(20.dp))
+                Row(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .background(Color.White),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.logo_fb),
+                        contentDescription = "Connexion",
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clickable { viewModel.clickOnFacebookLogin() }
+                    )
+                }
+            }
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            if(loading) {
+                Column(
+                    modifier = Modifier.align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = "Loading")
+                    CircularProgressIndicator()
+                }
+            }
+            }
+    }
+
+
+    @Preview
+    @Composable
+    fun AuthContentPreview() {
+        AuthContent("test@mail.Fr", "password", false, true)
+    }
+
+
+    /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.observe(this, state = ::render, sideEffect = ::handleSideEffect)
     }
@@ -83,22 +304,11 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 Toast.LENGTH_SHORT
             ).show()
         }
-    }
+    }*/
     private fun setupFacebookLogic() {
 
         if (!FacebookSdk.isInitialized()) {
             FacebookSdk.fullyInitialize()
-        }
-
-        binding.connecterFb.setOnClickListener {
-            if (AccessToken.getCurrentAccessToken() != null) {
-                LoginManager.getInstance().logOut()
-            }
-
-            LoginManager.getInstance().logInWithReadPermissions(
-                this,
-                listOf("email")
-            )
         }
         // Callback registration
         LoginManager.getInstance()
@@ -110,11 +320,11 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                     }
 
                     override fun onCancel() {
-                        longToast(R.string.login_facebook_cancelled)
+                        viewModel.error(R.string.login_facebook_cancelled)
                     }
 
                     override fun onError(exception: FacebookException) {
-                        longToast(R.string.login_facebook_error)
+                        viewModel.error(R.string.login_facebook_error)
                     }
                 }
             )

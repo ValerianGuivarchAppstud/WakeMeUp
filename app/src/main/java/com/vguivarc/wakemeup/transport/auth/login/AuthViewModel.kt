@@ -35,6 +35,27 @@ class AuthViewModel(private val authInteractor: AuthInteractor,
 
     }
 
+
+    fun clickOnFacebookLogin() = intent {
+        postSideEffect(AuthSideEffect.LoginFacebook)
+    }
+
+    fun editMail(mail: String)  = intent {
+        reduce {
+            state.copy(mail = mail)
+        }
+    }
+    fun editPassword(password: String)  = intent {
+        reduce {
+            state.copy(password = password)
+        }
+    }
+    fun setPasswordVisibility(visibility: Boolean)  = intent {
+        reduce {
+            state.copy(passwordVisibility = visibility)
+        }
+    }
+
     fun loginWithFacebook(token: String)  = intent {
         reduce {
             state.copy(isLoading = true)
@@ -55,6 +76,61 @@ class AuthViewModel(private val authInteractor: AuthInteractor,
 
             postSideEffect(AuthSideEffect.Toast(R.string.general_error))
         }
+    }
+
+    fun clickOnRegister() = intent {
+        postSideEffect(AuthSideEffect.NavigationToRegister(mail = state.mail))
+    }
+
+    fun clickOnLogin() = intent {
+        reduce {
+            state.copy(isLoading = true)
+        }
+        try {
+            authInteractor.loginByEmail(state.mail, state.password)
+
+            reduce {
+                state.copy(isConnected = true, isLoading = false)
+            }
+            postSideEffect(AuthSideEffect.Close)
+
+
+        } catch (exception: Exception) {
+            Timber.e(exception)
+
+            reduce {
+                state.copy(isConnected = false, isLoading = false)
+            }
+
+            postSideEffect(AuthSideEffect.Toast(R.string.general_error))
+        }
+    }
+
+    fun forgotPassword() = intent {
+        reduce {
+            state.copy(isLoading = true)
+        }
+        try {
+            authInteractor.forgotPassword(state.mail)
+
+
+        } catch (exception: Exception) {
+            Timber.e(exception)
+
+            reduce {
+                state.copy(isConnected = false, isLoading = false)
+            }
+
+            postSideEffect(AuthSideEffect.Toast(R.string.general_error))
+        }
+    }
+
+    fun close() = intent {
+        postSideEffect(AuthSideEffect.Close)
+    }
+
+    fun error(loginFacebookCancelled: Int) = intent {
+        postSideEffect(AuthSideEffect.Toast(loginFacebookCancelled))
     }
 }
 /*
