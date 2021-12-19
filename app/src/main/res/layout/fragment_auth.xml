@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".transport.auth.AuthActivity">
+    tools:context=".transport.old.auth.AuthActivity">
     <ImageView
         android:id="@+id/loginClose"
         android:layout_width="wrap_content"

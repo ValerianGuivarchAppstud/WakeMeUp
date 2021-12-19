@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.vguivarc.wakemeup.transport.auth.login.AuthFragment"
+        android:name="com.vguivarc.wakemeup.transport.account.login.AuthFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_auth">
         <action
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFormFragment"
-        android:name="com.vguivarc.wakemeup.transport.auth.AuthEmailFragment"
+        android:name="com.vguivarc.wakemeup.transport.old.auth.AuthEmailFragment"
         android:label="fragment_login_form"
         tools:layout="@layout/fragment_auth_email">
         <action
@@ -35,7 +35,7 @@
     </fragment>
     <fragment
         android:id="@+id/forgotPasswordFragment"
-        android:name="com.vguivarc.wakemeup.transport.auth.ForgotPasswordFragment"
+        android:name="com.vguivarc.wakemeup.transport.old.auth.ForgotPasswordFragment"
         android:label="fragment_forgot_password"
         tools:layout="@layout/fragment_auth_forgot_password">
         <argument

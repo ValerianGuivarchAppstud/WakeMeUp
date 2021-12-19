@@ -28,8 +28,7 @@ class Alarm(
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)
     },
-    var isActif: Boolean = true,
-    var isRepeated: Boolean = true
+    var isActif: Boolean = true
 ) : Parcelable {
 
     var hour: Int
@@ -57,13 +56,14 @@ class Alarm(
     }
 
     fun getJoursTexte(): String {
-        return if (isRepeated) {
-            // TODO déterminer "aujourdhui ou demain"
-            "[Pas de répétition]"
-        } else {
-            if (listActifDays.size == 7) {
+        return when (listActifDays.size) {
+            7 -> {
                 "[Tous les jours]"
-            } else {
+            }
+            0 -> {
+                "[Désactivé]" // TODO désactiver si 0
+            }
+            else -> {
                 listActifDays.toString()
             }
         }
@@ -128,15 +128,12 @@ class Alarm(
         if (snoozing) {
             nextAlarmCalendarToUse.add(Calendar.MINUTE, DUREE_SNOOZE)
         }
-/*        val calTemp = Calendar.getInstance()
-        calTemp.add(Calendar.SECOND, 3)
-        AppWakeUp.repository.alarmSetter.setInexactAlarm(idReveil, calTemp)*/
 
         val nextAlarmCalendarToUseBis = Calendar.getInstance()
         nextAlarmCalendarToUseBis.add(Calendar.SECOND, 3)
 
 
-        AndroidApplication.alarmAndroidProviderImpl.setInexactAlarm(idAlarm, nextAlarmCalendarToUseBis)
+        AndroidApplication.alarmAndroidProviderImpl.setInexactAlarm(idAlarm, nextAlarmCalendarToUse)
 
 /*        val t = nextAlarmCalendarToUse.timeInMillis/1000
 
@@ -156,17 +153,10 @@ class Alarm(
     }
 
     fun stop() {
-        if (isRepeated) {
-            calculeNextCalendar()
-            startAlarm()
-        } else {
+
             // TODO pas fait ici, faut supprimer
             //   AndroidApplication.repository.switchReveil(idReveil)
-        }
-    }
 
-    fun switch() {
-        isActif = !isActif
     }
     fun cancelAlarm() {
         /*
@@ -199,12 +189,6 @@ class Alarm(
             Timber.e("ListActifDays empty")
             exitProcess(0)
         }
-
-        if (isRepeated) {
-            while (now > nextAlarmCalendar) {
-                nextAlarmCalendar.set(Calendar.DAY_OF_YEAR, nextAlarmCalendar.get(Calendar.DAY_OF_YEAR) + 1)
-            }
-        } else {
             while (now > nextAlarmCalendar || !this.listActifDays.contains(
                     listDaysInWeek[
                         nextAlarmCalendar.get(
@@ -218,7 +202,7 @@ class Alarm(
                     nextAlarmCalendar.get(Calendar.DAY_OF_YEAR) + 1
                 )
             }
-        }
+
 
         // TODO REMOVE
 /*        nextAlarmCalendar=Calendar.getInstance()

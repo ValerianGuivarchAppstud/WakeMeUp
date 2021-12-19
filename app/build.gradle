@@ -127,6 +127,7 @@ dependencies {
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01"
 
+    implementation 'androidx.work:work-runtime-ktx:2.7.0'
 
 
     // Anko
@@ -248,6 +249,6 @@ dependencies {
 
     implementation 'com.github.AppIntro:AppIntro:6.0.0'
 
-    implementation 'com.facebook.android:facebook-android-sdk:9.0.0'
+    implementation 'com.facebook.android:facebook-android-sdk:11.3.0'
 
 }

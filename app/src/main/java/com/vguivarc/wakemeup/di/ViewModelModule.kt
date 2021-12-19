@@ -1,11 +1,11 @@
 package com.vguivarc.wakemeup.di
 
 import com.vguivarc.wakemeup.transport.MainActivityViewModel
-import com.vguivarc.wakemeup.transport.account.AccountViewModel
-import com.vguivarc.wakemeup.transport.alarmlist.AlarmListViewModel
-import com.vguivarc.wakemeup.transport.auth.login.AuthViewModel
-import com.vguivarc.wakemeup.transport.contactlist.ContactListViewModel
-import com.vguivarc.wakemeup.transport.contactlistfacebook.ContactFacebookListViewModel
+import com.vguivarc.wakemeup.transport.account.profile.ProfileViewModel
+import com.vguivarc.wakemeup.transport.alarm.AlarmListViewModel
+import com.vguivarc.wakemeup.transport.account.login.AuthViewModel
+import com.vguivarc.wakemeup.transport.contact.contactlist.ContactListViewModel
+import com.vguivarc.wakemeup.transport.contact.contactlistfacebook.ContactFacebookListViewModel
 import com.vguivarc.wakemeup.transport.favoritelist.FavoriteListViewModel
 import com.vguivarc.wakemeup.transport.ringingalarm.RingingAlarmViewModel
 import com.vguivarc.wakemeup.transport.search.SearchSongListViewModel
@@ -14,7 +14,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { AccountViewModel(get(), get()) }
+    viewModel { ProfileViewModel(get(), get()) }
     viewModel { AlarmListViewModel(get()) }
     viewModel { AuthViewModel(get(), get()) }
     viewModel { ContactListViewModel(get()) }

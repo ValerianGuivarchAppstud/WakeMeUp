@@ -1,23 +1,117 @@
 package com.vguivarc.wakemeup.transport.search
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.core.view.isVisible
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.databinding.FragmentSearchSongListBinding
+import com.vguivarc.wakemeup.domain.external.entity.Contact
+import com.vguivarc.wakemeup.domain.external.entity.SearchSong
+import com.vguivarc.wakemeup.domain.external.entity.Song
+import com.vguivarc.wakemeup.transport.ui.theme.WakeMeUpTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.orbitmvi.orbit.viewmodel.observe
 import timber.log.Timber
 
+
+
+class SearchSongListFragment : Fragment() {
+
+    private val viewModel by viewModel<SearchSongListViewModel>()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                WakeMeUpTheme {
+                    SearchSongListScreen(findNavController(), viewModel)
+                }
+            }
+        }
+    }
+
+
+
+    private fun handleSideEffect(navController: NavController, sideEffect: SearchSongListSideEffect) {
+        when (sideEffect) {
+            is SearchSongListSideEffect.Toast -> Toast.makeText(
+                context,
+                sideEffect.textResource,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    @Composable
+    fun SearchSongListScreen(navController: NavController, searchSongListViewModel: SearchSongListViewModel) {
+        val state by searchSongListViewModel.container.stateFlow.collectAsState()
+
+        val side by searchSongListViewModel.container.sideEffectFlow.collectAsState(initial = null)
+
+        SearchSongListContent(
+            state.searchSongList,
+            state.currentSong,
+            state.showBeforeSearch,
+            state.showEmptyResult
+        )
+        side?.let {
+            handleSideEffect(navController, it)
+        }
+    }
+
+    @Composable
+    fun SearchSongListContent(
+        searchSongs: List<SearchSong>,
+        currentSong: SearchSong?,
+        showBeforeSearch: Boolean,
+        showEmptyResult: Boolean
+    ) {
+        Scaffold(
+            content = {
+                Column {
+                    LazyColumn {
+                        items(searchSongs) { song ->
+                            SearchSongCard(song)
+                        }
+                    }
+                }
+            }
+        )
+    }
+
+    @Preview
+    @Composable
+    fun SearchSongListContentPreview() {
+        SearchSongListContent(
+            searchSongs = mutableListOf(
+                SearchSong(Song("a", "favo"), false),
+                SearchSong(Song("b", "nop"), true)
+            ),
+            null,
+            false,
+            false
+        )
+    }
+
+
+}
+
+/*
 class SearchSongListFragment : Fragment(R.layout.fragment_search_song_list),
     SearchSongListAdapter.SongItemClickListener {
 
@@ -123,8 +217,12 @@ class SearchSongListFragment : Fragment(R.layout.fragment_search_song_list),
         TODO("Not yet implemented")
     }
 }
+
+*/
 /*
+-------------------------------------------
 class SearchSongFragment :
+
     BaseLceFragment(R.layout.search_video_fragment),
     SearchSongAdapter.SongItemClickListener {
 

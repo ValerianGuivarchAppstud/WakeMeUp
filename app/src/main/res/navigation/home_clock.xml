@@ -8,7 +8,7 @@
     <fragment
         tools:layout="@layout/fragment_alarm_list"
         android:id="@+id/alarmsListFragment"
-        android:name="com.vguivarc.wakemeup.transport.alarmlist.AlarmListFragment"
+        android:name="com.vguivarc.wakemeup.transport.alarm.AlarmListFragment"
         android:label="@string/reveils" />
     <fragment
         android:id="@+id/ringingListFragment"

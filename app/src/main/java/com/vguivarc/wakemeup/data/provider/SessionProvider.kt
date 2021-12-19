@@ -22,7 +22,7 @@ class SessionProvider(private val context: Context, private val moshi: Moshi) : 
     override fun getUserProfileSession(): UserProfile?  = get(SHARED_PREFERENCES_USER_PROFILE)
 
     override fun getFacebookAuthToken(): String? {
-        return AccessToken.getCurrentAccessToken().token
+        return AccessToken.getCurrentAccessToken()?.token
     }
 
     override fun setUserProfileSession(userProfile: UserProfile): Boolean {

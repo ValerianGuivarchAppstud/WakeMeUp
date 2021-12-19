@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/accountFragment"
-        android:name="com.vguivarc.wakemeup.transport.account.AccountFragment"
+        android:name="com.vguivarc.wakemeup.transport.account.profile.ProfileFragment"
         android:label="AccountFragment"
         tools:layout="@layout/fragment_account" />
     <fragment

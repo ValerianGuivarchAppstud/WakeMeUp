@@ -35,9 +35,4 @@ class AlarmInteractor(private val alarmProvider: IAlarmProvider) {
         }
         return alarmProvider.save(alarm)
     }
-
-    fun actionRepeatSelected(alarm: Alarm, checked: Boolean): List<Alarm> {
-        alarm.isRepeated = checked
-        return alarmProvider.save(alarm)
-    }
 }

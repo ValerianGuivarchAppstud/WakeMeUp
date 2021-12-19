@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.vguivarc.wakemeup.BuildConfig
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.databinding.FragmentSettingsBinding
-import com.vguivarc.wakemeup.transport.auth.AuthActivity
+import com.vguivarc.wakemeup.transport.old.auth.AuthActivity
 import com.vguivarc.wakemeup.util.contactUs
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.jetbrains.anko.support.v4.intentFor
