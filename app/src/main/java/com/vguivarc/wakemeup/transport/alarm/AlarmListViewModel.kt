@@ -30,7 +30,6 @@ class AlarmListViewModel(private val alarmInteractor: AlarmInteractor) :
             val list = alarmInteractor.getAlarms()
 
             reduce {
-                Timber.e("state2")
                 state.copy(alarmList = list.toList())
             }
 

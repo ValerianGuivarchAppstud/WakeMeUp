@@ -1,10 +1,7 @@
 package com.vguivarc.wakemeup.transport.alarm
 
 import android.app.TimePickerDialog
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,17 +14,15 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.ComposeView
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import com.vguivarc.wakemeup.domain.external.entity.Alarm
-import com.vguivarc.wakemeup.transport.ui.theme.WakeMeUpTheme
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.vguivarc.wakemeup.transport.routeViewModel
 import java.util.*
 
-
+/*
 class AlarmListFragment : Fragment() {
 
     private val viewModel by viewModel<AlarmListViewModel>()
@@ -45,60 +40,55 @@ class AlarmListFragment : Fragment() {
             }
         }
     }
+*/
 
-    private fun handleSideEffect(navController: NavController, sideEffect: AlarmListSideEffect) {
-        when (sideEffect) {
-            is AlarmListSideEffect.Toast -> Toast.makeText(
-                context,
-                sideEffect.textResource,
-                Toast.LENGTH_SHORT
-            ).show()
-            is AlarmListSideEffect.OpenTimeEditor -> {
-                openTimeEditor(sideEffect.alarm)
-            }
-            AlarmListSideEffect.Ok -> {}
-        }
+@Composable
+fun AlarmListScreen(navController: NavController) {
+    val alarmListViewModel: AlarmListViewModel = remember { navController.routeViewModel() }
+
+    val state by alarmListViewModel.container.stateFlow.collectAsState()
+
+    val side by alarmListViewModel.container.sideEffectFlow.collectAsState(initial = null)
+
+    AlarmListContent(alarmListViewModel, state.alarmList, state.currentEditingAlarm)
+
+    side?.let {
+        handleSideEffect(alarmListViewModel, LocalContext.current, navController, it)
     }
+    alarmListViewModel.ok()
+}
 
 
-    @Composable
-    fun AlarmListScreen(navController: NavController, alarmListViewModel: AlarmListViewModel) {
-        val state by alarmListViewModel.container.stateFlow.collectAsState()
-
-        val side by alarmListViewModel.container.sideEffectFlow.collectAsState(initial = null)
-
-        AlarmListContent(state.alarmList, state.currentEditingAlarm)
-
-        side?.let {
-            handleSideEffect(navController, it)
-        }
-        viewModel.ok()
-    }
-
-
-    @Composable
-    fun AlarmListContent(
-        alarmList: List<Alarm>,
-        currentEditingAlarm: Alarm?
-    ) {
-        Scaffold(
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = {}
-                ) {
-                    Icon(Icons.Filled.Add,"")
+@Composable
+fun AlarmListContent(
+    alarmListViewModel: AlarmListViewModel?,
+    alarmList: List<Alarm>,
+    currentEditingAlarm: Alarm?
+) {
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    alarmListViewModel?.actionAddAlarm()
                 }
-            },
-            content = {
-                Column {
-                    LazyColumn {
-                        items(alarmList) { alarm ->
-                            AlarmCard(viewModel, alarm, currentEditingAlarm?.idAlarm?:false == alarm.idAlarm)
-                        }
+            ) {
+                Icon(Icons.Filled.Add, "")
+            }
+        },
+        content = {
+            Column {
+                LazyColumn {
+                    items(alarmList) { alarm ->
+                        AlarmCard(
+                            alarmListViewModel,
+                            alarm,
+                            currentEditingAlarm?.idAlarm ?: false == alarm.idAlarm
+                        )
                     }
                 }
             }
-        )
+        }
+    )
 /*        Column(
             modifier = Modifier
                 .padding(16.dp)
@@ -108,59 +98,82 @@ class AlarmListFragment : Fragment() {
         ) {
 
         }*/
-        /*Box(modifier = Modifier.fillMaxSize()) {
-            if(loading) {
-                Column(
-                    modifier = Modifier.align(Alignment.Center),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = "Loading")
-                    CircularProgressIndicator()
-                }
+    /*Box(modifier = Modifier.fillMaxSize()) {
+        if(loading) {
+            Column(
+                modifier = Modifier.align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = "Loading")
+                CircularProgressIndicator()
             }
-        }*/
-    }
-
-    @Preview
-    @Composable
-    fun AlarmListContentPreview() {
-        val alarmList = listOf(Alarm(1, mutableListOf(
-            Alarm.DaysWeek.Monday,
-            Alarm.DaysWeek.Tuesday,
-            Alarm.DaysWeek.Wednesday)),
-            Alarm(2, mutableListOf(
-            Alarm.DaysWeek.Monday,
-            Alarm.DaysWeek.Tuesday,
-            Alarm.DaysWeek.Friday))
-        )
-        AlarmListContent( alarmList, alarmList.first())
-    }
-
-    fun openTimeEditor(alarm: Alarm) {
-        if (alarm.hour == -1) {
-            // Get Current Time
-            val c: Calendar = Calendar.getInstance()
-            alarm.hour = c.get(Calendar.HOUR_OF_DAY)
-            alarm.minute = c.get(Calendar.MINUTE)
         }
-        // Time Set Listener.
-        val timeSetListener =
-            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                alarm.hour = hourOfDay
-                alarm.minute = minute
-                viewModel.actionSaveAlarm(alarm)
-            }
-
-        // Create TimePickerDialog:
-        val timePickerDialog = TimePickerDialog(
-            requireContext(),
-            timeSetListener, alarm.hour, alarm.minute, true
-        )
-
-        // Show
-        timePickerDialog.show()
+    }*/
+}
+private fun handleSideEffect(
+    alarmListViewModel: AlarmListViewModel,
+    context: Context, navController: NavController, sideEffect: AlarmListSideEffect
+) {
+    when (sideEffect) {
+        is AlarmListSideEffect.Toast -> Toast.makeText(
+            context,
+            sideEffect.textResource,
+            Toast.LENGTH_SHORT
+        ).show()
+        is AlarmListSideEffect.OpenTimeEditor -> {
+            openTimeEditor(alarmListViewModel, context, sideEffect.alarm)
+        }
+        AlarmListSideEffect.Ok -> {}
     }
 }
+
+@Preview
+@Composable
+fun AlarmListContentPreview() {
+    val alarmList = listOf(
+        Alarm(
+            1, mutableListOf(
+                Alarm.DaysWeek.Monday,
+                Alarm.DaysWeek.Tuesday,
+                Alarm.DaysWeek.Wednesday
+            )
+        ),
+        Alarm(
+            2, mutableListOf(
+                Alarm.DaysWeek.Monday,
+                Alarm.DaysWeek.Tuesday,
+                Alarm.DaysWeek.Friday
+            )
+        )
+    )
+    AlarmListContent(null, alarmList, alarmList.first())
+}
+
+fun openTimeEditor(alarmListViewModel: AlarmListViewModel, context: Context, alarm: Alarm) {
+    if (alarm.hour == -1) {
+        // Get Current Time
+        val c: Calendar = Calendar.getInstance()
+        alarm.hour = c.get(Calendar.HOUR_OF_DAY)
+        alarm.minute = c.get(Calendar.MINUTE)
+    }
+    // Time Set Listener.
+    val timeSetListener =
+        TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+            alarm.hour = hourOfDay
+            alarm.minute = minute
+            alarmListViewModel.actionSaveAlarm(alarm)
+        }
+
+    // Create TimePickerDialog:
+    val timePickerDialog = TimePickerDialog(
+        context,
+        timeSetListener, alarm.hour, alarm.minute, true
+    )
+
+    // Show
+    timePickerDialog.show()
+}
+
 /*
     private var _binding: FragmentAlarmListBinding? = null
 

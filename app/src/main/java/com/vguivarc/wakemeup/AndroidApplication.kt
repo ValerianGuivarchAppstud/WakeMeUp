@@ -40,10 +40,6 @@ class AndroidApplication : Application() {
     // TODO les notifs repassent à rouge quand il y a une musique en moins, et pas que quand il y en a plus
 
     companion object {
-        // / var mFirebaseCrashlytics: FirebaseCrashlytics
-
-        // TODO delete la suite
-        lateinit var repository: Repository
 
         lateinit var appContext: Context
 
@@ -106,7 +102,6 @@ class AndroidApplication : Application() {
             notificationManage.createNotificationChannel(notificationChannelReveil)
         }
         alarmAndroidProviderImpl = AlarmAndroidProvider.AlarmAndroidProviderImpl(appContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager, appContext)
-        repository = Repository()
 
     }
 

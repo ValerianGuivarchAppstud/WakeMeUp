@@ -1,10 +1,7 @@
 package com.vguivarc.wakemeup.transport.account.login
 
-import android.content.Intent
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.content.Context
+import com.vguivarc.wakemeup.util.Utility
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,11 +16,12 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -32,18 +30,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import com.facebook.*
 import com.facebook.login.LoginManager
-import com.facebook.login.LoginResult
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.transport.ui.theme.WakeMeUpTheme
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.vguivarc.wakemeup.transport.routeViewModel
+import com.vguivarc.wakemeup.util.Utility.getActivity
 import timber.log.Timber
 
-
+/*
 class AuthFragment : Fragment() {
 
     private val viewModel by viewModel<AuthViewModel>()
@@ -67,54 +62,30 @@ class AuthFragment : Fragment() {
                 }
             }
         }
-    }
-
-
-    private fun handleSideEffect(navController: NavController, sideEffect: AuthSideEffect) {
-        when (sideEffect) {
-            is AuthSideEffect.Toast -> Toast.makeText(
-                context,
-                sideEffect.textResource,
-                Toast.LENGTH_SHORT
-            ).show()
-            is AuthSideEffect.LoginFacebook -> {
-                Timber.e("post6")
-
-                if (AccessToken.getCurrentAccessToken() != null) {
-                    LoginManager.getInstance().logOut()
-                }
-
-                LoginManager.getInstance().logInWithReadPermissions(
-                    this,
-                    listOf("email")
-                )
-            }
-            is AuthSideEffect.NavigationToRegister -> {
-            } // TODO
-            is AuthSideEffect.Close -> {
-                activity?.onBackPressed()
-            }
-        }
-    }
+    }*/
 
 
     @Composable
-    fun AuthScreen(navController: NavController, authViewModel: AuthViewModel) {
+    fun AuthScreen(navController: NavController) {
+        val authViewModel: AuthViewModel = remember { navController.routeViewModel() }
+
         val state by authViewModel.container.stateFlow.collectAsState()
 
         val side by authViewModel.container.sideEffectFlow.collectAsState(initial = null)
 
-        AuthContent(state.mail, state.password, state.passwordVisibility, state.isLoading)
+        AuthContent(
+            authViewModel,state.mail, state.password, state.passwordVisibility, state.isLoading)
 
         side?.let {
-            handleSideEffect(navController, it)
+            handleSideEffect(authViewModel, LocalContext.current, navController, it)
         }
-        viewModel.ok()
+        authViewModel.ok()
     }
 
 
     @Composable
     fun AuthContent(
+        authViewModel: AuthViewModel?,
         mail: String,
         password: String,
         passwordVisibility: Boolean,
@@ -139,7 +110,7 @@ class AuthFragment : Fragment() {
                         modifier = Modifier
                             .size(40.dp)
                             .padding(all = 8.dp)
-                            .clickable { viewModel.close() },
+                            .clickable { authViewModel?.close() },
                         colorFilter = ColorFilter.tint(
                             Color.Black
                         )
@@ -163,7 +134,7 @@ class AuthFragment : Fragment() {
                         .fillMaxWidth(),
                     value = mail,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    onValueChange = { viewModel.editMail(it) },
+                    onValueChange = { authViewModel?.editMail(it) },
                     //label = { Text(text = "Mail") },
                     shape = RoundedCornerShape(8.dp),
                     leadingIcon = {
@@ -191,7 +162,7 @@ class AuthFragment : Fragment() {
                     value = password,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
-                    onValueChange = { viewModel.editPassword(it) },
+                    onValueChange = { authViewModel?.editPassword(it) },
                     //label = { Text(text = "Password") },
                     shape = RoundedCornerShape(8.dp),
                     leadingIcon = {
@@ -216,7 +187,7 @@ class AuthFragment : Fragment() {
                         else Icons.Filled.VisibilityOff
 
                         IconButton(onClick = {
-                            viewModel.setPasswordVisibility(!passwordVisibility)
+                            authViewModel?.setPasswordVisibility(!passwordVisibility)
                         }) {
                             Icon(imageVector = image, "Password Visibility")
                         }
@@ -224,7 +195,7 @@ class AuthFragment : Fragment() {
                 )
                 Spacer(Modifier.size(32.dp))
                 ExtendedFloatingActionButton(
-                    onClick = { viewModel.clickOnLogin() },
+                    onClick = { authViewModel?.clickOnLogin() },
                     backgroundColor = MaterialTheme.colors.primary,
                     text = {
                         Text("Se connecter")
@@ -235,7 +206,7 @@ class AuthFragment : Fragment() {
                 )
                 Spacer(Modifier.size(20.dp))
                 ExtendedFloatingActionButton(
-                    onClick = { viewModel.clickOnRegister() },
+                    onClick = { authViewModel?.clickOnRegister() },
                     backgroundColor = MaterialTheme.colors.primary,
                     text = {
                         Text("Créer un compte")
@@ -245,7 +216,7 @@ class AuthFragment : Fragment() {
                         .fillMaxWidth(),
                 )
                 Spacer(Modifier.size(20.dp))
-                TextButton(onClick = { viewModel.forgotPassword() }) {
+                TextButton(onClick = { authViewModel?.forgotPassword() }) {
                     Text("Mot de passe oublié")
                 }
                 Spacer(Modifier.size(20.dp))
@@ -260,7 +231,7 @@ class AuthFragment : Fragment() {
                         contentDescription = "Connexion",
                         modifier = Modifier
                             .size(64.dp)
-                            .clickable { viewModel.clickOnFacebookLogin() }
+                            .clickable { authViewModel?.clickOnFacebookLogin() }
                     )
                 }
             }
@@ -279,10 +250,41 @@ class AuthFragment : Fragment() {
     }
 
 
+
+
+    private fun handleSideEffect(authViewModel: AuthViewModel,
+                                 context: Context, navController: NavController, sideEffect: AuthSideEffect) {
+        when (sideEffect) {
+            is AuthSideEffect.Toast -> Toast.makeText(
+                context,
+                sideEffect.textResource,
+                Toast.LENGTH_SHORT
+            ).show()
+            is AuthSideEffect.LoginFacebook -> {
+                Timber.e("post6")
+
+                if (AccessToken.getCurrentAccessToken() != null) {
+                    LoginManager.getInstance().logOut()
+                }
+
+                LoginManager.getInstance().logInWithReadPermissions(
+                    context.getActivity(),
+                    listOf("email")
+                )
+            }
+            is AuthSideEffect.NavigationToRegister -> {
+            } // TODO
+            is AuthSideEffect.Close -> {
+                //activity?.onBackPressed()
+            }
+        }
+    }
+
+
     @Preview
     @Composable
     fun AuthContentPreview() {
-        AuthContent("test@mail.Fr", "password", false, true)
+        AuthContent(null, "test@mail.Fr", "password", false, true)
     }
 
 
@@ -308,6 +310,9 @@ class AuthFragment : Fragment() {
             ).show()
         }
     }*/
+
+
+/*
     private fun setupFacebookLogic() {
 
         if (!FacebookSdk.isInitialized()) {
@@ -377,7 +382,7 @@ class AuthFragment : Fragment() {
         showContent()
     }
 */
-}
+}*/
 
 /*
 class AuthFragment : BaseLceFragment() {

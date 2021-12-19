@@ -1,33 +1,139 @@
 package com.vguivarc.wakemeup.transport
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
-import android.view.Menu
-import android.view.View
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.databinding.ActivityMainBinding
-import com.vguivarc.wakemeup.util.navigation.setupWithNavController
-import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.orbitmvi.orbit.viewmodel.observe
-import timber.log.Timber
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.vguivarc.wakemeup.transport.alarm.AlarmListScreen
+import com.vguivarc.wakemeup.transport.contact.contactlist.ContactListScreen
+import com.vguivarc.wakemeup.transport.ui.theme.WakeMeUpTheme
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.androidx.viewmodel.scope.BundleDefinition
+import org.koin.core.qualifier.Qualifier
+
 
 private const val DEEPLINK_TOPIC_KEY = "tochange"
 
 
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            MusicMeApp()
+        }
+    }
+}
+inline fun <reified VM : ViewModel> NavController.routeViewModel(
+    route: String? = null,
+    qualifier: Qualifier? = null,
+    noinline parameters: BundleDefinition? = null,
+): VM {
+    val owner = if (route != null)
+        getBackStackEntry(route)
+    else
+        currentBackStackEntry!!
+
+    return owner.getViewModel(
+        qualifier,
+        parameters,
+    )
+}
+
+@Composable
+fun MusicMeApp() {
+    WakeMeUpTheme {
+        val allScreens = listOf<MusicMeScreens>(
+            MusicMeScreens.AlarmListScreen,
+            MusicMeScreens.MusicListScreen,
+            MusicMeScreens.ContactListScreen,
+            MusicMeScreens.HistoryScreen,
+            MusicMeScreens.SettingsScreen
+        )
+        val navController = rememberNavController()
+        val backstackEntry = navController.currentBackStackEntryAsState()
+        val currentScreen = MusicMeScreens.fromRoute(backstackEntry.value?.destination?.route)
+
+        Scaffold(
+            bottomBar = {
+                BottomNavigation {
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentDestination = navBackStackEntry?.destination
+                    allScreens.forEach { screen ->
+                        BottomNavigationItem(
+                            icon = { Icon(screen.icon, contentDescription = null) },
+                            label = { Text(stringResource(screen.resourceId)) },
+                            selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                            onClick = {
+                                navController.navigate(screen.route) {
+                                    // Pop up to the start destination of the graph to
+                                    // avoid building up a large stack of destinations
+                                    // on the back stack as users select items
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    // Avoid multiple copies of the same destination when
+                                    // reselecting the same item
+                                    launchSingleTop = true
+                                    // Restore state when reselecting a previously selected item
+                                    restoreState = true
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        ) { innerPadding ->
+
+            NavHost(navController, startDestination = MusicMeScreens.AlarmListScreen.route, Modifier.padding(innerPadding)) {
+                composable(MusicMeScreens.AlarmListScreen.route) {
+                    AlarmListScreen(navController)
+                }
+                composable(MusicMeScreens.MusicListScreen.route) {
+                    AlarmListScreen(navController)
+                }
+                composable(MusicMeScreens.ContactListScreen.route) {
+                    ContactListScreen(navController)
+
+                }
+                composable(MusicMeScreens.HistoryScreen.route) {
+                    AlarmListScreen(navController)
+
+                }
+                composable(MusicMeScreens.SettingsScreen.route) {
+                    AlarmListScreen(navController)
+
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private val viewModel by viewModel<MainActivityViewModel>()
@@ -271,6 +377,32 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 }
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 class MainActivity : AppCompatActivity() {

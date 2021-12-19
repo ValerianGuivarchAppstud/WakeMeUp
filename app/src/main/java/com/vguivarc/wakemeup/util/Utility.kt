@@ -1,5 +1,7 @@
 package com.vguivarc.wakemeup.util
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -8,6 +10,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.vguivarc.wakemeup.AndroidApplication
 import java.io.IOException
 import java.io.InputStream
@@ -15,6 +18,17 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 object Utility {
+
+    fun Context.getActivity(): AppCompatActivity? {
+        var currentContext = this
+        while (currentContext is ContextWrapper) {
+            if (currentContext is AppCompatActivity) {
+                return currentContext
+            }
+            currentContext = currentContext.baseContext
+        }
+        return null
+    }
 
     fun getBitmapFromURL(src: String?): Bitmap? {
         return try {

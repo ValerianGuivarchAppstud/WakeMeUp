@@ -160,7 +160,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             builder = Notification.Builder(applicationContext, channelId)
                 .setContentTitle(texte)
                 .setSmallIcon(R.drawable.main_logo)
-                .setLargeIcon(Utility.getBitmapFromURL(urlPicture))
+                .setLargeIcon(Utility.
+                getBitmapFromURL(urlPicture))
                 .setOnlyAlertOnce(true)
                 .setContentIntent(pi)
                 .setAutoCancel(true)
