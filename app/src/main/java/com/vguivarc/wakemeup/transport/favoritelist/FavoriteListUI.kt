@@ -1,24 +1,102 @@
 package com.vguivarc.wakemeup.transport.favoritelist
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.content.Context
 import android.widget.Toast
-import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.databinding.FragmentFavoriteListBinding
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavController
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.vguivarc.wakemeup.domain.external.entity.Favorite
-import com.vguivarc.wakemeup.transport.search.SearchSongListAdapter
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.orbitmvi.orbit.viewmodel.observe
-import timber.log.Timber
+import com.vguivarc.wakemeup.domain.external.entity.Song
+import com.vguivarc.wakemeup.transport.routeViewModel
 
+
+@Composable
+fun FavoriteListScreen(navController: NavController) {
+    val favoriteListViewModel: FavoriteListViewModel = remember { navController.routeViewModel() }
+
+    val state by favoriteListViewModel.container.stateFlow.collectAsState()
+
+    val side by favoriteListViewModel.container.sideEffectFlow.collectAsState(initial = null)
+
+    FavoriteListContent(
+        favoriteListViewModel = favoriteListViewModel,
+        favorites = state.favoriteList,
+        playerVisible = state.currentSong!= null
+    )
+    side?.let {
+        handleSideEffect(favoriteListViewModel, LocalContext.current, navController, it)
+    }
+}
+
+@Composable
+fun FavoriteListContent(
+    favoriteListViewModel: FavoriteListViewModel?,
+    favorites: List<Favorite>,
+    playerVisible: Boolean
+) {
+    Scaffold(
+        content = {
+            Column {
+                if(playerVisible) {
+                    YoutubePlayerViewCompose()
+                }
+                LazyColumn {
+                    items(favorites) { favorite ->
+                        FavoriteCard(favoriteListViewModel, favorite)
+                    }
+                }
+            }
+        }
+    )
+}
+
+
+private fun handleSideEffect(
+    favoriteListViewModel: FavoriteListViewModel,
+    context: Context, navController: NavController, sideEffect: FavoriteListSideEffect
+) {
+    when (sideEffect) {
+        is FavoriteListSideEffect.Toast -> Toast.makeText(
+            context,
+            sideEffect.textResource,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+}
+
+@Preview
+@Composable
+fun FavoriteListContentPreview() {
+    FavoriteListContent(
+        favoriteListViewModel = null,
+        favorites = mutableListOf(
+            Favorite("createdAt", Song("idSong", "idName", "url")),
+                    Favorite("createdAt", Song("idSong2", "idName2", "url")),
+                Favorite("createdAt", Song("idSong3", "idName3", "url"))
+    ),
+        playerVisible = true
+    )
+}
+
+
+@Composable
+fun YoutubePlayerViewCompose() {
+    AndroidView(factory = {context ->
+        YouTubePlayerView(context).apply {
+
+        }
+    })
+}
+
+
+/*
 class FavoriteListFragment : Fragment(R.layout.fragment_favorite_list),
     FavoriteListAdapter.RecyclerItemClickListener {
 
@@ -51,9 +129,9 @@ class FavoriteListFragment : Fragment(R.layout.fragment_favorite_list),
             refreshData()
         }
         binding.buttonAddFavorite.setOnClickListener {
-            findNavController().navigate(
+           /* findNavController().navigate(
                 R.id.searchVideoFragment
-            )
+            )*/
         }
 
         lifecycle.addObserver(binding.youtubePlayerView)
@@ -128,6 +206,8 @@ class FavoriteListFragment : Fragment(R.layout.fragment_favorite_list),
         viewModel.saveFavoriteStatus(recherche, false)
     }
 }
+*/
+
 /*
 class FavoriteListFragment :
     BaseLceFragment(R.layout.fragment_favori_list),
@@ -187,7 +267,7 @@ class FavoriteListFragment :
 
     override fun onShareListener(recherche: Favorite, position: Int) {
         /*  val action =
-              com.vguivarc.wakemeup.song.favori.FavorisFragmentDirections.actionFavorisFragmentToContactsListeShareFragment(
+              com.vguivarc.wakemeup.song.favori.FavorisFragmentDirections.actionFavorisFragmentToFavoritesListeShareFragment(
                   recherche.song!!
               )
           findNavController().navigate(action)*/

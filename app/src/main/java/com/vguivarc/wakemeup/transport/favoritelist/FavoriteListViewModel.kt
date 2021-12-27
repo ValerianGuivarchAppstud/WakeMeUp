@@ -47,16 +47,13 @@ class FavoriteListViewModel(
     }
 
 
-    fun selectSong(searchSong: Favorite)  = intent {
+    fun selectFavorite(searchSong: Favorite)  = intent {
         reduce {
             state.copy(isLoading = false, currentSong = searchSong)
         }
     }
 
-
-
     fun saveFavoriteStatus(favorite: Favorite, isFavorite: Boolean) = intent {
-
         try {
             val list = favoriteInteractor.saveFavoriteStatus(favorite.song, isFavorite)
 

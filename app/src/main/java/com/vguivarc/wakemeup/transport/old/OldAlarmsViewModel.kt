@@ -1,4 +1,4 @@
-package com.vguivarc.wakemeup.transport.ringingalarm
+package com.vguivarc.wakemeup.transport.old
 
 import androidx.lifecycle.ViewModel
 import com.vguivarc.wakemeup.domain.external.AlarmInteractor

@@ -27,7 +27,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.vguivarc.wakemeup.R
-
+/*
 /**
  * Manages the various graphs needed for a BottomNavigationView.
  *
@@ -295,3 +295,5 @@ fun NavController.navigateSafe(
         navigate(actionId)
     }
 }
+
+*/

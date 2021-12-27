@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin: "androidx.navigation.safeargs"
+//apply plugin: "androidx.navigation.safeargs"
 
 apply plugin: 'kotlin-kapt'
 
@@ -45,7 +45,7 @@ android {
         dev {
             dimension "server"
 
-            def API_BASEURL = "http://192.168.0.24:8080"
+            def API_BASEURL = "http://192.168.172.136:8080"
             buildConfigField "String", "API_BASEURL", "\"${API_BASEURL}/api/\""
         }
 
@@ -265,6 +265,6 @@ dependencies {
 
     implementation 'com.github.AppIntro:AppIntro:6.0.0'
 
-    implementation 'com.facebook.android:facebook-android-sdk:11.3.0'
+    implementation 'com.facebook.android:facebook-android-sdk:12.1.0'
 
 }

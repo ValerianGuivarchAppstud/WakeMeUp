@@ -23,7 +23,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.vguivarc.wakemeup.R
 
 enum class MusicMeScreens(
-    val route: String, @StringRes val resourceId: Int,
+    val route: String,
+    @StringRes val resourceId: Int = 0,
     val icon: ImageVector,
 ) {
     AlarmListScreen(

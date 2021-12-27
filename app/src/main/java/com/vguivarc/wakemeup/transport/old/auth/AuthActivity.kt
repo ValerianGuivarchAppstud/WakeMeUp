@@ -30,6 +30,7 @@ import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
+/*
 class AuthActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,3 +40,4 @@ class AuthActivity : BaseActivity() {
             .setGraph(R.navigation.navigation_login)
     }
 }
+*/

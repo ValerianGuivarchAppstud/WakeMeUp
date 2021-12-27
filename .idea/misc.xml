@@ -66,6 +66,35 @@
         <entry key="../../../../layout/compose-model-1639919595218.xml" value="0.1" />
         <entry key="../../../../layout/compose-model-1639920646358.xml" value="0.1" />
         <entry key="../../../../layout/compose-model-1639920734971.xml" value="1.0" />
+        <entry key="../../../../layout/compose-model-1639943140308.xml" value="0.25" />
+        <entry key="../../../../layout/compose-model-1639948040937.xml" value="0.25" />
+        <entry key="../../../../layout/compose-model-1639949339886.xml" value="0.11866554054054054" />
+        <entry key="../../../../layout/compose-model-1640176414230.xml" value="0.11613175675675676" />
+        <entry key="../../../../layout/compose-model-1640184248524.xml" value="0.1" />
+        <entry key="../../../../layout/compose-model-1640537896510.xml" value="0.165" />
+        <entry key="../../../../layout/compose-model-1640537907330.xml" value="0.15160472972972974" />
+        <entry key="../../../../layout/compose-model-1640537913545.xml" value="0.2796296296296296" />
+        <entry key="../../../../layout/compose-model-1640538471499.xml" value="0.2796296296296296" />
+        <entry key="../../../../layout/compose-model-1640538676330.xml" value="0.15244932432432431" />
+        <entry key="../../../../layout/compose-model-1640538703460.xml" value="0.15244932432432431" />
+        <entry key="../../../../layout/compose-model-1640539061218.xml" value="0.15244932432432431" />
+        <entry key="../../../../layout/compose-model-1640539563080.xml" value="0.9773462783171522" />
+        <entry key="../../../../layout/compose-model-1640539728320.xml" value="0.25" />
+        <entry key="../../../../layout/compose-model-1640539766275.xml" value="0.15244932432432431" />
+        <entry key="../../../../layout/compose-model-1640540029574.xml" value="0.15244932432432431" />
+        <entry key="../../../../layout/compose-model-1640540032461.xml" value="0.2796296296296296" />
+        <entry key="../../../../layout/compose-model-1640541170503.xml" value="0.25" />
+        <entry key="../../../../layout/compose-model-1640541343708.xml" value="0.15244932432432431" />
+        <entry key="../../../../layout/compose-model-1640541415977.xml" value="0.15244932432432431" />
+        <entry key="../../../../layout/compose-model-1640597895715.xml" value="0.2796296296296296" />
+        <entry key="../../../../layout/compose-model-1640597911617.xml" value="0.2796296296296296" />
+        <entry key="../../../../layout/compose-model-1640610931620.xml" value="0.17483108108108109" />
+        <entry key="../../../../layout/compose-model-1640610960976.xml" value="0.625" />
+        <entry key="../../../../layout/compose-model-1640612988168.xml" value="0.14484797297297297" />
+        <entry key="../../../../layout/compose-model-1640613015210.xml" value="0.30092592592592593" />
+        <entry key="../../../../layout/compose-model-1640613021919.xml" value="0.30092592592592593" />
+        <entry key="../../../../layout/compose-model-1640613165398.xml" value="0.335" />
+        <entry key="../../../../layout/compose-model-1640618926550.xml" value="0.165" />
         <entry key="app/src/main/res/drawable-v24/ic_baseline_mail_outline_24.xml" value="0.2171875" />
         <entry key="app/src/main/res/drawable/facebook.xml" value="0.13854166666666667" />
         <entry key="app/src/main/res/drawable/ic_favorite_no.xml" value="0.14635416666666667" />
@@ -75,6 +104,7 @@
         <entry key="app/src/main/res/drawable/share.xml" value="0.14635416666666667" />
         <entry key="app/src/main/res/layout/action_bar_notification_icon_reveils.xml" value="0.14166666666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.125" />
+        <entry key="app/src/main/res/layout/activity_musicme_app_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_reveil_sonne.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_account.xml" value="0.1203125" />
         <entry key="app/src/main/res/layout/fragment_alarm_list.xml" value="0.1" />
@@ -91,6 +121,8 @@
         <entry key="app/src/main/res/layout/item_list_contact.xml" value="0.1203125" />
         <entry key="app/src/main/res/layout/item_list_contact_facebook.xml" value="0.165" />
         <entry key="app/src/main/res/layout/item_list_favori.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_list_sonnerie_attente.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/item_list_sonnerie_passe.xml" value="0.165" />
         <entry key="app/src/main/res/layout/item_list_video.xml" value="0.25" />
         <entry key="app/src/main/res/layout/musicme_bar_main.xml" value="0.1968503937007874" />
         <entry key="app/src/main/res/layout/musicme_content_main.xml" value="0.1" />

@@ -36,14 +36,20 @@ class SearchSongListViewModel(
         }
     }
 
-    fun getSearchedSongList(searchText: String) = intent {
+    fun setSearchText(searchText: String)  = intent {
+        reduce {
+            state.copy(isLoading = false, showBeforeSearch = false, showEmptyResult = false, currentSong = null, searchText = searchText)
+        }
+    }
+
+    fun getSearchedSongList() = intent {
         reduce {
             state.copy(isLoading = true, showBeforeSearch = false, showEmptyResult = false, currentSong = null)
         }
 
         try {
             val favoriteList = favoriteInteractor.getFavoriteList()
-            val songList = songInteractor.getSong(searchText)
+            val songList = songInteractor.getSong(state.searchText)
             val list= songList.items.map { song ->
                 SearchSong(song.toSong(),favoriteList.any { it.song.id == song.id() })
             }

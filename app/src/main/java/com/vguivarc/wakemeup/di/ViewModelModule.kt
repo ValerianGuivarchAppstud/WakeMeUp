@@ -8,6 +8,7 @@ import com.vguivarc.wakemeup.transport.contact.contactlist.ContactListViewModel
 import com.vguivarc.wakemeup.transport.contact.contactlistfacebook.ContactFacebookListViewModel
 import com.vguivarc.wakemeup.transport.favoritelist.FavoriteListViewModel
 import com.vguivarc.wakemeup.transport.ringingalarm.RingingAlarmViewModel
+import com.vguivarc.wakemeup.transport.ringinglist.RingingListViewModel
 import com.vguivarc.wakemeup.transport.search.SearchSongListViewModel
 import com.vguivarc.wakemeup.transport.settings.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -24,5 +25,6 @@ val viewModelModule = module {
     viewModel { RingingAlarmViewModel(get(), get()) }
     viewModel { SearchSongListViewModel(get(), get()) }
     viewModel { SettingsViewModel(get()) }
+    viewModel { RingingListViewModel(get()) }
 
 }

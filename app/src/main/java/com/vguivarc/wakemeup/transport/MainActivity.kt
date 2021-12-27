@@ -3,24 +3,40 @@ package com.vguivarc.wakemeup.transport
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.vguivarc.wakemeup.R
+import com.vguivarc.wakemeup.transport.account.login.AuthScreen
+import com.vguivarc.wakemeup.transport.account.profile.AccountScreen
 import com.vguivarc.wakemeup.transport.alarm.AlarmListScreen
 import com.vguivarc.wakemeup.transport.contact.contactlist.ContactListScreen
+import com.vguivarc.wakemeup.transport.contact.contactlistfacebook.ContactFacebookListScreen
+import com.vguivarc.wakemeup.transport.ringinglist.RingingListScreen
+import com.vguivarc.wakemeup.transport.search.SearchSongListScreen
+import com.vguivarc.wakemeup.transport.settings.SettingsScreen
 import com.vguivarc.wakemeup.transport.ui.theme.WakeMeUpTheme
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.androidx.viewmodel.scope.BundleDefinition
 import org.koin.core.qualifier.Qualifier
 
@@ -28,12 +44,15 @@ import org.koin.core.qualifier.Qualifier
 private const val DEEPLINK_TOPIC_KEY = "tochange"
 
 
+
 class MainActivity : ComponentActivity() {
+    val mainActivityViewModel by viewModel<MainActivityViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            MusicMeApp()
+            MusicMeApp(mainActivityViewModel)
         }
     }
 }
@@ -54,7 +73,7 @@ inline fun <reified VM : ViewModel> NavController.routeViewModel(
 }
 
 @Composable
-fun MusicMeApp() {
+fun MusicMeApp(mainActivityViewModel: MainActivityViewModel) {
     WakeMeUpTheme {
         val allScreens = listOf<MusicMeScreens>(
             MusicMeScreens.AlarmListScreen,
@@ -63,9 +82,17 @@ fun MusicMeApp() {
             MusicMeScreens.HistoryScreen,
             MusicMeScreens.SettingsScreen
         )
+
         val navController = rememberNavController()
         val backstackEntry = navController.currentBackStackEntryAsState()
-        val currentScreen = MusicMeScreens.fromRoute(backstackEntry.value?.destination?.route)
+//        val currentScreen = MusicMeScreens.fromRoute(backstackEntry.value?.destination?.route)
+
+
+        val state by mainActivityViewModel.container.stateFlow.collectAsState()
+
+        val side by mainActivityViewModel.container.sideEffectFlow.collectAsState(initial = null)
+
+
 
         Scaffold(
             bottomBar = {
@@ -95,27 +122,37 @@ fun MusicMeApp() {
                         )
                     }
                 }
-            }
-        ) { innerPadding ->
+            },
+            topBar = { AppTopBar(navController, state.newNotification, state.nbNewNotification, state.newRinging, state.nbNewRinging) }
+            ) { innerPadding ->
 
             NavHost(navController, startDestination = MusicMeScreens.AlarmListScreen.route, Modifier.padding(innerPadding)) {
                 composable(MusicMeScreens.AlarmListScreen.route) {
                     AlarmListScreen(navController)
                 }
                 composable(MusicMeScreens.MusicListScreen.route) {
-                    AlarmListScreen(navController)
+                    SearchSongListScreen(navController)
                 }
                 composable(MusicMeScreens.ContactListScreen.route) {
                     ContactListScreen(navController)
-
                 }
                 composable(MusicMeScreens.HistoryScreen.route) {
                     AlarmListScreen(navController)
-
                 }
                 composable(MusicMeScreens.SettingsScreen.route) {
-                    AlarmListScreen(navController)
-
+                    SettingsScreen(navController)
+                }
+                composable("ContactFacebookList") {
+                    ContactFacebookListScreen(navController)
+                }
+                composable("RingingList") {
+                    RingingListScreen(navController)
+                }
+                composable("SettingsLogin") {
+                    AuthScreen(navController)
+                }
+                composable("SettingsAccount") {
+                    AccountScreen(navController)
                 }
             }
         }
@@ -125,8 +162,85 @@ fun MusicMeApp() {
 
 
 
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun AppTopBar(
+    navController: NavHostController,
+    newNotification: Boolean,
+    nbNewNotification: Int,
+    newRinging: Boolean,
+    nbNewRinging: Int
+) {
+    TopAppBar(
+        elevation = 10.dp,
+    ) {
+        ConstraintLayout(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            val (title, notification, music) = createRefs()
+            Text(
+                text = "MusicMe",
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier
+                    .constrainAs(title) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(notification.start)
+                        width = Dimension.fillToConstraints
+                    }
+            )
+            IconButton(
+                onClick = {
+                    navController.navigate(MusicMeScreens.MusicListScreen.route)
+                },
+                modifier = Modifier
+                    .constrainAs(notification) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                    }
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(
+                        R.drawable.icon_notif_no
+                    ),
+                    contentDescription = "Notification",
+                )
+            }
+            IconButton(
+                onClick = {
+                    navController.navigate("RingingList")
+                },
+                modifier = Modifier
+                    .constrainAs(music) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(notification.start)
+                    }
+            ) {
+                if (nbNewRinging == 0) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(
+                                R.drawable.icon_music_no
+                            ),
+                            contentDescription = "Sonneries",
+                        )
 
-
+                } else {
+                    BadgeBox(badgeContent = { Text(nbNewRinging.toString()) }) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(
+                                R.drawable.icon_music_yes
+                            ),
+                            contentDescription = "Sonneries",
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
 
 
 

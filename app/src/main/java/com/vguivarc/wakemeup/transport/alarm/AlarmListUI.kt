@@ -22,26 +22,6 @@ import com.vguivarc.wakemeup.domain.external.entity.Alarm
 import com.vguivarc.wakemeup.transport.routeViewModel
 import java.util.*
 
-/*
-class AlarmListFragment : Fragment() {
-
-    private val viewModel by viewModel<AlarmListViewModel>()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                WakeMeUpTheme {
-                    AlarmListScreen(findNavController(), viewModel)
-                }
-            }
-        }
-    }
-*/
-
 @Composable
 fun AlarmListScreen(navController: NavController) {
     val alarmListViewModel: AlarmListViewModel = remember { navController.routeViewModel() }

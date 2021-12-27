@@ -5,6 +5,7 @@ import com.vguivarc.wakemeup.transport.contact.contactlist.ContactListScreenSide
 
 data class SearchSongListState(
     val searchSongList: List<SearchSong> = emptyList(),
+    val searchText: String = "",
     val isLoading: Boolean = false,
     val showBeforeSearch: Boolean = true,
     val showEmptyResult: Boolean = false,

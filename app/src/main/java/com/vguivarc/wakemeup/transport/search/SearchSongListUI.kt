@@ -1,115 +1,218 @@
 package com.vguivarc.wakemeup.transport.search
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.ComposeView
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.fragment.app.Fragment
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.external.entity.Contact
 import com.vguivarc.wakemeup.domain.external.entity.SearchSong
 import com.vguivarc.wakemeup.domain.external.entity.Song
-import com.vguivarc.wakemeup.transport.ui.theme.WakeMeUpTheme
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
+import com.vguivarc.wakemeup.transport.routeViewModel
 
 
+@Composable
+fun SearchSongListScreen(navController: NavController) {
 
-class SearchSongListFragment : Fragment() {
+    val searchSongListViewModel: SearchSongListViewModel =
+        remember { navController.routeViewModel() }
 
-    private val viewModel by viewModel<SearchSongListViewModel>()
+    val state by searchSongListViewModel.container.stateFlow.collectAsState()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                WakeMeUpTheme {
-                    SearchSongListScreen(findNavController(), viewModel)
-                }
-            }
-        }
+    val side by searchSongListViewModel.container.sideEffectFlow.collectAsState(initial = null)
+
+    SearchSongListContent(
+        searchSongListViewModel,
+        state.searchSongList,
+        state.searchText,
+        state.currentSong,
+        state.showBeforeSearch,
+        state.showEmptyResult
+    )
+    side?.let {
+        handleSideEffect(LocalContext.current, navController, it)
     }
+}
 
-
-
-    private fun handleSideEffect(navController: NavController, sideEffect: SearchSongListSideEffect) {
-        when (sideEffect) {
-            is SearchSongListSideEffect.Toast -> Toast.makeText(
-                context,
-                sideEffect.textResource,
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
-    @Composable
-    fun SearchSongListScreen(navController: NavController, searchSongListViewModel: SearchSongListViewModel) {
-        val state by searchSongListViewModel.container.stateFlow.collectAsState()
-
-        val side by searchSongListViewModel.container.sideEffectFlow.collectAsState(initial = null)
-
-        SearchSongListContent(
-            state.searchSongList,
-            state.currentSong,
-            state.showBeforeSearch,
-            state.showEmptyResult
-        )
-        side?.let {
-            handleSideEffect(navController, it)
-        }
-    }
-
-    @Composable
-    fun SearchSongListContent(
-        searchSongs: List<SearchSong>,
-        currentSong: SearchSong?,
-        showBeforeSearch: Boolean,
-        showEmptyResult: Boolean
-    ) {
-        Scaffold(
-            content = {
-                Column {
-                    LazyColumn {
-                        items(searchSongs) { song ->
-                            SearchSongCard(song)
-                        }
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun SearchSongListContent(
+    searchSongListViewModel: SearchSongListViewModel?,
+    searchSongs: List<SearchSong>,
+    searchText: String,
+    currentSong: SearchSong?,
+    showBeforeSearch: Boolean,
+    showEmptyResult: Boolean
+) {
+    Scaffold(
+        content = {
+            Column {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(32.dp, 8.dp)
+                        .fillMaxWidth(),
+                    value = searchText,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    onValueChange = { searchSongListViewModel?.setSearchText(it) },
+                    shape = RoundedCornerShape(8.dp),
+                    trailingIcon = {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_baseline_search_24),
+                            contentDescription = "Search",
+                            colorFilter = ColorFilter.tint(
+                                Color.Black
+                            ),
+                            modifier = Modifier.clickable(
+                                onClick = { searchSongListViewModel?.getSearchedSongList() },
+//                                indication = null
+                            ),
+                        )
+                    },
+                    placeholder = { Text("Search a new music") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        focusedIndicatorColor = Color.LightGray,
+                        disabledIndicatorColor = Color.LightGray,
+                        unfocusedIndicatorColor = Color.LightGray,
+                        backgroundColor = Color.Transparent,
+                    )
+                )
+//                SearchBar(searchText, searchSongListViewModel, "hint")
+                LazyColumn {
+                    items(searchSongs) { song ->
+                        SearchSongCard(song)
                     }
                 }
             }
-        )
-    }
-
-    @Preview
-    @Composable
-    fun SearchSongListContentPreview() {
-        SearchSongListContent(
-            searchSongs = mutableListOf(
-                SearchSong(Song("a", "favo"), false),
-                SearchSong(Song("b", "nop"), true)
-            ),
-            null,
-            false,
-            false
-        )
-    }
-
-
+        }
+    )
 }
+
+
+private fun handleSideEffect(
+    context: Context,
+    navController: NavController,
+    sideEffect: SearchSongListSideEffect
+) {
+    when (sideEffect) {
+        is SearchSongListSideEffect.Toast -> Toast.makeText(
+            context,
+            sideEffect.textResource,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+}
+
+@Preview
+@Composable
+fun SearchSongListContentPreview() {
+    SearchSongListContent(
+        null,
+        searchSongs = mutableListOf(
+            SearchSong(Song("a", "favo"), false),
+            SearchSong(Song("b", "nop"), true)
+        ),
+        "search",
+        currentSong = null,
+        showBeforeSearch = false,
+        showEmptyResult = false
+    )
+}
+
+@ExperimentalAnimationApi
+@Composable
+fun SearchBar(value:String, viewModel: SearchSongListViewModel?,  hint: String,
+              endIcon: ImageVector? = Icons.Default.Cancel) {
+    // we are creating a variable for
+    // getting a value of our text field.
+
+    Surface(
+        shape = RoundedCornerShape(50),
+      //  color = searchFieldColor
+    ) {
+        Box(
+            modifier = Modifier
+                .height(40.dp)
+                .padding(start = 16.dp, end = 12.dp),
+            contentAlignment = Alignment.CenterStart
+        )
+        {
+            if (value.isEmpty()) {
+                Text(
+                    text = "Search...",
+                    style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onSurface.copy(ContentAlpha.medium)),
+                )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BasicTextField(
+                    modifier = Modifier.weight(1f),
+                    value = value,
+                    onValueChange = { viewModel?.setSearchText(it) },
+                    singleLine = true,
+                  //  cursorColor = YourColor,
+                )
+                endIcon?.let {
+                    AnimatedVisibility(
+                        visible = value.isNotEmpty(),
+                        enter = fadeIn(),
+                        exit = fadeOut()
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .size(24.dp)
+                                /*.clickable(
+                                    onClick = { textValue = TextFieldValue() },
+                                    indication = null
+                                ),*/,
+                            imageVector = endIcon,
+                            contentDescription = ""
+                            //colorFilter = iconColor
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 /*
 class SearchSongListFragment : Fragment(R.layout.fragment_search_song_list),

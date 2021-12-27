@@ -33,6 +33,7 @@
     <string name="message_partage_twitter">Voici mon contact sur MusicMe!, n\'hésite pas à me proposer des musiques pour mon prochain réveil !</string>
 
     <string name="facebook_app_id">241537453728565</string>
+    <string name="facebook_client_token">598db20dcd275824df75e91374308e85</string>
     <string name="fb_login_protocol_scheme">fb241537453728565</string>
     <string name="horaire">Horaire :</string>
     <string name="r_p_ter">Répéter :</string>
