@@ -1,41 +1,23 @@
 package com.vguivarc.wakemeup.domain.external.entity
 
-open class Notif(
-    val idReceiver: String?,
-    val idSender: String?,
-    val usernameSender: String?,
-    val urlPicture: String?,
-    val vue: Boolean,
-    val type: NotificationType
-) {
-    // var sender: UserModel?=null
-    var sonnerieName: String? = null
+import android.os.Parcelable
+import com.squareup.moshi.JsonClass
+import kotlinx.android.parcel.Parcelize
+import java.time.ZonedDateTime
 
-    @Suppress("unused")
-    constructor() : this(
-        "", null, "", null, false, NotificationType.ENVOIE_MUSIQUE
-    )
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class Notif(
+    val id: String,
+    val createdDate: ZonedDateTime?,
+    val seen: Boolean,
+    val type: NotifType,
+    val senderId: String = "",
+    val receiverId: String = ""
+) : Parcelable {
+}
 
-    enum class NotificationType {
-        ENVOIE_MUSIQUE,
-        SONNERIE_UTILISEE
-    }
-
-    companion object {
-        fun newInstanceEnvoieMusique(ringing: Ringing, sender: UserProfile): Notif {
-            return Notif(ringing.receiverId, sender.profileId, sender.username, sender.imageUrl, false, NotificationType.ENVOIE_MUSIQUE)
-        }
-        fun newInstanceSonnerieUtilisee(ringing: Ringing, sender: UserProfile): Notif {
-            val not = Notif(
-                ringing.senderId,
-                sender.profileId,
-                sender.username,
-                sender.imageUrl,
-                false,
-                NotificationType.SONNERIE_UTILISEE
-            )
-            not.sonnerieName = ringing.song!!.title
-            return not
-        }
-    }
+enum class NotifType {
+    RINGING_USED,
+    RINGING_RECEIVED
 }

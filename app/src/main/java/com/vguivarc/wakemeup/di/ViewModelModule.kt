@@ -4,6 +4,7 @@ import com.vguivarc.wakemeup.transport.MainActivityViewModel
 import com.vguivarc.wakemeup.transport.account.profile.ProfileViewModel
 import com.vguivarc.wakemeup.transport.alarm.AlarmListViewModel
 import com.vguivarc.wakemeup.transport.account.login.AuthViewModel
+import com.vguivarc.wakemeup.transport.contact.addbyusername.AddByUsernameViewModel
 import com.vguivarc.wakemeup.transport.contact.contactlist.ContactListViewModel
 import com.vguivarc.wakemeup.transport.contact.contactlistfacebook.ContactFacebookListViewModel
 import com.vguivarc.wakemeup.transport.favoritelist.FavoriteListViewModel
@@ -18,6 +19,7 @@ val viewModelModule = module {
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { AlarmListViewModel(get()) }
     viewModel { AuthViewModel(get(), get()) }
+    viewModel { AddByUsernameViewModel(get()) }
     viewModel { ContactListViewModel(get()) }
     viewModel { ContactFacebookListViewModel(get(), get()) }
     viewModel { FavoriteListViewModel(get()) }

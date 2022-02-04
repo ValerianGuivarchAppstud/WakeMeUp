@@ -17,7 +17,6 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.vguivarc.wakemeup.AndroidApplication
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.external.entity.Notif
 import com.vguivarc.wakemeup.transport.MainActivity
 import com.vguivarc.wakemeup.util.Utility
 import timber.log.Timber
@@ -137,8 +136,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val notificationManage = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val texte = when (notificationType) {
-            Notif.NotificationType.ENVOIE_MUSIQUE.name -> AndroidApplication.appContext.resources.getString(R.string.envoie_musique, usernameSender)
-            Notif.NotificationType.SONNERIE_UTILISEE.name -> AndroidApplication.appContext.resources.getString(R.string.sonnerie_utilisee, usernameSender)
+          //  OldNotif.NotificationType.ENVOIE_MUSIQUE.name -> AndroidApplication.appContext.resources.getString(R.string.envoie_musique, usernameSender)
+           // OldNotif.NotificationType.SONNERIE_UTILISEE.name -> AndroidApplication.appContext.resources.getString(R.string.sonnerie_utilisee, usernameSender)
             else -> ""
         }
 

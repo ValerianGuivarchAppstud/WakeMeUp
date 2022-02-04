@@ -29,10 +29,10 @@ enum class MusicMeScreens(
 ) {
     AlarmListScreen(
         "AlarmList", R.string.reveils
-      ,  icon = Icons.Filled.Close,
+      ,  icon = Icons.Filled.AccessAlarm,
     ),
     MusicListScreen(
-        "MusicList", R.string.musique, icon = Icons.Filled.Done,
+        "MusicList", R.string.musique, icon = Icons.Filled.LibraryMusic,
     ),
     ContactListScreen(
         "ContactList", R.string.contacts, icon = Icons.Filled.Person,
@@ -43,7 +43,7 @@ enum class MusicMeScreens(
     ),
     SettingsScreen(
         "Settings", R.string.historique
-        ,  icon = Icons.Filled.PlayArrow,
+        ,  icon = Icons.Filled.Settings,
     ),
     ;
 

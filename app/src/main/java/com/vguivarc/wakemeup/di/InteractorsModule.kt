@@ -33,6 +33,6 @@ val interactorsModule = module {
     single { ContactInteractor(get()) }
     single { FavoriteInteractor(get()) }
     single { ProfileInteractor(get()) }
-    single { RingingInteractor(get()) }
+    single { RingingInteractor(get(), get()) }
     single { SongInteractor(get()) }
 }

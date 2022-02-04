@@ -83,10 +83,6 @@ class SearchSongListViewModel(
                 isFavorite
 
             reduce {
-                state.copy(searchSongList = mutableListOf(), isLoading = false)
-            }
-
-            reduce {
                 state.copy(searchSongList = updatedList.toMutableList(), isLoading = false)
             }
     } catch (exception: Exception) {

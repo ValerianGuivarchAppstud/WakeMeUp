@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
@@ -32,19 +33,24 @@ fun ContactListScreen(navController: NavController) {
 
     ContactListContent(
         contacts = state.contactList,
-        onAddFacebook = {
-            contactListViewModel.addFacebookSelected()
+        onAddUsername = {
+            contactListViewModel.addUsernameSelected()
         }
     )
     side?.let {
         handleSideEffect(contactListViewModel, LocalContext.current, navController, it)
     }
+    if(LocalLifecycleOwner.current.lifecycle.currentState == androidx.lifecycle.Lifecycle.State.RESUMED) {
+        contactListViewModel.getContactList()
+    }
+
+    contactListViewModel.ok()
 }
 
 @Composable
 fun ContactListContent(
     contacts: List<Contact>,
-    onAddFacebook: () -> Unit
+    onAddUsername: () -> Unit
 ) {
     var toState by remember { mutableStateOf(MultiFabState.COLLAPSED) }
     Scaffold(
@@ -52,22 +58,22 @@ fun ContactListContent(
             MultiFloatingActionButton(
                 painterResource(id = R.drawable.add_24),
                 listOf(
-                    MultiFabItem(
+                   /* MultiFabItem(
                         "add_facebook",
                         painterResource(id = R.drawable.add_24),
                         "Facebook"
-                    )/*,
+                    ),*/
                         MultiFabItem(
-                            "add_phone",
-                            painterResource(id = R.drawable.add_24), "Phone"
-                        )*/
+                            "add_username",
+                            painterResource(id = R.drawable.add_24), "Identifiant"
+                        )
                 ), toState, true, { state ->
                     toState = state
                 }
             ) {
                 when (it.identifier) {
-                    "add_facebook" -> {
-                        onAddFacebook()
+                    "add_username"-> {
+                        onAddUsername()
                     }
                 }
             }
@@ -101,11 +107,13 @@ private fun handleSideEffect(
                 ContactListFragmentDirections.displayContactDetail(sideEffect.contact)
             )*/
         }
-        ContactListScreenSideEffect.NavigateToAddFacebookContact -> {
-            /* navController.navigate(
-                 ContactListFragmentDirections.actionAddContactFacebook()
-             )*/
+        is ContactListScreenSideEffect.NavigateToAddUsernameContact -> {
+             navController.navigate(
+                 "AddUsernameContact"
+             )
         }
+        ContactListScreenSideEffect.NavigateToAddFacebookContact -> TODO()
+        ContactListScreenSideEffect.Ok -> {}
     }
 }
 
@@ -133,8 +141,8 @@ fun ContactListContentPreview() {
             Contact("id24", "paul", null, 3, 4),
             Contact("id34", "jack", null, 5, 6)
         ),
-        onAddFacebook = {
-            Timber.d("Add Facebook")
+        onAddUsername = {
+            Timber.d("Add onAddUsername")
         }
     )
 }

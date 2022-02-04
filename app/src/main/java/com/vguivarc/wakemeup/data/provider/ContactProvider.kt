@@ -2,10 +2,12 @@ package com.vguivarc.wakemeup.data.provider
 
 import com.vguivarc.wakemeup.data.network.ContactApi
 import com.vguivarc.wakemeup.data.entity.ContactRequest
+import com.vguivarc.wakemeup.data.entity.SearchResultContactResponse
 import com.vguivarc.wakemeup.data.entity.SendRingingRequest
 import com.vguivarc.wakemeup.domain.external.entity.Contact
 import com.vguivarc.wakemeup.domain.external.entity.ContactFacebook
 import com.vguivarc.wakemeup.domain.external.entity.Ringing
+import com.vguivarc.wakemeup.domain.external.entity.UserProfile
 import com.vguivarc.wakemeup.domain.internal.IContactProvider
 import retrofit2.Retrofit
 
@@ -18,6 +20,10 @@ class ContactProvider(retrofit: Retrofit) : IContactProvider {
     }
     override suspend fun getContactFacebookList(socialAuthToken: String?): List<ContactFacebook> {
         return contactApi.getContactFacebook(socialAuthToken)
+    }
+
+    override suspend fun searchByUsername(searchText: String): SearchResultContactResponse {
+        return contactApi.searchByUsername(searchText)
     }
 
 /*

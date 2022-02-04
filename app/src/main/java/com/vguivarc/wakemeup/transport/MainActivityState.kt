@@ -1,7 +1,5 @@
 package com.vguivarc.wakemeup.transport
 
-import com.vguivarc.wakemeup.domain.external.entity.UserProfile
-
 data class MainActivityState(
     var isConnected: Boolean = false,
     var newNotification : Boolean = false,
@@ -12,4 +10,6 @@ data class MainActivityState(
 
 sealed class MainActivitySideEffect {
     data class Toast(val textResource: Int) : MainActivitySideEffect()
+    class Navigate(val route: String, val top: Boolean) : MainActivitySideEffect()
+    object Ok : MainActivitySideEffect()
 }

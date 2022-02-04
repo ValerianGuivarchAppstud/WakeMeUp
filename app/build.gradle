@@ -45,7 +45,7 @@ android {
         dev {
             dimension "server"
 
-            def API_BASEURL = "http://192.168.172.136:8080"
+            def API_BASEURL = "http://192.168.1.177:8080"
             buildConfigField "String", "API_BASEURL", "\"${API_BASEURL}/api/\""
         }
 
@@ -148,6 +148,13 @@ dependencies {
     // FloatingActionButton multio action
     //implementation 'academy.compose.companion:multi-fab:1.2'
 
+    // Logging
+    implementation('com.github.ihsanbal:LoggingInterceptor:3.1.0') {
+        exclude group: 'org.json', module: 'json'
+    }
+    debugImplementation "com.github.chuckerteam.chucker:library:3.5.2"
+    releaseImplementation "com.github.chuckerteam.chucker:library-no-op:3.5.2"
+
 
     // Koin
     implementation "org.koin:koin-core:2.2.2"
@@ -177,8 +184,8 @@ dependencies {
 
     // retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
-    implementation "com.squareup.okhttp3:okhttp:4.9.2"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.9.2"
+    implementation "com.squareup.okhttp3:okhttp:4.9.3"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
     implementation "com.squareup.moshi:moshi-adapters:1.12.0"

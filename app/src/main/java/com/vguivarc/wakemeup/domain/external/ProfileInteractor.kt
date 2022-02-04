@@ -1,6 +1,7 @@
 package com.vguivarc.wakemeup.domain.external
 
 import com.vguivarc.wakemeup.domain.external.entity.UserProfile
+import com.vguivarc.wakemeup.domain.internal.IAuthProvider
 import com.vguivarc.wakemeup.domain.internal.IProfileProvider
 
 

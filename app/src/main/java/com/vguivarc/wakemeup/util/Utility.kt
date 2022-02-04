@@ -10,7 +10,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.MainThread
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import com.vguivarc.wakemeup.AndroidApplication
 import java.io.IOException
 import java.io.InputStream
@@ -18,6 +20,12 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 object Utility {
+
+    /*@MainThread
+    fun NavController.popBackStackWithBackNotification(): Boolean {
+        this.previousBackStackEntry?.savedStateHandle?.set("back", "back")
+        return this.popBackStack()
+    }*/
 
     fun Context.getActivity(): AppCompatActivity? {
         var currentContext = this

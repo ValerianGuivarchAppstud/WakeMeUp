@@ -11,6 +11,7 @@ data class ContactListState(
 sealed class ContactListScreenSideEffect {
     data class NavigateToContactDetail(val contact: Contact) : ContactListScreenSideEffect()
     object NavigateToAddFacebookContact: ContactListScreenSideEffect()
+    object NavigateToAddUsernameContact: ContactListScreenSideEffect()
     data class Toast(val textResource: Int) : ContactListScreenSideEffect()
     object Ok: ContactListScreenSideEffect()
 

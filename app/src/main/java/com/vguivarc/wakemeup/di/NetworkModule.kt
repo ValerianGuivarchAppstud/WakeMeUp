@@ -1,5 +1,6 @@
 package com.vguivarc.wakemeup.di
 
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.vguivarc.wakemeup.BuildConfig
@@ -39,6 +40,15 @@ val networkModule = module {
                 readTimeout(READ_TIMEOUT_IN_MINUTES, TimeUnit.MINUTES)
 
                 addInterceptor(ConnectivityInterceptor(get()))
+
+              /*  addInterceptor(LoggingInterceptor.Builder()
+                    .setLevel(Level.BASIC)
+                    .log(VERBOSE)
+                    .addHeader("cityCode","53")
+                    .addQueryParam("moonStatus", "crescent")
+                    .build())*/
+
+                    .addInterceptor(ChuckerInterceptor(get()))
 
                 // Access token
                 addInterceptor(TokenInterceptor(get(), BuildConfig.API_BASEURL, get()))

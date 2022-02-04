@@ -1,9 +1,7 @@
 package com.vguivarc.wakemeup.transport.account.login
 
-import android.app.Activity
 import android.content.Context
 import android.widget.Toast
-import androidx.activity.result.ActivityResultRegistryOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,20 +30,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.facebook.*
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.FacebookSdk
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.vguivarc.wakemeup.R
 import com.vguivarc.wakemeup.transport.routeViewModel
-import com.vguivarc.wakemeup.util.Utility.getActivity
 import timber.log.Timber
-
 
 
 @Composable
 fun AuthScreen(navController: NavController) {
     val authViewModel: AuthViewModel = remember { navController.routeViewModel() }
-    val activity = LocalContext.current as Activity
+   // val activity = LocalContext.current as Activity
     val state by authViewModel.container.stateFlow.collectAsState()
 
     val side by authViewModel.container.sideEffectFlow.collectAsState(initial = null)
@@ -55,7 +54,7 @@ fun AuthScreen(navController: NavController) {
     )
 
     side?.let {
-        handleSideEffect(activity, authViewModel, LocalContext.current, navController, it)
+        handleSideEffect(authViewModel, LocalContext.current, navController, it)
     }
     authViewModel.ok()
 }
@@ -197,7 +196,7 @@ fun AuthContent(
         TextButton(onClick = { authViewModel?.forgotPassword() }) {
             Text("Mot de passe oublié")
         }
-        Spacer(Modifier.size(2.dp))
+      /*  Spacer(Modifier.size(2.dp))
         Row(
             modifier = Modifier
                 .background(Color.White),
@@ -210,7 +209,7 @@ fun AuthContent(
                     .size(164.dp)
                     .clickable { authViewModel?.clickOnFacebookLogin() }
             )
-        }
+        }*/
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -228,7 +227,6 @@ fun AuthContent(
 
 
 private fun handleSideEffect(
-    activity: Activity,
     authViewModel: AuthViewModel,
     context: Context,
     navController: NavController,
@@ -240,7 +238,7 @@ private fun handleSideEffect(
             sideEffect.textResource,
             Toast.LENGTH_SHORT
         ).show()
-        is AuthSideEffect.LoginFacebook -> {
+        /*is AuthSideEffect.LoginFacebook -> {
             Timber.e("post6")
 
             if (AccessToken.getCurrentAccessToken() != null) {
@@ -253,11 +251,11 @@ private fun handleSideEffect(
                 activity,
                 listOf("email")
             )
-        }
+        }*/
         is AuthSideEffect.NavigationToRegister -> {
         } // TODO
         is AuthSideEffect.Close -> {
-            //activity?.onBackPressed()
+            navController.popBackStack()
         }
     }
 }
@@ -266,7 +264,7 @@ private fun handleSideEffect(
 @Preview
 @Composable
 fun AuthContentPreview() {
-    AuthContent(null, "test@mail.Fr", "password", false, true)
+    AuthContent(authViewModel = null,mail =  "test@mail.Fr", password = "password", passwordVisibility = false, loading = true)
 }
 
 

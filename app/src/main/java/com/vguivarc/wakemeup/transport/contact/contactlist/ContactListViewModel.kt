@@ -95,4 +95,8 @@ class ContactListViewModel(private val contactInteractor: ContactInteractor) :
     fun ok() = intent {
         postSideEffect(ContactListScreenSideEffect.Ok)
     }
+
+    fun addUsernameSelected() = intent {
+        postSideEffect(ContactListScreenSideEffect.NavigateToAddUsernameContact)
+    }
 }

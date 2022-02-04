@@ -161,6 +161,7 @@ interface AlarmAndroidProvider {
         private inner class OreoSetter : ISetAlarmStrategy {
             override fun setRTCAlarm(calendar: Calendar, pendingIntent: PendingIntent) {
                 // TODO IMPORTANT check Android 8.0  (probablement tout passer en inexact)
+                Timber.e("lol")
             /*   val pendingShowList = PendingIntent.getActivity(
                         mContext,
                         100500,

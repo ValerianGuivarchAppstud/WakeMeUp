@@ -4,6 +4,7 @@ import com.vguivarc.wakemeup.data.entity.*
 import com.vguivarc.wakemeup.domain.external.entity.Contact
 import com.vguivarc.wakemeup.domain.external.entity.ContactFacebook
 import com.vguivarc.wakemeup.domain.external.entity.Ringing
+import com.vguivarc.wakemeup.domain.external.entity.UserProfile
 import retrofit2.http.*
 
 /**
@@ -17,6 +18,11 @@ interface ContactApi {
     suspend fun getContactFacebook(
         @Query("socialAuthToken") socialAuthToken: String?
     ): List<ContactFacebook>
+
+    @GET("v1/contact/username")
+    suspend fun searchByUsername(
+        @Query("searchUsernameText") searchText: String
+    ): SearchResultContactResponse
 
 
     @PUT("v1/contact/status")

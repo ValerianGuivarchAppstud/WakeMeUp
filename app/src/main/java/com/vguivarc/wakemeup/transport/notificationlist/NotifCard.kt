@@ -1,4 +1,4 @@
-package com.vguivarc.wakemeup.transport.ringinglist
+package com.vguivarc.wakemeup.transport.notificationlist
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -14,20 +14,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vguivarc.wakemeup.R
-import com.vguivarc.wakemeup.domain.external.entity.Ringing
-import com.vguivarc.wakemeup.domain.external.entity.Song
+import com.vguivarc.wakemeup.domain.external.entity.Notif
+import com.vguivarc.wakemeup.domain.external.entity.NotifType
 
 @Preview
 @Composable
-fun RingingCardPreview() {
-    RingingCard(
+fun NotifCardPreview() {
+    NotifCard(
         viewModel = null,
-        ringing
-        = Ringing(id="id1",song= Song("kgkljhl", "chanson",""), listened = false, seen = false, receiverId = "receiverId", senderId = null, senderName = "senderName")
+        notif
+        = Notif(id="id1", createdDate = null, seen = false, receiverId = "receiverId", senderId = "senderId", type = NotifType.RINGING_RECEIVED)
     )
 }
 @Composable
-fun RingingCard(viewModel: RingingListViewModel?, ringing: Ringing) {
+fun NotifCard(viewModel: NotifListViewModel?, notif: Notif) {
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(all = 8.dp),
@@ -44,7 +44,7 @@ fun RingingCard(viewModel: RingingListViewModel?, ringing: Ringing) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = "Envoyé par ${ringing.senderName}",
+            text = "Envoyé par ${notif.senderId}",
             fontSize = 24.sp,
             textAlign = TextAlign.Center
         )

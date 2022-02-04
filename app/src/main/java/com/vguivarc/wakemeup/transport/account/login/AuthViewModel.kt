@@ -35,14 +35,6 @@ class AuthViewModel(private val authInteractor: AuthInteractor,
 
     }
 
-
-    fun clickOnFacebookLogin() = intent {
-        Timber.e("post0")
-       // postSideEffect(AuthSideEffect.Toast(R.string.general_error))
-        postSideEffect(AuthSideEffect.LoginFacebook)
-
-    }
-
     fun editMail(mail: String)  = intent {
         reduce {
             state.copy(mail = mail)
@@ -72,7 +64,7 @@ class AuthViewModel(private val authInteractor: AuthInteractor,
             reduce {
                 state.copy(isConnected = true, isLoading = false)
             }
-
+            postSideEffect(AuthSideEffect.Close(state.isConnected))
         } catch (exception: Exception) {
             Timber.e(exception)
 
@@ -98,7 +90,7 @@ class AuthViewModel(private val authInteractor: AuthInteractor,
             reduce {
                 state.copy(isConnected = true, isLoading = false)
             }
-            postSideEffect(AuthSideEffect.Close)
+            postSideEffect(AuthSideEffect.Close(state.isConnected))
 
 
         } catch (exception: Exception) {
@@ -132,7 +124,7 @@ class AuthViewModel(private val authInteractor: AuthInteractor,
     }
 
     fun close() = intent {
-        postSideEffect(AuthSideEffect.Close)
+        postSideEffect(AuthSideEffect.Close(state.isConnected))
     }
 
     fun error(loginFacebookCancelled: Int) = intent {

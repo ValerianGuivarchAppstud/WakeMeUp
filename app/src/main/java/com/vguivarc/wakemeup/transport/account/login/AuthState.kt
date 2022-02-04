@@ -12,7 +12,7 @@ data class AuthState(
 sealed class AuthSideEffect {
     data class Toast(val textResource: Int) : AuthSideEffect()
     data class NavigationToRegister(val mail: String) : AuthSideEffect()
-    object LoginFacebook : AuthSideEffect()
-    object Close : AuthSideEffect()
+   // object LoginFacebook : AuthSideEffect()
+   data class Close(val connected: Boolean) : AuthSideEffect()
     object Ok : AuthSideEffect()
 }
